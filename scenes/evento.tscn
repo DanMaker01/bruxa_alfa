@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://q8karr4w1qvx"]
+
+[ext_resource type="Script" uid="uid://bjxlt3vqym72w" path="res://src/cena/evento_base.gd" id="1_e5x04"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e5x04"]
+
+[node name="Evento" type="CharacterBody2D" unique_id=1732768344]
+script = ExtResource("1_e5x04")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2065628570]
+shape = SubResource("RectangleShape2D_e5x04")

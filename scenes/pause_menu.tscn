@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://dldftnhpdhm4n"]
+
+[node name="PauseMenu" type="Control" unique_id=692826576]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 640.0
+offset_bottom = 960.0
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=39046394]
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 960.0
+color = Color(1, 1, 1, 0.5019608)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1454809502]
+layout_mode = 1
+offset_left = 224.0
+offset_top = 192.0
+offset_right = 416.0
+offset_bottom = 368.0
+
+[node name="Continuar" type="Button" parent="VBoxContainer" unique_id=412030094]
+layout_mode = 2
+text = "Continuar"
+
+[node name="Opcoes" type="Button" parent="VBoxContainer" unique_id=1907317347]
+layout_mode = 2
+text = "Opções"
+
+[node name="Sair" type="Button" parent="VBoxContainer" unique_id=511898298]
+layout_mode = 2
+text = "Sair"
+
+[node name="Label" type="Label" parent="." unique_id=1789470388]
+layout_mode = 1
+anchors_preset = -1
+offset_top = 144.0
+offset_right = 640.0
+offset_bottom = 944.0
+text = "Menu de Pausa"

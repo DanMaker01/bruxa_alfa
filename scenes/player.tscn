@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://d06e36tmfryc5"]
+
+[ext_resource type="Script" uid="uid://d08o4fjdpdvpt" path="res://src/cena/player.gd" id="1_g2els"]
+[ext_resource type="Texture2D" uid="uid://b2y38paytqk2d" path="res://assets/game_player/player_parado.png" id="2_qhqgy"]
+[ext_resource type="Script" uid="uid://dn8km4r36htgx" path="res://src/core/camera_2d.gd" id="3_dqkch"]
+[ext_resource type="Script" uid="uid://clw3yby1kvkie" path="res://src/cena/interaction_zone.gd" id="3_qhqgy"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a8y0u"]
+size = Vector2(80, 256)
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_jkv2x"]
+
+[sub_resource type="Animation" id="Animation_jbj1t"]
+resource_name = "parado"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_muem4"]
+_data = {
+&"idle": SubResource("Animation_jbj1t")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g2els"]
+size = Vector2(80, 256)
+
+[node name="Player" type="CharacterBody2D" unique_id=1493749994]
+z_index = 1
+script = ExtResource("1_g2els")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=602715156]
+z_index = 1
+texture = ExtResource("2_qhqgy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=695879060]
+shape = SubResource("RectangleShape2D_a8y0u")
+
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=210809904]
+tree_root = SubResource("AnimationNodeStateMachine_jkv2x")
+anim_player = NodePath("../AnimationPlayer")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=848541800]
+libraries/ = SubResource("AnimationLibrary_muem4")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=464682596]
+position_smoothing_enabled = true
+position_smoothing_speed = 4.0
+script = ExtResource("3_dqkch")
+
+[node name="InteractionZone" type="Area2D" parent="." unique_id=943936715]
+script = ExtResource("3_qhqgy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionZone" unique_id=888843153]
+shape = SubResource("RectangleShape2D_g2els")

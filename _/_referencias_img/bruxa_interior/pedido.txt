@@ -1,0 +1,14 @@
+Tamanho:
+	960 x 720 (ou 1440 x 720)
+
+Conteúdo:
+	Cenário da casa da Bruxa interior
+	Caldeirão
+	Objetos e ingredientes
+	Porta da casa
+
+Obs.:
+	Se puder salvar os elementos como imagens separadas, tipo bg1, bg2, caldeirão, objetos, etc...
+	Estilo que quiser
+	Fique livre pra adicionar ou modificar coisas.
+

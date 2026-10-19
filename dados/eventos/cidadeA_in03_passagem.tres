@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="EventoData" format=3]
+
+[ext_resource type="Script" path="res://src/dados/pagina_data.gd" id="1_kin04"]
+[ext_resource type="Script" path="res://src/dados/comandos/comando.gd" id="2_pqatu"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_fade.gd" id="3_gv7y8"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_teleportar.gd" id="4_ilogd"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_esperar.gd" id="5_kjj3d"]
+[ext_resource type="SpriteFrames" path="res://animacoes/portal.tres" id="6_wbnob"]
+[ext_resource type="Script" path="res://src/dados/evento_data.gd" id="7_wt2we"]
+
+[sub_resource type="Resource" id="Resource_f6h2j"]
+script = ExtResource("3_gv7y8")
+tempo = 0.2
+
+[sub_resource type="Resource" id="Resource_vd5a3"]
+script = ExtResource("4_ilogd")
+mapa = "res://mapas/mapa_cidadeA.tscn"
+posicao = Vector2(3488, 505)
+direcao = 1
+
+[sub_resource type="Resource" id="Resource_yt2qv"]
+script = ExtResource("5_kjj3d")
+segundos = 0.2
+
+[sub_resource type="Resource" id="Resource_u746w"]
+script = ExtResource("3_gv7y8")
+tipo = 1
+tempo = 0.5
+
+[sub_resource type="Resource" id="Resource_7gbm8"]
+script = ExtResource("1_kin04")
+sprite_frames = ExtResource("6_wbnob")
+animacao = "parado"
+area_pos = Vector2(0, -10)
+area_scale = Vector2(9, 36)
+comandos = Array[ExtResource("2_pqatu")]([SubResource("Resource_f6h2j"), SubResource("Resource_vd5a3"), SubResource("Resource_yt2qv"), SubResource("Resource_u746w")])
+
+[resource]
+script = ExtResource("7_wt2we")
+id = "cidadeA_in03_passagem"
+paginas = Array[ExtResource("1_kin04")]([SubResource("Resource_7gbm8")])

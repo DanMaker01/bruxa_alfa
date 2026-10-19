@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://16tnqj4gw7my"]
+
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="1_fopm2"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_kfvve"]
+[ext_resource type="SpriteFrames" uid="uid://dmrkasnqwesa" path="res://animacoes/vestido.tres" id="3_7rdd7"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="3_kfvve"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="4_bkpq8"]
+
+[sub_resource type="Resource" id="Resource_rgxbv"]
+script = ExtResource("1_fopm2")
+sprite_frames = ExtResource("3_7rdd7")
+area_pos = Vector2(0, -10)
+area_scale = Vector2(9, 36)
+
+[resource]
+script = ExtResource("4_bkpq8")
+id = "bruxa_in_vestido"
+paginas = Array[ExtResource("1_fopm2")]([SubResource("Resource_rgxbv")])

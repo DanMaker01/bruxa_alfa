@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://bj42mmgkqvxl8"]
+
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="1_bxe3x"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_pipfk"]
+[ext_resource type="Script" uid="uid://dk7m46jhepr5v" path="res://src/dados/comandos/cmd_hud.gd" id="3_fy88y"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="6_4a26e"]
+[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="7_a2amw"]
+[ext_resource type="Script" uid="uid://bqhd785i1urnr" path="res://src/dados/comandos/cmd_preparo.gd" id="8_4j1sn"]
+[ext_resource type="SpriteFrames" uid="uid://bdomrxaxuelbx" path="res://animacoes/caldeirao.tres" id="9_cq3d5"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="10_6wmrf"]
+
+[sub_resource type="Resource" id="Resource_jjusl"]
+script = ExtResource("3_fy88y")
+mostrar = false
+
+[sub_resource type="Resource" id="Resource_a3djt"]
+script = ExtResource("7_a2amw")
+texto = "caldeirão (em construção)"
+
+[sub_resource type="Resource" id="Resource_u2v5q"]
+script = ExtResource("8_4j1sn")
+
+[sub_resource type="Resource" id="Resource_nv25v"]
+script = ExtResource("3_fy88y")
+
+[sub_resource type="Resource" id="Resource_texnt"]
+script = ExtResource("1_bxe3x")
+sprite_frames = ExtResource("9_cq3d5")
+area_pos = Vector2(0, -10)
+area_scale = Vector2(9, 36)
+comandos = Array[ExtResource("2_pipfk")]([SubResource("Resource_jjusl"), SubResource("Resource_a3djt"), SubResource("Resource_u2v5q"), SubResource("Resource_nv25v")])
+
+[resource]
+script = ExtResource("10_6wmrf")
+id = "bruxa_in_caldeirao"
+paginas = Array[ExtResource("1_bxe3x")]([SubResource("Resource_texnt")])

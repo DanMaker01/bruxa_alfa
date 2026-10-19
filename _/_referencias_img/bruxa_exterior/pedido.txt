@@ -1,0 +1,10 @@
+Tamanho:
+	960 x 720 (ou [multiplo de 480]x720 )
+
+Conteúdo:
+	Cenário da casa da Bruxa, integrada no ambiente (floresta, vila, ...)
+
+Obs.:
+	Se puder salvar os elementos como imagens separadas, tipo bg1, bg2, casa, objetos, etc...
+	Estilo que quiser
+	Fique livre pra adicionar ou modificar coisas.

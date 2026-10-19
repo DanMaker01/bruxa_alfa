@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://bxem6bc654flx"]
+
+[ext_resource type="Texture2D" uid="uid://d2p2a132npgdr" path="res://assets/mapa_ponte/mapa_ponte_guarda.png" id="1_yl0p2"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_yl0p2")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

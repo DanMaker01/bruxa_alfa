@@ -1,0 +1,510 @@
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://bgywscj5liwe5"]
+
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="1_c04db"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_optqh"]
+[ext_resource type="Script" uid="uid://u1lexc30s8be" path="res://src/dados/comandos/cmd_player.gd" id="3_gtb0y"]
+[ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="4_xme6w"]
+[ext_resource type="Script" uid="uid://bm6rsgpqii0pt" path="res://src/dados/comandos/cmd_som.gd" id="5_gomjd"]
+[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="6_kgd5i"]
+[ext_resource type="Script" uid="uid://bcx1mthgrhnun" path="res://src/dados/comandos/cmd_mover_camera.gd" id="7_js0ta"]
+[ext_resource type="Script" uid="uid://7rb2hsa5dvty" path="res://src/dados/comandos/cmd_resetar_camera.gd" id="8_fxvs5"]
+[ext_resource type="Script" uid="uid://btdlgkphiqan1" path="res://src/dados/comandos/cmd_mostrar_opcoes.gd" id="9_xn8wu"]
+[ext_resource type="Script" uid="uid://crwb7mjauibuo" path="res://src/dados/comandos/cmd_label.gd" id="10_5mle4"]
+[ext_resource type="Script" uid="uid://bercma7w4moqu" path="res://src/dados/comandos/cmd_mudar_var.gd" id="11_np2s2"]
+[ext_resource type="Script" uid="uid://ba7m6ef3neoh0" path="res://src/dados/comandos/cmd_mover_evento.gd" id="12_wx0yx"]
+[ext_resource type="Script" uid="uid://b3yty8028fcf2" path="res://src/dados/comandos/cmd_goto.gd" id="13_wmm05"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="14_jlf5g"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="15_t7kas"]
+
+[sub_resource type="Resource" id="Resource_73mqy"]
+script = ExtResource("3_gtb0y")
+
+[sub_resource type="Resource" id="Resource_qmqt3"]
+script = ExtResource("4_xme6w")
+
+[sub_resource type="Resource" id="Resource_5asad"]
+script = ExtResource("4_xme6w")
+segundos = 2.0
+
+[sub_resource type="Resource" id="Resource_0kgrr"]
+script = ExtResource("5_gomjd")
+arquivo = "res://audio/se/batida01.mp3"
+
+[sub_resource type="Resource" id="Resource_o7nlj"]
+script = ExtResource("4_xme6w")
+segundos = 0.5
+
+[sub_resource type="Resource" id="Resource_kg7wh"]
+script = ExtResource("5_gomjd")
+arquivo = "res://audio/se/batida01.mp3"
+
+[sub_resource type="Resource" id="Resource_fs43n"]
+script = ExtResource("4_xme6w")
+segundos = 0.1
+
+[sub_resource type="Resource" id="Resource_1noqm"]
+script = ExtResource("5_gomjd")
+arquivo = "res://audio/se/batida01.mp3"
+
+[sub_resource type="Resource" id="Resource_dvbhk"]
+script = ExtResource("4_xme6w")
+segundos = 0.1
+
+[sub_resource type="Resource" id="Resource_go3bc"]
+script = ExtResource("5_gomjd")
+arquivo = "res://audio/se/batida01.mp3"
+
+[sub_resource type="Resource" id="Resource_45lbe"]
+script = ExtResource("4_xme6w")
+segundos = 0.2
+
+[sub_resource type="Resource" id="Resource_uijtt"]
+script = ExtResource("5_gomjd")
+arquivo = "res://audio/se/batida01.mp3"
+
+[sub_resource type="Resource" id="Resource_7g4fa"]
+script = ExtResource("4_xme6w")
+segundos = 1.5
+
+[sub_resource type="Resource" id="Resource_glly0"]
+script = ExtResource("5_gomjd")
+arquivo = "res://audio/se/batida01.mp3"
+
+[sub_resource type="Resource" id="Resource_jkh3a"]
+script = ExtResource("4_xme6w")
+segundos = 0.1
+
+[sub_resource type="Resource" id="Resource_p3lq3"]
+script = ExtResource("5_gomjd")
+arquivo = "res://audio/se/batida01.mp3"
+
+[sub_resource type="Resource" id="Resource_iprbv"]
+script = ExtResource("4_xme6w")
+segundos = 0.1
+
+[sub_resource type="Resource" id="Resource_2bbq4"]
+script = ExtResource("5_gomjd")
+arquivo = "res://audio/se/batida01.mp3"
+
+[sub_resource type="Resource" id="Resource_jye12"]
+script = ExtResource("4_xme6w")
+segundos = 0.2
+
+[sub_resource type="Resource" id="Resource_7olg0"]
+script = ExtResource("5_gomjd")
+arquivo = "res://audio/se/batida01.mp3"
+
+[sub_resource type="Resource" id="Resource_3xlgm"]
+script = ExtResource("4_xme6w")
+segundos = 0.2
+
+[sub_resource type="Resource" id="Resource_gar4i"]
+script = ExtResource("6_kgd5i")
+texto = "TOC! TOC! TOC!"
+
+[sub_resource type="Resource" id="Resource_h5k3h"]
+script = ExtResource("4_xme6w")
+segundos = 0.5
+
+[sub_resource type="Resource" id="Resource_1csho"]
+script = ExtResource("7_js0ta")
+posicao = Vector2(1000, 500)
+tempo = 1.0
+
+[sub_resource type="Resource" id="Resource_aa4hk"]
+script = ExtResource("4_xme6w")
+segundos = 2.0
+
+[sub_resource type="Resource" id="Resource_4nvo0"]
+script = ExtResource("5_gomjd")
+arquivo = "res://audio/se/batida01.mp3"
+
+[sub_resource type="Resource" id="Resource_h2c3j"]
+script = ExtResource("4_xme6w")
+segundos = 0.1
+
+[sub_resource type="Resource" id="Resource_ftfcc"]
+script = ExtResource("5_gomjd")
+arquivo = "res://audio/se/batida01.mp3"
+
+[sub_resource type="Resource" id="Resource_8msh3"]
+script = ExtResource("4_xme6w")
+segundos = 0.1
+
+[sub_resource type="Resource" id="Resource_v5fb7"]
+script = ExtResource("5_gomjd")
+arquivo = "res://audio/se/batida01.mp3"
+
+[sub_resource type="Resource" id="Resource_ffo14"]
+script = ExtResource("4_xme6w")
+segundos = 0.2
+
+[sub_resource type="Resource" id="Resource_3ft7v"]
+script = ExtResource("5_gomjd")
+arquivo = "res://audio/se/batida01.mp3"
+
+[sub_resource type="Resource" id="Resource_msusd"]
+script = ExtResource("4_xme6w")
+segundos = 0.2
+
+[sub_resource type="Resource" id="Resource_c5yhq"]
+script = ExtResource("6_kgd5i")
+texto = "[???;;100] Ei. Tem alguém em casa!?"
+
+[sub_resource type="Resource" id="Resource_28dil"]
+script = ExtResource("4_xme6w")
+segundos = 0.5
+
+[sub_resource type="Resource" id="Resource_5scxx"]
+script = ExtResource("8_fxvs5")
+tempo = 1.0
+
+[sub_resource type="Resource" id="Resource_wduen"]
+script = ExtResource("4_xme6w")
+segundos = 2.0
+
+[sub_resource type="Resource" id="Resource_ovkkp"]
+script = ExtResource("9_xn8wu")
+pergunta = "[BRUXA;bruxa_grande;0] O que faço?"
+opcoes = Array[String](["Deixar entrar", "Ignorar"])
+labels = Array[String](["label_convidar", "label_ignorar"])
+
+[sub_resource type="Resource" id="Resource_7fjw0"]
+script = ExtResource("10_5mle4")
+nome = "label_convidar"
+
+[sub_resource type="Resource" id="Resource_7p7qa"]
+script = ExtResource("4_xme6w")
+segundos = 0.3
+
+[sub_resource type="Resource" id="Resource_aqp7k"]
+script = ExtResource("6_kgd5i")
+texto = "[BRUXA;bruxa_grande;0] Você não seria da inquisição, não é?"
+
+[sub_resource type="Resource" id="Resource_rj6aj"]
+script = ExtResource("6_kgd5i")
+texto = "[???;;100] Não, não. Sou só um camponês."
+
+[sub_resource type="Resource" id="Resource_lili8"]
+script = ExtResource("6_kgd5i")
+texto = "[BRUXA;bruxa_grande;0] (desconfiada) Pode entrar..."
+
+[sub_resource type="Resource" id="Resource_3g0ce"]
+script = ExtResource("4_xme6w")
+segundos = 0.5
+
+[sub_resource type="Resource" id="Resource_mhvxu"]
+script = ExtResource("7_js0ta")
+posicao = Vector2(1000, 500)
+tempo = 1.0
+
+[sub_resource type="Resource" id="Resource_6inrx"]
+script = ExtResource("4_xme6w")
+segundos = 2.0
+
+[sub_resource type="Resource" id="Resource_ae7rc"]
+script = ExtResource("5_gomjd")
+arquivo = "res://audio/se/porta_abre.mp3"
+
+[sub_resource type="Resource" id="Resource_aa8rj"]
+script = ExtResource("4_xme6w")
+segundos = 0.7
+
+[sub_resource type="Resource" id="Resource_31pmp"]
+script = ExtResource("11_np2s2")
+variavel = "bruxa_in_npc_visivel"
+valor = 1.0
+
+[sub_resource type="Resource" id="Resource_1opvw"]
+script = ExtResource("4_xme6w")
+segundos = 0.7
+
+[sub_resource type="Resource" id="Resource_a7ju0"]
+script = ExtResource("5_gomjd")
+arquivo = "res://audio/se/porta_fecha.mp3"
+
+[sub_resource type="Resource" id="Resource_bifeq"]
+script = ExtResource("4_xme6w")
+segundos = 0.7
+
+[sub_resource type="Resource" id="Resource_wjf6o"]
+script = ExtResource("4_xme6w")
+segundos = 0.7
+
+[sub_resource type="Resource" id="Resource_3opxw"]
+script = ExtResource("12_wx0yx")
+evento = "bruxa_in_npc"
+posicao = Vector2(544, 464)
+velocidade = 150.0
+direcao = 1
+esperar = false
+
+[sub_resource type="Resource" id="Resource_j0oay"]
+script = ExtResource("8_fxvs5")
+tempo = 4.0
+
+[sub_resource type="Resource" id="Resource_m45oa"]
+script = ExtResource("4_xme6w")
+segundos = 4.5
+
+[sub_resource type="Resource" id="Resource_3bqtm"]
+script = ExtResource("6_kgd5i")
+texto = "[CAMPONÊS;campones;100] Com licença..."
+
+[sub_resource type="Resource" id="Resource_dxax8"]
+script = ExtResource("6_kgd5i")
+texto = "[CAMPONÊS;campones;100] É aqui que mora a Bruxa? Passei o dia todo andando, quase me perdi duas vezes."
+
+[sub_resource type="Resource" id="Resource_aj5ti"]
+script = ExtResource("6_kgd5i")
+texto = "[CAMPONÊS;campones;100] Eu queria falar com você, porque minha irmã vai se casar amanhã. Mas ela não sai da cama."
+
+[sub_resource type="Resource" id="Resource_cjxqi"]
+script = ExtResource("6_kgd5i")
+texto = "[CAMPONÊS;campones;100] Ela fala que o coração dispara, as mãos tremem, ela não come, não dorme."
+
+[sub_resource type="Resource" id="Resource_uh1o3"]
+script = ExtResource("6_kgd5i")
+texto = "[CAMPONÊS;campones;100] Fica dizendo que vai estragar tudo, que o noivo vai desistir, que todo mundo vai rir dela."
+
+[sub_resource type="Resource" id="Resource_knokq"]
+script = ExtResource("6_kgd5i")
+texto = "[CAMPONÊS;campones;100] Já chamei um médico, mas ela não melhora, e talvez o casamento não aconteça. Eu não sei mais o que fazer."
+
+[sub_resource type="Resource" id="Resource_67ysa"]
+script = ExtResource("6_kgd5i")
+texto = "[BRUXA;bruxa_grande;0] (pensando) Coração disparado. Mãos trêmulas. Pensamentos catastróficos. "
+
+[sub_resource type="Resource" id="Resource_rbw8v"]
+script = ExtResource("6_kgd5i")
+texto = "[BRUXA;bruxa_grande;0] (pensando) Parece que alguém tem um alarme que não desliga."
+
+[sub_resource type="Resource" id="Resource_s0kd1"]
+script = ExtResource("6_kgd5i")
+texto = "[BRUXA;bruxa_grande;0] Entendi. Ela precisa de uma Poção da Calma Lúcida."
+
+[sub_resource type="Resource" id="Resource_rgmyk"]
+script = ExtResource("6_kgd5i")
+texto = "[CAMPONÊS;campones;100] Calma lúcida?"
+
+[sub_resource type="Resource" id="Resource_7fgmm"]
+script = ExtResource("6_kgd5i")
+texto = "[BRUXA;bruxa_grande;0] O medo vai continuar ali. Mas ela vai conseguir agir apesar dele. Levantar da cama, vestir o vestido, atravessar a igreja."
+
+[sub_resource type="Resource" id="Resource_3fdd6"]
+script = ExtResource("6_kgd5i")
+texto = "[BRUXA;bruxa_grande;0] Para essa poção são só dois ingredientes. Um cogumelo que cresce onde a floresta acaba. "
+
+[sub_resource type="Resource" id="Resource_ajdrk"]
+script = ExtResource("6_kgd5i")
+texto = "[BRUXA;bruxa_grande;0] E uma folha que posso , onde as árvores acabam."
+
+[sub_resource type="Resource" id="Resource_1dger"]
+script = ExtResource("6_kgd5i")
+texto = "[CAMPONÊS;campones;100] No fim da floresta? Dá um medo de ir lá."
+
+[sub_resource type="Resource" id="Resource_3cm0n"]
+script = ExtResource("6_kgd5i")
+texto = "[BRUXA;bruxa_grande;0] Eu sei. Deixa essa parte comigo."
+
+[sub_resource type="Resource" id="Resource_e4tah"]
+script = ExtResource("6_kgd5i")
+texto = "[BRUXA;bruxa_grande;0] Vá para casa. Fique com sua irmã. Amanhã, antes do casamento, ela vai estar de pé."
+
+[sub_resource type="Resource" id="Resource_4ohjl"]
+script = ExtResource("6_kgd5i")
+texto = "[CAMPONÊS;campones;100] A senhora... vai mesmo me ajudar?"
+
+[sub_resource type="Resource" id="Resource_lym1c"]
+script = ExtResource("6_kgd5i")
+texto = "[BRUXA;bruxa_grande;0] Ajudar não! Tudo tem seu preço."
+
+[sub_resource type="Resource" id="Resource_5iktt"]
+script = ExtResource("6_kgd5i")
+texto = "[BRUXA;bruxa_grande;0] E não será barato."
+
+[sub_resource type="Resource" id="Resource_l8py2"]
+script = ExtResource("6_kgd5i")
+texto = "[CAMPONÊS;campones;100] Tudo bem. Obrigado. Obrigado mesmo."
+
+[sub_resource type="Resource" id="Resource_wlxkp"]
+script = ExtResource("4_xme6w")
+
+[sub_resource type="Resource" id="Resource_b5bcm"]
+script = ExtResource("12_wx0yx")
+evento = "bruxa_in_npc"
+posicao = Vector2(944, 464)
+velocidade = 150.0
+direcao = 2
+esperar = false
+
+[sub_resource type="Resource" id="Resource_6ctfg"]
+script = ExtResource("7_js0ta")
+posicao = Vector2(1000, 500)
+tempo = 2.0
+
+[sub_resource type="Resource" id="Resource_tefxn"]
+script = ExtResource("4_xme6w")
+segundos = 3.0
+
+[sub_resource type="Resource" id="Resource_yja8x"]
+script = ExtResource("5_gomjd")
+arquivo = "res://audio/se/porta_abre.mp3"
+
+[sub_resource type="Resource" id="Resource_vkiss"]
+script = ExtResource("4_xme6w")
+segundos = 0.7
+
+[sub_resource type="Resource" id="Resource_ggtyw"]
+script = ExtResource("5_gomjd")
+arquivo = "res://audio/se/move.mp3"
+
+[sub_resource type="Resource" id="Resource_1eqwh"]
+script = ExtResource("11_np2s2")
+variavel = "bruxa_in_npc_visivel"
+
+[sub_resource type="Resource" id="Resource_rmpw7"]
+script = ExtResource("4_xme6w")
+segundos = 0.7
+
+[sub_resource type="Resource" id="Resource_ifmlr"]
+script = ExtResource("5_gomjd")
+arquivo = "res://audio/se/porta_fecha.mp3"
+
+[sub_resource type="Resource" id="Resource_puxdq"]
+script = ExtResource("4_xme6w")
+segundos = 0.2
+
+[sub_resource type="Resource" id="Resource_8jf04"]
+script = ExtResource("4_xme6w")
+
+[sub_resource type="Resource" id="Resource_kj00y"]
+script = ExtResource("8_fxvs5")
+tempo = 1.0
+
+[sub_resource type="Resource" id="Resource_quhje"]
+script = ExtResource("4_xme6w")
+segundos = 2.0
+
+[sub_resource type="Resource" id="Resource_fkp8f"]
+script = ExtResource("6_kgd5i")
+texto = "[BRUXA;bruxa_grande;0] (pensando) Primeiro o cogumelo. Depois a folha. Cozinhando isso, depois é só ir no castelo."
+
+[sub_resource type="Resource" id="Resource_3miql"]
+script = ExtResource("4_xme6w")
+segundos = 0.1
+
+[sub_resource type="Resource" id="Resource_r2kvu"]
+script = ExtResource("3_gtb0y")
+acao = 1
+
+[sub_resource type="Resource" id="Resource_4jqi4"]
+script = ExtResource("11_np2s2")
+variavel = "missao01_aceita"
+valor = 2.0
+
+[sub_resource type="Resource" id="Resource_uqwpp"]
+script = ExtResource("4_xme6w")
+segundos = 0.1
+
+[sub_resource type="Resource" id="Resource_ffkj5"]
+script = ExtResource("13_wmm05")
+label = "fim"
+
+[sub_resource type="Resource" id="Resource_ai35c"]
+script = ExtResource("10_5mle4")
+nome = "label_ignorar"
+
+[sub_resource type="Resource" id="Resource_ux7ap"]
+script = ExtResource("6_kgd5i")
+texto = "[BRUXA;bruxa_grande;0] ..."
+
+[sub_resource type="Resource" id="Resource_lkqac"]
+script = ExtResource("11_np2s2")
+variavel = "missao01_aceita"
+valor = 1.0
+
+[sub_resource type="Resource" id="Resource_ohnie"]
+script = ExtResource("3_gtb0y")
+acao = 1
+
+[sub_resource type="Resource" id="Resource_pmmvm"]
+script = ExtResource("13_wmm05")
+label = "fim"
+
+[sub_resource type="Resource" id="Resource_wax0t"]
+script = ExtResource("10_5mle4")
+nome = "fim"
+
+[sub_resource type="Resource" id="Resource_jh0eb"]
+script = ExtResource("1_c04db")
+gatilho = 2
+comandos = Array[ExtResource("2_optqh")]([SubResource("Resource_73mqy"), SubResource("Resource_qmqt3"), SubResource("Resource_5asad"), SubResource("Resource_0kgrr"), SubResource("Resource_o7nlj"), SubResource("Resource_kg7wh"), SubResource("Resource_fs43n"), SubResource("Resource_1noqm"), SubResource("Resource_dvbhk"), SubResource("Resource_go3bc"), SubResource("Resource_45lbe"), SubResource("Resource_uijtt"), SubResource("Resource_7g4fa"), SubResource("Resource_glly0"), SubResource("Resource_jkh3a"), SubResource("Resource_p3lq3"), SubResource("Resource_iprbv"), SubResource("Resource_2bbq4"), SubResource("Resource_jye12"), SubResource("Resource_7olg0"), SubResource("Resource_3xlgm"), SubResource("Resource_gar4i"), SubResource("Resource_h5k3h"), SubResource("Resource_1csho"), SubResource("Resource_aa4hk"), SubResource("Resource_4nvo0"), SubResource("Resource_h2c3j"), SubResource("Resource_ftfcc"), SubResource("Resource_8msh3"), SubResource("Resource_v5fb7"), SubResource("Resource_ffo14"), SubResource("Resource_3ft7v"), SubResource("Resource_msusd"), SubResource("Resource_c5yhq"), SubResource("Resource_28dil"), SubResource("Resource_5scxx"), SubResource("Resource_wduen"), SubResource("Resource_ovkkp"), SubResource("Resource_7fjw0"), SubResource("Resource_7p7qa"), SubResource("Resource_aqp7k"), SubResource("Resource_rj6aj"), SubResource("Resource_lili8"), SubResource("Resource_3g0ce"), SubResource("Resource_mhvxu"), SubResource("Resource_6inrx"), SubResource("Resource_ae7rc"), SubResource("Resource_aa8rj"), SubResource("Resource_31pmp"), SubResource("Resource_1opvw"), SubResource("Resource_a7ju0"), SubResource("Resource_bifeq"), SubResource("Resource_wjf6o"), SubResource("Resource_3opxw"), SubResource("Resource_j0oay"), SubResource("Resource_m45oa"), SubResource("Resource_3bqtm"), SubResource("Resource_dxax8"), SubResource("Resource_aj5ti"), SubResource("Resource_cjxqi"), SubResource("Resource_uh1o3"), SubResource("Resource_knokq"), SubResource("Resource_67ysa"), SubResource("Resource_rbw8v"), SubResource("Resource_s0kd1"), SubResource("Resource_rgmyk"), SubResource("Resource_7fgmm"), SubResource("Resource_3fdd6"), SubResource("Resource_ajdrk"), SubResource("Resource_1dger"), SubResource("Resource_3cm0n"), SubResource("Resource_e4tah"), SubResource("Resource_4ohjl"), SubResource("Resource_lym1c"), SubResource("Resource_5iktt"), SubResource("Resource_l8py2"), SubResource("Resource_wlxkp"), SubResource("Resource_b5bcm"), SubResource("Resource_6ctfg"), SubResource("Resource_tefxn"), SubResource("Resource_yja8x"), SubResource("Resource_vkiss"), SubResource("Resource_ggtyw"), SubResource("Resource_1eqwh"), SubResource("Resource_rmpw7"), SubResource("Resource_ifmlr"), SubResource("Resource_puxdq"), SubResource("Resource_8jf04"), SubResource("Resource_kj00y"), SubResource("Resource_quhje"), SubResource("Resource_fkp8f"), SubResource("Resource_3miql"), SubResource("Resource_r2kvu"), SubResource("Resource_4jqi4"), SubResource("Resource_uqwpp"), SubResource("Resource_ffkj5"), SubResource("Resource_ai35c"), SubResource("Resource_ux7ap"), SubResource("Resource_lkqac"), SubResource("Resource_ohnie"), SubResource("Resource_pmmvm"), SubResource("Resource_wax0t")])
+
+[sub_resource type="Resource" id="Resource_rea3u"]
+script = ExtResource("4_xme6w")
+segundos = 2.0
+
+[sub_resource type="Resource" id="Resource_75jjj"]
+script = ExtResource("5_gomjd")
+arquivo = "res://audio/se/batida01.mp3"
+
+[sub_resource type="Resource" id="Resource_o1yrw"]
+script = ExtResource("4_xme6w")
+segundos = 0.5
+
+[sub_resource type="Resource" id="Resource_m57po"]
+script = ExtResource("5_gomjd")
+arquivo = "res://audio/se/batida01.mp3"
+
+[sub_resource type="Resource" id="Resource_6ynrk"]
+script = ExtResource("4_xme6w")
+segundos = 0.1
+
+[sub_resource type="Resource" id="Resource_jyacc"]
+script = ExtResource("5_gomjd")
+arquivo = "res://audio/se/batida01.mp3"
+
+[sub_resource type="Resource" id="Resource_b6qy7"]
+script = ExtResource("4_xme6w")
+segundos = 0.1
+
+[sub_resource type="Resource" id="Resource_315lg"]
+script = ExtResource("5_gomjd")
+arquivo = "res://audio/se/batida01.mp3"
+
+[sub_resource type="Resource" id="Resource_00nxr"]
+script = ExtResource("4_xme6w")
+segundos = 0.2
+
+[sub_resource type="Resource" id="Resource_27lp0"]
+script = ExtResource("5_gomjd")
+arquivo = "res://audio/se/batida01.mp3"
+
+[sub_resource type="Resource" id="Resource_p8yha"]
+script = ExtResource("4_xme6w")
+
+[sub_resource type="Resource" id="Resource_xcod1"]
+script = ExtResource("14_jlf5g")
+variavel = "missao01_aceita"
+valor = 1.0
+
+[sub_resource type="Resource" id="Resource_de3m8"]
+script = ExtResource("1_c04db")
+condicao = SubResource("Resource_xcod1")
+gatilho = 2
+comandos = Array[ExtResource("2_optqh")]([SubResource("Resource_rea3u"), SubResource("Resource_75jjj"), SubResource("Resource_o1yrw"), SubResource("Resource_m57po"), SubResource("Resource_6ynrk"), SubResource("Resource_jyacc"), SubResource("Resource_b6qy7"), SubResource("Resource_315lg"), SubResource("Resource_00nxr"), SubResource("Resource_27lp0"), SubResource("Resource_p8yha")])
+
+[sub_resource type="Resource" id="Resource_2kxtk"]
+script = ExtResource("14_jlf5g")
+variavel = "missao01_aceita"
+valor = 2.0
+
+[sub_resource type="Resource" id="Resource_5ks0u"]
+script = ExtResource("1_c04db")
+condicao = SubResource("Resource_2kxtk")
+
+[resource]
+script = ExtResource("15_t7kas")
+id = "bruxa_in_auto"
+paginas = Array[ExtResource("1_c04db")]([SubResource("Resource_jh0eb"), SubResource("Resource_de3m8"), SubResource("Resource_5ks0u")])

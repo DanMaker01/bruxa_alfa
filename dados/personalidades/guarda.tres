@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PersonalidadeData" format=3 uid="uid://cyj1mrts043f4"]
+
+[ext_resource type="Script" uid="uid://cc4l3ovhft665" path="res://src/dados/personalidade_data.gd" id="1_pp7kq"]
+
+[resource]
+script = ExtResource("1_pp7kq")
+id = "guarda"
+consciencia = 5.0
+extroversao = 2.0
+amabilidade = 1.0
+neuroticismo = 6.0

@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://b6d4dma5by1pv"]
+
+[ext_resource type="Theme" uid="uid://3chprlsxpov2" path="res://resources/tema_base.tres" id="1_0b04q"]
+[ext_resource type="Script" uid="uid://0utbn1ej6q5p" path="res://src/ui/option_box.gd" id="2_0b04q"]
+
+[node name="OptionBox" type="Control" unique_id=1643482043]
+z_index = 101
+layout_mode = 3
+anchors_preset = 0
+offset_right = 256.0
+offset_bottom = 320.0
+theme = ExtResource("1_0b04q")
+script = ExtResource("2_0b04q")
+
+[node name="Panel" type="Panel" parent="." unique_id=1919700635]
+z_index = 101
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -3.0517578e-05
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=349496008]
+z_index = 101
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -1.5000001
+anchor_top = -2.0
+anchor_right = -1.5000001
+anchor_bottom = -2.0
+offset_left = 399.99997
+offset_top = 656.0
+offset_right = 624.0
+offset_bottom = 944.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer" unique_id=991311278]
+z_index = 101
+layout_mode = 2
+
+[node name="QuestionLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer" unique_id=1882392701]
+z_index = 101
+layout_mode = 2
+theme = ExtResource("1_0b04q")
+
+[node name="OptionsContainer" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=1066001998]
+z_index = 101
+layout_mode = 2
+
+[node name="TesteButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/OptionsContainer" unique_id=2759959]
+z_index = 101
+layout_mode = 2
+text = "Teste"
+
+[node name="TypeTimer" type="Timer" parent="." unique_id=976900197]

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>(M+R)^n=A · produtos · ferramentas · aplicar em (1,1,1,1,1)</title>
+<style>
+  body{font-family:system-ui,sans-serif;max-width:1100px;margin:2rem auto;padding:0 1rem}
+  h1{font-size:1.4rem}h2{font-size:1.1rem;border-bottom:1px solid #ddd;padding-bottom:.3rem;margin-top:1.5rem}
+  fieldset{border:1px solid #ccc;border-radius:8px;padding:1rem;margin-bottom:1rem}
+  legend{font-weight:bold;padding:0 .4rem}
+  .g5{display:grid;grid-template-columns:repeat(5,1fr);gap:.4rem}
+  .row{display:flex;gap:1rem;flex-wrap:wrap;align-items:end}.row>div{flex:1;min-width:100px}
+  label{font-size:.8rem;color:#555;display:block}
+  input{width:100%;padding:.35rem;font-size:.95rem;box-sizing:border-box}
+  button{padding:.6rem 1.2rem;font-size:1rem;cursor:pointer;border-radius:6px;border:1px solid #444;background:#222;color:#fff}
+  button:hover{background:#444}button.sec{background:#fff;color:#222}
+  .box{background:#f6f6f6;padding:.8rem 1rem;border-radius:8px;margin-top:.6rem}
+  table{border-collapse:collapse;margin-top:.4rem}
+  td{padding:.3rem .6rem;border:1px solid #ccc;text-align:right;font-family:monospace;font-size:.9rem}
+  .err{color:#b00;font-weight:600}.ok{color:#070;font-weight:600}.diff{background:#ffe8e8}
+  small{color:#666}.cols{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .vet{display:flex;gap:.4rem;margin-top:.3rem}
+  .vet span{background:#e8f0ff;padding:.3rem .7rem;border-radius:6px;font-family:monospace;font-size:.9rem}
+  @media(max-width:700px){.cols{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<h1>(M+R)<sup>n</sup>=A · produtos · ferramentas · aplicar em (1,1,1,1,1)</h1>
+
+<fieldset><legend>M1 — parâmetros</legend>
+  <label>Diagonal de A₁</label>
+  <div class="g5">
+    <div><label>a</label><input id="a1" type="number" step="any" value="32"></div>
+    <div><label>b</label><input id="b1" type="number" step="any" value="243"></div>
+    <div><label>c</label><input id="c1" type="number" step="any" value="1024"></div>
+    <div><label>d</label><input id="d1" type="number" step="any" value="3125"></div>
+    <div><label>e</label><input id="e1" type="number" step="any" value="7776"></div>
+  </div>
+  <div class="row">
+    <div><label>E₁</label><input id="E1" type="number" step="any" value="0.01"></div>
+    <div><label>n₁</label><input id="n1" type="number" step="1" min="1" value="5"></div>
+    <div><label>Semente (opcional)</label><input id="s1" type="number" step="1" placeholder="vazio = aleatório"></div>
+  </div>
+</fieldset>
+
+<fieldset><legend>M2 — parâmetros</legend>
+  <label>Diagonal de A₂</label>
+  <div class="g5">
+    <div><label>a</label><input id="a2" type="number" step="any" value="1"></div>
+    <div><label>b</label><input id="b2" type="number" step="any" value="32"></div>
+    <div><label>c</label><input id="c2" type="number" step="any" value="243"></div>
+    <div><label>d</label><input id="d2" type="number" step="any" value="1024"></div>
+    <div><label>e</label><input id="e2" type="number" step="any" value="3125"></div>
+  </div>
+  <div class="row">
+    <div><label>E₂</label><input id="E2" type="number" step="any" value="0.02"></div>
+    <div><label>n₂</label><input id="n2" type="number" step="1" min="1" value="5"></div>
+    <div><label>Semente (opcional)</label><input id="s2" type="number" step="1" placeholder="vazio = aleatório"></div>
+  </div>
+</fieldset>
+
+<p><button onclick="run()">Calcular tudo</button>
+   <button class="sec" onclick="run()">Recalcular (novo R)</button></p>
+
+<div id="out"></div>
+
+<script>
+/* ---------- PRNG ---------- */
+const mulberry32 = s => () => {
+  s |= 0; s = s + 0x6D2B79F5 | 0;
+  let t = Math.imul(s ^ s >>> 15, 1 | s);
+  t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+  return ((t ^ t >>> 14) >>> 0) / 4294967296;
+};
+
+/* ---------- Álgebra ---------- */
+const N = 5;
+const zeros = () => Array.from({length:N}, () => Array(N).fill(0));
+const eye   = () => zeros().map((r,i) => (r[i]=1, r));
+const diag  = d => zeros().map((r,i) => (r[i]=d[i], r));
+const sub   = (X,Y) => X.map((r,i) => r.map((v,j) => v - Y[i][j]));
+const add   = (X,Y) => X.map((r,i) => r.map((v,j) => v + Y[i][j]));
+const mul   = (X,Y) => {
+  const Z = zeros();
+  for (let i=0;i<N;i++) for (let j=0;j<N;j++) for (let k=0;k<N;k++) Z[i][j] += X[i][k]*Y[k][j];
+  return Z;
+};
+const pow   = (X,k) => { let P = eye(); for (let i=0;i<k;i++) P = mul(P,X); return P; };
+const transp= X => X[0].map((_,j) => X.map(r => r[j]));
+const trace = X => X.reduce((s,r,i) => s + r[i], 0);
+const maxAbs= X => Math.max(...X.flat().map(Math.abs));
+const maxDiff=(X,Y) => Math.max(...X.flat().map((v,i) => Math.abs(v - Y.flat()[i])));
+
+/* Aplica matriz M ao vetor v: M·v */
+const aplicar = (M, v) => M.map(linha => linha.reduce((s, x, j) => s + x*v[j], 0));
+
+/* Determinante */
+function det(X){
+  const A = X.map(r => r.slice()); let d = 1;
+  for (let i=0;i<N;i++){
+    let p = i;
+    for (let k=i+1;k<N;k++) if (Math.abs(A[k][i]) > Math.abs(A[p][i])) p = k;
+    if (Math.abs(A[p][i]) < 1e-12) return 0;
+    if (p !== i){ [A[i],A[p]] = [A[p],A[i]]; d = -d; }
+    d *= A[i][i];
+    for (let k=i+1;k<N;k++){
+      const f = A[k][i] / A[i][i];
+      for (let j=i;j<N;j++) A[k][j] -= f * A[i][j];
+    }
+  }
+  return d;
+}
+
+/* Inversa */
+function inv(X){
+  const A = X.map(r => r.slice()), I = eye();
+  for (let i=0;i<N;i++){
+    let p = i;
+    for (let k=i+1;k<N;k++) if (Math.abs(A[k][i]) > Math.abs(A[p][i])) p = k;
+    if (Math.abs(A[p][i]) < 1e-12) return null;
+    [A[i],A[p]] = [A[p],A[i]]; [I[i],I[p]] = [I[p],I[i]];
+    const piv = A[i][i];
+    for (let j=0;j<N;j++){ A[i][j] /= piv; I[i][j] /= piv; }
+    for (let k=0;k<N;k++){
+      if (k === i) continue;
+      const f = A[k][i];
+      for (let j=0;j<N;j++){ A[k][j] -= f*A[i][j]; I[k][j] -= f*I[i][j]; }
+    }
+  }
+  return I;
+}
+
+/* Raiz n-ésima real */
+const raizN = (x,n) => x===0 ? 0 : x>0 ? Math.pow(x,1/n) : (n%2 ? -Math.pow(-x,1/n) : null);
+
+/* ---------- Resolver (M+R)^n = A ---------- */
+function resolver(diagA, E, n, semente){
+  const diagB = [];
+  for (let i=0;i<N;i++){
+    const r = raizN(diagA[i], n);
+    if (r === null) return {erro:`A[${i}]=${diagA[i]} < 0 com n=${n} par → sem raiz real.`};
+    diagB.push(r);
+  }
+  const B = diag(diagB);
+  const rng = (semente == null || Number.isNaN(semente)) ? Math.random : mulberry32(semente);
+  const R = zeros();
+  for (let i=0;i<N;i++) for (let j=0;j<N;j++) if (i!==j) R[i][j] = (rng()*2-1)*E;
+  const M = sub(B,R);
+  const A = diag(diagA);
+  return {B,R,M,A,diagA,diagB,E,n};
+}
+
+/* ---------- HTML helpers ---------- */
+const fmt = (x,c=6) => x.toFixed(c);
+function mat(M,c=6,cls=null){
+  let h = "<table>";
+  for (let i=0;i<M.length;i++){
+    h += "<tr>";
+    for (let j=0;j<M[i].length;j++){
+      const k = cls && cls(i,j) ? ' class="diff"' : '';
+      h += `<td${k}>${fmt(M[i][j],c)}</td>`;
+    }
+    h += "</tr>";
+  }
+  return h + "</table>";
+}
+function vetHTML(v, c=6){
+  return `<div class="vet">${v.map(x => `<span>${fmt(x,c)}</span>`).join('')}</div>`;
+}
+
+/* ---------- Principal ---------- */
+function run(){
+  const out = document.getElementById('out');
+  out.innerHTML = "";
+
+  const ler = s => {
+    const d = ['a','b','c','d','e'].map(x => parseFloat(document.getElementById(x+s).value));
+    const E = parseFloat(document.getElementById('E'+s).value);
+    const n = parseInt(document.getElementById('n'+s).value,10);
+    const raw = document.getElementById('s'+s).value.trim();
+    return {d, E, n, semente: raw === "" ? null : parseInt(raw,10)};
+  };
+  const p1 = ler('1'), p2 = ler('2');
+
+  for (const [nome,p] of [["M1",p1],["M2",p2]]){
+    if (p.d.some(isNaN) || isNaN(p.E) || isNaN(p.n) || p.n<1 || p.E<0){
+      out.innerHTML = `<p class="err">Parâmetros inválidos em ${nome}.</p>`; return;
+    }
+  }
+
+  const r1 = resolver(p1.d, p1.E, p1.n, p1.semente);
+  const r2 = resolver(p2.d, p2.E, p2.n, p2.semente);
+  if (r1.erro){ out.innerHTML = `<p class="err">M1: ${r1.erro}</p>`; return; }
+  if (r2.erro){ out.innerHTML = `<p class="err">M2: ${r2.erro}</p>`; return; }
+
+  const {A:A1, M:M1, R:R1, B:B1, n:n1} = r1;
+  const {A:A2, M:M2, R:R2, B:B2, n:n2} = r2;
+
+  const M1M2 = mul(M1,M2);
+  const M2M1 = mul(M2,M1);
+  const A1A2 = mul(A1,A2);
+  const A2A1 = mul(A2,A1);
+  const diffM = maxDiff(M1M2,M2M1);
+  const diffA = maxDiff(A1A2,A2A1);
+
+  const v1 = maxDiff(pow(add(M1,R1), n1), A1);
+  const v2 = maxDiff(pow(add(M2,R2), n2), A2);
+
+  let h = '';
+
+  h += `<h2>Bloco 1 — M1</h2>
+    <div class="cols">
+      <div class="box"><b>A₁</b>${mat(A1)}</div>
+      <div class="box"><b>B₁ = A₁<sup>1/${n1}</sup></b>${mat(B1)}</div>
+    </div>
+    <div class="cols">
+      <div class="box"><b>R₁</b>${mat(R1)}</div>
+      <div class="box"><b>M₁ = B₁ − R₁</b>${mat(M1)}</div>
+    </div>
+    <small>Verificação (M₁+R₁)<sup>${n1}</sup> = A₁ → erro ${v1.toExponential(2)}</small>`;
+
+  h += `<h2>Bloco 2 — M2</h2>
+    <div class="cols">
+      <div class="box"><b>A₂</b>${mat(A2)}</div>
+      <div class="box"><b>B₂ = A₂<sup>1/${n2}</sup></b>${mat(B2)}</div>
+    </div>
+    <div class="cols">
+      <div class="box"><b>R₂</b>${mat(R2)}</div>
+      <div class="box"><b>M₂ = B₂ − R₂</b>${mat(M2)}</div>
+    </div>
+    <small>Verificação (M₂+R₂)<sup>${n2}</sup> = A₂ → erro ${v2.toExponential(2)}</small>`;
+
+  h += `<h2>Produtos A₁·A₂ e A₂·A₁</h2>
+    <div class="cols">
+      <div class="box"><b>A₁ · A₂</b>${mat(A1A2)}</div>
+      <div class="box"><b>A₂ · A₁</b>${mat(A2A1)}</div>
+    </div>
+    <div class="box">
+      Diferença máxima: <b>${diffA.toExponential(3)}</b><br>
+      ${diffA < 1e-9
+        ? '<span class="ok">A₁ e A₂ comutam (diagonais sempre comutam).</span>'
+        : '<span class="err">Não comutam.</span>'}
+    </div>`;
+
+  h += `<h2>Produtos M₁·M₂ e M₂·M₁</h2>
+    <div class="cols">
+      <div class="box"><b>M₁ · M₂</b>${mat(M1M2)}</div>
+      <div class="box"><b>M₂ · M₁</b>${mat(M2M1)}</div>
+    </div>
+    <div class="box">
+      Diferença: ${mat(M1M2.map((r,i)=>r.map((v,j)=>v-M2M1[i][j])), 6, (i,j)=>Math.abs(M1M2[i][j]-M2M1[i][j])>1e-9)}
+      <p>Diferença máxima: <b>${diffM.toExponential(3)}</b><br>
+      ${diffM < 1e-9
+        ? '<span class="ok">M₁ e M₂ comutam numericamente.</span>'
+        : '<span class="err">M₁ e M₂ NÃO comutam.</span>'}</p>
+    </div>`;
+
+  /* ---------- Aplicação em (1,1,1,1,1) ---------- */
+  const u = [1,1,1,1,1];
+  const lista = [
+    ["A₁",        A1],
+    ["A₂",        A2],
+    ["A₁·A₂",     A1A2],
+    ["A₂·A₁",     A2A1],
+    ["M₁",        M1],
+    ["M₂",        M2],
+    ["M₁·M₂",     M1M2],
+    ["M₂·M₁",     M2M1]
+  ];
+
+  h += `<h2>Aplicação em u = (1,1,1,1,1)</h2>
+    <p><small>Cada linha é o resultado de <b>Matriz · u</b>. Compare A₁·u com A₁·A₂·u, M₁·u com M₁·M₂·u, etc.</small></p>`;
+
+  for (const [nome, M] of lista){
+    const res = aplicar(M, u);
+    h += `<div class="box"><b>${nome} · u</b>${vetHTML(res)}
+      <small>soma = ${res.reduce((a,b)=>a+b,0).toFixed(6)}</small></div>`;
+  }
+
+  /* Comparação direta A1·u vs A1A2·u e M1·u vs M1M2·u */
+  const A1u   = aplicar(A1, u);
+  const A1A2u = aplicar(A1A2, u);
+  const A2u   = aplicar(A2, u);
+  const A2A1u = aplicar(A2A1, u);
+  const M1u   = aplicar(M1, u);
+  const M1M2u = aplicar(M1M2, u);
+  const M2u   = aplicar(M2, u);
+  const M2A1u = aplicar(M2M1, u);
+
+  const dA1   = Math.max(...A1u.map((x,i)=>Math.abs(x - A1A2u[i])));
+  const dA2   = Math.max(...A2u.map((x,i)=>Math.abs(x - A2A1u[i])));
+  const dM1   = Math.max(...M1u.map((x,i)=>Math.abs(x - M1M2u[i])));
+  const dM2   = Math.max(...M2u.map((x,i)=>Math.abs(x - M2A1u[i])));
+
+  h += `<div class="box"><b>Comparações em u</b>
+    <table>
+      <tr><td>A₁·u vs A₁·A₂·u</td><td>${dA1.toExponential(3)}</td></tr>
+      <tr><td>A₂·u vs A₂·A₁·u</td><td>${dA2.toExponential(3)}</td></tr>
+      <tr><td>M₁·u vs M₁·M₂·u</td><td>${dM1.toExponential(3)}</td></tr>
+      <tr><td>M₂·u vs M₂·M₁·u</td><td>${dM2.toExponential(3)}</td></tr>
+    </table>
+    <small>Valores próximos de zero indicam que aplicar a matriz sozinha ou aplicá-la após o produto tem efeito parecido sobre u.</small>
+  </div>`;
+
+  /* ---------- Ferramentas ---------- */
+  h += `<h2>Ferramentas de matrizes</h2>`;
+  const ferramentas = [
+    ["det(M₁)", det(M1)],
+    ["det(M₂)", det(M2)],
+    ["tr(M₁)", trace(M1)],
+    ["tr(M₂)", trace(M2)],
+    ["det(A₁)", det(A1)],
+    ["det(A₂)", det(A2)],
+    ["det(M₁·M₂)", det(M1M2)],
+    ["det(M₂·M₁)", det(M2M1)],
+    ["det(M₁)·det(M₂)", det(M1)*det(M2)],
+    ["‖M₁‖∞", maxAbs(M1)],
+    ["‖M₂‖∞", maxAbs(M2)]
+  ];
+  h += `<div class="box"><table>` +
+       ferramentas.map(([k,v]) => `<tr><td>${k}</td><td>${v.toExponential(6)}</td></tr>`).join('') +
+       `</table></div>`;
+
+  const inv1 = inv(M1), inv2 = inv(M2);
+  h += `<div class="cols">
+    <div class="box"><b>M₁⁻¹</b>${inv1 ? mat(inv1) : '<p class="err">Singular.</p>'}</div>
+    <div class="box"><b>M₂⁻¹</b>${inv2 ? mat(inv2) : '<p class="err">Singular.</p>'}</div>
+  </div>`;
+
+  const T12 = transp(M1M2), T21 = transp(M2M1);
+  h += `<div class="cols">
+    <div class="box"><b>(M₁·M₂)ᵀ</b>${mat(T12)}</div>
+    <div class="box"><b>(M₂·M₁)ᵀ</b>${mat(T21)}</div>
+  </div>`;
+
+  if (inv1 && inv2){
+    const I12 = mul(M1M2, mul(inv2, inv1));
+    h += `<div class="box"><b>(M₁·M₂)·(M₂⁻¹·M₁⁻¹)</b> — deve ser I
+      ${mat(I12,6,(i,j)=> (i!==j && Math.abs(I12[i][j])>1e-9) || (i===j && Math.abs(I12[i][j]-1)>1e-9))}
+    </div>`;
+  }
+
+  out.innerHTML = h;
+}
+
+run();
+</script>
+
+</body>
+</html>

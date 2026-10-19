@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://7ntrrw342v7r"]
+
+[ext_resource type="Script" uid="uid://b6ahlah4mhwps" path="res://src/dados/item_data.gd" id="1_ej1gs"]
+[ext_resource type="Texture2D" uid="uid://qbvyfxmst8m1" path="res://assets/itens_icones/item_agua.png" id="1_olat6"]
+
+[resource]
+script = ExtResource("1_ej1gs")
+id = "agua"
+nome = "Água"
+descricao = "quantidade suficiente para um copo de água."
+icone = ExtResource("1_olat6")
+A = Array[PackedFloat32Array]([PackedFloat32Array(1, 0, 0, 0, 0), PackedFloat32Array(0, 0.98, 0, 0, 0), PackedFloat32Array(0, 0, 1, 0, 0), PackedFloat32Array(0, 0, 0, 1, 0), PackedFloat32Array(0, 0, 0, 0, 1)])
+s_menos = 0.0
+s_mais = 0.0
+k_min = 0.01
+T_max = 110.0
+k_max = 0.01
+h_min = 0.0
+t_max = 120.0
+h_max = 999.0

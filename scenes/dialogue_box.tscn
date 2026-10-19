@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://dwvw17gqe65ew"]
+
+[ext_resource type="Script" uid="uid://bu4oj13k4yyfp" path="res://src/ui/dialogue_box.gd" id="1_rc1id"]
+
+[node name="DialogueBox" type="Control" unique_id=1643482043]
+z_index = 101
+layout_mode = 3
+anchor_right = 0.6
+anchor_bottom = 0.333
+offset_bottom = 0.32000732
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_rc1id")
+letras_por_segundo = 70.0
+
+[node name="Panel" type="Panel" parent="." unique_id=1919700635]
+z_index = 101
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=349496008]
+z_index = 101
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer" unique_id=375059202]
+z_index = 101
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer" unique_id=1882392701]
+z_index = 101
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "texto123"
+autowrap_mode = 2
+
+[node name="TypeTimer" type="Timer" parent="." unique_id=976900197]

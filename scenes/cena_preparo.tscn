@@ -1,0 +1,183 @@
+[gd_scene format=3 uid="uid://c8pejctwkl60q"]
+
+[ext_resource type="Script" uid="uid://fvb7ymoc8e2o" path="res://src/core/cena_preparo.gd" id="1_mpeo2"]
+[ext_resource type="Texture2D" uid="uid://0256vrk8foeo" path="res://assets/game_caldeirao/bg.jpg" id="1_qpp4d"]
+[ext_resource type="SpriteFrames" uid="uid://bdomrxaxuelbx" path="res://animacoes/caldeirao.tres" id="2_qpp4d"]
+[ext_resource type="SpriteFrames" uid="uid://bs83v87c3lejv" path="res://animacoes/fogo.tres" id="3_qpp4d"]
+[ext_resource type="Script" uid="uid://0p3f24vg2s21" path="res://src/preparo/grafico_temperatura.gd" id="5_stgn2"]
+[ext_resource type="Texture2D" uid="uid://47stb8wx6c84" path="res://assets/game_caldeirao/bolha.png" id="5_uwxqp"]
+[ext_resource type="Texture2D" uid="uid://vw6asas7s3qq" path="res://assets/game_caldeirao/bolha2.png" id="6_ho8or"]
+[ext_resource type="Texture2D" uid="uid://rq6lloc2u06y" path="res://assets/game_caldeirao/botao_pocao.png" id="8_4huqc"]
+[ext_resource type="Texture2D" uid="uid://ccndjb1xd6pko" path="res://assets/game_caldeirao/botao_fogo.png" id="9_a20yi"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_stgn2"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(50, 1, 1)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, -1, 0)
+spread = 40.0
+initial_velocity_min = 10.0
+initial_velocity_max = 100.0
+angular_velocity_min = -360.0
+angular_velocity_max = 359.99997
+linear_accel_min = -10.000002
+linear_accel_max = -2.2351742e-06
+scale_min = 0.099999994
+scale_max = 1.5
+
+[node name="CenaPreparo" type="Control" unique_id=563764385]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mpeo2")
+metadata/_edit_vertical_guides_ = [320.0]
+metadata/_edit_horizontal_guides_ = [800.0, 560.0]
+
+[node name="Background" type="TextureRect" parent="." unique_id=492807037]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -320.0
+offset_top = -448.0
+offset_right = 288.0
+offset_bottom = 416.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_qpp4d")
+stretch_mode = 1
+
+[node name="Animações" type="Node2D" parent="." unique_id=258668470]
+
+[node name="Panel2" type="Panel" parent="Animações" unique_id=1236715597]
+modulate = Color(0, 0, 0, 1)
+offset_left = 160.0
+offset_top = 32.0
+offset_right = 480.0
+offset_bottom = 544.0
+mouse_filter = 1
+
+[node name="Caldeirao" type="AnimatedSprite2D" parent="Animações" unique_id=1721849374]
+position = Vector2(320, 272)
+scale = Vector2(2, 2)
+sprite_frames = ExtResource("2_qpp4d")
+
+[node name="Fogo" type="AnimatedSprite2D" parent="Animações" unique_id=1176008504]
+self_modulate = Color(1, 1, 1, 0.627451)
+position = Vector2(320, 384)
+sprite_frames = ExtResource("3_qpp4d")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="Animações" unique_id=1062958233]
+z_index = 6
+position = Vector2(320, 304)
+amount = 30
+texture = ExtResource("5_uwxqp")
+lifetime = 2.0
+preprocess = 2.0
+process_material = SubResource("ParticleProcessMaterial_stgn2")
+
+[node name="GPUParticles2D2" type="GPUParticles2D" parent="Animações" unique_id=978560212]
+z_index = 6
+position = Vector2(320, 304)
+amount = 60
+texture = ExtResource("6_ho8or")
+lifetime = 2.0
+preprocess = 2.0
+process_material = SubResource("ParticleProcessMaterial_stgn2")
+
+[node name="Grafico" type="Control" parent="." unique_id=113433798]
+anchors_preset = 0
+offset_left = 160.0
+offset_top = 560.0
+offset_right = 480.0
+offset_bottom = 800.0
+script = ExtResource("5_stgn2")
+
+[node name="PainelIngredientes" type="Control" parent="." unique_id=206284967]
+layout_mode = 1
+anchor_top = 0.83300006
+anchor_bottom = 0.83300006
+offset_top = 0.3199463
+offset_right = 640.0
+offset_bottom = 160.31995
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 1
+
+[node name="Panel" type="Panel" parent="PainelIngredientes" unique_id=1293891771]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_top = 32.0
+offset_right = 640.0
+offset_bottom = 128.0
+mouse_filter = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PainelIngredientes" unique_id=46589984]
+layout_mode = 1
+offset_left = 128.0
+offset_top = 48.0
+offset_right = 512.0
+offset_bottom = 128.0
+follow_focus = true
+vertical_scroll_mode = 0
+
+[node name="ListaHorizontal" type="HBoxContainer" parent="PainelIngredientes/ScrollContainer" unique_id=721732789]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Button" type="Button" parent="PainelIngredientes/ScrollContainer/ListaHorizontal" unique_id=558812917]
+layout_mode = 2
+text = "item1"
+
+[node name="Button2" type="Button" parent="PainelIngredientes/ScrollContainer/ListaHorizontal" unique_id=815273357]
+layout_mode = 2
+text = "item2"
+
+[node name="Button4" type="Button" parent="PainelIngredientes/ScrollContainer/ListaHorizontal" unique_id=1973966773]
+layout_mode = 2
+text = "item2"
+
+[node name="Button5" type="Button" parent="PainelIngredientes/ScrollContainer/ListaHorizontal" unique_id=581120842]
+layout_mode = 2
+text = "item3"
+
+[node name="Button6" type="Button" parent="PainelIngredientes/ScrollContainer/ListaHorizontal" unique_id=595683315]
+layout_mode = 2
+text = "item4"
+
+[node name="Button7" type="Button" parent="PainelIngredientes/ScrollContainer/ListaHorizontal" unique_id=1158846330]
+layout_mode = 2
+text = "item5"
+
+[node name="Poção" type="Button" parent="PainelIngredientes" unique_id=1092986463]
+layout_mode = 0
+offset_top = 32.0
+offset_right = 112.0
+offset_bottom = 112.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+icon = ExtResource("8_4huqc")
+
+[node name="BotaoFogo" type="Button" parent="PainelIngredientes" unique_id=1095812818]
+layout_mode = 0
+offset_left = 528.0
+offset_top = 32.0
+offset_right = 640.0
+offset_bottom = 112.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+icon = ExtResource("9_a20yi")
+
+[node name="Indicadores" type="Label" parent="." unique_id=1632783899]
+z_index = 5
+layout_mode = 0
+offset_right = 624.0
+offset_bottom = 180.0
+pivot_offset = Vector2(8, 580)
+theme_override_colors/font_color = Color(0.779387, 0.7793871, 0.779387, 1)
+theme_override_font_sizes/font_size = 14

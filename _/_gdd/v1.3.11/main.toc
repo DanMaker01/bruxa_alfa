@@ -1,0 +1,37 @@
+\babel@toc {brazilian}{}\relax 
+\contentsline {section}{\numberline {1}Informacoes do Projeto}{2}{section.1}%
+\contentsline {section}{\numberline {2}Layouts das Telas}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Layout 1 - HUD (Inventário + Status)}{3}{subsection.2.1}%
+\contentsline {paragraph}{Elementos do HUD:}{3}{section*.2}%
+\contentsline {paragraph}{Status:}{3}{section*.3}%
+\contentsline {subsection}{\numberline {2.2}Layout 2 - Diálogo e Opções}{3}{subsection.2.2}%
+\contentsline {paragraph}{Elementos do Diálogo:}{4}{section*.4}%
+\contentsline {paragraph}{Implementação:}{4}{section*.5}%
+\contentsline {subsection}{\numberline {2.3}Layout 3 - Preparo de Poções}{4}{subsection.2.3}%
+\contentsline {paragraph}{Elementos do Preparo:}{5}{section*.6}%
+\contentsline {paragraph}{Interações do Preparo:}{5}{section*.7}%
+\contentsline {subparagraph}{Botão de Fogo \textbf {[F]}{}}{5}{table.caption.9}%
+\contentsline {subparagraph}{Botão de Poção \textbf {[P]}{}}{5}{table.caption.11}%
+\contentsline {paragraph}{Modelagem Física do Preparo:}{5}{section*.12}%
+\contentsline {subparagraph}{Variáveis:}{6}{section*.13}%
+\contentsline {subparagraph}{Equações:}{6}{section*.14}%
+\contentsline {subparagraph}{Parâmetros Padrão:}{6}{section*.15}%
+\contentsline {paragraph}{Cálculo da Poção:}{6}{section*.16}%
+\contentsline {paragraph}{Aplicação da Poção:}{6}{section*.17}%
+\contentsline {paragraph}{Status:}{6}{section*.18}%
+\contentsline {section}{\numberline {3}Estrutura de Jogo (atualizada)}{7}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Conexões}{8}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Status dos Modulos}{8}{subsection.3.2}%
+\contentsline {section}{\numberline {4}Mapa}{9}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Links MIRO}{9}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Relações do Mapa}{9}{subsection.4.2}%
+\contentsline {section}{\numberline {5}Comandos do Interpretador}{10}{section.5}%
+\contentsline {section}{\numberline {6}Historia}{11}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Contexto / Mundo}{11}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Introducao}{11}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Capitulo 1}{12}{subsection.6.3}%
+\contentsline {section}{\numberline {7}Mecanicas}{13}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Poções e Personalidades}{13}{subsection.7.1}%
+\contentsline {subsubsection}{\numberline {7.1.1}Preparo de Poções}{13}{subsubsection.7.1.1}%
+\contentsline {paragraph}{Ingredientes}{13}{section*.21}%
+\contentsline {section}{\numberline {8}Próximos Passos}{14}{section.8}%

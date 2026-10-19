@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://c5yjbbworwu"]
+
+[ext_resource type="Texture2D" uid="uid://fbg86t5r7gl8" path="res://assets/mapa_cidadeA_in02/mapa_cidadeA_in02_mago.png" id="1_3au34"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_3au34")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

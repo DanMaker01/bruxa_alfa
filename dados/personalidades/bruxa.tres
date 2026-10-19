@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PersonalidadeData" format=3 uid="uid://dwsw60svkvwq8"]
+
+[ext_resource type="Script" uid="uid://cc4l3ovhft665" path="res://src/dados/personalidade_data.gd" id="1_cocvl"]
+
+[resource]
+script = ExtResource("1_cocvl")
+id = "bruxa"
+consciencia = 0.1
+extroversao = -0.1
+amabilidade = 0.2
+neuroticismo = -0.2

@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://djmas4chi11fk"]
+
+[ext_resource type="Script" uid="uid://bcgwhojrxj4e" path="res://src/cena/pagina.gd" id="1_0ovpi"]
+[ext_resource type="Script" uid="uid://clw3yby1kvkie" path="res://src/cena/interaction_zone.gd" id="2_3u4sj"]
+
+[node name="Pagina" type="StaticBody2D" unique_id=1096507145]
+script = ExtResource("1_0ovpi")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=521397094]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1711750996]
+
+[node name="InteractionZone" type="Area2D" parent="." unique_id=1524253064]
+script = ExtResource("2_3u4sj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionZone" unique_id=1933367529]

@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://himp7lgodr5s"]
+
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="1_whluh"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_y06qh"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="3_p18u5"]
+[ext_resource type="SpriteFrames" uid="uid://bxem6bc654flx" path="res://animacoes/bruxa_in_npc.tres" id="4_s6b36"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="5_gdd6y"]
+
+[sub_resource type="Resource" id="Resource_n5gxh"]
+script = ExtResource("1_whluh")
+
+[sub_resource type="Resource" id="Resource_063t1"]
+script = ExtResource("3_p18u5")
+variavel = "bruxa_in_npc_visivel"
+valor = 1.0
+
+[sub_resource type="Resource" id="Resource_l2g8b"]
+script = ExtResource("1_whluh")
+condicao = SubResource("Resource_063t1")
+sprite_frames = ExtResource("4_s6b36")
+
+[resource]
+script = ExtResource("5_gdd6y")
+id = "bruxa_in_npc"
+paginas = Array[ExtResource("1_whluh")]([SubResource("Resource_n5gxh"), SubResource("Resource_l2g8b")])

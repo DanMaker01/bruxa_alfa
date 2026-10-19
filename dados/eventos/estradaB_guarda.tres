@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://brxbmftv5ps6n"]
+
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="1_n2758"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_yjafp"]
+[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="3_lj3un"]
+[ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="4_ge1fr"]
+[ext_resource type="SpriteFrames" uid="uid://c5yjbbworwu" path="res://animacoes/guarda02.tres" id="5_jiap1"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="5_yjafp"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="6_32dyt"]
+
+[sub_resource type="Resource" id="Resource_26t8c"]
+script = ExtResource("3_lj3un")
+texto = "[GUARDA] Somente os conhecidos da realeza podem passar por aqui. "
+
+[sub_resource type="Resource" id="Resource_bifsd"]
+script = ExtResource("3_lj3un")
+texto = "[GUARDA] São ordens do Rei. "
+
+[sub_resource type="Resource" id="Resource_g5u7y"]
+script = ExtResource("4_ge1fr")
+segundos = 0.5
+
+[sub_resource type="Resource" id="Resource_thguq"]
+script = ExtResource("3_lj3un")
+texto = "[BRUXA;bruxa_grande;0] Aff. "
+
+[sub_resource type="Resource" id="Resource_tycrd"]
+script = ExtResource("1_n2758")
+passavel = false
+sprite_frames = ExtResource("5_jiap1")
+colisao_scale = Vector2(9, 20.25)
+area_pos = Vector2(0, -10)
+area_scale = Vector2(16, 20.25)
+comandos = Array[ExtResource("2_yjafp")]([SubResource("Resource_26t8c"), SubResource("Resource_bifsd"), SubResource("Resource_g5u7y"), SubResource("Resource_thguq")])
+
+[resource]
+script = ExtResource("6_32dyt")
+id = "estradaB_guarda"
+paginas = Array[ExtResource("1_n2758")]([SubResource("Resource_tycrd")])

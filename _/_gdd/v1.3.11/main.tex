@@ -1,0 +1,655 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{multirow}
+\usepackage{pifont}
+\usepackage{float}
+
+\sloppy
+\raggedbottom  % Opcional: evita espaçamento vertical estranho
+
+\geometry{a4paper, margin=1.5cm}
+\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue}
+
+% Cores
+\definecolor{verde}{RGB}{0,150,0}
+\definecolor{azul}{RGB}{0,0,200}
+\definecolor{cinza}{RGB}{100,100,100}
+\definecolor{vermelho}{RGB}{200,0,0}
+\definecolor{amarelo}{RGB}{200,150,0}
+
+% Comandos de status
+\newcommand{\ok}{\textcolor{verde}{[\textbf{X}]}}
+\newcommand{\pendente}{\textcolor{vermelho}{[\textbf{ }]}}
+\newcommand{\andamento}{\textcolor{amarelo}{[\textbf{-}]}}
+\newcommand{\parcial}{\textcolor{azul}{[\textbf{!}]}}
+
+% ===== SÍMBOLOS SIMPLES (TEXTO PURO) =====
+\newcommand{\fogo}{\textbf{[F]}}
+\newcommand{\pocao}{\textbf{[P]}}
+\newcommand{\caldeirao}{\textbf{[C]}}
+\newcommand{\crossmark}{\textcolor{vermelho}{[X]}}
+\newcommand{\duvida}{\textcolor{amarelo}{[?]}}
+
+% Comando para quebra de linha na tabela
+\newcommand{\quebra}{\newline}
+
+\title{
+    \Huge\textbf{Jogo Bruxa} \\
+    \Large Documento de Design - v1.3.12
+}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{center}
+\large \textit{Jogo narrativo de alquimia e decisoes entre o mundo dos vivos e dos mortos.}
+\end{center}
+
+\tableofcontents
+
+\newpage
+
+\section{Informacoes do Projeto}
+
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Propriedade} & \textbf{Valor} \\
+\hline
+Engine & Godot 4 \\
+Plataforma & Android \\
+Resolucao & 640 x 960 px \\
+Genero & Point \& Click \\
+Estilo & Side-scroller \\
+\hline
+\end{tabular}
+
+\newpage
+
+\section{Layouts das Telas}
+
+O jogo possui 3 layouts principais, cada um com uma função específica.
+
+\subsection{Layout 1 - HUD (Inventário + Status)}
+
+Layout fixo na parte inferior da tela, sempre visível durante a exploração.
+
+\begin{verbatim}
+            640
+____________________________
+|                            |
+|                            |
+|                            |
+|         CENA               |
+|         (640x640)          |
+|                            |
+|                            |
+|                            |
+|                            |
+|                            |
+|____________________________|  960
+|         ^         |  ____  |
+|  _______________  | |    | |
+| |_______________| | |____| |
+| |_______________| |  ____  |
+| |_______________| |  ____  |
+| |_______________| |  ____  |
+| |_______________| |  ____  |
+|         v         |  ____  |
+|___________________|________|
+
+       384(60%)       256(40%)
+     Inventário       Status
+\end{verbatim}
+
+\paragraph{Elementos do HUD:}
+\begin{itemize}
+    \item \textbf{Inventário (60\%)}: Lista de itens com scroll, botões clicáveis
+    \item \textbf{Status (40\%)}: Personalidades da bruxa (O, C, E, A, N)
+    \item \textbf{Popup de Item}: Aparece ao clicar em um item, com tamanho adaptativo
+\end{itemize}
+
+\paragraph{Status:} Implementado em \texttt{hud.gd}, com atualização automática via sinais do \texttt{GameTemp}.
+
+\subsection{Layout 2 - Diálogo e Opções}
+
+Aparece sobre a cena durante interações com NPCs e eventos.
+
+\begin{verbatim}
+            640
+____________________________
+|                            |
+|                            |
+|                            |
+|         CENA               |
+|         (640x640)          |
+|                            |
+|                            |
+|                            |
+|                            |
+|                            |
+|____________________________|  960
+|                   |  ____  |
+| Aaaa aaa aaaaaa,  | |    | |
+| a aaaaaa, aaaaaa. | |    | |
+| Aaaa aa aaaaaaa.  | | -> | |
+| a, aaaaaa, aaaaa  | |    | |
+| aaaaa aaaaa, aaa. | |    | |
+| a, aaaaaa, aaaa.  | |____| |
+|                   |        |
+|___________________|________|
+
+       384(60%)       256(40%)
+      Mensagem        Opções
+\end{verbatim}
+
+\paragraph{Elementos do Diálogo:}
+\begin{itemize}
+    \item \textbf{Mensagem (60\%)}: Texto do diálogo com suporte a múltiplas linhas
+    \item \textbf{Opções (40\%)}: Botões de escolha ou botão "Avançar"
+    \item \textbf{Comportamento}: Pausa o jogo durante o diálogo
+\end{itemize}
+
+\paragraph{Implementação:}
+\begin{itemize}
+    \item \texttt{DialogBox}: Exibe mensagens, sinaliza \texttt{advance\_requested}
+    \item \texttt{OptionBox}: Modo opções ou modo avançar
+    \item \texttt{GameManager}: Orquestra pausa/reset e fluxo entre diálogo e opções
+\end{itemize}
+
+\subsection{Layout 3 - Preparo de Poções}
+
+Tela dedicada para a criação de poções, com interações de temperatura e tempo.
+
+\begin{verbatim}
+            640
+.___________________________
+|              *            |
+|     °    __          °    |
+|       .  ||    .    .     |
+|          ||°    *         |
+|      .-==||==°====-.      |
+|    .-'\_~~~~__;___/'-.    |
+|   /                   \   |
+|  |                     |  | 640
+|  |                     |  |
+|   \                   /   |
+|    '.               .'    |
+|      '-._________.-'      |
+|        [F] [F] [F] [F]    |
+|                           |
+|___________________________|
+|  _______________________  |
+| |      __    /---\      | |
+| |_    /  \__/     \_   /| |  160
+| | \__/              \_/ | |
+| |_______________________| |
+|  __    ___________    __  |
+| |[P]|  |  |  |  |  |  |[F]| |  160
+| |__|  |__|__|__|__|  |__| |
+|___________________________|
+
+  20%         60%        20%
+  128         384        128
+\end{verbatim}
+
+\paragraph{Elementos do Preparo:}
+\begin{itemize}
+    \item \textbf{Animação do Caldeirão (60\%)}: Centro da tela, animação conforme estado
+    \item \textbf{Gráfico T(t)}: Temperatura ao longo do tempo (canto superior)
+    \item \textbf{Botão \pocao{} (20\%)}: À esquerda, finaliza o preparo
+    \item \textbf{Inventário (60\%)}: Itens disponíveis para adicionar
+    \item \textbf{Botão \fogo{} (20\%)}: À direita, controla a temperatura do fogo
+\end{itemize}
+
+\paragraph{Interações do Preparo:}
+
+\subparagraph{Botão de Fogo \fogo{}}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Estado} & \textbf{Ação} & \textbf{Comportamento} & \textbf{Efeito Visual} \\
+\hline
+Fogo Desligado & Apertar (curto) & \crossmark{} Nada & Faísca única \\
+Fogo Desligado & Segurar (longo) & \checkmark{} Liga fogo & Faíscas contínuas $\rightarrow$ Fogo \\
+Fogo Ligado & Apertar (curto) & \checkmark{} Atiça fogo & Chama aumenta \\
+Fogo Ligado & Segurar (longo) & \checkmark{} Desliga fogo & Chama diminui até apagar \\
+\hline
+\end{tabular}
+\caption{Comportamento do Botão de Fogo}
+\end{table}
+
+\subparagraph{Botão de Poção \pocao{}}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Estado} & \textbf{Ação} & \textbf{Comportamento} & \textbf{Efeito Visual} \\
+\hline
+Sem Item & Apertar (curto) & \crossmark{} Nada & Nenhum \\
+Sem Item & Segurar (longo) & \crossmark{} Nada & Nenhum \\
+Com Item & Apertar (curto) & \checkmark{} Finaliza preparo & Animação de preparo \\
+Com Item & Segurar (longo) & \duvida{} \textbf{???} & ??? \\
+\hline
+\end{tabular}
+\caption{Comportamento do Botão de Poção}
+\end{table}
+
+\paragraph{Modelagem Física do Preparo:}
+
+\subparagraph{Variáveis:}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Variável} & \textbf{Descrição} \\
+\hline
+\(T\) & Temperatura do caldeirão \\
+\(F\) & Temperatura do fogo \\
+\(k_T\) & Fator de resfriamento para o ambiente \\
+\(k_F\) & Constante de resfriamento do fogo \\
+\(T_{amb}\) & Temperatura padrão do ambiente \\
+\(F_{min}\) & Temperatura padrão do fogo \\
+\(a\) & Fator de transferência (Fogo $\rightarrow$ Caldeirão) \\
+\(F_{max}\) & Temperatura máxima do fogo \\
+\hline
+\end{tabular}
+
+\subparagraph{Equações:}
+
+\[
+\frac{dT}{dt}(t) = -k_T(T - T_{amb}) + a(F - T)
+\]
+
+\[
+\frac{dF}{dt}(t) = -k_F(F - F_{min})
+\]
+
+\subparagraph{Parâmetros Padrão:}
+
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Parâmetro} & \textbf{Valor} \\
+\hline
+\(T_{amb}\) & 20 \\
+\(k_T\) & 0.02 \\
+\(F_{min}\) & 120 \\
+\(F_{max}\) & 240 \\
+\hline
+\end{tabular}
+
+\paragraph{Cálculo da Poção:}
+
+Ao finalizar uma poção, a matriz resultante é:
+
+\[
+A = \prod_{i=1}^{n} [a_i A_i + (1-a_i)I]
+\]
+
+Onde \(a_i\) é o aproveitamento do ingrediente \(i\), calculado por:
+
+\[
+a = \text{penalidade}_Q + \text{penalidade}_{T_{max}} + \text{penalidade}_{T_{min}} + \text{penalidade}_{t_{min}} + \text{penalidade}_{t_{max}}
+\]
+
+\paragraph{Aplicação da Poção:}
+
+\[
+x \rightarrow Ax \rightarrow \frac{Ax}{|Ax|}
+\]
+
+Onde \(|x|\) é a norma infinito, preservando a característica mais forte.
+
+\paragraph{Status:} Tela de Preparo \textbf{NÃO IMPLEMENTADA} - próxima prioridade.
+
+\newpage
+
+\section{Estrutura de Jogo (atualizada)}
+
+\begin{verbatim}
+MAIN
+|
++-- GameManager [X] (game_manager.gd)
+|   +-- DatabaseManager [X] (database_manager.gd)
+|   +-- AudioManager [X] (audio_manager.gd - funcional)
+|   +-- Interpeter [X] (game_interpeter.gd - parcial)
+|   +-- GameTemp [X] (game_temp.gd)
+|   +-- InputManager [X] (game_input_manager.gd)
+|
++-- CanvasLayer
+|   +-- HUD [X] (hud.gd - limpo e organizado)
+|   |   +-- Inventario [X] (com scroll e botões)
+|   |   |   Obs: botões dinâmicos com popup adaptativo
+|   |   +-- Status [X] (personalidades da bruxa)
+|   |
+|   +-- PauseMenu [X] (funcional)
+|   |   +-- Continuar [X]
+|   |   +-- Opcoes [ ] (sem funcao)
+|   |   +-- Sair [X]
+|   |
+|   +-- Notificacao [X] (estrutura pronta)
+|   |
+|   +-- DialogBox [X] (dialogue_box.gd)
+|   |   Obs: com sinal advance\_requested
+|   |
+|   +-- OptionBox [X] (option_box.gd)
+|   |   Obs: com modos opções e avançar
+|   |
+|   +-- PopupItem [X] (popup_item.gd - adaptativo)
+|   |   Obs: tamanho automático ao conteúdo
+|   |
+|   +-- CenaPreparo [ ] (invisivel)
+|   +-- MenuPrincipal [ ] (invisivel)
+|   +-- Fade [X] (funcional)
+|
++-- Mundo [X]
+    +-- Player [X] (com aceleração e fricção)
+    |   +-- Camera2D [X]
+    |   +-- Sprite2D [X]
+    |   +-- CollisionShape2D [X]
+    |   +-- InteractionZone [X]
+    |
+    +-- Mapa [X] (mapa_base.gd)
+        +-- Eventos
+            +-- EventoBase [X] (evento_base.gd)
+                +-- Pagina [X] (pagina.gd)
+                    +-- InteractionZone [X] (interaction_zone.gd)
+\end{verbatim}
+
+\subsection{Conexões}
+
+\begin{verbatim}
+Continuar (pressed) -> GameManager._on_continuar_pressed
+Sair (pressed)      -> GameManager._on_sair_pressed
+DatabaseManager.loaded -> GameTemp._on_database_loaded
+DialogBox.advance_requested -> GameManager._on_advance_requested
+OptionBox.option_selected -> GameManager._on_option_selected
+PopupItem.popup_closed -> HUD._on_popup_closed
+\end{verbatim}
+
+\subsection{Status dos Modulos}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|l|c|p{5cm}|p{2.5cm}|}
+\hline
+\textbf{Modulo} & \textbf{Status} & \textbf{Observacao} & \textbf{Prioridade} \\
+\hline
+GameManager & \ok & Gerenciando tudo & - \\
+DatabaseManager & \ok & Lendo JSON com sucesso & - \\
+AudioManager & \ok & BGM, BGS, SE funcionando & - \\
+Interpeter & \parcial & Comandos principais ok & Media \\
+GameTemp & \ok & Estado do jogo funcionando & - \\
+InputManager & \ok & Movimento com aceleração & - \\
+HUD/Inventario & \ok & Botões dinâmicos com popup & - \\
+PopupItem & \ok & Adaptativo ao conteúdo & - \\
+DialogBox & \ok & Com avanço via sinal & - \\
+OptionBox & \ok & Modos opções e avançar & - \\
+PauseMenu & \ok & Continuar e Sair & - \\
+Notificacao & \ok & Estrutura pronta & - \\
+Fade & \ok & Transições funcionando & - \\
+Player & \ok & Com aceleração/fricção & - \\
+EventoBase & \ok & Trigger click/touch/parallel & - \\
+Pagina & \ok & Com InteractionZone & - \\
+InteractionZone & \ok & Detecta click e touch & - \\
+MapaBase & \ok & Conecta eventos & - \\
+\hline
+CenaPreparo & \pendente & Invisivel, sem funcao & Alta \\
+MenuPrincipal & \pendente & Invisivel, sem funcao & Alta \\
+Opcoes & \pendente & Sem funcao & Baixa \\
+Salvamento & \pendente & - & Media \\
+\hline
+\end{tabular}
+\caption{Status de Desenvolvimento}
+\end{table}
+
+\newpage
+
+\section{Mapa}
+
+\subsection{Links MIRO}
+
+\begin{itemize}
+    \item Capitulo 1: \url{https://miro.com/app/board/uXjVHHRQsyM=/}
+    \item Capitulo 2: (em breve)
+    \item Capitulo 3: (em breve)
+\end{itemize}
+
+\subsection{Relações do Mapa}
+
+\scriptsize
+\begin{longtable}{|c|p{2.2cm}|p{1.5cm}|p{2cm}|p{2.5cm}|p{2.5cm}|p{2.8cm}|}
+\hline
+\textbf{ID} & \textbf{Cena} & \textbf{Dim.} & \textbf{Conecta} & \textbf{Funcao} & \textbf{Elementos} & \textbf{Objetivo} \\
+\hline
+1 & Floresta & 8000 & 1.1, 2, 7 & Exploracao princ. & Arvores, ervas, ingredientes & Coletar recursos e avancar \\
+1.1 & BruxaOut & 1280 & 1, 1.1.1 & Area externa base & Casa, arvore, jardim & Acessar a casa ou retornar \\
+1.1.1 & BruxaIn & 1280 & 1.1 & Base inicial & Caldeirao, mesa, alquimia & Criar pocoes \\
+\hline
+2 & Bosque & 2000 & 1, 3 & Area de transicao & Vegetacao aberta & Chegar a cidade \\
+\hline
+3 & CidadeA & 5000 & 2, 3.1, 3.2, 3.3, 4 & Hub social & NPCs, casas, lojas & Conversar e receber missoes \\
+3.1 & CasaNPC1 & 1280 & 3 & Interior NPC & Comerciante/morador & Obter itens/informacoes \\
+3.2 & CasaNPC2 & 1280 & 3 & Interior NPC & Morador/alquimista & Descbloquear recompensas \\
+3.3 & CasaNPC3 & 1280 & 3 & Interior NPC & Plebeu doente da missão & Completar missao \\
+\hline
+4 & Estrada & 2000 & 3, 5 & Estrada principal & Caminho aberto & Prosseguir a ponte \\
+\hline
+5 & Ponte & 2000 & 4, 6 & Evento interm. & Ponte, rio, item 1/2 para poção ansiolítica. Guarda& Superar desafio \\
+\hline
+6 & CasteloOut & 3000 & 5, 6.1, 7 & Exterior castelo & Muralhas, portao & Entrar no castelo \\
+6.1 & CasteloIn & 2500 & 6 & Climax & Saloes, guardas, chefe & Concluir missao principal \\
+\hline
+7 & EstradaSec. & 3000 & 1, 6 & Atalho & Caminho alternativo, item 2/2 para poção ansiolítica. Guarda & Acesso rapido ao castelo \\
+\hline
+\caption{Mapa de Cenas e Conexoes}
+\end{longtable}
+\normalsize
+
+\newpage
+
+\section{Comandos do Interpretador}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|l|l|c|}
+\hline
+\textbf{Comando} & \textbf{Argumentos} & \textbf{Status} \\
+\hline
+teleportar & [map, x, y, direcao] & \ok \\
+parar\_movimento & [evento\_nome] & \ok \\
+travar\_player & [] & \ok \\
+destravar\_player & [] & \ok \\
+label & [nome] & \ok \\
+goto & [label] & \ok \\
+if & [condicao] & \ok \\
+else & [] & \ok \\
+end & [] & \ok \\
+while & [condicao] & \ok \\
+break & [] & \ok \\
+move\_event & [id, x, y, speed, dir, wait] & \ok \\
+mostrar\_msg & [mensagens...] & \ok \\
+esperar & [segundos] & \ok \\
+mostrar\_opcoes & [pergunta, opcoes, labels] & \ok \\
+mudar\_var & [nome, op, valor] & \ok \\
+tocar\_bgm & [nome, volume] & \ok \\
+tocar\_bgs & [nome, volume] & \ok \\
+tocar\_se & [nome, volume] & \ok \\
+fade\_out & [tempo] & \ok \\
+fade\_in & [tempo] & \ok \\
+adicionar\_item & [nome, quantidade] & \ok \\
+remover\_item & [nome, quantidade] & \ok \\
+limpar\_inventario & [] & \ok \\
+\hline
+mudar\_personalidade & [nome, index, valor] & \ok \\
+chamar\_evento & [nome, pagina] & \pendente \\
+camera\_mover & [x, y, tempo] & \pendente \\
+camera\_tremer & [intensidade, freq, tempo] & \pendente \\
+mostrar\_animacao & [nome] & \pendente \\
+\hline
+\end{tabular}
+\caption{Comandos do Interpretador}
+\end{table}
+
+\newpage
+
+\section{Historia}
+
+\subsection{Contexto / Mundo}
+
+\textbf{Cenario:} Europa Medieval
+
+\vspace{0.3cm}
+
+\noindent Entre o mundo dos vivos e o mundo dos mortos existe um fino veu que os separa. Para a maioria das pessoas esse veu e imperceptivel, mas aqueles que tem contato com a magia podem ver atraves.
+
+\vspace{0.2cm}
+
+\noindent A cada dia que passa o mundo dos mortos esta mais cheio e alguns espiritos, por vontade ou acaso, acabam chegando tao perto do veu que interferem no mundo dos vivos.
+
+\vspace{0.2cm}
+
+\noindent A Bruxa [\ldots\ldots\ldots\ldots], se mudou para perto da cidade a pouco tempo, ela veio para descansar. Porem, os mortos e vivos tem problemas diversos e ficam te chamando toda hora para fazer pocoes para eles.
+
+\vspace{0.2cm}
+
+\noindent Para as pocoes sao necessarios ingredientes de lugares diversos, entao a bruxa resolveu pendurar na sua porta, um pedaco do veu entre mundos, assim nao precisara perder tempo ou importar ingredientes caros.
+
+\vspace{0.2cm}
+
+\noindent Foram 4 dias para a criacao da casa. Um dia para cortar as madeiras. Outro para montar a casa. Um dia para pegar um pedaco do veu. E o ultimo dia, para preparar os moveis e encantamentos. Assim a casa estava pronta e a bruxa pode descansar.
+
+\subsection{Introducao}
+
+\textbf{Cenario:} Casa da bruxa (na floresta), manha com nevoa.
+
+\vspace{0.3cm}
+
+\begin{quote}
+\itshape
+A neblina ainda danca entre os pinheiros quando os primeiros sinos de argila pendurados na porta soam. Por dentro da casa, frascos coloridos repousam em prateleiras tortas, raizes secando pendem do teto, e um caldeirao fumegante com uma mistura esverdeada. O cheiro e de hortela, enxofre e terra umida.
+
+\vspace{0.3cm}
+
+\noindent Voce, a bruxa, esta proxima a mesa, enrolando rabos de salamandra quando a porta se abre com um rangido lento. Um jovem campones entra, com chapeu nas maos e os olhos baixos.
+
+\vspace{0.3cm}
+
+\noindent "Dona… minha irma vai se casar amanha, mas ela perdeu a voz. Pode nos ajudar?"
+\end{quote}
+
+\vspace{0.3cm}
+
+\noindent Voce se levanta, pega um livro pesado com fecho de ossos e o abre sobre a mesa. A luz das velas tremula. Um menu aparece com ingredientes possiveis: mel de fada, lingua de tritao, eco de caverna, orvalho de flor da manha, etc.
+
+\newpage
+
+\subsection{Capitulo 1}
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Cenário:} Floresta / Bosque / Cidade A / Estradas / Ponte / Castelo
+    \item \textbf{Missão:} Pegar ingredientes, criar poção, curar doença de ansiedade no plebeu, pegar a carta validando, depois curar a mesma doença na princesa.
+    \item \textbf{Roteiro:} Bruxa em casa, vem pessoa avisar doença num plebeu, bruxa vai ver ela na cidade, bruxa pega itens, bruxa cozinha, bruxa volta no plebeu doente, aplica poção, reação, carta para o rei, bruxa vai na guarda, bruxa vai no rei, aplica poção na princesa.
+    \item \textbf{Menor caminho:} $1.1.1\rightarrow1.1\rightarrow1\rightarrow2\rightarrow3\rightarrow3.3\rightarrow3\rightarrow4\rightarrow5\rightarrow4\rightarrow3\rightarrow2\rightarrow1\rightarrow7\rightarrow1\rightarrow1.1\rightarrow1.1.1\rightarrow1.1\rightarrow1\rightarrow2\rightarrow3\rightarrow3.3\rightarrow3\rightarrow4\rightarrow5\rightarrow6\rightarrow6.1$
+\end{itemize}
+
+\newpage
+
+\section{Mecanicas}
+
+\subsection{Poções e Personalidades}
+
+O estado da personalidade de uma pessoa é representado por um vetor em \(\mathbb{R}^5\):
+
+\[
+x \in \mathbb{R}^5
+\]
+
+As poções são itens que modificam uma personalidade, são representados por uma matriz \(A\):
+
+\[A : \text{matriz 5x5}\]
+
+A nova personalidade \(p\), após o uso da poção, é calculada por:
+
+\[
+p(x) = Ax + b
+\]
+
+Onde:
+\begin{itemize}
+    \item \(x \in \mathbb{R}^5\) é a personalidade que será mudada
+    \item \(A \in \text{Mat}_5(\mathbb{R})\) é a matriz de transformacao da poção
+    \item \(b \in \mathbb{R}^{5}\) são um termo de erro adicionado
+\end{itemize}
+
+\subsubsection{Preparo de Poções}
+
+O preparo de poções se dá ao combinar ingredientes e controlar a temperatura e tempo de cozimento.
+
+\paragraph{Ingredientes}
+
+Os ingredientes são os componentes que combinados geram uma poção.
+Cada ingrediente tem sua matriz \(A\) e sua temperatura de cozimento \(\mu\).
+
+\begin{itemize}
+    \item \(A\) matrix 5x5
+    \item \(\mu\) temperatura de cozimento média
+    \item \(\sigma\) desvio padrão de cozimento
+\end{itemize}
+
+Ao final é calculada a matriz \(A\) da poção gerada:
+
+\[A = \prod{\alpha_i A_i} = (\prod{\alpha_i}) \cdot \prod{A_i} \]
+\[i \leq n \]
+
+sua qualidade \(\alpha\) é calculada a partir da média dos \(\alpha_i\).
+
+\newpage
+
+\section{Próximos Passos}
+
+\begin{itemize}
+    \item \textbf{Alta Prioridade:}
+    \begin{itemize}
+        \item Criar Menu Principal
+        \item Criar Cena de Preparo (poções)
+    \end{itemize}
+    
+    \item \textbf{Média Prioridade:}
+    \begin{itemize}
+        \item Adicionar comandos faltantes no Interpeter
+        \item Sistema de salvamento/carregamento
+        \item Implementar sistema de poções com matrizes
+    \end{itemize}
+    
+    \item \textbf{Baixa Prioridade:}
+    \begin{itemize}
+        \item Opções do jogo (configurações)
+        \item Refinamentos visuais
+    \end{itemize}
+\end{itemize}
+
+\end{document}

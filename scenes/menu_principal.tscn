@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://cghsvj5vju42v"]
+
+[ext_resource type="Theme" uid="uid://3chprlsxpov2" path="res://resources/tema_base.tres" id="1_i85hu"]
+
+[node name="MenuPrincipal" type="Control" unique_id=1568489843]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 640.0
+offset_bottom = 960.0
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=807308383]
+layout_mode = 1
+offset_right = 640.0
+offset_bottom = 960.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1233780193]
+layout_mode = 1
+offset_left = 256.0
+offset_top = 400.0
+offset_right = 384.0
+offset_bottom = 960.0
+
+[node name="Iniciar" type="Button" parent="VBoxContainer" unique_id=860827673]
+layout_mode = 2
+text = "Iniciar"
+
+[node name="Carregar" type="Button" parent="VBoxContainer" unique_id=1514413794]
+layout_mode = 2
+text = "Carregar"
+
+[node name="Opções" type="Button" parent="VBoxContainer" unique_id=1926094226]
+layout_mode = 2
+text = "Opções"
+
+[node name="Sair" type="Button" parent="VBoxContainer" unique_id=1349075545]
+layout_mode = 2
+text = "Sair"
+
+[node name="Label" type="Label" parent="." unique_id=1043372800]
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 272.0
+theme = ExtResource("1_i85hu")
+
+[node name="Label2" type="Label" parent="." unique_id=665565183]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 28.0
+text = "Menu Principal"

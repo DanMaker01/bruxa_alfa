@@ -1,0 +1,39 @@
+\babel@toc {brazilian}{}\relax 
+\contentsline {section}{\numberline {1}Informacoes do Projeto}{2}{section.1}%
+\contentsline {section}{\numberline {2}Layout da Tela}{2}{section.2}%
+\contentsline {section}{\numberline {3}Estrutura de Jogo (em progresso)}{3}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Conexoes}{4}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Status dos Modulos}{4}{subsection.3.2}%
+\contentsline {section}{\numberline {4}Mapa}{5}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Links MIRO}{5}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Relações do Mapa}{5}{subsection.4.2}%
+\contentsline {section}{\numberline {5}Historia}{7}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Contexto / Mundo}{7}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Introducao}{7}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Capitulo 1}{8}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Entre capítulos (mais curto)}{8}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.5}Capitulo 2}{8}{subsection.5.5}%
+\contentsline {subsection}{\numberline {5.6}Capitulo 3}{8}{subsection.5.6}%
+\contentsline {section}{\numberline {6}Fluxo de Missoes}{9}{section.6}%
+\contentsline {section}{\numberline {7}Mecanicas}{10}{section.7}%
+\contentsline {paragraph}{Oficiais}{10}{section*.8}%
+\contentsline {paragraph}{Brainstorm (mecanicas possiveis)}{10}{section*.9}%
+\contentsline {subsection}{\numberline {7.1}Poções e Personalidades}{10}{subsection.7.1}%
+\contentsline {subsubsection}{\numberline {7.1.1}Preparo de Poções}{11}{subsubsection.7.1.1}%
+\contentsline {paragraph}{Layout}{11}{section*.11}%
+\contentsline {paragraph}{Temperatura}{11}{section*.12}%
+\contentsline {paragraph}{Tempo}{11}{section*.13}%
+\contentsline {paragraph}{Ingredientes}{11}{section*.14}%
+\contentsline {paragraph}{Preparo}{11}{section*.15}%
+\contentsline {paragraph}{Simétrica}{12}{section*.17}%
+\contentsline {paragraph}{Definida positiva}{12}{section*.18}%
+\contentsline {paragraph}{Antissimétrica}{12}{section*.19}%
+\contentsline {paragraph}{Ortogonal}{12}{section*.20}%
+\contentsline {paragraph}{Permutação}{12}{section*.21}%
+\contentsline {paragraph}{Idempotente}{12}{section*.22}%
+\contentsline {paragraph}{Involutória}{12}{section*.23}%
+\contentsline {paragraph}{Nilpotente}{12}{section*.24}%
+\contentsline {paragraph}{Periódica}{12}{section*.25}%
+\contentsline {paragraph}{Potência-estável}{12}{section*.26}%
+\contentsline {paragraph}{Diagonal}{13}{section*.27}%
+\contentsline {subsection}{\numberline {7.2}Interpreter}{13}{subsection.7.2}%

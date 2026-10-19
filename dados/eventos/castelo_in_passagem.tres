@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://btieqyao35670"]
+
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="1_5ek33"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_t7kwy"]
+[ext_resource type="Script" uid="uid://7c1614u5xl4b" path="res://src/dados/comandos/cmd_fade.gd" id="3_ub07r"]
+[ext_resource type="Script" uid="uid://bnrknn0lpp5ss" path="res://src/dados/comandos/cmd_teleportar.gd" id="4_2t1em"]
+[ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="5_23ca8"]
+[ext_resource type="SpriteFrames" uid="uid://nipt5oq20nr3" path="res://animacoes/portal.tres" id="6_3io24"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="6_t7kwy"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="7_pqqer"]
+
+[sub_resource type="Resource" id="Resource_1hk6o"]
+script = ExtResource("3_ub07r")
+tempo = 0.2
+
+[sub_resource type="Resource" id="Resource_dcu0w"]
+script = ExtResource("4_2t1em")
+mapa = "res://mapas/mapa_castelo_out.tscn"
+posicao = Vector2(1080, 505)
+direcao = 2
+
+[sub_resource type="Resource" id="Resource_2kfn5"]
+script = ExtResource("5_23ca8")
+segundos = 0.2
+
+[sub_resource type="Resource" id="Resource_mpele"]
+script = ExtResource("3_ub07r")
+tipo = 1
+tempo = 0.5
+
+[sub_resource type="Resource" id="Resource_hb47w"]
+script = ExtResource("1_5ek33")
+sprite_frames = ExtResource("6_3io24")
+animacao = "parado"
+area_pos = Vector2(0, -10)
+area_scale = Vector2(9, 36)
+comandos = Array[ExtResource("2_t7kwy")]([SubResource("Resource_1hk6o"), SubResource("Resource_dcu0w"), SubResource("Resource_2kfn5"), SubResource("Resource_mpele")])
+
+[resource]
+script = ExtResource("7_pqqer")
+id = "castelo_in_passagem"
+paginas = Array[ExtResource("1_5ek33")]([SubResource("Resource_hb47w")])

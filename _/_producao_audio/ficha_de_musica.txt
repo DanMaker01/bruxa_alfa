@@ -1,0 +1,18 @@
+Música Floresta
+
+Clima: 		Feliz
+Ritmo: 		Rock 60s
+Tempo: 		4/4
+Velocidade: 	120 bpm
+Instrumentos:
+		Cordas, alaúde: Arpejos acompanha a harmonia
+		Oah/synth: como harmonia
+		Flautas, Oboés, Tubas: conversa de melodias
+		Glockspiel/sino: efeitos e algumas frases
+		Sons de passaros, vento, volhas: efeitos
+
+Escala: 		Dórico
+Harmonia: 	C-Am-F-G
+Melodia:		frases rapidas e esparsas
+Estrutura:		intro 2x, verso1, verso2, refrao, ponte, verso1 verso2, refrao.
+	

@@ -1,0 +1,27 @@
+==========================================================
+1400
+Cordas:
+	Alaúde medieval: Tocado com palheta, com som mais percussivo.
+	Rabeca (Rebec): Instrumento de arco ancestral do violino, com corpo em formato de pera.
+	Harpa e Saltério: Cordas dedilhadas muito populares nas cortes.
+	Vielle (Fidula): O principal instrumento de arco medieval para acompanhar canções.
+Sopro:
+	Flauta doce e Flauta transversal de madeira usadas em danças e festas.
+	Gaita de foles: Muito comum tanto na música popular quanto na camponesa.
+	Charamela: Instrumento de palheta dupla, ancestral do oboé, com som muito forte.
+Percursão:
+	Tambores e Pandeiros: Usados para marcar o ritmo das danças rituais e festivas.
+
+==========================================================
+1600
+Teclas:
+	Cravo (usado para o baixo contínuo)
+	Órgão de igreja e de câmara
+Cordas:
+	Violino e a família das violas da gamba. 
+	Alaúde e teorba (cordas dedilhadas)
+Sopro:
+	Flauta doce (em vários tamanhos)
+	Cornetto e sacabuxa (ancestrais dos metais)
+
+==========================================================

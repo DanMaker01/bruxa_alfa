@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://v0l52k86clk5"]
+
+[ext_resource type="Script" uid="uid://b6ahlah4mhwps" path="res://src/dados/item_data.gd" id="1_b0rtd"]
+[ext_resource type="Texture2D" uid="uid://blltffbqxwwax" path="res://assets/itens_icones/item_arroz.png" id="2_icone"]
+
+[resource]
+script = ExtResource("1_b0rtd")
+id = "arroz"
+nome = "Arroz"
+descricao = "Um punhado de arroz."
+icone = ExtResource("2_icone")
+A = Array[PackedFloat32Array]([PackedFloat32Array(1, 0, 0, 0, 0), PackedFloat32Array(0, 1, 0, 0, 0), PackedFloat32Array(0, 0, 1, 0, 0), PackedFloat32Array(0, 0, 0, 1, 0), PackedFloat32Array(0, 0, 0, 0, 1)])
+m = 3000.0
+s_menos = 680.0
+s_mais = 680.0
+T_min = 50.0
+T_max = 180.0
+t_min = 20.0
+h_min = 0.5
+t_max = 40.0
+h_max = 0.4
+k_min = 0.01
+k_max = 0.01

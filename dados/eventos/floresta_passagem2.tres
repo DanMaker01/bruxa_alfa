@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://p5edxojtjva3"]
+
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="1_fd0h5"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_ybajp"]
+[ext_resource type="Script" uid="uid://7c1614u5xl4b" path="res://src/dados/comandos/cmd_fade.gd" id="3_aiaho"]
+[ext_resource type="Script" uid="uid://bnrknn0lpp5ss" path="res://src/dados/comandos/cmd_teleportar.gd" id="4_x5cxl"]
+[ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="5_75q71"]
+[ext_resource type="SpriteFrames" uid="uid://nipt5oq20nr3" path="res://animacoes/portal.tres" id="6_qokr4"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="6_ybajp"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="7_k3j3i"]
+
+[sub_resource type="Resource" id="Resource_3ssgy"]
+script = ExtResource("3_aiaho")
+tempo = 0.2
+
+[sub_resource type="Resource" id="Resource_70527"]
+script = ExtResource("4_x5cxl")
+mapa = "res://mapas/mapa_bosque.tscn"
+posicao = Vector2(120, 505)
+direcao = 2
+
+[sub_resource type="Resource" id="Resource_qvgjy"]
+script = ExtResource("5_75q71")
+segundos = 0.2
+
+[sub_resource type="Resource" id="Resource_aniv6"]
+script = ExtResource("3_aiaho")
+tipo = 1
+tempo = 0.5
+
+[sub_resource type="Resource" id="Resource_i36jn"]
+script = ExtResource("1_fd0h5")
+gatilho = 1
+sprite_frames = ExtResource("6_qokr4")
+animacao = "parado"
+area_pos = Vector2(0, -10)
+area_scale = Vector2(9, 36)
+comandos = Array[ExtResource("2_ybajp")]([SubResource("Resource_3ssgy"), SubResource("Resource_70527"), SubResource("Resource_qvgjy"), SubResource("Resource_aniv6")])
+
+[resource]
+script = ExtResource("7_k3j3i")
+id = "floresta_passagem2"
+paginas = Array[ExtResource("1_fd0h5")]([SubResource("Resource_i36jn")])

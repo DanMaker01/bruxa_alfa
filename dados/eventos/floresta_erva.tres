@@ -1,0 +1,49 @@
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://b0xl8r6jm2fnj"]
+
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="1_1crth"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_jkp58"]
+[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="3_eya4r"]
+[ext_resource type="Script" uid="uid://bercma7w4moqu" path="res://src/dados/comandos/cmd_mudar_var.gd" id="4_wqwq6"]
+[ext_resource type="Resource" uid="uid://cd8kjx75t1h3t" path="res://dados/itens/erva.tres" id="5_p7eu0"]
+[ext_resource type="Script" uid="uid://bg82uh5klkyf6" path="res://src/dados/comandos/cmd_item.gd" id="6_3bvw7"]
+[ext_resource type="SpriteFrames" path="res://animacoes/floresta_erva.tres" id="7_3n8h0"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="8_2m7h7"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="9_j2gur"]
+
+[sub_resource type="Resource" id="Resource_d7by5"]
+script = ExtResource("3_eya4r")
+texto = "Esta erva é um bom ingrediente. Vou pegar."
+
+[sub_resource type="Resource" id="Resource_chlc2"]
+script = ExtResource("4_wqwq6")
+variavel = "pegou_floresta_erva"
+valor = 1.0
+
+[sub_resource type="Resource" id="Resource_46h7u"]
+script = ExtResource("6_3bvw7")
+item = ExtResource("5_p7eu0")
+
+[sub_resource type="Resource" id="Resource_e0kyd"]
+script = ExtResource("1_1crth")
+sprite_frames = ExtResource("7_3n8h0")
+direcao = 2
+area_pos = Vector2(-2.5, -6)
+area_scale = Vector2(6.25, 6.25)
+comandos = Array[ExtResource("2_jkp58")]([SubResource("Resource_d7by5"), SubResource("Resource_chlc2"), SubResource("Resource_46h7u")])
+
+[sub_resource type="Resource" id="Resource_22lkp"]
+script = ExtResource("8_2m7h7")
+variavel = "pegou_floresta_erva"
+valor = 1.0
+
+[sub_resource type="Resource" id="Resource_hbarb"]
+script = ExtResource("1_1crth")
+condicao = SubResource("Resource_22lkp")
+direcao = 2
+area_pos = Vector2(-2.5, -6)
+area_scale = Vector2(6.25, 6.25)
+
+[resource]
+script = ExtResource("9_j2gur")
+id = "floresta_erva"
+paginas = Array[ExtResource("1_1crth")]([SubResource("Resource_e0kyd"), SubResource("Resource_hbarb")])

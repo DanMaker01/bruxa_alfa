@@ -1,0 +1,136 @@
+[gd_resource type="Resource" script_class="EventoData" format=3]
+
+[ext_resource type="Script" path="res://src/dados/pagina_data.gd" id="1_wk0jm"]
+[ext_resource type="Script" path="res://src/dados/comandos/comando.gd" id="2_fp4i4"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="3_lgb6n"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_mostrar_opcoes.gd" id="4_symku"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_label.gd" id="5_hutgf"]
+[ext_resource type="Resource" path="res://dados/itens/maca.tres" id="6_4ar06"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_item.gd" id="7_4rhsc"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_mudar_var.gd" id="8_tpxdf"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_goto.gd" id="9_2plsw"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_player.gd" id="10_bkhln"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_tremer_camera.gd" id="11_dnrbo"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_esperar.gd" id="12_87qhk"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_mover_camera.gd" id="13_1b1ri"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_resetar_camera.gd" id="14_db83f"]
+[ext_resource type="SpriteFrames" path="res://animacoes/maca.tres" id="15_rpce6"]
+[ext_resource type="Script" path="res://src/dados/condicao.gd" id="16_pdo0j"]
+[ext_resource type="Script" path="res://src/dados/evento_data.gd" id="17_rx4aw"]
+
+[sub_resource type="Resource" id="Resource_vgahb"]
+script = ExtResource("3_lgb6n")
+texto = "🍎 Você encontrou uma maçã vermelha e brilhante."
+
+[sub_resource type="Resource" id="Resource_7gdpu"]
+script = ExtResource("4_symku")
+pergunta = "O que você faz?"
+opcoes = Array[String](["Pegar maçã", "Ignorar"])
+labels = Array[String](["label_pegar", "label_ignorar"])
+
+[sub_resource type="Resource" id="Resource_6j301"]
+script = ExtResource("5_hutgf")
+nome = "label_pegar"
+
+[sub_resource type="Resource" id="Resource_0qb50"]
+script = ExtResource("3_lgb6n")
+texto = "🍎 Você pegou a maçã! Ela parece deliciosa."
+
+[sub_resource type="Resource" id="Resource_s7fnu"]
+script = ExtResource("7_4rhsc")
+item = ExtResource("6_4ar06")
+
+[sub_resource type="Resource" id="Resource_5w2yw"]
+script = ExtResource("8_tpxdf")
+variavel = "pegou_maca"
+valor = 1.0
+
+[sub_resource type="Resource" id="Resource_jn8dm"]
+script = ExtResource("9_2plsw")
+label = "fim"
+
+[sub_resource type="Resource" id="Resource_e3xlb"]
+script = ExtResource("5_hutgf")
+nome = "label_ignorar"
+
+[sub_resource type="Resource" id="Resource_qd3rd"]
+script = ExtResource("3_lgb6n")
+texto = "🍎 Você ignorou a maçã e seguiu seu caminho."
+
+[sub_resource type="Resource" id="Resource_ahh1k"]
+script = ExtResource("9_2plsw")
+label = "fim"
+
+[sub_resource type="Resource" id="Resource_c6h87"]
+script = ExtResource("5_hutgf")
+nome = "fim"
+
+[sub_resource type="Resource" id="Resource_8k8ya"]
+script = ExtResource("3_lgb6n")
+texto = "..."
+
+[sub_resource type="Resource" id="Resource_koxk8"]
+script = ExtResource("10_bkhln")
+
+[sub_resource type="Resource" id="Resource_gf0m4"]
+script = ExtResource("11_dnrbo")
+duracao = 2.0
+
+[sub_resource type="Resource" id="Resource_h3cie"]
+script = ExtResource("12_87qhk")
+segundos = 2.0
+
+[sub_resource type="Resource" id="Resource_vc0gy"]
+script = ExtResource("12_87qhk")
+
+[sub_resource type="Resource" id="Resource_8j8v4"]
+script = ExtResource("13_1b1ri")
+posicao = Vector2(1000, 500)
+tempo = 1.0
+
+[sub_resource type="Resource" id="Resource_x37dd"]
+script = ExtResource("12_87qhk")
+
+[sub_resource type="Resource" id="Resource_niwp8"]
+script = ExtResource("12_87qhk")
+
+[sub_resource type="Resource" id="Resource_pmxen"]
+script = ExtResource("14_db83f")
+tempo = 1.0
+
+[sub_resource type="Resource" id="Resource_iv8np"]
+script = ExtResource("12_87qhk")
+
+[sub_resource type="Resource" id="Resource_qvaf6"]
+script = ExtResource("12_87qhk")
+segundos = 1.5
+
+[sub_resource type="Resource" id="Resource_lcxpk"]
+script = ExtResource("10_bkhln")
+acao = 1
+
+[sub_resource type="Resource" id="Resource_vml6x"]
+script = ExtResource("3_lgb6n")
+texto = "osh, que estranho..."
+
+[sub_resource type="Resource" id="Resource_tf8po"]
+script = ExtResource("1_wk0jm")
+sprite_frames = ExtResource("15_rpce6")
+area_scale = Vector2(4, 36)
+comandos = Array[ExtResource("2_fp4i4")]([SubResource("Resource_vgahb"), SubResource("Resource_7gdpu"), SubResource("Resource_6j301"), SubResource("Resource_0qb50"), SubResource("Resource_s7fnu"), SubResource("Resource_5w2yw"), SubResource("Resource_jn8dm"), SubResource("Resource_e3xlb"), SubResource("Resource_qd3rd"), SubResource("Resource_ahh1k"), SubResource("Resource_c6h87"), SubResource("Resource_8k8ya"), SubResource("Resource_koxk8"), SubResource("Resource_gf0m4"), SubResource("Resource_h3cie"), SubResource("Resource_vc0gy"), SubResource("Resource_8j8v4"), SubResource("Resource_x37dd"), SubResource("Resource_niwp8"), SubResource("Resource_pmxen"), SubResource("Resource_iv8np"), SubResource("Resource_qvaf6"), SubResource("Resource_lcxpk"), SubResource("Resource_vml6x")])
+
+[sub_resource type="Resource" id="Resource_yk2tu"]
+script = ExtResource("16_pdo0j")
+variavel = "pegou_maca"
+valor = 1.0
+
+[sub_resource type="Resource" id="Resource_8tqvb"]
+script = ExtResource("1_wk0jm")
+condicao = SubResource("Resource_yk2tu")
+animacao = "parado"
+area_scale = Vector2(4, 4)
+
+[resource]
+script = ExtResource("17_rx4aw")
+id = "cidadeA_in01_maca"
+paginas = Array[ExtResource("1_wk0jm")]([SubResource("Resource_tf8po"), SubResource("Resource_8tqvb")])

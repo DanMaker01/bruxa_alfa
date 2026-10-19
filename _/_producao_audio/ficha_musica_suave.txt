@@ -1,0 +1,97 @@
+
+Forest1 
+
+Clima: 		Misterioso
+Ritmo: 		x 2 3 4 - x 2 3 4 - x 2 3 4 - x 2 3 4
+Tempo: 		3/4, 4/4 ou 7/4
+Velocidade: 	120bpm
+Instrumentos:
+		Cordas: Arpejos acompanha a harmonia
+		Oah/synth: como harmonia
+		Flautas, Oboés, Tubas: conversa de melodias
+		Glockspiel/sino: efeitos e algumas frases
+		Sons de passaros, vento, volhas: efeitos
+
+Escala: 		Dórico, Mixolídio, Aeólio
+Harmonia: 	Em-F-G-F (algo que vai e volta assim)
+Melodia:		
+		Frases e respostas, acordes entre instrumentos
+		Frases de 8 barras
+Cadência:
+		16 intro
+		16 tema
+		16 tema
+		16 intro
+		16 tema
+		16 tema
+		16 gira instrumento
+		16 gira instrumento
+		16 acordes feliz
+		16 acordes curioso
+		16 acordes agridoce
+		16 acordes fim
+
+Referências:
+		Forest Theme (From "Final Fantasy VI")
+---------------------------------------------------
+
+Forest2
+
+Clima: 		Misterioso
+Ritmo: 		1 2 3 - 4 5 6 - 1 2 3 - 4 5 6 
+Tempo: 		6/8
+Velocidade: 	120bpm
+Instrumentos:
+		Cordas: Arpejos acompanha a harmonia
+		Oah/synth: como harmonia
+		Flautas, Oboés, Tubas: conversa de melodias
+		Glockspiel/sino: efeitos e algumas frases
+		Sons de passaros, vento, volhas: efeitos
+
+Escala: 		Dórico, Mixolídio, Aeólio
+Harmonia: 	Em-F-G-F (algo que vai e volta assim)
+Melodia:		
+		Frases e respostas, acordes entre instrumentos
+		Frases de 8 barras
+Cadência:
+		16bar baixo, melodia, harmonia
+		16bar melodia fechando o loop
+
+
+Referências:
+		Forest Of Illusion - Super Mario World
+
+
+-------------------------------------------------------------------------------------------
+
+Forest1 
+
+Clima: 		Misterioso
+Ritmo: 		a A a A - a A a A 
+Tempo: 		4/4
+Velocidade: 	130bpm
+Instrumentos:
+		Cordas: Arpejos acompanha a harmonia
+		Oah/synth: como harmonia
+		Flautas, Oboés, Tubas: conversa de melodias
+		Glockspiel/sino: efeitos e algumas frases
+		Sons de passaros, vento, volhas: efeitos
+
+Escala: 		Dórico, Mixolídio, Aeólio
+Harmonia: 	Em-F-G-F (algo que vai e volta assim)
+Melodia:		
+		Frases e respostas, acordes entre instrumentos
+		Frases de 8 barras
+Cadência:
+		16bar melodia1
+		16bar melodia1++
+		32bar darks e loop (harpejo fininho e synth darks)
+
+		16bar melodia2
+		16bar melodia2++
+		32bar bonitinho loop
+				
+
+
+Referências:
+		Forest Maze - Mario RPG

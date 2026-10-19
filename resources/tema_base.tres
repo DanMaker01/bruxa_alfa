@@ -1,0 +1,8 @@
+[gd_resource type="Theme" format=3 uid="uid://3chprlsxpov2"]
+
+[sub_resource type="SystemFont" id="SystemFont_ghim6"]
+
+[resource]
+default_font = SubResource("SystemFont_ghim6")
+default_font_size = 24
+Label/colors/font_color = Color(0, 0, 0, 1)

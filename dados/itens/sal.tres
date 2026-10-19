@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://bskh34u4r8np1"]
+
+[ext_resource type="Texture2D" uid="uid://dbl3cple6i0ut" path="res://assets/itens_icones/item_sal.png" id="1_rp7v0"]
+[ext_resource type="Script" uid="uid://b6ahlah4mhwps" path="res://src/dados/item_data.gd" id="1_taihl"]
+
+[resource]
+script = ExtResource("1_taihl")
+id = "sal"
+nome = "Sal"
+descricao = "um pitada de de sal."
+icone = ExtResource("1_rp7v0")
+A = Array[PackedFloat32Array]([PackedFloat32Array(0.95, 0, 0, 0, 0), PackedFloat32Array(0, 1.05, 0.01, 0, 0), PackedFloat32Array(0, 0, 1, 0, 0), PackedFloat32Array(0, 0, 0, 1, 0), PackedFloat32Array(0, 0, 0, 0, 1)])
+m = 0
+s_menos = 0.0
+s_mais = 0.0
+k_min = 0.01
+T_min = 0
+T_max = 999.0
+k_max = 0.01
+h_min = 0.0
+t_max = 30.0
+h_max = 999.0

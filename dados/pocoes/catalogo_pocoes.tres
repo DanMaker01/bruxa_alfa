@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="CatalogoPocoes" format=3]
+
+[ext_resource type="Script" path="res://src/dados/catalogo_pocoes.gd" id="1_cat"]
+
+[resource]
+script = ExtResource("1_cat")
+distancia_max = 0.05

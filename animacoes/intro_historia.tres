@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://vcb8rfgmjljf"]
+
+[ext_resource type="Texture2D" uid="uid://bl6rpcg1bw6fq" path="res://assets/mapa_intro/intro_historia.png" id="1_pyai2"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_pyai2")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

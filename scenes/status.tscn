@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://c2hpmhdnt43qb"]
+
+[ext_resource type="Texture2D" uid="uid://dt6jl3hluwkhv" path="res://assets/game_ui/bola.png" id="1_puj0d"]
+[ext_resource type="Script" uid="uid://dpjyhwxdux3ny" path="res://src/ui/status.gd" id="1_u3ihd"]
+[ext_resource type="Texture2D" uid="uid://cr1ab2huesgjk" path="res://assets/game_ui/pentagrama.png" id="2_rvgb4"]
+
+[node name="Status" type="Control" unique_id=1781711192]
+z_index = 20
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -384.0
+offset_bottom = -640.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_u3ihd")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=980031228]
+z_index = 20
+layout_mode = 0
+offset_left = 58.0
+offset_top = 47.0
+offset_right = 202.0
+offset_bottom = 191.0
+texture = ExtResource("2_rvgb4")
+
+[node name="Pivo" type="Node2D" parent="." unique_id=1345016489]
+z_index = 20
+position = Vector2(131, 119)
+
+[node name="Icone_O" type="TextureRect" parent="Pivo" unique_id=498866325]
+z_index = 20
+offset_left = -27.0
+offset_top = -112.0
+offset_right = 21.0
+offset_bottom = -64.0
+texture = ExtResource("1_puj0d")
+stretch_mode = 3
+
+[node name="Icone_C" type="TextureRect" parent="Pivo" unique_id=232723025]
+z_index = 20
+offset_left = 56.0
+offset_top = -49.0
+offset_right = 104.0
+offset_bottom = -1.0
+texture = ExtResource("1_puj0d")
+stretch_mode = 3
+
+[node name="Icone_E" type="TextureRect" parent="Pivo" unique_id=1917376993]
+z_index = 20
+offset_left = 30.0
+offset_top = 45.0
+offset_right = 78.0
+offset_bottom = 93.0
+texture = ExtResource("1_puj0d")
+stretch_mode = 3
+
+[node name="Icone_A" type="TextureRect" parent="Pivo" unique_id=1324319569]
+z_index = 20
+offset_left = -78.0
+offset_top = 46.0
+offset_right = -30.0
+offset_bottom = 94.0
+texture = ExtResource("1_puj0d")
+stretch_mode = 3
+
+[node name="Icone_N" type="TextureRect" parent="Pivo" unique_id=348696006]
+z_index = 20
+offset_left = -107.0
+offset_top = -48.0
+offset_right = -59.0
+texture = ExtResource("1_puj0d")
+stretch_mode = 3

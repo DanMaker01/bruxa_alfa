@@ -1,0 +1,23 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://bs83v87c3lejv"]
+
+[ext_resource type="Texture2D" uid="uid://b0d3gw7osqkw2" path="res://assets/game_caldeirao/fogo.png" id="1_4htys"]
+[ext_resource type="Texture2D" uid="uid://b10j32cptidpw" path="res://assets/game_caldeirao/fogo_for.png" id="2_xc0ym"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_4htys")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_xc0ym")
+}],
+"loop": true,
+"name": &"fogo_alto",
+"speed": 5.0
+}]

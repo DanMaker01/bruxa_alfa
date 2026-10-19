@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://jlu5xlh2wsah"]
+
+[ext_resource type="Texture2D" uid="uid://bnhjd0aadyw8y" path="res://assets/mapa_cidadeA_in01/cidadeA_in01_maca.png" id="1_xis53"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_xis53")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
