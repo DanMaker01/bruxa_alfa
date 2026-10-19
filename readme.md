@@ -42,19 +42,18 @@ EstradaB
 [?]	Se segurar o botão de fogo quero que retire const_A a cada 0.3seg ao invés de desligar o fogo. Como não há como desligar mais o fogo, caso a temperatura do fogo fique abaixo de F_LIMIT_MIN ele faz um efeito e apaga.
 		Feito: segurar com o fogo aceso abafa (−CONST_A a cada 0,3 s); F < F_LIMIT_MIN (600, em sistema_termico) → fumaça e apaga. Apagado: segurar 1 s acende.
 		Calibrar: CONST_A, F_LIMIT_MIN, de resto ok.
-[?]	xquero que os icones tenham seu anel de cozimento(bolhas circulando) e que se o circulo chegar ao máximo deve ser quando ele passou do ponto. quando estiver no ponto ele deve estar antes de fechar o circulo. quero que as cores representem, branco->dourado brilhando(ponto perfeito)->amarelo->laranja->vermelho(quando há punição de 50% do quesito cozimento) e vai ficando preto até a punição ser máxima. O tempo também deve ter cores representando e se chegar ao máximo também é pq está com punição máxima.
-		Feito: ponto (e t_max na vela) em 75% do anel (FRACAO_PONTO); os 25% restantes são a régua da punição.
 [?]	receita1 testar replicabilidade (depende dos atributos dos itens)
 [ ]	balancear, pq usar a poção como ingrediente deve ser dificil, sensível. e deve ser cosistente a depender dos ingredientes.
-[ ] 	Caldeirão não deve tremer quando está com problemas na poção. Ele deve tremever levemente quando está com temperatura em 100 graus. e acima disso ele deve ir ficando avermelhado.
+[?] 	Caldeirão não deve tremer quando está com problemas na poção. Ele deve tremever levemente quando está com temperatura em 100 graus. e acima disso ele deve ir ficando avermelhado.
+		Feito (visual_caldeirao): treme de 95 °C (0 px) → 100 °C (1,5 px) → 200 °C (3,5 px); acima de 100 °C avermelha até 200 °C. Perda de aproveitamento não treme mais (só o caldo turvo).
+		Calibrar: T_TREMOR_INICIO, TREMOR_LEVE_PX, TREMOR_MAX_PX, T_VERMELHO_MAX, VERMELHO_MAX.
 
 
 [ ] Cena de poção preparada:
 [?]	Layout deve ser: uma janela com fundo escuro e leve transparencia. A poção surge no meio. Uma mensagem de texto é mostrada (identificação da poção, depois vamos verificar se ela ficou parecida suficiente com alguma poção que tem nome. Senão, pode dar nome. Mas é uma mecânica futura. Depois do texto a imagem da poção deve transladar para a esquerda e no espaço que ficou à direita deve aparecem os parametros dessa poção criada. Depois dos parametros, ao clicar em qualquer lugar a janela dá fade e fecha. 
 [.]	Indicador da matriz: pentágono O-C-E-A-N (personalidade neutra antes/depois, com ↑/↓ %) + grade 5x5 pequena (dourado aumenta, vermelho diminui)
-[?]	Deve ter efeitos visuais de entrada, meio e saida. no meio deve mostrar a poção e as informações dela. 
 [?]	Nome da poção: se a matriz ficar perto (distância de Frobenius <= distancia_max) de uma poção do catálogo (dados/pocoes/catalogo_pocoes.tres) ou de uma já nomeada pelo jogador (user://pocoes_nomeadas.tres), recebe o mesmo nome; senão o jogador dá um nome, que fica registrado. Se a poção só foi de 1 item, ela recebe o nome Poção de [nome item] [adjetivo], onde adjetivo diz sobre a qualidade dela.
-		Adjetivos (aproveitamento médio): ≥95% Perfeita, ≥80% Refinada, ≥60% Comum, ≥40% Rala, ≥20% Aguada, abaixo Estragada (CalculadoraPocao.ADJETIVOS_QUALIDADE).
+		Corrigido: Adjetivos (aproveitamento médio): ≥95% Concentrada, ≥80% Refinada, ≥60% (sem adjetivo), ≥40% Rala, ≥20% Aguada, abaixo Estragada (CalculadoraPocao.ADJETIVOS_QUALIDADE).
 [?]	Não mostrar mais o cozimento, tempo ideal e Temp ideal de poções criadas. Só quero o pentagrama e a matriz.
 [ ]	Nomear as poções de referência no catálogo (PocaoReferencia: nome, descrição, A)
 
@@ -83,7 +82,8 @@ EstradaB
 [?]	Variáveis só número (sem booleano; use 0 e 1). var02 do banco virou 1.0
 [?]	Página com várias condições (todas precisam valer): variável, item, personalidade, posição, direção
 [?]	Página reavalia ao ganhar/perder item e ao mudar personalidade
-[ ]	Notificação de item nunca aparece (NotificacaoItem sem Label em main.tscn)
+[?]	Notificação de item nunca aparece (NotificacaoItem sem Label em main.tscn)
+		Label já existe; agora o painel começa escondido e uma notificação nova não é mais apagada pelo timer da anterior.
 [?]	Segurar o botão de poção para sair agora é 0,7 s (TEMPO_LONGO)
 ```
 
@@ -94,6 +94,7 @@ EstradaB
 
 [.] Itens:
 [?]		Matriz A aceita poucas casas decimais no Inspector, ainda está arredondando para 2 casas. quero no mínimo 5. Por enquanto tenho que editar diretamente o .tras
+				Passo do Inspector agora é 0.00001 (item_data.gd). Conferir no editor.
 
 
 [ ] Intro:

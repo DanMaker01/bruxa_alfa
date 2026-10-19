@@ -336,9 +336,9 @@ static func criar_pocao(resultado: Dictionary, id: String, nome: String) -> Item
 ## Adjetivo da qualidade (aproveitamento médio) para poções de um item só, do melhor ao pior:
 ## [aproveitamento mínimo, adjetivo]. Concordam com "Poção" (feminino).
 const ADJETIVOS_QUALIDADE := [
-	[0.95, "Perfeita"],
+	[0.95, "Concentrada"],
 	[0.80, "Refinada"],
-	[0.60, "Comum"],
+	[0.60, ""],          # qualidade normal: sem adjetivo
 	[0.40, "Rala"],
 	[0.20, "Aguada"],
 	[0.0, "Estragada"],
@@ -363,7 +363,8 @@ static func nome_item_unico(diagnosticos: Array) -> String:
 		soma_a += float(d.get("a", 0.0))
 	if nome == "":
 		return ""
-	return "Poção de %s %s" % [nome, adjetivo_qualidade(soma_a / diagnosticos.size())]
+	var adj := adjetivo_qualidade(soma_a / diagnosticos.size())
+	return ("Poção de %s %s" % [nome, adj]) if adj != "" else ("Poção de %s" % nome)
 
 ## Média dos atributos dos ingredientes, pesada pelo aproveitamento (a) de cada um.
 ## Limites (Tmin, Tmax, tmin, tmax) só entram na média de quem TEM aquele limite

@@ -15,10 +15,11 @@ const H_PADRAO: float = 0.25
 
 @export_group("Poção")
 ## Matriz 5x5 (linhas O, C, E, A, N) que o ingrediente aplica na personalidade.
-# Passo de 0.0001 no Inspector (o padrão do Godot arredonda para 0.001).
+# Passo de 0.00001 (5 casas) no Inspector (o padrão do Godot arredonda para 0.001).
 # Hint: "32:3/1:..." = TYPE_PACKED_FLOAT32_ARRAY(32) de TYPE_FLOAT(3) com PROPERTY_HINT_RANGE(1).
 # (precisa ser string literal: a anotação não aceita "%" nem concatenação)
-@export_custom(PROPERTY_HINT_TYPE_STRING, "32:3/1:-10,10,0.0001,or_less,or_greater")
+# Obs.: float32 guarda ~7 dígitos, então 5 casas valem para |valor| < 10.
+@export_custom(PROPERTY_HINT_TYPE_STRING, "32:3/1:-10,10,0.00001,or_less,or_greater")
 var A: Array[PackedFloat32Array] = [
 	PackedFloat32Array([1, 0, 0, 0, 0]),
 	PackedFloat32Array([0, 1, 0, 0, 0]),

@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://t453tvdxj1f"]
+
+[ext_resource type="Texture2D" uid="uid://bmco7u2sp8udj" path="res://assets/game_caldeirao/caldeirao2.png" id="1_wgf4q"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_wgf4q")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

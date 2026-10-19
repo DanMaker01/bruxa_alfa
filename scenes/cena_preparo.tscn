@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://fvb7ymoc8e2o" path="res://src/core/cena_preparo.gd" id="1_mpeo2"]
 [ext_resource type="Texture2D" uid="uid://0256vrk8foeo" path="res://assets/game_caldeirao/bg.jpg" id="1_qpp4d"]
 [ext_resource type="SpriteFrames" uid="uid://bdomrxaxuelbx" path="res://animacoes/caldeirao.tres" id="2_qpp4d"]
+[ext_resource type="SpriteFrames" uid="uid://t453tvdxj1f" path="res://animacoes/caldeirao_base.tres" id="3_a20yi"]
 [ext_resource type="SpriteFrames" uid="uid://bs83v87c3lejv" path="res://animacoes/fogo.tres" id="3_qpp4d"]
 [ext_resource type="Script" uid="uid://0p3f24vg2s21" path="res://src/preparo/grafico_temperatura.gd" id="5_stgn2"]
 [ext_resource type="Texture2D" uid="uid://47stb8wx6c84" path="res://assets/game_caldeirao/bolha.png" id="5_uwxqp"]
@@ -61,6 +62,11 @@ offset_top = 32.0
 offset_right = 480.0
 offset_bottom = 544.0
 mouse_filter = 1
+
+[node name="CaldeiraoBase" type="AnimatedSprite2D" parent="Animações" unique_id=98629199]
+position = Vector2(320, 272)
+scale = Vector2(2, 2)
+sprite_frames = ExtResource("3_a20yi")
 
 [node name="Caldeirao" type="AnimatedSprite2D" parent="Animações" unique_id=1721849374]
 position = Vector2(320, 272)

@@ -58,7 +58,7 @@ z_index = 3
 script = ExtResource("4_iquun")
 evento = ExtResource("ev_bruxa_in_auto")
 
-[node name="Caldeirao2" type="CharacterBody2D" parent="Eventos" unique_id=1775784514]
+[node name="NPC" type="CharacterBody2D" parent="Eventos" unique_id=1775784514]
 position = Vector2(944, 464)
 script = ExtResource("4_iquun")
 evento = ExtResource("ev_bruxa_in_npc")

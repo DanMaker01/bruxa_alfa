@@ -85,6 +85,7 @@ func _buscar_ui() -> void:
 	if notification_container:
 		var item = notification_container.get_node_or_null("Container/NotificacaoItem")
 		notification_label = item.get_node_or_null("Label") if item else null
+		notification_container.visible = false   # começa escondida (não mostra painel vazio)
 
 func _conectar_sinais() -> void:
 	if database:
@@ -219,25 +220,23 @@ func lock_player() -> void: player_locked = true
 func unlock_player() -> void: player_locked = false
 func is_player_locked() -> bool: return player_locked
 
+var _notificacao_id: int = 0   # só a notificação mais recente pode esconder o painel
+
 func _show_notification(t: String) -> void:
 	print("[GameManager] Notificação: ", t)
-	print("  notification_label: ", notification_label)
-	print("  notification_container: ", notification_container)
 	if notification_label:
-		print("  label existe! path: ", notification_label.get_path())
-		print("  label.visible: ", notification_label.visible)
-		print("  container.visible antes: ", notification_container.visible if notification_container else "null")
 		notification_label.text = t
 		if notification_container:
 			notification_container.visible = true
-			print("  container.visible depois: ", notification_container.visible)
+			_notificacao_id += 1
+			var meu_id := _notificacao_id
 			get_tree().create_timer(3.0).timeout.connect(func():
-				if notification_container: notification_container.visible = false)
+				if notification_container and meu_id == _notificacao_id:
+					notification_container.visible = false)
 	elif pause_menu_label:
-		print("  ⚠️ caiu no pause_menu_label!")
 		pause_menu_label.text = "NOTIFICAÇÃO: " + t
 	else:
-		print("  ❌ NENHUM label encontrado!")
+		push_warning("[GameManager] Notificação sem label: " + t)
 
 # =============================================================================
 # PAUSA (sempre limpando o input, para a bruxa não sair andando sozinha)

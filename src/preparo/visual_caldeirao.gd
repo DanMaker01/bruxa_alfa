@@ -1,8 +1,8 @@
 # visual_caldeirao.gd
 # Tudo que é "aparência" do caldeirão e do fogo na cena de preparo:
 #   cor do caldeirão pela temperatura, cor/visibilidade do fogo, partículas (bolhas e
-#   brilhos), sprite forte ao atiçar, animação de ligar/desligar, tremor proporcional
-#   à perda de aproveitamento e respingo quando um item cai dentro.
+#   brilhos), sprite forte ao atiçar, animação de ligar/desligar, tremor leve na
+#   fervura (100 °C) e avermelhado acima disso, e respingo quando um item cai dentro.
 # Não decide nada do jogo: a cena chama os métodos com o estado atual.
 class_name VisualCaldeirao
 extends Node
@@ -35,8 +35,16 @@ const FAISCA_INTERVALO_INICIO: float = 0.22
 const FAISCA_INTERVALO_FIM: float = 0.05
 const COR_FAISCA := Color(1.0, 0.92, 0.6)
 const COR_FAISCA_FIM := Color(1.0, 0.45, 0.1, 0.0)
-# ---- tremor ----
-const TREMOR_MAX_PX: float = 7.0
+# ---- tremor e vermelho (pela temperatura T do caldo) ----
+## Começa a tremer em T_TREMOR_INICIO e chega no tremor leve em T_FERVURA (100 °C).
+const T_TREMOR_INICIO: float = 80.0
+const T_FERVURA: float = 100.0
+## Acima da fervura ele fica avermelhado até o máximo em T_VERMELHO_MAX.
+const T_VERMELHO_MAX: float = 200.0
+const TREMOR_LEVE_PX: float = 0.6      # amplitude em 100 °C
+const TREMOR_MAX_PX: float = 3.0       # amplitude em T_VERMELHO_MAX
+const VERMELHO_MAX: float = 0.6        # 0..1: quanto puxa para COR_VERMELHO no máximo
+const COR_VERMELHO := Color(1.0, 0.35, 0.3)
 # ---- caldo turvo (visão geral do aproveitamento) ----
 ## Quanto pior o aproveitamento médio, mais turvo: caldeirão mais escuro, bolhas maiores,
 ## mais lentas e escuras, quase sem estrelas. Bom aproveitamento: calmo e brilhante.
@@ -117,12 +125,11 @@ func boca() -> Vector2:
 # A CADA FRAME
 # =============================================================================
 ## perda_media: 0 = nada perdido, 1 = tudo perdido (média dos ingredientes).
-func atualizar(sistema: SistemaTermico, delta: float, perda_media: float, punindo_agora: bool) -> void:
+func atualizar(sistema: SistemaTermico, delta: float, perda_media: float, _punindo_agora: bool = false) -> void:
 	_t += delta
-	# caldeirão esquenta de cor com T
+	# caldeirão: cor normal até a fervura; acima de 100 °C vai ficando avermelhado
 	if caldeirao:
-		var tn = clampf((sistema.T - 20.0) / (240.0 - 20.0), 0.0, 1.0)
-		caldeirao.self_modulate = Color(1.0, 1.0 - tn * 0.3, 1.0 - tn * 0.5)
+		caldeirao.self_modulate = Color.WHITE.lerp(COR_VERMELHO, VERMELHO_MAX * _fator_vermelho(sistema.T))
 	# fogo: cor/intensidade pela temperatura do fogo
 	if fogo:
 		var cor = sistema.get_cor_fogo()
@@ -141,7 +148,7 @@ func atualizar(sistema: SistemaTermico, delta: float, perda_media: float, punind
 		_tempo_fogo_alto -= delta
 		if _tempo_fogo_alto <= 0.0 and fogo and fogo.sprite_frames and fogo.sprite_frames.has_animation(&"default"):
 			fogo.play(&"default")
-	_tremer(delta, perda_media, punindo_agora)
+	_tremer(delta, sistema.T)
 
 # =============================================================================
 # PARTÍCULAS
@@ -201,25 +208,36 @@ func _aplicar_turvo(delta: float, perda_media: float) -> void:
 		_mat_bolhas.initial_velocity_max *= lenta
 
 # =============================================================================
-# TREMOR (proporcional ao aproveitamento já perdido)
+# TREMOR (pela temperatura: leve na fervura, um pouco mais forte acima)
+# Problemas na poção NÃO fazem o caldeirão tremer (isso fica com os ícones/painel).
 # =============================================================================
-func _tremer(delta: float, perda_media: float, punindo_agora: bool) -> void:
+## 0 até 100 °C, 1 em T_VERMELHO_MAX.
+static func _fator_vermelho(T: float) -> float:
+	return clampf((T - T_FERVURA) / (T_VERMELHO_MAX - T_FERVURA), 0.0, 1.0)
+
+## Amplitude alvo (px): 0 até T_TREMOR_INICIO, sobe suave até TREMOR_LEVE_PX em 100 °C
+## e daí até TREMOR_MAX_PX em T_VERMELHO_MAX.
+static func amplitude_tremor(T: float) -> float:
+	if T < T_TREMOR_INICIO:
+		return 0.0
+	var leve: float = smoothstep(T_TREMOR_INICIO, T_FERVURA, T) * TREMOR_LEVE_PX
+	return lerpf(leve, TREMOR_MAX_PX, _fator_vermelho(T))
+
+func _tremer(delta: float, T: float) -> void:
 	if not caldeirao:
 		return
-	_intensidade_tremor = lerpf(_intensidade_tremor, perda_media, clampf(delta * 4.0, 0.0, 1.0))
-	var forca: float = _intensidade_tremor * (1.0 if punindo_agora else 0.6)
-	if forca > 0.01:
-		var amp: float = TREMOR_MAX_PX * forca
+	# _intensidade_tremor guarda a amplitude suavizada (px)
+	_intensidade_tremor = lerpf(_intensidade_tremor, amplitude_tremor(T), clampf(delta * 4.0, 0.0, 1.0))
+	var amp: float = _intensidade_tremor
+	if amp > 0.05:
 		caldeirao.position = _caldeirao_pos_base + Vector2(randf_range(-amp, amp), randf_range(-amp, amp) * 0.6)
-		var pulso: float = 0.5 + 0.5 * sin(_t * (6.0 + 10.0 * forca))
-		var vermelho: float = clampf(forca * (0.5 + 0.5 * pulso), 0.0, 0.8)
-		caldeirao.modulate = Color(1.0, 1.0 - vermelho, 1.0 - vermelho)
 	else:
 		caldeirao.position = _caldeirao_pos_base
-		caldeirao.modulate = Color.WHITE
+	caldeirao.modulate = Color.WHITE
 
+## 0..1 (proporção do tremor máximo).
 func intensidade_tremor() -> float:
-	return _intensidade_tremor
+	return _intensidade_tremor / TREMOR_MAX_PX
 
 # =============================================================================
 # FOGO
