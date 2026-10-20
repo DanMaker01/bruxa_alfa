@@ -39,57 +39,53 @@ EstradaB
 
 ```
 [ ] Caldeirão:
-[?]	Se segurar o botão de fogo quero que retire const_A a cada 0.3seg ao invés de desligar o fogo. Como não há como desligar mais o fogo, caso a temperatura do fogo fique abaixo de F_LIMIT_MIN ele faz um efeito e apaga.
-		Feito: segurar com o fogo aceso abafa (−CONST_A a cada 0,3 s); F < F_LIMIT_MIN (600, em sistema_termico) → fumaça e apaga. Apagado: segurar 1 s acende.
-		Calibrar: CONST_A, F_LIMIT_MIN, de resto ok.
-[?]	receita1 testar replicabilidade (depende dos atributos dos itens)
-[ ]	balancear, pq usar a poção como ingrediente deve ser dificil, sensível. e deve ser cosistente a depender dos ingredientes.
-[?] 	Caldeirão não deve tremer quando está com problemas na poção. Ele deve tremever levemente quando está com temperatura em 100 graus. e acima disso ele deve ir ficando avermelhado.
-		Feito (visual_caldeirao): treme de 95 °C (0 px) → 100 °C (1,5 px) → 200 °C (3,5 px); acima de 100 °C avermelha até 200 °C. Perda de aproveitamento não treme mais (só o caldo turvo).
-		Calibrar: T_TREMOR_INICIO, TREMOR_LEVE_PX, TREMOR_MAX_PX, T_VERMELHO_MAX, VERMELHO_MAX.
+[?]		Se segurar o botão de fogo quero que retire const_A a cada 0.3seg ao invés de desligar o fogo. Como não há como desligar mais o fogo, caso a temperatura do fogo fique abaixo de F_LIMIT_MIN ele faz um efeito e apaga.
+			Feito: segurar com o fogo aceso abafa (−CONST_A a cada 0,3 s); F < F_LIMIT_MIN (600, em sistema_termico) → fumaça e apaga. Apagado: segurar 1 s acende.
+			Calibrar: CONST_A, F_LIMIT_MIN, de resto ok.
+[ ]		balancear, pq usar a poção como ingrediente deve ser dificil, sensível. e deve ser cosistente a depender dos ingredientes.
+[?] 		Caldeirão não deve tremer quando está com problemas na poção. Ele deve tremever levemente quando está com temperatura em 100 graus. e acima disso ele deve ir ficando avermelhado.
+			Feito (visual_caldeirao): treme de 95 °C (0 px) → 100 °C (1,5 px) → 200 °C (3,5 px); acima de 100 °C avermelha até 200 °C. Perda de aproveitamento não treme mais (só o caldo turvo).
+			Calibrar: T_TREMOR_INICIO, TREMOR_LEVE_PX, TREMOR_MAX_PX, T_VERMELHO_MAX, VERMELHO_MAX.
 
+[ ] v3
+[ ] 	debug:limpar placeholder vars, definir algumas personalidades (todos npc terão personalidade. index z maior. 
+[ ]		balancear itens e preparo. 4 primeiros ingredientes oficiais. erva, cogu, pena de urubu,olho de salamandra(ou outro)
 
 [ ] Cena de poção preparada:
-[?]	Layout deve ser: uma janela com fundo escuro e leve transparencia. A poção surge no meio. Uma mensagem de texto é mostrada (identificação da poção, depois vamos verificar se ela ficou parecida suficiente com alguma poção que tem nome. Senão, pode dar nome. Mas é uma mecânica futura. Depois do texto a imagem da poção deve transladar para a esquerda e no espaço que ficou à direita deve aparecem os parametros dessa poção criada. Depois dos parametros, ao clicar em qualquer lugar a janela dá fade e fecha. 
-[.]	Indicador da matriz: pentágono O-C-E-A-N (personalidade neutra antes/depois, com ↑/↓ %) + grade 5x5 pequena (dourado aumenta, vermelho diminui)
-[?]	Nome da poção: se a matriz ficar perto (distância de Frobenius <= distancia_max) de uma poção do catálogo (dados/pocoes/catalogo_pocoes.tres) ou de uma já nomeada pelo jogador (user://pocoes_nomeadas.tres), recebe o mesmo nome; senão o jogador dá um nome, que fica registrado. Se a poção só foi de 1 item, ela recebe o nome Poção de [nome item] [adjetivo], onde adjetivo diz sobre a qualidade dela.
-		Corrigido: Adjetivos (aproveitamento médio): ≥95% Concentrada, ≥80% Refinada, ≥60% (sem adjetivo), ≥40% Rala, ≥20% Aguada, abaixo Estragada (CalculadoraPocao.ADJETIVOS_QUALIDADE).
-[?]	Não mostrar mais o cozimento, tempo ideal e Temp ideal de poções criadas. Só quero o pentagrama e a matriz.
-[ ]	Nomear as poções de referência no catálogo (PocaoReferencia: nome, descrição, A)
+[?]		Layout: Definir localização das janelas e informações. 
+[ ]			revisar como mostrar os valores fora das diagonais.
+[ ]		Nomear as poções de referência no catálogo (PocaoReferencia: nome, descrição, A)
 
-[ ]UI - notificação está estranha, tenho que ver se ela fica com uma fução mais bem definida, com multiplas notificações ou senão só tiro as notificações.
+[ ] UI - notificação está estranha, tenho que ver se ela fica com uma fução mais bem definida, com multiplas notificações ou senão só tiro as notificações.
 
 [ ] História / missão: (em ordem)
-[ ]	Diálogos devem condizer com a época
-[ ]	Cada personagem tem seu linguajar próprio e manias.
-[?]	Camponês bate na porta (TOC! TOC! TOC!), opção Deixar entrar / Ignorar. Ele pede ajuda para a irmã que vai casar → Poção da Calma Lúcida. Guardas ainda não deixam passar.
-[ ]		Corrigir fala: "E uma folha que posso , onde as árvores acabam." (bruxa_in_auto / bruxa_in_passagem). ("depoisé" já corrigido)
-				A Bruxa diz que o cogumelo cresce "onde a floresta acaba", mas ele está na estradaA.
-[.]		fazer área de spawn de evento no fim da floresta, outro na estradaA. Fazer farm com qtd na tela. (3 cogu, 3 erva) 
-				Hoje: 1 cogumelo (estradaA) + 1 erva (floresta), coleta única por variável. Fazer o spawn de eventos, nas páginas vai ter uma também uma nova condição de self-variable, valores 0 e 1; e no interprete quero um comando de ativar/desativar self-variable de um evento.
-[?]		A bruxa diz quais & qtos itens tem que pegar e libera controle na primeira missão.
-[ ]		com ingredientes na mão, interagir com o caldeirão, ela explica como usar a 1ª vez.
-				Evento bruxa_in_caldeirao ainda é só "caldeirão (em construção)".
-[ ]		após criar, vem cena NPC, basta ir no castelo, guardas deixam passar agora.
-				ponte_guarda e estradaB_guarda só bloqueiam, sem condição.
-[ ]		finalização, entrega poção e resultados possíveis.
-				castelo_in só tem a passagem.
+[ ]		Diálogos devem condizer com a época
+[ ]		Cada personagem tem seu linguajar próprio e manias.
+[?]		Camponês bate na porta (TOC! TOC! TOC!), opção Deixar entrar / Ignorar. Ele pede ajuda para a irmã que vai casar → Poção da Calma Lúcida. Guardas ainda não deixam passar.
+[ ]			Corrigir fala: "E uma folha que posso , onde as árvores acabam." (bruxa_in_auto / bruxa_in_passagem). ("depoisé" já corrigido)
+					A Bruxa diz que o cogumelo cresce "onde a floresta acaba", mas ele está na estradaA.
+[.]			fazer área de spawn de evento no fim da floresta, outro na estradaA. Fazer farm com qtd na tela. (3 cogu, 3 erva) 
+					Hoje: 1 cogumelo (estradaA) + 1 erva (floresta), coleta única por variável. Fazer o spawn de eventos, nas páginas vai ter uma também uma nova condição de self-variable, valores 0 e 1; e no interprete quero um comando de ativar/desativar self-variable de um evento.
+[?]			A bruxa diz quais & qtos itens tem que pegar e libera controle na primeira missão.
+[ ]			com ingredientes na mão, interagir com o caldeirão, ela explica como usar a 1ª vez.
+					Evento bruxa_in_caldeirao ainda é só "caldeirão (em construção)".
+[ ]			após criar, vem cena NPC, basta ir no castelo, guardas deixam passar agora.
+					ponte_guarda e estradaB_guarda só bloqueiam, sem condição.
+[ ]			finalização, entrega poção e resultados possíveis.
+					castelo_in só tem a passagem.
 
-
-[ ] Bugs que atrapalham a missão:
-[?]	Se segurar o botão de fogo quero que retire const_A a cada 0.3seg ao invés de desligar o fogo. Como não há como desligar mais o fogo, caso a temperatura do fogo fique abaixo de F_LIMIT_MIN ele faz um efeito e apaga.
-		Feito: segurar com o fogo aceso abafa (−CONST_A a cada 0,3 s); F < F_LIMIT_MIN (600, em sistema_termico) → fumaça e apaga. Apagado: segurar 1 s acende.
-[?]	Variáveis só número (sem booleano; use 0 e 1). var02 do banco virou 1.0
-[?]	Página com várias condições (todas precisam valer): variável, item, personalidade, posição, direção
-[?]	Página reavalia ao ganhar/perder item e ao mudar personalidade
-[?]	Notificação de item nunca aparece (NotificacaoItem sem Label em main.tscn)
-		Label já existe; agora o painel começa escondido e uma notificação nova não é mais apagada pelo timer da anterior.
-[?]	Segurar o botão de poção para sair agora é 0,7 s (TEMPO_LONGO)
 ```
 
 ## Terminar até o Cap. 1 (1)
 
 ```
+
+[ ] Bugs/Revisão:
+[?]		Página com várias condições (todas precisam valer): variável, item, personalidade, posição, direção
+[?]		Página reavalia ao ganhar/perder item e ao mudar personalidade
+[?]		Notificação de item nunca aparece (NotificacaoItem sem Label em main.tscn)
+			Label já existe; agora o painel começa escondido e uma notificação nova não é mais apagada pelo timer da anterior.
+[?]		Segurar o botão de poção para sair agora é 0,7 s (TEMPO_LONGO)
 
 
 [.] Itens:
