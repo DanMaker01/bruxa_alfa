@@ -49,16 +49,18 @@ EstradaB
 [ ]			Corrigir: Quando clico num item do inventário nada acontece.
 [ ]			Implementar: Inventário deve indicar que dá pra subir ou descer quando houver itens ocultados.
 [ ]	Sprite placeholder de:
-[ ]		Campones
-[ ]		Guarda1
-[ ]		Guarda2
+[ ]		Campones, foto
+[ ]		Guarda1, foto
+[ ]		Guarda2, foto
 
 
-[ ] Caldeirão:
+[ ] Caldeirão/Preparo:
 [?]		Se segurar o botão de fogo quero que retire const_A a cada 0.3seg ao invés de desligar o fogo. Como não há como desligar mais o fogo, caso a temperatura do fogo fique abaixo de F_LIMIT_MIN ele faz um efeito e apaga.
 			Feito: segurar com o fogo aceso abafa (−CONST_A a cada 0,3 s); F < F_LIMIT_MIN (600, em sistema_termico) → fumaça e apaga. Apagado: segurar 1 s acende.
 			Calibrar: CONST_A, F_LIMIT_MIN, de resto ok.
-[ ]	Botão de confirmar após apertar o botão de finalizar poção deve ser maior para facilitar o clique.			
+[ ]		Botão de confirmar após apertar o botão de finalizar poção deve ser maior para facilitar o clique.		
+[ ]		Layout deve mudar agora que não tem grafico nem barra lateral. tudo pode ficar maior (os sprites eu mesmo edito), para ficar mais fácil interagir no celular.
+[ ]		Inventário deve ter scrool com touch, arrastando, assim como o inventário normal foi adaptado.
 
 [ ] Cena de poção preparada:
 [.]		Layout: Definir localização das janelas e informações. 
@@ -68,7 +70,7 @@ EstradaB
 [ ]			Anotar o tempo e temperatura no momento que cada item entrou nos itens. quero não só número, mas uma representação visual útil.
 [.]		Nomear as poções de referência no catálogo (PocaoReferencia: nome, descrição, A)
 [ ]			As poções nomeadas não devem ficar salvas no user, e sim salvas no GameTemp, valem só para aquela secção.
-[ ]			Iniciar o livro de receitas
+[ ]		Ao sair do preparo, a poção vai para o meio e o resto da janela vai sumindo em fade. a poção sai do meio e vai para o inventário.
 
 [ ] História / missão: (em ordem)
 [ ]		Diálogos devem condizer com a época
@@ -90,7 +92,6 @@ EstradaB
 					ponte_guarda e estradaB_guarda só bloqueiam, sem condição.
 [ ]			finalização, entrega poção e resultados possíveis.
 					castelo_in só tem a passagem.
-
 ```
 
 ## Terminar até o Cap. 1 (1)
@@ -107,7 +108,9 @@ EstradaB
 
 
 [ ]	Cena Livro de Receitas:
-[ ]		Layout
+[ ]		Ao criar uma poção nova a bruxa tem opção de anotar a receita no livro. Caso escolha anotar: Abre a cena do livro de receitas já anotando.
+[ ]		Iniciar o livro de receitas, cena com janela que inicia após uma nova receita. A cena de livro abre e é escrita uma nova receita.
+[ ]		Pensar no Layout
 [ ]		Uma receita por página, 2 páginas por folha, mostra o livro aberto e tem opção de controlar com clique ou arrastando, é redundante para melhor UX.
 [ ]		Ao clicar numa página mostra seus ingredientes e tempo relacionado com seu gráfico, seu resultado.
 [ ]		Fazer tudo bem animado e temático de bruxaria.
@@ -194,10 +197,10 @@ EstradaB
 [ ]	Fazer sons:
 [ ]		Teleport entre mapas
 [ ]		Flip card
-[ ]		Efeitos (...)	
+[ ]		Efeitos (...)
 
 [ ]	Animações:
-[ ]		
+[ ]	
 
 
 [ ] Estilo:
@@ -236,3 +239,4 @@ EstradaB
 [ ]	Sistema de fama
 [ ]	Sistema de compra/venda
 
+```
