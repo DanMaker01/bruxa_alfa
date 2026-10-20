@@ -153,11 +153,11 @@ texto = "[BRUXA;bruxa_grande;0] O medo vai continuar ali. Mas ela vai conseguir 
 
 [sub_resource type="Resource" id="Resource_fmhl5"]
 script = ExtResource("9_knu6e")
-texto = "[BRUXA;bruxa_grande;0] Para essa poção são só dois ingredientes. Um cogumelo que cresce onde a floresta acaba. "
+texto = "[BRUXA;bruxa_grande;0] Para essa poção são só dois ingredientes. Um cogumelo que cresce na beira da estrada, depois da cidade. "
 
 [sub_resource type="Resource" id="Resource_3682x"]
 script = ExtResource("9_knu6e")
-texto = "[BRUXA;bruxa_grande;0] E uma folha que posso , onde as árvores acabam."
+texto = "[BRUXA;bruxa_grande;0] E uma erva que posso pegar no fim da floresta."
 
 [sub_resource type="Resource" id="Resource_6i5r4"]
 script = ExtResource("9_knu6e")

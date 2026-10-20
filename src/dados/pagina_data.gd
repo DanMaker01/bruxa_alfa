@@ -42,11 +42,12 @@ func get_trigger() -> String:
 
 
 ## true se a condição antiga (se houver) e TODAS as condições da lista forem verdadeiras.
-func condicoes_ok(game_temp) -> bool:
-	if condicao and not condicao.avaliar(game_temp):
+## chave_self: chave do nó do evento (para condições de self-variable).
+func condicoes_ok(game_temp, chave_self: String = "") -> bool:
+	if condicao and not condicao.avaliar(game_temp, chave_self):
 		return false
 	for c in condicoes:
-		if c and not c.avaliar(game_temp):
+		if c and not c.avaliar(game_temp, chave_self):
 			return false
 	return true
 

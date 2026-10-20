@@ -13,7 +13,7 @@ func executar(interp, ev) -> int:
 	if b == null or not b.has("end"):
 		interp.abortar(ev, "if sem end")
 		return MANTER
-	if interp.avaliar(condicao):
+	if interp.avaliar(condicao, ev):
 		ev.current_index += 1
 	elif b["else"] != -1:
 		ev.current_index = b["else"] + 1

@@ -17,8 +17,10 @@ var _pergunta_aberta: bool = false   # caixa de diálogo mostrando a pergunta ju
 
 func configurar(p_gm) -> void:
 	gm = p_gm
-	dialog_box = gm.get_node_or_null("/root/Main/CanvasLayer/DialogBox")
-	option_box = gm.get_node_or_null("/root/Main/CanvasLayer/OptionBox")
+	# as caixas podem estar dentro das cartas do HUD: procura em todo o CanvasLayer
+	var camada = gm.get_node_or_null("/root/Main/CanvasLayer")
+	dialog_box = camada.find_child("DialogBox", true, false) if camada else null
+	option_box = camada.find_child("OptionBox", true, false) if camada else null
 	if not option_box:
 		# cena sem OptionBox: cria uma por script
 		var canvas = gm.get_node_or_null("/root/Main/CanvasLayer")

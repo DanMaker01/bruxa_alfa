@@ -3,6 +3,10 @@ extends Node
 var variaveis = {}
 var personalidades = {}
 var inventario = {}
+## Self-variables: chave do evento ("mapa:caminho/do/no") -> {"A": 0/1, ...}
+var self_vars: Dictionary = {}
+## Posições sorteadas pelas áreas de spawn: chave da área -> Array[Vector2]
+var spawns: Dictionary = {}
 
 var database = null
 var database_pronto = false
@@ -42,6 +46,8 @@ func _on_database_loaded():
 	
 	inventario = {}
 	print("[GameTemp] Inventário vazio")
+	self_vars = {}
+	spawns = {}
 	
 	database_pronto = true
 	print("[GameTemp] ===== PRONTO =====")
@@ -71,6 +77,26 @@ func has_var(nome: String) -> bool:
 func get_all_vars() -> Dictionary:
 	print("[GameTemp] 📊 Retornando todas as variáveis: ", variaveis)
 	return variaveis.duplicate()
+
+# ===== SELF-VARIABLES (uma por evento no mapa) =====
+
+func get_self_var(chave: String, letra: String) -> float:
+	return float(self_vars.get(chave, {}).get(letra, 0.0))
+
+func set_self_var(chave: String, letra: String, valor: float) -> void:
+	if chave == "":
+		return
+	if not self_vars.has(chave):
+		self_vars[chave] = {}
+	self_vars[chave][letra] = valor
+	print("[GameTemp] 🔄 Self-var ", chave, " ", letra, " = ", valor)
+	variables_changed.emit()   # páginas reavaliam como numa variável comum
+
+## Apaga as self-variables de todas as chaves que começam com o prefixo (sem emitir sinal).
+func limpar_self_vars(prefixo: String) -> void:
+	for chave in self_vars.keys():
+		if str(chave).begins_with(prefixo):
+			self_vars.erase(chave)
 
 # ===== PERSONALIDADES =====
 

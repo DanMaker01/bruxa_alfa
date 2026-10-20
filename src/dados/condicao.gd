@@ -5,6 +5,7 @@
 #   PERSONALIDADE  traço O/C/E/A/N de uma personalidade (nome em "variavel") op valor
 #   POSICAO_X/Y    posição da bruxa no mapa (px)                           op valor
 #   DIRECAO_PLAYER para onde a bruxa olha ("direcao"), só == ou !=
+#   SELF_VAR       self-variable A/B/C/D DESTE evento (cada nó no mapa tem as suas) op valor
 # Uma página pode ter várias condições (PaginaData.condicoes): todas precisam valer.
 # Páginas reavaliam quando muda uma variável, o inventário ou uma personalidade;
 # posição/direção servem para if/while (numa página só são vistas na próxima reavaliação).
@@ -14,12 +15,13 @@ extends Resource
 
 const PageSelector = preload("res://src/core/page_selector.gd")
 
-enum Tipo { VARIAVEL, ITEM, PERSONALIDADE, POSICAO_X, POSICAO_Y, DIRECAO_PLAYER }
+enum Tipo { VARIAVEL, ITEM, PERSONALIDADE, POSICAO_X, POSICAO_Y, DIRECAO_PLAYER, SELF_VAR }
 enum Operador { IGUAL, DIFERENTE, MAIOR, MENOR, MAIOR_IGUAL, MENOR_IGUAL }
 enum Traco { O, C, E, A, N }
 enum Direcao { ESQ, DIR }
+enum Letra { A, B, C, D }
 const OPERADORES := ["==", "!=", ">", "<", ">=", "<="]
-const TIPOS := ["var", "item", "personalidade", "x", "y", "direcao"]
+const TIPOS := ["var", "item", "personalidade", "x", "y", "direcao", "self"]
 const DIRECOES := ["esq", "dir"]
 
 @export var tipo: Tipo = Tipo.VARIAVEL:
@@ -31,11 +33,14 @@ const DIRECOES := ["esq", "dir"]
 @export var item: ItemData
 @export var traco: Traco = Traco.O
 @export var direcao: Direcao = Direcao.DIR
+## Self-variable (SELF_VAR): começa em 0; use 0 e 1.
+@export var letra: Letra = Letra.A
 @export var operador: Operador = Operador.IGUAL
 @export var valor: float = 0.0
 
 
-func avaliar(game_temp) -> bool:
+## chave_self: chave do evento dono da condição (só usada por SELF_VAR).
+func avaliar(game_temp, chave_self: String = "") -> bool:
 	if game_temp == null:
 		return false
 	var atual = null
@@ -46,6 +51,10 @@ func avaliar(game_temp) -> bool:
 			atual = game_temp.get_item_quantity(item.id if item else variavel)
 		Tipo.PERSONALIDADE:
 			atual = game_temp.get_personality_value(variavel, traco)
+		Tipo.SELF_VAR:
+			if chave_self == "" or not game_temp.has_method("get_self_var"):
+				return false
+			atual = game_temp.get_self_var(chave_self, Letra.keys()[letra])
 		Tipo.POSICAO_X, Tipo.POSICAO_Y:
 			var p = _player(game_temp)
 			if p == null:
@@ -75,6 +84,8 @@ func to_dict() -> Dictionary:
 			return {"tipo": "personalidade", "nome": variavel, "traco": Traco.keys()[traco], "op": OPERADORES[operador], "val": valor}
 		Tipo.DIRECAO_PLAYER:
 			return {"tipo": "direcao", "op": OPERADORES[operador], "val": DIRECOES[direcao]}
+		Tipo.SELF_VAR:
+			return {"tipo": "self", "letra": Letra.keys()[letra], "op": OPERADORES[operador], "val": valor}
 	return {"tipo": TIPOS[tipo], "op": OPERADORES[operador], "val": valor}
 
 # Inspector: esconde os campos que não valem para o tipo escolhido.
@@ -86,6 +97,7 @@ func _validate_property(property: Dictionary) -> void:
 		"item": mostrar = tipo == Tipo.ITEM
 		"traco": mostrar = tipo == Tipo.PERSONALIDADE
 		"direcao": mostrar = tipo == Tipo.DIRECAO_PLAYER
+		"letra": mostrar = tipo == Tipo.SELF_VAR
 		"valor": mostrar = tipo != Tipo.DIRECAO_PLAYER
 		_: return
 	if not mostrar:

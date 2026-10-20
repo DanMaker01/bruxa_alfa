@@ -85,7 +85,8 @@ func _buscar_ui() -> void:
 	if notification_container:
 		var item = notification_container.get_node_or_null("Container/NotificacaoItem")
 		notification_label = item.get_node_or_null("Label") if item else null
-		notification_container.visible = false   # começa escondida (não mostra painel vazio)
+		if item:
+			item.visible = false   # é só o molde: cada notificação é uma cópia dele
 
 func _conectar_sinais() -> void:
 	if database:
@@ -132,9 +133,9 @@ func _atualizar_eventos(node: Node) -> void:
 			child.refresh_event()
 		_atualizar_eventos(child)
 
-func on_map_event(evento: EventoData) -> void:
+func on_map_event(evento: EventoData, origem: Node = null) -> void:
 	if interpeter:
-		interpeter.trigger_event(evento)
+		interpeter.trigger_event(evento, origem)
 
 ## Anda até o evento. Retorna true só se chegou (false se cancelado/travado).
 func move_player_to_event(event_node: Node2D) -> bool:
@@ -202,7 +203,9 @@ func sumir_hud() -> void: _hud_visivel(false)
 
 func _hud_visivel(v: bool) -> void:
 	var hud = get_node_or_null("/root/Main/CanvasLayer/HUD")
-	if hud:
+	if hud and hud.has_method("set_ativo"):
+		hud.set_ativo(v)   # cartas do HUD (no diálogo elas aparecem mesmo inativas)
+	elif hud:
 		hud.visible = v
 
 func get_player() -> Node:
@@ -220,19 +223,32 @@ func lock_player() -> void: player_locked = true
 func unlock_player() -> void: player_locked = false
 func is_player_locked() -> bool: return player_locked
 
-var _notificacao_id: int = 0   # só a notificação mais recente pode esconder o painel
+## Notificações empilhadas: cada uma é uma cópia de NotificacaoItem, entra com fade,
+## fica NOTIF_TEMPO segundos e sai com fade. Mais que NOTIF_MAX: a mais antiga sai na hora.
+const NOTIF_TEMPO: float = 2.5
+const NOTIF_FADE: float = 0.25
+const NOTIF_MAX: int = 4
 
 func _show_notification(t: String) -> void:
 	print("[GameManager] Notificação: ", t)
-	if notification_label:
-		notification_label.text = t
-		if notification_container:
-			notification_container.visible = true
-			_notificacao_id += 1
-			var meu_id := _notificacao_id
-			get_tree().create_timer(3.0).timeout.connect(func():
-				if notification_container and meu_id == _notificacao_id:
-					notification_container.visible = false)
+	var molde = notification_label.get_parent() if notification_label else null
+	if molde and molde.get_parent():
+		var caixa: Node = molde.get_parent()
+		notification_container.visible = true
+		var nova: Control = molde.duplicate()
+		nova.get_node("Label").text = t
+		nova.visible = true
+		nova.modulate.a = 0.0
+		caixa.add_child(nova)
+		# limite: some com as mais antigas (o molde escondido não conta)
+		var ativas: Array = caixa.get_children().filter(func(c): return c != molde and not c.is_queued_for_deletion())
+		while ativas.size() > NOTIF_MAX:
+			ativas.pop_front().queue_free()
+		var tw := nova.create_tween()
+		tw.tween_property(nova, "modulate:a", 1.0, NOTIF_FADE)
+		tw.tween_interval(NOTIF_TEMPO)
+		tw.tween_property(nova, "modulate:a", 0.0, NOTIF_FADE)
+		tw.tween_callback(nova.queue_free)
 	elif pause_menu_label:
 		pause_menu_label.text = "NOTIFICAÇÃO: " + t
 	else:

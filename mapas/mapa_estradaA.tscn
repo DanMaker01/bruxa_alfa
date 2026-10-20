@@ -4,7 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://b8djhvum260h2" path="res://assets/mapa_estradaA/mapa_estrada1_fundo.png" id="2_3b7oq"]
 [ext_resource type="Texture2D" uid="uid://cq73iwga35ux3" path="res://assets/mapa_estradaA/mapa_estrada1_frente.png" id="3_u8pfr"]
 [ext_resource type="Script" uid="uid://bjxlt3vqym72w" path="res://src/cena/evento_base.gd" id="4_bgl00"]
-[ext_resource type="Resource" uid="uid://di6csjkqhhr1u" path="res://dados/eventos/estradaA_cogumelo.tres" id="ev_estradaA_cogumelo"]
+[ext_resource type="Script" path="res://src/cena/area_spawn.gd" id="area_spawn"]
+[ext_resource type="Resource" path="res://dados/eventos/spawn_cogumelo.tres" id="ev_spawn_cogumelo"]
 [ext_resource type="Resource" uid="uid://dm6ot5qbg0vlm" path="res://dados/eventos/estradaA_passagem1.tres" id="ev_estradaA_passagem1"]
 [ext_resource type="Resource" uid="uid://2n2vhw8723pg" path="res://dados/eventos/estradaA_passagem2.tres" id="ev_estradaA_passagem2"]
 
@@ -42,8 +43,9 @@ position = Vector2(8, 496)
 script = ExtResource("4_bgl00")
 evento = ExtResource("ev_estradaA_passagem1")
 
-[node name="Cogumelo" type="CharacterBody2D" parent="Eventos" unique_id=1527804284]
+[node name="AreaCogumelo" type="Node2D" parent="Eventos"]
 z_index = 3
-position = Vector2(624, 592)
-script = ExtResource("4_bgl00")
-evento = ExtResource("ev_estradaA_cogumelo")
+position = Vector2(900, 592)
+script = ExtResource("area_spawn")
+evento = ExtResource("ev_spawn_cogumelo")
+largura = 800.0

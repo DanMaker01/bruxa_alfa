@@ -1,6 +1,11 @@
 # mapa_base.gd
 extends Node2D
 
+## Música do mapa (res://audio/bgm/*.mp3). Vazio = sem música (para a que estiver tocando).
+## Se for a mesma do mapa anterior, ela só continua (igual RPG Maker).
+@export_file("*.mp3") var bgm: String = ""
+@export_range(0.0, 1.0, 0.01) var bgm_volume: float = 1.0
+
 var game_manager = null
 var interpeter = null
 signal map_event_triggered(evento_id)
@@ -55,6 +60,7 @@ func _ready():
 	_calc_limits()
 	_apply_limits()
 	_connect_events()
+	call_deferred("_tocar_bgm")   # deferred: o AudioManager pode ainda não estar pronto
 	
 	# 🔥 EXIBE LIMITES DA CÂMERA
 	print("\n📷 [CÂMERA] ", name, " | L:", cam.l, " R:", cam.r, " T:", cam.t, " B:", cam.b)
@@ -63,6 +69,13 @@ func _ready():
 	_debug_list_events()
 	print("=".repeat(60))
 
+
+func _tocar_bgm() -> void:
+	var audio = game_manager.get_node_or_null("AudioManager") if game_manager else null
+	if audio == null or audio.get("bgm_player") == null:
+		return
+	# play_bgm já ignora se for a mesma música tocando; "" para a música
+	audio.play_bgm(bgm.get_file().get_basename() if bgm != "" else "", bgm_volume)
 
 func _debug_limits_simple():
 	"""Debug simples dos limites da câmera"""
@@ -129,12 +142,12 @@ func _connect_recursive(node):
 		# 🔥 CONTINUA BUSCANDO NOS FILHOS (para páginas)
 		_connect_recursive(c)
 
-func _on_event_triggered(evento: EventoData):
+func _on_event_triggered(evento: EventoData, origem: Node = null):
 	if evento == null:
 		return
 	print("[MapaBase] Evento: ", evento.id)
 	if game_manager and game_manager.has_method("on_map_event"):
-		game_manager.on_map_event(evento)
+		game_manager.on_map_event(evento, origem)
 	elif interpeter and interpeter.has_method("trigger_event"):
-		interpeter.trigger_event(evento)
+		interpeter.trigger_event(evento, origem)
 	map_event_triggered.emit(evento.id)

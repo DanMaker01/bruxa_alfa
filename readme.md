@@ -56,16 +56,21 @@ EstradaB
 [ ]			revisar como mostrar os valores fora das diagonais.
 [ ]		Nomear as poções de referência no catálogo (PocaoReferencia: nome, descrição, A)
 
-[ ] UI - notificação está estranha, tenho que ver se ela fica com uma fução mais bem definida, com multiplas notificações ou senão só tiro as notificações.
+[?] UI - notificação está estranha, tenho que ver se ela fica com uma fução mais bem definida, com multiplas notificações ou senão só tiro as notificações.
+		Feito: notificações empilhadas (cópias de NotificacaoItem), fade de entrada/saída, até 4 ao mesmo tempo. Ajustar: NOTIF_TEMPO, NOTIF_FADE, NOTIF_MAX (game_manager).
 
 [ ] História / missão: (em ordem)
 [ ]		Diálogos devem condizer com a época
 [ ]		Cada personagem tem seu linguajar próprio e manias.
 [?]		Camponês bate na porta (TOC! TOC! TOC!), opção Deixar entrar / Ignorar. Ele pede ajuda para a irmã que vai casar → Poção da Calma Lúcida. Guardas ainda não deixam passar.
-[ ]			Corrigir fala: "E uma folha que posso , onde as árvores acabam." (bruxa_in_auto / bruxa_in_passagem). ("depoisé" já corrigido)
+[?]			Corrigir fala: "E uma folha que posso , onde as árvores acabam." (bruxa_in_auto / bruxa_in_passagem). ("depoisé" já corrigido)
 					A Bruxa diz que o cogumelo cresce "onde a floresta acaba", mas ele está na estradaA.
-[.]			fazer área de spawn de evento no fim da floresta, outro na estradaA. Fazer farm com qtd na tela. (3 cogu, 3 erva) 
+					Feito: agora "E uma erva que posso pegar no fim da floresta." e "Um cogumelo que cresce na beira da estrada, depois da cidade."
+[?]			fazer área de spawn de evento no fim da floresta, outro na estradaA. Fazer farm com qtd na tela. (3 cogu, 3 erva) 
 					Hoje: 1 cogumelo (estradaA) + 1 erva (floresta), coleta única por variável. Fazer o spawn de eventos, nas páginas vai ter uma também uma nova condição de self-variable, valores 0 e 1; e no interprete quero um comando de ativar/desativar self-variable de um evento.
+					Feito: self-variables A/B/C/D por nó de evento (GameTemp.self_vars). Condição tipo "self" (páginas, if, while). Comando CmdSelfVar (vazio = este evento).
+					AreaSpawn (src/cena/area_spawn.gd): no máximo N cópias de um EventoData numa faixa; posições e cooldowns salvos no GameTemp (voltar ao mapa = mesmas posições); coletou 1 (self A = 1) → após o cooldown (s) renasce num ponto qualquer da faixa, com efeito de brilho. estradaA: AreaCogumelo (3x spawn_cogumelo), floresta: AreaErva (3x spawn_erva).
+					Ajustar no editor: posição/largura das áreas. estradaA_cogumelo.tres e floresta_erva.tres ficaram sem uso (apagar).
 [?]			A bruxa diz quais & qtos itens tem que pegar e libera controle na primeira missão.
 [ ]			com ingredientes na mão, interagir com o caldeirão, ela explica como usar a 1ª vez.
 					Evento bruxa_in_caldeirao ainda é só "caldeirão (em construção)".
@@ -113,29 +118,39 @@ EstradaB
 [ ]		Tutorial(leve) na primeira vez.
 
 [ ] Mapa:
-[ ]     Spawn de itens: existem as áreas de spawn, que invocam um tipo de evento, limitados por qtd de invocações no mapa.  
+[?]     Spawn de itens: existem as áreas de spawn, que invocam um tipo de evento, limitados por qtd de invocações no mapa.  
 [.]         Remover todos eventos placeholders de item dos mapas
 				Removidos os 6 cogumelos de teste (teste_magia) de bruxa_out e castelo_out. Fica só o da história (estradaA). teste_magia.tres sem uso.
-[ ]         Adicionar o floresta_erva oficial
-[ ]         Adicionar o bosque_cogumelo oficial
+[?]         Adicionar o floresta_erva oficial (AreaErva na floresta)
+[?]         Adicionar o bosque_cogumelo oficial (AreaCogumelo no bosque, x≈1000–1700, y=580: ajustar no editor)
 [.]     Resolver problema de área de colisão, verificar cada evento, posição, etc.
 [ ]		Quando chego perto de uma borda o paralax age parando bruscamente, quero que ele não fique limitado à tela, talvez tenho que mudar o tamanho dos cenários?
 [.]		Padronizar parallaxes em cada mapa: ...,Fundo2,Fundo,Meio,Frente,Frente2... (meio é onde ficam os eventos também)
-[ ]		Testar loop de bgm, loop de bgs.
-[ ]		cada mapa tocando BGM da fase em loop. (verificar mapa_base)
-[ ]		SE nos teleport
+[?]		Testar loop de bgm, loop de bgs. (floresta.mp3 já está com loop=true no import)
+[?]		cada mapa tocando BGM da fase em loop. (verificar mapa_base)
+			Feito: mapa_base tem bgm/bgm_volume no Inspector. Mesmo bgm = continua; outro = troca; vazio = para. Só a floresta tem bgm (floresta.mp3).
+[ ]		SE nos teleport (depois: som de passos na transição)
 [?]		Tela preta das passagens mais curta: "esperar" depois do teleporte baixado de 0.4 para 0.2
 
 
-[ ]	HUD/inventário:
-[ ]     Separar o Inventário do HUD. O HUD deve fazer o esquema de carta que vira ao clicar em um de seus componentes (inventário ou status), pensar como vai ser a dinâmica da carta girando, ativação, desativação, etc. Um clique em cima para mostrar, e se ficar alguns segundos sem interação ele desvira.
-[ ]		Animar o inventário e o status como um card que gira/abre ou algo assim. 
-[ ]		Fazer uma animação de carta virando para os diálogos, opções, inventário e status. 
-
+[.]	HUD/inventário:
+		Feito (1ª versão): src/ui/carta.gd + hud.tscn refeito. Duas cartas: CartaInventario (Verso/Inventario/Dialogo) e CartaStatus (Verso/Status/Opcoes).
+		Toque no verso abre; 4 s sem tocar na carta (nem popup do item aberto) desvira. Independentes. Fechada ocupa o mesmo espaço.
+		Diálogo/opções: DialogBox e OptionBox vão para dentro das cartas (face de prioridade); a carta vira sozinha e volta para onde estava.
+		mostrar_hud/sumir_hud: ativa/desativa as cartas (inativas somem, mas aparecem no diálogo).
+		Ajustar: tempo_aberta, tempo_virar, levantar (Inspector da carta). Falta: arte do verso, sombra.
+[!]     Separar o Inventário do HUD. O HUD deve fazer o esquema de carta que vira ao clicar em um de seus componentes (inventário ou status), pensar como vai ser a dinâmica da carta girando, ativação, desativação, etc. Um clique em cima para mostrar, e se ficar alguns segundos sem interação ele desvira.
+[!]		Animar o inventário e o status como um card que gira/abre ou algo assim. 
+[!]		Fazer uma animação de carta virando para os diálogos, opções, inventário e status. 
+[ ]		Posição da foto não deveria se mover enquanto a carta gira, ela só faz fade.
+[ ]		Criar um estilo para os botões de opção, deve ser preto
+[ ]		Nome não gira, só deve fazer fade tbm. 
+[ ]		Se o próximo diálogo tiver a mesma foto, não precisa fazer fade da foto, só manter.
 
 
 [ ]	Arte Visual
-[ ]     como fazer imagem ficar fazendo pan infinito? usar nas núvens
+[?]     como fazer imagem ficar fazendo pan infinito? usar nas núvens
+			Feito: src/cena/nuvens_movendo.gd num TextureRect em modo Tile (velocidade px/s). Aplicado nas nuvens da ponte (Fundo3).
 [ ]     Fazer sprite:
 [ ]         mapa floresta de 6000px (talvez diminua), com paralax, provisório.
 [ ]         inventário e status de costas (card que gira)

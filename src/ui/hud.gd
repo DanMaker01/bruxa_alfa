@@ -1,5 +1,8 @@
 # =============================================================================
-# hud.gd - HUD do jogo (Inventário + Status)
+# hud.gd - HUD do jogo: duas cartas que viram (ver carta.gd)
+#   CartaInventario: Verso / Inventario / Dialogo (DialogBox)
+#   CartaStatus:     Verso / Status     / Opcoes  (OptionBox)
+# mostrar_hud/sumir_hud só ativam/desativam as cartas: no diálogo elas aparecem mesmo assim.
 # =============================================================================
 extends Control
 
@@ -16,8 +19,11 @@ const POPUP_ANCHOR_Y = 540.0     # altura preferida do centro do popup (sobe se 
 # =============================================================================
 # REFERÊNCIAS UI
 # =============================================================================
-@onready var inventory_container = $Inventario/MarginContainer/ScrollContainer/VBoxContainer
-@onready var status_node = $Status/Status  # 🔥 Referência para a cena Status
+@onready var inventory_container = $CartaInventario/Giro/Inventario/MarginContainer/ScrollContainer/VBoxContainer
+@onready var status_node = $CartaStatus/Giro/Status/Status
+@onready var carta_inventario: Carta = $CartaInventario
+@onready var carta_status: Carta = $CartaStatus
+@onready var fundo_hud: ColorRect = $FundoHUD
 
 # =============================================================================
 # DEPENDÊNCIAS
@@ -38,12 +44,68 @@ var popup_instance = null
 
 func _ready():
 	print("[HUD] Inicializando...")
+	# o nó fica sempre visível; "visible" da cena vira ativo/inativo das cartas
+	var comecar_ativo := visible
+	visible = true
+	set_ativo(comecar_ativo)
+	_montar_dialogo()
 	_find_dependencies()
 	_connect_signals()
 	_create_popup()
 	_refresh_inventory()
 	_update_status()
 	print("[HUD] Inicializado!")
+
+# =============================================================================
+# CARTAS
+# =============================================================================
+
+## Ativo = cartas aparecem (verso/abertas). Inativo = somem, menos para o diálogo.
+func set_ativo(v: bool) -> void:
+	fundo_hud.visible = v
+	carta_inventario.ativa = v
+	carta_status.ativa = v
+
+## Põe a DialogBox e a OptionBox (de main.tscn) dentro das cartas, como faces.
+## Espera um frame: a DialogBox cria a tela escura no pai original antes de mudar de lugar.
+func _montar_dialogo() -> void:
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var canvas := get_parent()
+	_colocar_na_carta(canvas.get_node_or_null("DialogBox"), carta_inventario.face("Dialogo"))
+	_colocar_na_carta(canvas.get_node_or_null("OptionBox"), carta_status.face("Opcoes"))
+
+## Margem (px) entre a borda da carta e o conteúdo (texto, lista, botões... o texto dos botões).
+const MARGEM_CONTEUDO: float = 20.0
+
+func _colocar_na_carta(caixa: Control, face: Control) -> void:
+	if caixa == null or face == null:
+		push_warning("[HUD] caixa de diálogo/opções não encontrada")
+		return
+	caixa.reparent(face, false)
+	caixa.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	caixa.scale = Vector2.ONE
+	# a carta é o fundo: o painel da caixa fica transparente (só o conteúdo aparece)
+	var painel = caixa.get("panel")
+	if painel is CanvasItem:
+		painel.self_modulate.a = 0.0
+	if caixa.get("margem_texto") != null:
+		# opções: os botões ocupam a carta toda; a margem fica no texto deles
+		caixa.margem = 0.0
+		caixa.margem_texto = MARGEM_CONTEUDO
+		if caixa.has_method("_setup_ui"):
+			caixa._setup_ui()
+		var adv = caixa.get("advance_button")
+		if adv and caixa.has_method("_estilizar_botao"):
+			caixa._estilizar_botao(adv)
+	else:
+		# diálogo: margem em volta do texto
+		var m := caixa.get_node_or_null("Panel/MarginContainer") as Control
+		if m:
+			m.offset_left = MARGEM_CONTEUDO
+			m.offset_top = MARGEM_CONTEUDO
+			m.offset_right = -MARGEM_CONTEUDO
+			m.offset_bottom = -MARGEM_CONTEUDO
 
 # =============================================================================
 # INICIALIZAÇÃO
@@ -188,12 +250,14 @@ func _on_item_button_pressed(item_name: String):
 	var screen_size = get_viewport().get_visible_rect().size
 	var anchor = Vector2(get_global_mouse_position().x, POPUP_ANCHOR_Y)
 	var area = Rect2(0, 0, screen_size.x, POPUP_AREA_BOTTOM)
+	carta_inventario.segurar = true   # não desvira com o popup aberto
 	popup_instance.show_item(titulo, item_data, quantity, anchor, area)
 
 func _on_popup_closed():
 	"""Fecha o popup"""
 	if popup_instance:
 		popup_instance.visible = false
+	carta_inventario.segurar = false
 
 # =============================================================================
 # STATUS

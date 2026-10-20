@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bn5rdf2cjfgn2" path="res://assets/mapa_ponte/mapa_ponte_fundo01.png" id="4_mr0x3"]
 [ext_resource type="Script" uid="uid://bjxlt3vqym72w" path="res://src/cena/evento_base.gd" id="4_wfah4"]
 [ext_resource type="Resource" path="res://dados/eventos/ponte_guarda.tres" id="ev_ponte_guarda"]
+[ext_resource type="Script" path="res://src/cena/nuvens_movendo.gd" id="nuvens"]
 [ext_resource type="Resource" path="res://dados/eventos/ponte_passagem2.tres" id="ev_ponte_passagem2"]
 [ext_resource type="Resource" path="res://dados/eventos/ponte_passagem1.tres" id="ev_ponte_passagem1"]
 
@@ -92,3 +93,4 @@ offset_right = 2623.0
 offset_bottom = 1072.0
 texture = ExtResource("3_xgi4s")
 stretch_mode = 1
+script = ExtResource("nuvens")

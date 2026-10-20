@@ -6,6 +6,10 @@ extends RefCounted
 var id: int
 var name: String
 var page_index: int = -1
+## Chave do nó do evento no mapa (self-variables). "" = sem nó (ex.: disparado pelo debug).
+var chave_self: String = ""
+## Nó do evento que disparou (WeakRef: o mapa pode ser trocado no meio).
+var origem: WeakRef = null
 var commands: Array = []          # Array de Comando (Resources da página)
 var current_index: int = 0
 var finished: bool = false

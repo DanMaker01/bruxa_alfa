@@ -64,11 +64,11 @@ func _setup_ui():
 	# layout: a margem ocupa o painel todo e os botões dividem o espaço
 	if panel:
 		panel.clip_contents = true   # nada desenha fora do molde
-	var margem: MarginContainer = $Panel/MarginContainer
-	if margem:
-		margem.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var margem_no: MarginContainer = $Panel/MarginContainer
+	if margem_no:
+		margem_no.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		for lado in ["left", "top", "right", "bottom"]:
-			margem.add_theme_constant_override("margin_" + lado, int(MARGEM))
+			margem_no.add_theme_constant_override("margin_" + lado, int(margem))
 	var vbox: VBoxContainer = $Panel/MarginContainer/VBoxContainer
 	if vbox:
 		vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -148,7 +148,10 @@ func hide_options():
 ## Fonte das opções conforme quantas são (menos opções = botões maiores = letra maior).
 const FONTE_POR_QTD := [34, 30, 26, 22, 20]
 const SEPARACAO: int = 8
-const MARGEM: float = 10.0
+## Margem entre a borda da caixa e os botões (0 = botões ocupam a caixa toda).
+var margem: float = 10.0
+## Margem entre a borda do botão e o texto dele.
+var margem_texto: float = 8.0
 
 func _create_option_buttons(options_list: Array):
 	if not options_container:
@@ -156,10 +159,10 @@ func _create_option_buttons(options_list: Array):
 	_limpar_opcoes()
 	var n: int = options_list.size()
 	# a altura de cada botão é a caixa dividida por n; a fonte nunca passa disso
-	var altura_util: float = size.y - 2.0 * MARGEM - SEPARACAO * (n - 1)
+	var altura_util: float = size.y - 2.0 * margem - SEPARACAO * (n - 1)
 	var altura_botao: float = altura_util / n
 	var fonte: int = FONTE_POR_QTD[mini(n, FONTE_POR_QTD.size()) - 1]
-	fonte = clampi(mini(fonte, int((altura_botao - 16.0) / 1.35)), 12, 72)
+	fonte = clampi(mini(fonte, int((altura_botao - 2.0 * margem_texto) / 1.35)), 12, 72)
 	for i in range(options_list.size()):
 		var btn := Button.new()
 		btn.text = ""
@@ -180,10 +183,10 @@ func _create_option_buttons(options_list: Array):
 		lbl.add_theme_color_override("font_color", Color.WHITE)
 		btn.add_child(lbl)
 		lbl.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		lbl.offset_left = 8
-		lbl.offset_right = -8
-		lbl.offset_top = 6
-		lbl.offset_bottom = -6
+		lbl.offset_left = margem_texto
+		lbl.offset_right = -margem_texto
+		lbl.offset_top = margem_texto
+		lbl.offset_bottom = -margem_texto
 		_estilizar_botao(btn)
 		btn.pressed.connect(_on_option_pressed.bind(i))
 		options_container.add_child(btn)
@@ -212,7 +215,7 @@ func _estilizar_botao(btn: Button) -> void:
 		st.border_color = Color(0.6, 0.6, 0.8, 0.8)
 		st.set_border_width_all(2)
 		st.set_corner_radius_all(12)
-		st.set_content_margin_all(6)
+		st.set_content_margin_all(margem_texto)
 		btn.add_theme_stylebox_override(estado, st)
 
 # ===== SINAIS =====

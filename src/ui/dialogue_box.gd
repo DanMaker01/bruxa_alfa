@@ -39,6 +39,8 @@ const SOBREPOSICAO_FOTO: float = 80.0
 const MARGEM_NOME: float = 16.0
 ## z_index absoluto da plaquinha do nome (fica por cima da caixa e das opções).
 const Z_NOME: int = 600
+## z absoluto da foto: acima da tela escura (150), atrás da carta do diálogo (160).
+const Z_FOTO: int = 155
 # ===== TELA ESCURA (fade atrás do diálogo) =====
 ## Alfa máximo da tela preta enquanto o diálogo está aberto.
 const ALFA_MAX: float = 0.3
@@ -271,14 +273,18 @@ func is_dialog_visible() -> bool:
 # NOME E FOTO
 # =============================================================================
 func _criar_falante_ui() -> void:
-	var z_painel: int = panel.z_index if panel else 101
 	# foto: atrás da caixa
 	_foto = TextureRect.new()
 	_foto.name = "Foto"
 	_foto.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_foto.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_foto.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	_foto.z_index = z_painel - 1
+	_foto.z_as_relative = false
+	_foto.z_index = Z_FOTO
+	# não acompanha a carta quando ela vira (posição/escala só pela tela)
+	_foto.top_level = true
+	# sempre que passa a aparecer (inclusive quando a carta termina de virar): fade
+	_foto.visibility_changed.connect(_fade_foto)
 	_foto.visible = false
 	add_child(_foto)
 	move_child(_foto, 0)
@@ -308,6 +314,13 @@ func _criar_falante_ui() -> void:
 	resized.connect(_posicionar_falante)
 
 ## Separa "[nome;pos_nome;foto;pos_foto] texto" (ver falante.gd).
+func _fade_foto() -> void:
+	if not _foto.is_visible_in_tree():
+		return
+	_foto.modulate.a = 0.0
+	_foto.create_tween().tween_property(_foto, "modulate:a", 1.0, 0.25)
+	_posicionar_falante.call_deferred()
+
 func _resolver_fala(msg: String) -> Dictionary:
 	var r := Falante.do_texto(msg)
 	var fal: Falante = r["falante"]

@@ -9,25 +9,26 @@ extends RefCounted
 
 # Regra estilo RPG Maker: vence a ÚLTIMA página cujas condições são TODAS verdadeiras.
 # Página sem condições vale sempre. Se nenhuma servir, usa a página 0.
-static func select(pages: Array, game_temp) -> int:
+## chave_self: chave do nó do evento (para condições de self-variable).
+static func select(pages: Array, game_temp, chave_self: String = "") -> int:
 	if pages.is_empty():
 		return -1
 	for i in range(pages.size() - 1, -1, -1):
 		var p = pages[i]
 		if p is PaginaData:
-			if p.condicoes_ok(game_temp):
+			if p.condicoes_ok(game_temp, chave_self):
 				return i
-		elif evaluate(p.get("cond"), game_temp):
+		elif evaluate(p.get("cond"), game_temp, chave_self):
 			return i
 	return 0
 
 
 # cond pode ser: null (verdadeiro), bool, Condicao, ou {"var": nome, "op": "==", "val": valor}
-static func evaluate(cond, game_temp) -> bool:
+static func evaluate(cond, game_temp, chave_self: String = "") -> bool:
 	if cond == null:
 		return true
 	if cond is Condicao:
-		return cond.avaliar(game_temp)
+		return cond.avaliar(game_temp, chave_self)
 	if typeof(cond) == TYPE_BOOL:
 		return cond
 	if typeof(cond) != TYPE_DICTIONARY or game_temp == null:

@@ -114,7 +114,7 @@ func _finish_event(event: EventInstance, success: bool):
 	event_completed.emit(event.name, success)
 	print("[Interpreter] 🏁 Evento ", event.id, " finalizado (", event.name, ")")
 	# 🔥 NOTIFICA O EVENTO QUE TERMINOU (se ele ainda existir no mapa atual)
-	_notify_event_finished(event.name)
+	_notify_event_finished(event)
 
 # ===== API USADA PELOS COMANDOS =====
 
@@ -131,8 +131,9 @@ func falhar(event: EventInstance, cmd: Comando, msg: String):
 func aviso(event: EventInstance, msg: String):
 	print("[Interpreter] ⚠️ ", event.name, ": ", msg)
 
-func avaliar(cond) -> bool:
-	return PageSelector.evaluate(cond, game_temp)
+## ev (opcional): evento que está avaliando, para condições de self-variable.
+func avaliar(cond, ev: EventInstance = null) -> bool:
+	return PageSelector.evaluate(cond, game_temp, ev.chave_self if ev else "")
 
 func enfileirar_dialogo(item: Dictionary):
 	_enqueue_dialog(item)
@@ -150,9 +151,12 @@ func get_audio_manager():
 	return game_manager.get_node_or_null("AudioManager") if game_manager else null
 
 
-func _notify_event_finished(event_name: String):
+func _notify_event_finished(event: EventInstance):
 	"""Notifica o nó do evento que sua execução terminou (se ele ainda existir)"""
-	var target_event = _find_event_by_name(event_name)
+	var event_name: String = event.name
+	var target_event = event.origem.get_ref() if event.origem else _find_event_by_name(event_name)
+	if target_event and (not is_instance_valid(target_event) or not target_event.is_inside_tree()):
+		target_event = null
 	if target_event and target_event.has_method("on_event_finished"):
 		target_event.on_event_finished()
 	elif not target_event:
@@ -206,16 +210,18 @@ func on_preparo_fechado(_resultado) -> void:
 			print("[Interpreter] ▶️ Evento ", event.id, " despausado (", event.name, ")")
 
 
-func select_page_index(evento: EventoData) -> int:
+func select_page_index(evento: EventoData, chave_self: String = "") -> int:
 	if evento == null:
 		return -1
-	return PageSelector.select(evento.paginas, game_temp)
+	return PageSelector.select(evento.paginas, game_temp, chave_self)
 
 
-func is_page_running(event_name: String, page_index: int) -> bool:
-	"""True se esta página deste evento já está em execução."""
+func is_page_running(event_name: String, page_index: int, chave_self: String = "") -> bool:
+	"""True se esta página deste evento já está em execução.
+	Com chave_self, só conta a execução DESTE nó (cópias de spawn rodam independentes)."""
 	for e in running_events:
-		if not e.finished and e.name == event_name and e.page_index == page_index:
+		if not e.finished and e.name == event_name and e.page_index == page_index \
+				and (chave_self == "" or e.chave_self == chave_self):
 			return true
 	return false
 
@@ -227,7 +233,8 @@ func is_event_running(event_name: String) -> bool:
 	return false
 
 
-func trigger_event(evento: EventoData) -> bool:
+## origem: nó do evento no mapa (dá a chave das self-variables). Pode ser null.
+func trigger_event(evento: EventoData, origem: Node = null) -> bool:
 	if evento == null:
 		print("[Interpreter] ERRO: trigger_event sem EventoData"); return false
 	var event_name: String = evento.id
@@ -236,12 +243,13 @@ func trigger_event(evento: EventoData) -> bool:
 	if pages.is_empty():
 		print("[Interpreter] ERRO: Evento sem páginas: ", event_name); return false
 
+	var chave_self: String = origem.chave_self() if origem and origem.has_method("chave_self") else ""
 	# 🔥 MESMA REGRA DE PÁGINA QUE O evento_base USA
-	var page_index = PageSelector.select(pages, game_temp)
+	var page_index = PageSelector.select(pages, game_temp, chave_self)
 
 	# 🔥 A MESMA PÁGINA NÃO RODA DUAS VEZES AO MESMO TEMPO.
 	# Outra página do mesmo evento pode rodar (ex.: bos_goblin pego durante o "esperar").
-	if is_page_running(event_name, page_index):
+	if is_page_running(event_name, page_index, chave_self):
 		print("[Interpreter] ⏭️ ", event_name, " página ", page_index, " já está rodando")
 		return false
 
@@ -255,6 +263,8 @@ func trigger_event(evento: EventoData) -> bool:
 	event_id_counter += 1
 	event.name = event_name
 	event.page_index = page_index
+	event.chave_self = chave_self
+	event.origem = weakref(origem) if origem else null
 	event.commands = commands
 	event.current_index = 0
 

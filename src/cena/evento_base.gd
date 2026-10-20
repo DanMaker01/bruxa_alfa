@@ -6,7 +6,7 @@ const PageSelector = preload("res://src/core/page_selector.gd")
 ## Dados do evento (páginas, condições, comandos). Arraste um .tres de res://dados/eventos.
 @export var evento: EventoData
 
-signal event_triggered(evento: EventoData)
+signal event_triggered(evento: EventoData, origem: Node)
 signal move_finished(success: bool)
 
 var game_manager = null
@@ -51,7 +51,7 @@ func _update_page():
 	if not game_temp:
 		return
 	# 🔥 MESMA REGRA DO INTERPRETER (página com condição verdadeira de maior índice)
-	var new_index = PageSelector.select(pages_data, game_temp)
+	var new_index = PageSelector.select(pages_data, game_temp, chave_self())
 	if new_index != active_page_index:
 		_activate_page(new_index)
 
@@ -351,7 +351,7 @@ func _can_activate() -> bool:
 	# A MESMA página não roda duas vezes; outra página do mesmo evento pode
 	# (ex.: bos_goblin muda de página durante o "esperar" e pode ser clicado).
 	if interpreter and interpreter.has_method("is_page_running"):
-		if interpreter.is_page_running(get_event_name(), active_page_index):
+		if interpreter.is_page_running(get_event_name(), active_page_index, chave_self()):
 			return false
 	return true
 
@@ -367,7 +367,7 @@ func _do_activate():
 	is_event_running = true
 	last_activation_time = Time.get_ticks_msec() / 1000.0
 
-	event_triggered.emit(evento)
+	event_triggered.emit(evento, self)
 
 	await get_tree().process_frame
 	if is_instance_valid(self):
@@ -559,6 +559,27 @@ func _zone_global_rect() -> Rect2:
 	var sz: Vector2 = shape_node.shape.size
 	return shape_node.global_transform * Rect2(-sz / 2.0, sz)
 
+
+# ===== SELF-VARIABLES =====
+var _chave_self: String = ""
+
+## Chave única deste nó: "<arquivo do mapa>:<caminho dentro do mapa>"
+## (ex.: "mapa_estradaA:Eventos/AreaCogumelo/AreaCogumelo_0"). Estável entre visitas ao mapa.
+func chave_self() -> String:
+	if _chave_self == "" and is_inside_tree():
+		var mapa := _mapa_raiz()
+		if mapa:
+			_chave_self = mapa.scene_file_path.get_file().get_basename() + ":" + str(mapa.get_path_to(self))
+		else:
+			_chave_self = str(get_path())
+	return _chave_self
+
+## Nó raiz do mapa (filho direto de /root/Main/Mundo).
+func _mapa_raiz() -> Node:
+	var n: Node = self
+	while n.get_parent() and n.get_parent().name != "Mundo":
+		n = n.get_parent()
+	return n if n.get_parent() else null
 
 func get_event_name() -> String:
 	"""Id do EventoData (usado por move_event / parar_movimento para achar o nó)"""
