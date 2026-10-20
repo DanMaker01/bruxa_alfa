@@ -43,7 +43,7 @@ const Z_NOME: int = 600
 const Z_FOTO: int = 155
 # ===== TELA ESCURA (fade atrás do diálogo) =====
 ## Alfa máximo da tela preta enquanto o diálogo está aberto.
-const ALFA_MAX: float = 0.3
+const ALFA_MAX: float = 0.5
 ## Duração do fade de entrada/saída (s).
 const DURACAO_ESCURECER: float = 0.25
 ## z_index absoluto da tela preta: acima do mapa e do HUD, abaixo da foto e da caixa.

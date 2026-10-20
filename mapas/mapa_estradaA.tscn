@@ -49,3 +49,5 @@ position = Vector2(900, 592)
 script = ExtResource("area_spawn")
 evento = ExtResource("ev_spawn_cogumelo")
 largura = 800.0
+quantidade = 5
+cooldown = 2.0

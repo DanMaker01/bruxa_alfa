@@ -43,11 +43,11 @@ EstradaB
 [ ]		balancear itens e preparo. 4 primeiros ingredientes oficiais. erva, cogu, pena de urubu,olho de salamandra(ou outro) (pena e olho: DEPOIS)
 			Erva + cogumelo (1ª receita): erva m5200 s2000/3000 Tmin50 k.3 Tmax135 k.15 (queima ~140+) t25–90 h.4; cogumelo m1200 s600/900 Tmin100 k.15 Tmax160 k.15 t5–25 h.4/.5. Fogo: K 0.3, CONST_A 30.
 			Receita ideal (~60 s): acende → erva com água morna (~8 s) → cozinha até ~40 s → ~1 clique/s até chama BRANCA (~120 °C) → cogumelo (~48–50 s) → frita ~10 s → termina. Perfeito → Poção da Calma Profunda (só N cai, 0,93).
-[.]		Ao interagir com eventos a bruxa deve virar para ele antes. (evento_base._virar_player_para_mim, clique/toque). E quando não quiser que vire?
+[?]		Ao interagir com eventos a bruxa deve virar para ele antes. (evento_base._virar_player_para_mim, clique/toque). E quando não quiser que vire? → PaginaData.virar_bruxa (desligue na página).
 [.]		Scroll do inventário é muito pequeno e difícil puxar, eu queria que fosse uma lista e com o touch eu pudesse clicar e arrastar para fazer rolar.
 			Feito: ListaRolavel (src/ui/lista_rolavel.gd): arrastar rola com inércia, toque sem arrastar abre o item. Linhas de 56 px, fonte 22.
-[ ]			Corrigir: Quando clico num item do inventário nada acontece.
-[ ]			Implementar: Inventário deve indicar que dá pra subir ou descer quando houver itens ocultados.
+[?]			Corrigir: Quando clico num item do inventário nada acontece. (caminho errado depois do Giro; corrigido)
+[?]			Implementar: Inventário deve indicar que dá pra subir ou descer quando houver itens ocultados. (setas pulsando nas bordas, ListaRolavel)
 [ ]	Sprite placeholder de:
 [ ]		Campones, foto
 [ ]		Guarda1, foto
@@ -58,19 +58,24 @@ EstradaB
 [?]		Se segurar o botão de fogo quero que retire const_A a cada 0.3seg ao invés de desligar o fogo. Como não há como desligar mais o fogo, caso a temperatura do fogo fique abaixo de F_LIMIT_MIN ele faz um efeito e apaga.
 			Feito: segurar com o fogo aceso abafa (−CONST_A a cada 0,3 s); F < F_LIMIT_MIN (600, em sistema_termico) → fumaça e apaga. Apagado: segurar 1 s acende.
 			Calibrar: CONST_A, F_LIMIT_MIN, de resto ok.
-[ ]		Botão de confirmar após apertar o botão de finalizar poção deve ser maior para facilitar o clique.		
+[?]		Botão de confirmar após apertar o botão de finalizar poção deve ser maior para facilitar o clique.		 (botões 200x96, fonte 34)
 [ ]		Layout deve mudar agora que não tem grafico nem barra lateral. tudo pode ficar maior (os sprites eu mesmo edito), para ficar mais fácil interagir no celular.
-[ ]		Inventário deve ter scrool com touch, arrastando, assim como o inventário normal foi adaptado.
+[?]		Inventário deve ter scrool com touch, arrastando, assim como o inventário normal foi adaptado. (ListaRolavel horizontal no preparo)
+
 
 [ ] Cena de poção preparada:
 [.]		Layout: Definir localização das janelas e informações. 
 [ ]			revisar como mostrar os valores fora das diagonais. 
-[ ]			Revisar posições das informações.
-[ ]			Mostrar qual foi o erro por ingrediente nos ingredientes da receita. 
+[?]			Revisar posições das informações.
+[?]			Mostrar qual foi o erro por ingrediente nos ingredientes da receita. 
 [ ]			Anotar o tempo e temperatura no momento que cada item entrou nos itens. quero não só número, mas uma representação visual útil.
+[ ]			Gostei do grafico. Mas a receita começa quando o primeiro ingrediente entra.
+[ ]			Veja que o layout está bom mas só cabem uns 2 ou 3 ingredientes da receita na tela.
 [.]		Nomear as poções de referência no catálogo (PocaoReferencia: nome, descrição, A)
-[ ]			As poções nomeadas não devem ficar salvas no user, e sim salvas no GameTemp, valem só para aquela secção.
-[ ]		Ao sair do preparo, a poção vai para o meio e o resto da janela vai sumindo em fade. a poção sai do meio e vai para o inventário.
+[?]			As poções nomeadas não devem ficar salvas no user, e sim salvas no GameTemp, valem só para aquela secção. (GameTemp.pocoes_nomeadas)
+[?]		Ao sair do preparo, a poção vai para o meio e o resto da janela vai sumindo em fade. a poção sai do meio e vai para o inventário. (janela_resultado._fechar/_voar) A poção deve ir sem girar, abre a carta do inventário, mostra o item indo para lá e mostra aparecendo o nome dela no inventário.
+[ ]		
+
 
 [ ] História / missão: (em ordem)
 [ ]		Diálogos devem condizer com a época
@@ -99,7 +104,9 @@ EstradaB
 ```
 
 [ ] Bugs/Revisão:
-[ ]		Camera trava quando chega num canto de tela mas o parallax não deve travar, senão dá uma sensação ruim de impacto quando chega perto de um canto de tela.
+[?]		Camera trava quando chega num canto de tela mas o parallax não deve travar, senão dá uma sensação ruim de impacto quando chega perto de um canto de tela.
+			Feito: camera_2d.gd lê limit_left/right e usa borda suave (BORDA_SUAVE 200 px, aproximação exponencial). Vale para todos os mapas.
+			CamadaParallax (src/cena/camada_parallax.gd, Parallax2D): textura, fator (0 céu parado, 1 mapa, >1 frente), loop_x, pan (px/s), deslocamento. Ponte: nuvens (Fundo3) convertidas. Converter as outras camadas/mapas aos poucos.
 [?]		Página com várias condições (todas precisam valer): variável, item, personalidade, posição, direção
 [?]		Página reavalia ao ganhar/perder item e ao mudar personalidade
 [?]		Notificação de item nunca aparece (NotificacaoItem sem Label em main.tscn)
@@ -148,7 +155,7 @@ EstradaB
 [?]         Adicionar o floresta_erva oficial (AreaErva na floresta)
 [?]         Adicionar o bosque_cogumelo oficial (AreaCogumelo no bosque, x≈1000–1700, y=580: ajustar no editor)
 [.]     Resolver problema de área de colisão, verificar cada evento, posição, etc.
-[ ]		Quando chego perto de uma borda o paralax age parando bruscamente, quero que ele não fique limitado à tela, talvez tenho que mudar o tamanho dos cenários?
+[?]		Quando chego perto de uma borda o paralax age parando bruscamente, quero que ele não fique limitado à tela, talvez tenho que mudar o tamanho dos cenários? (câmera com borda suave; CamadaParallax na ponte)
 [.]		Padronizar parallaxes em cada mapa: ...,Fundo2,Fundo,Meio,Frente,Frente2... (meio é onde ficam os eventos também)
 [?]		Testar loop de bgm, loop de bgs. (floresta.mp3 já está com loop=true no import)
 [?]		cada mapa tocando BGM da fase em loop. (verificar mapa_base)

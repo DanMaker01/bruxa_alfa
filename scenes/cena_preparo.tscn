@@ -1,4 +1,5 @@
 [gd_scene format=3 uid="uid://c8pejctwkl60q"]
+[ext_resource type="Script" path="res://src/ui/lista_rolavel.gd" id="lista_rolavel"]
 
 [ext_resource type="Script" uid="uid://fvb7ymoc8e2o" path="res://src/core/cena_preparo.gd" id="1_mpeo2"]
 [ext_resource type="Texture2D" uid="uid://0256vrk8foeo" path="res://assets/game_caldeirao/bg.jpg" id="1_qpp4d"]
@@ -118,17 +119,18 @@ mouse_filter = 1
 [node name="Panel" type="Panel" parent="PainelIngredientes" unique_id=1293891771]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 0
-offset_top = 32.0
 offset_right = 640.0
-offset_bottom = 128.0
+offset_bottom = 160.0
 mouse_filter = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="PainelIngredientes" unique_id=46589984]
 layout_mode = 1
-offset_left = 128.0
-offset_top = 48.0
-offset_right = 512.0
-offset_bottom = 128.0
+script = ExtResource("lista_rolavel")
+horizontal = true
+offset_left = 160.0
+offset_top = 12.0
+offset_right = 480.0
+offset_bottom = 148.0
 follow_focus = true
 vertical_scroll_mode = 0
 
@@ -162,19 +164,22 @@ text = "item5"
 
 [node name="Poção" type="Button" parent="PainelIngredientes" unique_id=1092986463]
 layout_mode = 0
-offset_top = 32.0
-offset_right = 112.0
-offset_bottom = 112.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 152.0
+offset_bottom = 152.0
+expand_icon = true
 size_flags_horizontal = 3
 size_flags_vertical = 0
 icon = ExtResource("8_4huqc")
 
 [node name="BotaoFogo" type="Button" parent="PainelIngredientes" unique_id=1095812818]
 layout_mode = 0
-offset_left = 528.0
-offset_top = 32.0
-offset_right = 640.0
-offset_bottom = 112.0
+offset_left = 488.0
+offset_top = 8.0
+offset_right = 632.0
+offset_bottom = 152.0
+expand_icon = true
 size_flags_horizontal = 3
 size_flags_vertical = 0
 icon = ExtResource("9_a20yi")

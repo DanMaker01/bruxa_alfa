@@ -10,11 +10,11 @@
 
 [sub_resource type="Resource" id="Resource_cgbke"]
 script = ExtResource("3_3ip05")
-texto = "[GUARDA] Somente os conhecidos da realeza podem passar por aqui. "
+texto = "[GUARDA;face_base;100] Somente os conhecidos da realeza podem passar por aqui. "
 
 [sub_resource type="Resource" id="Resource_fhp8i"]
 script = ExtResource("3_3ip05")
-texto = "[GUARDA] São ordens do Rei. "
+texto = "[GUARDA;face_base;100] São ordens do Rei. "
 
 [sub_resource type="Resource" id="Resource_o673b"]
 script = ExtResource("4_p7ena")
@@ -35,7 +35,7 @@ comandos = Array[ExtResource("2_ogism")]([SubResource("Resource_cgbke"), SubReso
 
 [sub_resource type="Resource" id="Resource_libera_msg"]
 script = ExtResource("3_3ip05")
-texto = "[GUARDA] Ah, a bruxa da poção. Pode passar. "
+texto = "[GUARDA;face_base;100] Ah, a bruxa da poção. Pode passar. "
 
 [sub_resource type="Resource" id="Resource_libera_cond"]
 script = ExtResource("5_ogism")

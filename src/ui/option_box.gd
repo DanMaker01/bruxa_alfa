@@ -30,8 +30,17 @@ func _ready():
 		vbox.add_child(advance_button)
 	
 	if advance_button:
-		advance_button.text = "▼"
-		advance_button.add_theme_font_size_override("font_size", 72)
+		advance_button.text = ""
+		# seta ▼ num Label filho: ela balança em y = A·sin(2π·t/L) (ver _process)
+		_seta = Label.new()
+		_seta.text = "▼"
+		_seta.add_theme_font_size_override("font_size", 64)
+		_seta.add_theme_color_override("font_color", Color.WHITE)   # mesma cor do texto do diálogo
+		_seta.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_seta.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		_seta.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		advance_button.add_child(_seta)
+		_seta.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		_estilizar_botao(advance_button)
 		advance_button.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		advance_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -82,7 +91,29 @@ func _setup_ui():
 
 # ===== MODO AVANÇAR =====
 
+## Botão de avançar um pouco menor que a carta: margem pequena em volta (só nele).
+const MARGEM_AVANCAR: float = 14.0
+## Seta do avançar: amplitude (px) e período (s) do balanço.
+const SETA_AMPLITUDE: float = 7.0
+const SETA_PERIODO: float = 1.1
+var _seta: Label
+var _t_seta: float = 0.0
+
+func _process(delta: float) -> void:
+	if _seta and advance_button and advance_button.visible:
+		_t_seta += delta
+		var y: float = SETA_AMPLITUDE * sin(TAU * _t_seta / SETA_PERIODO)
+		_seta.offset_top = y
+		_seta.offset_bottom = y
+
+func _margens(v: float) -> void:
+	var m = get_node_or_null("Panel/MarginContainer")
+	if m:
+		for lado in ["left", "top", "right", "bottom"]:
+			m.add_theme_constant_override("margin_" + lado, int(v))
+
 func show_advance():
+	_margens(MARGEM_AVANCAR)
 	print("[OptionBox] ===== SHOW_ADVANCE =====")
 	
 	is_advance_mode = true
@@ -115,6 +146,7 @@ func hide_advance():
 # ===== MODO OPÇÕES =====
 
 func show_options(options_list: Array):
+	_margens(margem)
 	"""Mostra opções para o jogador (sem pergunta)"""
 	if options_list.is_empty():
 		print("[OptionBox] ⚠️ Lista de opções vazia")

@@ -7,6 +7,8 @@ var inventario = {}
 var self_vars: Dictionary = {}
 ## Posições sorteadas pelas áreas de spawn: chave da área -> Array[Vector2]
 var spawns: Dictionary = {}
+## Poções que o jogador nomeou nesta sessão (catálogo do jogador).
+var pocoes_nomeadas: CatalogoPocoes = CatalogoPocoes.new()
 
 var database = null
 var database_pronto = false
@@ -48,6 +50,7 @@ func _on_database_loaded():
 	print("[GameTemp] Inventário vazio")
 	self_vars = {}
 	spawns = {}
+	pocoes_nomeadas = CatalogoPocoes.new()
 	
 	database_pronto = true
 	print("[GameTemp] ===== PRONTO =====")

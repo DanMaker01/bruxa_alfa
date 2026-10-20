@@ -1,7 +1,7 @@
 # catalogo_pocoes.gd
 # Poções com nome. Dois catálogos:
 #   do jogo     → res://dados/pocoes/catalogo_pocoes.tres (você preenche no Inspector)
-#   do jogador  → user://pocoes_nomeadas.tres (nomes que o jogador deu durante o jogo)
+#   do jogador  → GameTemp.pocoes_nomeadas (nomes que o jogador deu; só valem nesta sessão/save)
 # Uma poção nova recebe o nome da poção conhecida mais perto, se a distância entre as
 # matrizes for <= distancia_max (do catálogo do jogo). Senão, o jogador pode dar um nome,
 # que fica registrado e vale para as próximas poções parecidas.
@@ -32,8 +32,16 @@ static func distancia(a: Array, b: Array) -> float:
 static func _garantir() -> void:
 	if _jogo == null:
 		_jogo = load(CAMINHO_JOGO) if ResourceLoader.exists(CAMINHO_JOGO) else CatalogoPocoes.new()
-	if _jogador == null:
-		_jogador = load(CAMINHO_JOGADOR) if ResourceLoader.exists(CAMINHO_JOGADOR) else CatalogoPocoes.new()
+	# catálogo do jogador mora no GameTemp (não é salvo em user://)
+	var gt = _game_temp()
+	if gt:
+		_jogador = gt.pocoes_nomeadas
+	elif _jogador == null:
+		_jogador = CatalogoPocoes.new()
+
+static func _game_temp():
+	var arvore = Engine.get_main_loop()
+	return arvore.root.get_node_or_null("Main/GameManager/GameTemp") if arvore is SceneTree else null
 
 ## Procura a poção conhecida mais perto de A nos dois catálogos.
 ## Devolve {"nome": String ("" se não houver nenhuma), "dist": float, "perto": bool}.
@@ -61,6 +69,3 @@ static func registrar(nome: String, A: Array, descricao: String = "") -> void:
 		A_tipada.append(PackedFloat32Array(linha))
 	ref.A = A_tipada
 	_jogador.pocoes.append(ref)
-	var erro := ResourceSaver.save(_jogador, CAMINHO_JOGADOR)
-	if erro != OK:
-		push_warning("[CatalogoPocoes] não consegui salvar " + CAMINHO_JOGADOR + " (erro %d)" % erro)

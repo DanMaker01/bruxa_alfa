@@ -43,7 +43,7 @@ var popup_instance = null
 # =============================================================================
 
 func _ready():
-	var lista = get_node_or_null("CartaInventario/Inventario/MarginContainer/ScrollContainer")
+	var lista = get_node_or_null("CartaInventario/Giro/Inventario/MarginContainer/ScrollContainer")
 	if lista and lista.has_signal("linha_tocada"):
 		lista.linha_tocada.connect(_on_linha_tocada)
 	print("[HUD] Inicializando...")

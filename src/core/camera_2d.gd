@@ -12,6 +12,17 @@ var shake_timer: float = 0.0
 var shake_offset: Vector2 = Vector2.ZERO
 var original_offset: Vector2 = Vector2.ZERO
 
+# ===== BORDA SUAVE =====
+## Perto da borda do mapa a câmera desacelera em vez de bater no limite: nos últimos
+## BORDA_SUAVE px ela vai cada vez mais devagar e só encosta na borda bem no fim.
+## (O Camera2D trava seco em limit_left/right; aqui esses limites são lidos e trocados
+## por esta curva, então o mapa e o parallax nunca param de repente.)
+## 0 = para seco na borda (as CamadaParallax com continuar_na_borda seguem andando).
+const BORDA_SUAVE: float = 200.0
+const SEM_LIMITE: int = 10000000
+var _lim_esq: float = -INF
+var _lim_dir: float = INF
+
 # ===== REFERÊNCIAS =====
 @onready var player = get_parent()
 var _move_tween: Tween = null
@@ -82,7 +93,8 @@ func snap_to_player():
 	"""Volta a seguir o player e pula direto para ele, sem suavização (usado no teleporte)."""
 	_kill_move_tween()
 	is_following_player = true
-	global_position = player.global_position
+	_ler_limites()
+	global_position = Vector2(_x_suave(player.global_position.x), player.global_position.y)
 	reset_smoothing()
 
 func _kill_move_tween():
@@ -109,7 +121,7 @@ func tremer_camera(intensidade: float, velocidade: float, duracao: float):
 func _process(delta):
 	# 🔥 SE ESTIVER SEGUINDO O PLAYER
 	if is_following_player:
-		global_position = player.global_position
+		global_position = Vector2(_x_suave(player.global_position.x), player.global_position.y)
 	
 	# 🔥 SHAKE
 	if shake_duration > 0.0:
@@ -131,6 +143,33 @@ func _process(delta):
 			shake_offset.y = randf_range(-current_intensity, current_intensity)
 			
 			offset = original_offset + shake_offset
+
+## O mapa_base escreve limit_left/right ao carregar: guarda e solta o limite horizontal.
+func _ler_limites() -> void:
+	if limit_left > -SEM_LIMITE:
+		_lim_esq = float(limit_left)
+		limit_left = -SEM_LIMITE
+	if limit_right < SEM_LIMITE:
+		_lim_dir = float(limit_right)
+		limit_right = SEM_LIMITE
+
+## x do centro da câmera: igual ao do player no meio do mapa; perto das bordas,
+## aproxima a borda de forma exponencial (sem quina, sem tranco).
+func _x_suave(x: float) -> float:
+	_ler_limites()
+	var meia: float = get_viewport_rect().size.x * 0.5 / zoom.x
+	var a: float = _lim_esq + meia
+	var b: float = _lim_dir - meia
+	if not is_finite(a) or not is_finite(b) or b <= a:
+		return x
+	var z: float = minf(BORDA_SUAVE, (b - a) * 0.5)
+	if z <= 0.0:
+		return clampf(x, a, b)
+	if x < a + z:
+		return a + z * exp((x - (a + z)) / z)
+	if x > b - z:
+		return b - z * exp(((b - z) - x) / z)
+	return x
 
 # ===== DEBUG =====
 func debug():

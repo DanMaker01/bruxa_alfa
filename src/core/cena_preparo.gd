@@ -253,9 +253,9 @@ func _popular_inventario() -> void:
 
 func _criar_botao_item(item_name: String, item: ItemData, quantidade: int) -> Button:
 	var btn = Button.new()
-	btn.custom_minimum_size = Vector2(80, 80)
+	btn.custom_minimum_size = Vector2(120, 120)   # grande, para o dedo
 	btn.text = (item.get_nome() if item else item_name) + "\nx" + str(quantidade)
-	btn.add_theme_font_size_override("font_size", 12)
+	btn.add_theme_font_size_override("font_size", 16)
 	if item and item.icone:
 		btn.icon = item.icone
 		btn.expand_icon = true

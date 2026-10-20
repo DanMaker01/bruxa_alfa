@@ -55,13 +55,15 @@ anchor_bottom = 1.0
 mouse_filter = 2
 
 [node name="Simbolo" type="Control" parent="CartaInventario/Verso"]
+z_index = 2
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_bottom = -40.0
 mouse_filter = 2
 script = ExtResource("6_penta_verso")
+raio_rel = 0.28
+giro_graus_s = 1.0
 
 [node name="Titulo" type="Label" parent="CartaInventario/Verso"]
 modulate = Color(1, 1, 1, 0.6)
@@ -150,13 +152,15 @@ anchor_bottom = 1.0
 mouse_filter = 2
 
 [node name="Simbolo" type="Control" parent="CartaStatus/Verso"]
+z_index = 2
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_bottom = -40.0
 mouse_filter = 2
 script = ExtResource("6_penta_verso")
+raio_rel = 0.28
+giro_graus_s = 1.0
 
 [node name="Titulo" type="Label" parent="CartaStatus/Verso"]
 modulate = Color(1, 1, 1, 0.6)

@@ -1,0 +1,76 @@
+# camada_parallax.gd
+# Uma camada de parallax "estilo RPG Maker", em cima do Parallax2D do Godot 4:
+#   textura      imagem da camada (vira um Sprite2D filho; deixe vazio para usar filhos próprios)
+#   fator        quanto acompanha a câmera: 0 = parada no céu, 1 = anda com o mapa,
+#                >1 = mais perto que o mapa (primeiro plano)
+#   loop_x       repete na horizontal sem fim (nunca aparece a borda da imagem)
+#   pan          velocidade própria em px/s (nuvens, névoa); negativo = para a esquerda
+#   deslocamento posição da imagem dentro da camada
+#   continuar_na_borda  quando a câmera para na borda do mapa, a camada continua andando
+#                como se a câmera seguisse a bruxa (suave). A imagem precisa ser mais
+#                larga que a tela (ou usar loop_x) para não aparecer a borda dela.
+@tool
+class_name CamadaParallax
+extends Parallax2D
+
+@export var textura: Texture2D:
+	set(v):
+		textura = v
+		_montar()
+@export var fator: float = 1.0:
+	set(v):
+		fator = v
+		_montar()
+@export var loop_x: bool = true:
+	set(v):
+		loop_x = v
+		_montar()
+@export var pan: float = 0.0:
+	set(v):
+		pan = v
+		_montar()
+@export var deslocamento: Vector2 = Vector2.ZERO:
+	set(v):
+		deslocamento = v
+		_montar()
+
+@export var continuar_na_borda: bool = false
+## Quão rápido o deslocamento extra acompanha (maior = mais colado na bruxa).
+@export var suavidade: float = 4.0
+
+var _sprite: Sprite2D
+var _extra: float = 0.0
+
+func _process(delta: float) -> void:
+	if Engine.is_editor_hint() or not continuar_na_borda:
+		return
+	var cam := get_viewport().get_camera_2d()
+	var player = get_node_or_null("/root/Main/Mundo/Player")
+	if cam == null or player == null:
+		return
+	# quanto a bruxa está "à frente" do centro da câmera (≠ 0 só quando a câmera travou)
+	var diff: float = player.global_position.x - cam.get_screen_center_position().x
+	_extra = lerpf(_extra, -diff * fator, clampf(delta * suavidade, 0.0, 1.0))
+	scroll_offset.x = _extra
+
+func _ready() -> void:
+	_montar()
+
+func _montar() -> void:
+	if not is_inside_tree():
+		return
+	scroll_scale = Vector2(fator, 0.0)
+	autoscroll = Vector2(pan, 0.0)
+	if textura:
+		if _sprite == null or not is_instance_valid(_sprite):
+			_sprite = Sprite2D.new()
+			_sprite.name = "Imagem"
+			_sprite.centered = false
+			add_child(_sprite, false, Node.INTERNAL_MODE_FRONT)
+		_sprite.texture = textura
+		_sprite.position = deslocamento
+	if loop_x and textura:
+		repeat_size = Vector2(textura.get_width(), 0.0)
+		repeat_times = 3   # cópias suficientes para cobrir a tela em qualquer posição
+	else:
+		repeat_size = Vector2.ZERO

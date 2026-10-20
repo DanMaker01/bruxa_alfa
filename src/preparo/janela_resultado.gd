@@ -19,12 +19,18 @@ signal _nome_definido
 const ICONE_POCAO := "res://assets/game_caldeirao/pocao.png"
 const ALFA_FUNDO: float = 0.85
 const TAM_POCAO := Vector2(200, 200)
-const CENTRO_POCAO := Vector2(320, 360)       # onde a poção surge
+# Layout (640x960), de cima para baixo:
+#   título (largura toda) | poção à esquerda + pentágono à direita | grade embaixo da poção
+#   | ingredientes (largura toda): nome, barra de aproveitamento e tags do que errou | dica
+const CENTRO_POCAO := Vector2(320, 330)       # onde a poção surge
 const POCAO_ESQUERDA_X: float = 30.0          # para onde ela desliza (posição x)
-const PAINEL_RECT := Rect2(240, 110, 385, 760)  # coluna dos parâmetros (direita)
+const TITULO_RECT := Rect2(20, 40, 600, 80)
+const PENTAGONO_RECT := Rect2(250, 130, 370, 360)
+const GRADE_RECT := Rect2(50, 455, 170, 170)
+const INGREDIENTES_RECT := Rect2(30, 640, 580, 255)
+## Para onde a poção voa ao sair (fallback, se a carta do inventário não for achada).
+const DESTINO_INVENTARIO := Vector2(192, 800)
 const NOME_DESCONHECIDO := "Poção desconhecida"
-const TAM_PENTAGONO: float = 340.0
-const TAM_GRADE: float = 200.0
 const FAIXA_NOME := Rect2(0, 680, 640, 230)  # faixa escura onde aparece a pergunta do nome
 const BRILHOS: int = 28
 ## z_index absoluto da janela (acima da CenaPreparo, do Fade e das notificações).
@@ -43,11 +49,11 @@ var _texto: Label
 var _faixa_nome: ColorRect
 var _caixa_nome: VBoxContainer
 var _campo_nome: LineEdit
-var _painel: VBoxContainer
+var _painel: Control
 var _titulo: Label
 var _pentagono: PentagonoOcean
 var _grade: GradeMatriz
-var _ingredientes: Label
+var _ingredientes: VBoxContainer
 var _dica: Label
 var _t: float = 0.0
 
@@ -143,28 +149,36 @@ func _construir() -> void:
 	_caixa_nome.add_child(botoes)
 	_caixa_nome.visible = false
 
-	# painel dos parâmetros (direita)
-	_painel = VBoxContainer.new()
-	_painel.position = PAINEL_RECT.position
-	_painel.size = PAINEL_RECT.size
-	_painel.add_theme_constant_override("separation", 10)
+	# informações: um Control da tela toda (entra junto, com fade e um leve deslize)
+	_painel = Control.new()
+	_painel.size = tela
+	_painel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_painel.modulate.a = 0.0
-	_titulo = _label(30, HORIZONTAL_ALIGNMENT_CENTER)
+	_titulo = _label(32, HORIZONTAL_ALIGNMENT_CENTER)
 	_titulo.autowrap_mode = TextServer.AUTOWRAP_WORD
-	_titulo.custom_minimum_size = Vector2(PAINEL_RECT.size.x, 0)
+	_titulo.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_titulo.position = TITULO_RECT.position
+	_titulo.size = TITULO_RECT.size
+	_titulo.add_theme_color_override("font_color", Color(1.0, 0.88, 0.55))
 	_painel.add_child(_titulo)
 	_pentagono = PentagonoOcean.new()
-	_pentagono.custom_minimum_size = Vector2(PAINEL_RECT.size.x, TAM_PENTAGONO)
+	_pentagono.position = PENTAGONO_RECT.position
+	_pentagono.size = PENTAGONO_RECT.size
 	_painel.add_child(_pentagono)
-	var centro_grade := CenterContainer.new()
-	centro_grade.custom_minimum_size = Vector2(PAINEL_RECT.size.x, TAM_GRADE)
 	_grade = GradeMatriz.new()
-	_grade.custom_minimum_size = Vector2(TAM_GRADE, TAM_GRADE)
-	centro_grade.add_child(_grade)
-	_painel.add_child(centro_grade)
-	_ingredientes = _label(18, HORIZONTAL_ALIGNMENT_LEFT)
-	_ingredientes.autowrap_mode = TextServer.AUTOWRAP_WORD
-	_ingredientes.custom_minimum_size = Vector2(PAINEL_RECT.size.x, 0)
+	_grade.position = GRADE_RECT.position
+	_grade.size = GRADE_RECT.size
+	_painel.add_child(_grade)
+	# separador fininho acima dos ingredientes
+	var linha := ColorRect.new()
+	linha.color = Color(1, 1, 1, 0.15)
+	linha.position = Vector2(INGREDIENTES_RECT.position.x, INGREDIENTES_RECT.position.y - 14)
+	linha.size = Vector2(INGREDIENTES_RECT.size.x, 2)
+	_painel.add_child(linha)
+	_ingredientes = VBoxContainer.new()
+	_ingredientes.position = INGREDIENTES_RECT.position
+	_ingredientes.size = INGREDIENTES_RECT.size
+	_ingredientes.add_theme_constant_override("separation", 10)
 	_painel.add_child(_ingredientes)
 	add_child(_painel)
 
@@ -236,10 +250,10 @@ func abrir(resultado: Dictionary) -> void:
 	tw.tween_property(_pocao, "position:x", POCAO_ESQUERDA_X, 0.6).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
 	tw.tween_property(_halo, "position:x", POCAO_ESQUERDA_X - TAM_POCAO.x * 0.15, 0.6).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
 	await tw.finished
-	_painel.position.x = PAINEL_RECT.position.x + 40.0
+	_painel.position.x = 40.0
 	tw = create_tween().set_parallel(true)
 	tw.tween_property(_painel, "modulate:a", 1.0, 0.4)
-	tw.tween_property(_painel, "position:x", PAINEL_RECT.position.x, 0.4).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tw.tween_property(_painel, "position:x", 0.0, 0.4).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	await tw.finished
 	_pentagono.mostrar(A)
 	_grade.mostrar(A)
@@ -322,12 +336,93 @@ func _definir_nome(nome: String) -> void:
 	if _pocao_item:
 		_pocao_item.nome = nome
 
-func _preencher_parametros(A: Array) -> void:
+func _preencher_parametros(_A: Array) -> void:
 	_titulo.text = _pocao_item.get_nome() if _pocao_item else "Poção"
-	var partes: Array = []
-	for d in _res.get("diagnosticos", []):
-		partes.append("%s  %d%%" % [d.get("nome_exibicao", d.get("nome", "?")), roundi(100.0 * float(d.get("a", 0.0)))])
-	_ingredientes.text = "Ingredientes:\n" + ("\n".join(partes) if not partes.is_empty() else "—")
+	for c in _ingredientes.get_children():
+		c.queue_free()
+	var cab := _label(20, HORIZONTAL_ALIGNMENT_LEFT)
+	cab.text = "Ingredientes"
+	cab.add_theme_color_override("font_color", Color(1, 1, 1, 0.6))
+	_ingredientes.add_child(cab)
+	var diags: Array = _res.get("diagnosticos", [])
+	if diags.is_empty():
+		var nada := _label(20, HORIZONTAL_ALIGNMENT_LEFT)
+		nada.text = "—"
+		_ingredientes.add_child(nada)
+	for d in diags:
+		_ingredientes.add_child(_linha_ingrediente(d))
+
+## Uma linha: nome | barra do aproveitamento + % | tags do que deu errado.
+func _linha_ingrediente(d: Dictionary) -> Control:
+	var a: float = clampf(float(d.get("a", 0.0)), 0.0, 1.0)
+	var linha := VBoxContainer.new()
+	linha.add_theme_constant_override("separation", 4)
+	var topo := HBoxContainer.new()
+	topo.add_theme_constant_override("separation", 12)
+	var nome := _label(22, HORIZONTAL_ALIGNMENT_LEFT)
+	nome.text = str(d.get("nome_exibicao", d.get("nome", "?")))
+	nome.custom_minimum_size = Vector2(250, 0)
+	nome.clip_text = true
+	topo.add_child(nome)
+	# barra
+	var fundo_barra := ColorRect.new()
+	fundo_barra.color = Color(1, 1, 1, 0.12)
+	fundo_barra.custom_minimum_size = Vector2(200, 14)
+	fundo_barra.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	var cheio := ColorRect.new()
+	cheio.color = _cor_aproveitamento(a)
+	cheio.size = Vector2(200.0 * a, 14)
+	fundo_barra.add_child(cheio)
+	topo.add_child(fundo_barra)
+	var pct := _label(20, HORIZONTAL_ALIGNMENT_RIGHT)
+	pct.text = "%d%%" % roundi(100.0 * a)
+	pct.custom_minimum_size = Vector2(70, 0)
+	topo.add_child(pct)
+	linha.add_child(topo)
+	# tags
+	var tags := HFlowContainer.new()
+	tags.add_theme_constant_override("h_separation", 6)
+	tags.add_theme_constant_override("v_separation", 4)
+	var problemas: Array = d.get("problemas", [])
+	if problemas.is_empty():
+		tags.add_child(_tag("no ponto ✓", Color(0.85, 0.7, 0.25)))
+	else:
+		for t in problemas:
+			var perda: float = float(t.get("perda", 0.0))
+			var cor := Color(0.8, 0.25, 0.2) if perda >= 0.5 else Color(0.85, 0.5, 0.15)
+			tags.add_child(_tag("%s  −%d%%" % [t.get("texto", "?"), roundi(100.0 * perda)], cor))
+	linha.add_child(tags)
+	# quando entrou e a temperatura do caldo ao longo do preparo
+	var lt := LinhaTempo.new()
+	lt.configurar(_res.get("historico_T", []), float(d.get("t0", 0.0)), float(_res.get("t_final", 1.0)))
+	linha.add_child(lt)
+	return linha
+
+func _tag(texto: String, cor: Color) -> Control:
+	var p := PanelContainer.new()
+	var st := StyleBoxFlat.new()
+	st.bg_color = Color(cor, 0.85)
+	st.set_corner_radius_all(10)
+	st.content_margin_left = 10
+	st.content_margin_right = 10
+	st.content_margin_top = 2
+	st.content_margin_bottom = 2
+	p.add_theme_stylebox_override("panel", st)
+	p.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var l := _label(16, HORIZONTAL_ALIGNMENT_CENTER)
+	l.text = texto
+	l.add_theme_color_override("font_color", Color.WHITE)
+	p.add_child(l)
+	return p
+
+func _cor_aproveitamento(a: float) -> Color:
+	if a >= 0.95:
+		return Color(1.0, 0.82, 0.3)     # dourado
+	if a >= 0.6:
+		return Color(0.55, 0.8, 0.4)     # verde
+	if a >= 0.3:
+		return Color(0.9, 0.55, 0.2)     # laranja
+	return Color(0.85, 0.25, 0.2)        # vermelho
 
 ## Estouro de brilhinhos saindo do centro (entrada da poção).
 func _estourar_brilhos(centro: Vector2) -> void:
@@ -355,18 +450,71 @@ func _input(event: InputEvent) -> void:
 		return
 	var toque: bool = (event is InputEventMouseButton and event.pressed) or (event is InputEventScreenTouch and event.pressed)
 	if toque:
+		# toque na grade mostra o valor da célula (não fecha)
+		var pos: Vector2 = event.position
+		if _grade and _grade.get_global_rect().has_point(pos):
+			return
 		get_viewport().set_input_as_handled()
 		_fechar()
 
 func _fechar() -> void:
 	_estado = Estado.SAINDO
+	_dica.visible = false
+	# 1. tudo some, menos a poção, que volta para o meio
 	var tw := create_tween().set_parallel(true)
-	tw.tween_property(self, "modulate:a", 0.0, 0.45)
-	tw.tween_property(_pocao, "scale", Vector2(0.6, 0.6), 0.45)
+	for c in get_children():
+		if c != _pocao and c != _halo and c is CanvasItem:
+			tw.tween_property(c, "modulate:a", 0.0, 0.4)
+	tw.tween_property(_halo, "modulate:a", 0.0, 0.4)
+	tw.tween_property(_pocao, "position", CENTRO_POCAO - TAM_POCAO * 0.5, 0.45).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	tw.tween_property(_pocao, "rotation", 0.0, 0.3)
 	await tw.finished
+	# 2. a poção passa para uma camada própria (o preparo vai fechar) e voa até o inventário
+	var voo := _criar_voo()
 	visible = false
+	modulate.a = 1.0
+	for c in get_children():
+		if c is CanvasItem:
+			c.modulate.a = 1.0
 	_estado = Estado.FECHADA
 	fechou.emit(_res)
+	if voo:
+		await _voar(voo)
+
+## Cópia da poção numa CanvasLayer no topo da árvore (sobrevive ao preparo fechar).
+func _criar_voo() -> TextureRect:
+	var camada := CanvasLayer.new()
+	camada.layer = 100
+	camada.process_mode = Node.PROCESS_MODE_ALWAYS
+	get_tree().root.add_child(camada)
+	var p := TextureRect.new()
+	p.texture = _pocao.texture
+	p.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	p.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	p.size = TAM_POCAO
+	p.pivot_offset = TAM_POCAO * 0.5
+	p.position = CENTRO_POCAO - TAM_POCAO * 0.5
+	p.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	camada.add_child(p)
+	return p
+
+func _voar(p: TextureRect) -> void:
+	var destino := DESTINO_INVENTARIO
+	var carta = get_node_or_null("/root/Main/CanvasLayer/HUD/CartaInventario")
+	if carta is Control:
+		destino = carta.global_position + carta.size * 0.5
+	var tw := p.create_tween().set_parallel(true)
+	tw.tween_property(p, "position", destino - TAM_POCAO * 0.5, 0.7).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	tw.tween_property(p, "scale", Vector2(0.18, 0.18), 0.7).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	tw.tween_property(p, "rotation", TAU, 0.7)
+	await tw.finished
+	# chegou: a carta do inventário dá uma "pulsada" e abre para mostrar o item novo
+	if carta and carta.has_method("abrir"):
+		carta.abrir()
+	var fim := p.create_tween()
+	fim.tween_property(p, "modulate:a", 0.0, 0.15)
+	await fim.finished
+	p.get_parent().queue_free()
 
 func esta_aberta() -> bool:
 	return _estado != Estado.FECHADA
