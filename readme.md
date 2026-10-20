@@ -48,13 +48,18 @@ EstradaB
 			Feito: ListaRolavel (src/ui/lista_rolavel.gd): arrastar rola com inércia, toque sem arrastar abre o item. Linhas de 56 px, fonte 22.
 [ ]			Corrigir: Quando clico num item do inventário nada acontece.
 [ ]			Implementar: Inventário deve indicar que dá pra subir ou descer quando houver itens ocultados.
+[ ]	Sprite placeholder de:
+[ ]		Campones
+[ ]		Guarda1
+[ ]		Guarda2
 
 
 [ ] Caldeirão:
 [?]		Se segurar o botão de fogo quero que retire const_A a cada 0.3seg ao invés de desligar o fogo. Como não há como desligar mais o fogo, caso a temperatura do fogo fique abaixo de F_LIMIT_MIN ele faz um efeito e apaga.
 			Feito: segurar com o fogo aceso abafa (−CONST_A a cada 0,3 s); F < F_LIMIT_MIN (600, em sistema_termico) → fumaça e apaga. Apagado: segurar 1 s acende.
 			Calibrar: CONST_A, F_LIMIT_MIN, de resto ok.
-			
+[ ]	Botão de confirmar após apertar o botão de finalizar poção deve ser maior para facilitar o clique.			
+
 [ ] Cena de poção preparada:
 [.]		Layout: Definir localização das janelas e informações. 
 [ ]			revisar como mostrar os valores fora das diagonais. 
@@ -133,6 +138,7 @@ EstradaB
 [ ]		Tutorial(leve) na primeira vez. (DEPOIS DO CAP. 1)
 
 [ ] Mapa:
+[ ]	Só 1 cogumelo no bosque a cada 10seg. na estradaA tem 5 cogumelos com delay de 2seg.
 [?]     Spawn de itens: existem as áreas de spawn, que invocam um tipo de evento, limitados por qtd de invocações no mapa.  
 [.]         Remover todos eventos placeholders de item dos mapas
 				Removidos os 6 cogumelos de teste (teste_magia) de bruxa_out e castelo_out. Fica só o da história (estradaA). teste_magia.tres sem uso.
@@ -146,7 +152,7 @@ EstradaB
 			Feito: mapa_base tem bgm/bgm_volume no Inspector. Mesmo bgm = continua; outro = troca; vazio = para. Só a floresta tem bgm (floresta.mp3).
 [ ]		SE nos teleport (depois: som de passos na transição)
 [?]		Tela preta das passagens mais curta: "esperar" depois do teleporte baixado de 0.4 para 0.2
-
+[ ]	Paralaxe 1.01 deve ser 0.99
 
 [.]	HUD/inventário:
 		Feito (1ª versão): src/ui/carta.gd + hud.tscn refeito. Duas cartas: CartaInventario (Verso/Inventario/Dialogo) e CartaStatus (Verso/Status/Opcoes).
@@ -161,6 +167,10 @@ EstradaB
 [ ]     Separar o Inventário do HUD. O HUD deve fazer o esquema de carta que vira ao clicar em um de seus componentes (inventário ou status), pensar como vai ser a dinâmica da carta girando, ativação, desativação, etc. Um clique em cima para mostrar, e se ficar alguns segundos sem interação ele desvira.
 [ ]		Animar o inventário e o status como um card que gira/abre ou algo assim. 
 [ ]		Fazer uma animação de carta virando para os diálogos, opções, inventário e status. 
+[ ]		Diminuir o botão de avançar diálogo em todas as laterais, pouca coisa.
+[ ]		Mostrar o pentagrama por cima dos Cards, talvez é problema de zindex.
+[ ]		No diálogo a tela deve escurecer um pouco mais.
+[ ]		No avançar diálogo o cursor triangular deve ficar com movimento y=sin((2pi/L)*x)
 
 
 
@@ -172,7 +182,7 @@ EstradaB
 [ ]         inventário e status de costas (card que gira)
 
 
-[ ]	Audio:
+[ ] Audio:
 [ ]     Fazer músicas: 
 [ ]         intro, 
 [ ]         casa bruxa, 
@@ -181,9 +191,14 @@ EstradaB
 [ ]			ponte (ouvir ost: ragnarok, pokemon, nobuo uematsu)
 [ ]         castelo, 
 [ ]         ...
+[ ]	Fazer sons:
+[ ]		Teleport entre mapas
+[ ]		Flip card
+[ ]		Efeitos (...)	
 
 [ ]	Animações:
 [ ]		
+
 
 [ ] Estilo:
 [ ] 	organizar o layout e textura dialogo/opções
@@ -220,8 +235,4 @@ EstradaB
 [ ]	Sistema de mercado/valor dinâmico
 [ ]	Sistema de fama
 [ ]	Sistema de compra/venda
-```
 
-## Game Design Document
-
-[_gdd/v1.3.11/main.pdf](https://github.com/DanMaker01/bruxa-v-0.1/blob/main/_gdd/v1.3.11/main.pdf)
