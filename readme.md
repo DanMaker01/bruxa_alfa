@@ -38,26 +38,32 @@ EstradaB
 ## Terminar logo (0)
 
 ```
+
+[ ] v3
+[ ]		balancear itens e preparo. 4 primeiros ingredientes oficiais. erva, cogu, pena de urubu,olho de salamandra(ou outro) (pena e olho: DEPOIS)
+			Erva + cogumelo (1ª receita): erva m5200 s2000/3000 Tmin50 k.3 Tmax135 k.15 (queima ~140+) t25–90 h.4; cogumelo m1200 s600/900 Tmin100 k.15 Tmax160 k.15 t5–25 h.4/.5. Fogo: K 0.3, CONST_A 30.
+			Receita ideal (~60 s): acende → erva com água morna (~8 s) → cozinha até ~40 s → ~1 clique/s até chama BRANCA (~120 °C) → cogumelo (~48–50 s) → frita ~10 s → termina. Perfeito → Poção da Calma Profunda (só N cai, 0,93).
+[.]		Ao interagir com eventos a bruxa deve virar para ele antes. (evento_base._virar_player_para_mim, clique/toque). E quando não quiser que vire?
+[.]		Scroll do inventário é muito pequeno e difícil puxar, eu queria que fosse uma lista e com o touch eu pudesse clicar e arrastar para fazer rolar.
+			Feito: ListaRolavel (src/ui/lista_rolavel.gd): arrastar rola com inércia, toque sem arrastar abre o item. Linhas de 56 px, fonte 22.
+[ ]			Corrigir: Quando clico num item do inventário nada acontece.
+[ ]			Implementar: Inventário deve indicar que dá pra subir ou descer quando houver itens ocultados.
+
+
 [ ] Caldeirão:
 [?]		Se segurar o botão de fogo quero que retire const_A a cada 0.3seg ao invés de desligar o fogo. Como não há como desligar mais o fogo, caso a temperatura do fogo fique abaixo de F_LIMIT_MIN ele faz um efeito e apaga.
 			Feito: segurar com o fogo aceso abafa (−CONST_A a cada 0,3 s); F < F_LIMIT_MIN (600, em sistema_termico) → fumaça e apaga. Apagado: segurar 1 s acende.
 			Calibrar: CONST_A, F_LIMIT_MIN, de resto ok.
-[ ]		balancear, pq usar a poção como ingrediente deve ser dificil, sensível. e deve ser cosistente a depender dos ingredientes.
-[?] 		Caldeirão não deve tremer quando está com problemas na poção. Ele deve tremever levemente quando está com temperatura em 100 graus. e acima disso ele deve ir ficando avermelhado.
-			Feito (visual_caldeirao): treme de 95 °C (0 px) → 100 °C (1,5 px) → 200 °C (3,5 px); acima de 100 °C avermelha até 200 °C. Perda de aproveitamento não treme mais (só o caldo turvo).
-			Calibrar: T_TREMOR_INICIO, TREMOR_LEVE_PX, TREMOR_MAX_PX, T_VERMELHO_MAX, VERMELHO_MAX.
-
-[ ] v3
-[ ] 	debug:limpar placeholder vars, definir algumas personalidades (todos npc terão personalidade. index z maior. 
-[ ]		balancear itens e preparo. 4 primeiros ingredientes oficiais. erva, cogu, pena de urubu,olho de salamandra(ou outro)
-			Erva + cogumelo (1ª receita): erva m5200 s2000/3000 Tmin50 k.3 Tmax135 k.15 (queima ~140+) t25–90 h.4; cogumelo m1200 s600/900 Tmin100 k.15 Tmax160 k.15 t5–25 h.4/.5; CONST_A 60.
-			Receita ideal (~60 s): acende → erva quando a água esquentar (~8 s, T>60) → cozinha até ~45 s → ~1 clique/s no fogo → cogumelo com T≥115 (~50 s) → frita ~10 s → termina. Perfeito: C e E se anulam, só N cai (0,93).
-
+			
 [ ] Cena de poção preparada:
-[?]		Layout: Definir localização das janelas e informações. 
-[ ]			revisar como mostrar os valores fora das diagonais.
-[ ]		Nomear as poções de referência no catálogo (PocaoReferencia: nome, descrição, A)
-[ ]		As poções nomeadas não devem ficar salvas no user, e sim salvas no GameTemp, valem só para aquela secção.
+[.]		Layout: Definir localização das janelas e informações. 
+[ ]			revisar como mostrar os valores fora das diagonais. 
+[ ]			Revisar posições das informações.
+[ ]			Mostrar qual foi o erro por ingrediente nos ingredientes da receita. 
+[ ]			Anotar o tempo e temperatura no momento que cada item entrou nos itens. quero não só número, mas uma representação visual útil.
+[.]		Nomear as poções de referência no catálogo (PocaoReferencia: nome, descrição, A)
+[ ]			As poções nomeadas não devem ficar salvas no user, e sim salvas no GameTemp, valem só para aquela secção.
+[ ]			Iniciar o livro de receitas
 
 [ ] História / missão: (em ordem)
 [ ]		Diálogos devem condizer com a época
@@ -93,6 +99,13 @@ EstradaB
 [?]		Notificação de item nunca aparece (NotificacaoItem sem Label em main.tscn)
 			Label já existe; agora o painel começa escondido e uma notificação nova não é mais apagada pelo timer da anterior.
 [?]		Segurar o botão de poção para sair agora é 0,7 s (TEMPO_LONGO)
+
+
+[ ]	Cena Livro de Receitas:
+[ ]		Layout
+[ ]		Uma receita por página, 2 páginas por folha, mostra o livro aberto e tem opção de controlar com clique ou arrastando, é redundante para melhor UX.
+[ ]		Ao clicar numa página mostra seus ingredientes e tempo relacionado com seu gráfico, seu resultado.
+[ ]		Fazer tudo bem animado e temático de bruxaria.
 
 
 [.] Itens:

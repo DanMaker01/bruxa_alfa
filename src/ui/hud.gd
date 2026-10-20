@@ -10,7 +10,7 @@ extends Control
 # CONSTANTES
 # =============================================================================
 const POPUP_SIZE = Vector2(570, 200)
-const BUTTON_FONT_SIZE = 18
+const BUTTON_FONT_SIZE = 22
 const EMPTY_FONT_SIZE = 18
 const MARGIN = 10
 const POPUP_AREA_BOTTOM = 640.0  # o popup fica acima do HUD (inventário/status começam em y=640)
@@ -43,6 +43,9 @@ var popup_instance = null
 # =============================================================================
 
 func _ready():
+	var lista = get_node_or_null("CartaInventario/Inventario/MarginContainer/ScrollContainer")
+	if lista and lista.has_signal("linha_tocada"):
+		lista.linha_tocada.connect(_on_linha_tocada)
 	print("[HUD] Inicializando...")
 	# o nó fica sempre visível; "visible" da cena vira ativo/inativo das cartas
 	var comecar_ativo := visible
@@ -189,7 +192,8 @@ func _populate_inventory(inventory: Dictionary):
 		var item: ItemData = database.get_item(item_name) if database else null
 		
 		var button = _create_item_button(item.get_nome() if item else item_name, quantity)
-		button.pressed.connect(_on_item_button_pressed.bind(item_name))
+		button.set_meta("item", item_name)
+		button.mouse_filter = Control.MOUSE_FILTER_IGNORE   # quem decide toque x arraste é a ListaRolavel
 		inventory_container.add_child(button)
 
 func _create_item_button(item_name: String, quantity: int) -> Button:
@@ -201,7 +205,7 @@ func _create_item_button(item_name: String, quantity: int) -> Button:
 	button.add_theme_stylebox_override("normal", _button_style_normal())
 	button.add_theme_stylebox_override("hover", _button_style_hover())
 	button.add_theme_stylebox_override("pressed", _button_style_pressed())
-	button.custom_minimum_size = Vector2(0, 40)
+	button.custom_minimum_size = Vector2(0, 56)   # linhas altas: fácil de tocar e de arrastar
 	return button
 
 # =============================================================================
@@ -254,6 +258,10 @@ func _on_item_button_pressed(item_name: String):
 	var area = Rect2(0, 0, screen_size.x, POPUP_AREA_BOTTOM)
 	carta_inventario.segurar = true   # não desvira com o popup aberto
 	popup_instance.show_item(titulo, item_data, quantity, anchor, area)
+
+func _on_linha_tocada(linha: Control) -> void:
+	if linha.has_meta("item"):
+		_on_item_button_pressed(linha.get_meta("item"))
 
 func _on_popup_closed():
 	"""Fecha o popup"""

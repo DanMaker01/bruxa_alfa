@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="PersonalidadeData" format=3]
+
+[ext_resource type="Script" uid="uid://cc4l3ovhft665" path="res://src/dados/personalidade_data.gd" id="1_pers"]
+
+[resource]
+script = ExtResource("1_pers")
+id = "campones"
+abertura = 2.0
+consciencia = 4.0
+extroversao = 3.0
+amabilidade = 6.0
+neuroticismo = 5.0

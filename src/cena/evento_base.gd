@@ -366,12 +366,23 @@ func _do_activate():
 	is_processing_activation = true
 	is_event_running = true
 	last_activation_time = Time.get_ticks_msec() / 1000.0
+	_virar_player_para_mim()
 
 	event_triggered.emit(evento, self)
 
 	await get_tree().process_frame
 	if is_instance_valid(self):
 		is_processing_activation = false
+
+## A bruxa olha para o evento antes de interagir (clique e toque; paralelo não).
+func _virar_player_para_mim() -> void:
+	if trigger == "parallel":
+		return
+	var player = get_node_or_null("/root/Main/Mundo/Player")
+	if player and player.has_method("virar"):
+		var dx: float = global_position.x - player.global_position.x
+		if absf(dx) > 4.0:
+			player.virar("dir" if dx > 0.0 else "esq")
 
 func on_event_finished():
 	"""Chamado quando o evento termina sua execução"""

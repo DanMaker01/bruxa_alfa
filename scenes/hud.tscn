@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://c2hpmhdnt43qb" path="res://scenes/status.tscn" id="3_5ysmq"]
 [ext_resource type="Texture2D" uid="uid://b8g17f8odkjvu" path="res://assets/game_ui/hud_frame2.png" id="4_6fi6k"]
 [ext_resource type="Texture2D" uid="uid://cr1ab2huesgjk" path="res://assets/game_ui/pentagrama.png" id="5_penta"]
+[ext_resource type="Script" path="res://src/ui/lista_rolavel.gd" id="7_lista"]
 
 [node name="HUD" type="Control"]
 z_index = 20
@@ -98,7 +99,7 @@ offset_bottom = -20.0
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 size_flags_vertical = 3
-follow_focus = true
+script = ExtResource("7_lista")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CartaInventario/Inventario/MarginContainer/ScrollContainer"]
 layout_mode = 2

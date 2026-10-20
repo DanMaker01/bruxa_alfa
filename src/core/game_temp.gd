@@ -54,8 +54,9 @@ func _on_database_loaded():
 
 # ===== VARIÁVEIS =====
 
+## Variáveis são sempre número: uma que não existe vale 0.
 func get_var(nome: String):
-	return variaveis.get(nome)
+	return variaveis.get(nome, 0.0)
 
 func set_var(nome: String, valor):
 	var old = variaveis.get(nome)
