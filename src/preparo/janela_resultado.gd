@@ -224,6 +224,8 @@ func abrir(resultado: Dictionary) -> void:
 		_definir_nome(achada["nome"])
 	elif nome_unico != "":
 		_definir_nome(nome_unico)   # um item só: nome automático, não pergunta
+	elif _nome_ingrediente(A) != "":
+		_definir_nome(_nome_ingrediente(A))   # matriz parecida com um ingrediente puro
 	else:
 		pedir_nome = true
 	_estado = Estado.MOSTRANDO
@@ -267,6 +269,10 @@ func abrir(resultado: Dictionary) -> void:
 	# 4. pronto: qualquer toque fecha
 	_dica.visible = true
 	_estado = Estado.PRONTA
+
+func _nome_ingrediente(A: Array) -> String:
+	var db = get_node_or_null("/root/Main/GameManager/DatabaseManager")
+	return CalculadoraPocao.nome_por_ingrediente(A, db)
 
 func _resetar() -> void:
 	_t = 0.0

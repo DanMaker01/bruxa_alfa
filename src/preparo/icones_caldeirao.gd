@@ -32,6 +32,8 @@
 # Não decide nada do jogo: a cena chama adicionar() e atualizar() com o estado.
 class_name IconesCaldeirao
 extends Node2D
+## Perda (0..1) a partir da qual o ícone chacoalha.
+const LIMIAR_TREMER: float = 0.67
 
 # ---- a bola onde os itens flutuam (ajuste aqui quando o sprite arredondado chegar) ----
 ## Centro da bola, relativo à posição do sprite do caldeirão.
@@ -226,7 +228,10 @@ func atualizar(i: int, est: Dictionary) -> void:
 		if niveis[k] == 2:
 			punindo = true
 	a["brilho"] = 1.0 if est.get("no_ponto", false) and not punindo and not passou else 0.0
-	a["treme"] = 1.0 if punindo else 0.0
+	# só chacoalha quando a punição já é séria: perdeu >= 67% do aproveitamento
+	var perdido: float = 1.0 - float(est.get("perda", 1.0))
+	a["treme"] = clampf(0.4 + 0.6 * (perdido - LIMIAR_TREMER) / (1.0 - LIMIAR_TREMER), 0.4, 1.0) \
+		if punindo and perdido >= LIMIAR_TREMER else 0.0
 	# anel: quanto da régua o cozimento (Q) já andou
 	var ic: Dictionary = _icones[i]
 	var item_ic: ItemData = ic["item"]

@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://dm0wu7vpqtyqg"]
+
+[ext_resource type="Texture2D" uid="uid://cdcejvwb2n6g6" path="res://assets/mapa_bruxa_in/bau.png" id="1_vrwr1"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_vrwr1")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

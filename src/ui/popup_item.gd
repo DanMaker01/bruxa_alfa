@@ -22,12 +22,20 @@ const SCREEN_MARGIN: float = 10.0  # Distância mínima da borda da tela
 
 var _show_token: int = 0  # evita que dois show_item seguidos se atropelem
 
+# ===== MATRIZ (pentágono O-C-E-A-N + grade 5x5), criados por código =====
+const TAM_PENTAGONO := Vector2(210, 190)
+const TAM_GRADE := Vector2(130, 130)
+var _linha_matriz: HBoxContainer
+var _pentagono: PentagonoOcean
+var _grade: GradeMatriz
+
 func _ready():
     process_mode = PROCESS_MODE_ALWAYS
     _setup_ui()
     
     if close_button:
         close_button.pressed.connect(_on_close_pressed)
+    _criar_matriz()
     
     visible = false
 
@@ -61,6 +69,13 @@ func show_item(item_name: String, item_data: Dictionary, quantity: int, anchor =
         description_label.text = item_data.get("descricao", "(Sem descrição disponível.)")
     if quantity_label:
         quantity_label.text = "QTD: " + str(quantity)
+    # matriz do item (efeito na personalidade): pentágono + grade
+    var A = item_data.get("A")
+    if _linha_matriz:
+        _linha_matriz.visible = A != null
+        if A != null:
+            _pentagono.mostrar(A)
+            _grade.mostrar(A)
 
     # 🔥 1. LARGURA: mede o texto de verdade e limita entre MIN/MAX
     var pad = _get_padding()
@@ -99,6 +114,30 @@ func hide_item():
     popup_closed.emit()
     print("[PopupItem] Fechado")
 
+func _criar_matriz():
+    """Linha com o pentágono e a grade, entre a descrição e a quantidade."""
+    if not vbox:
+        return
+    _linha_matriz = HBoxContainer.new()
+    _linha_matriz.name = "Matriz"
+    _linha_matriz.alignment = BoxContainer.ALIGNMENT_CENTER
+    _linha_matriz.add_theme_constant_override("separation", 16)
+    _linha_matriz.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+    _linha_matriz.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    _pentagono = PentagonoOcean.new()
+    _pentagono.custom_minimum_size = TAM_PENTAGONO
+    _pentagono.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    _grade = GradeMatriz.new()
+    _grade.custom_minimum_size = TAM_GRADE
+    _grade.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+    _grade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    _linha_matriz.add_child(_pentagono)
+    _linha_matriz.add_child(_grade)
+    vbox.add_child(_linha_matriz)
+    if quantity_label:
+        vbox.move_child(_linha_matriz, quantity_label.get_index())
+    _linha_matriz.visible = false
+
 func _get_padding() -> Vector2:
     """Margens reais do MarginContainer (esq+dir, cima+baixo)."""
     if not margin_container:
@@ -119,6 +158,8 @@ func _calculate_content_width(pad: Vector2) -> float:
         w = max(w, close_button.get_combined_minimum_size().x)
     if description_label:
         w = max(w, _text_width(description_label))
+    if _linha_matriz and _linha_matriz.visible:
+        w = max(w, TAM_PENTAGONO.x + TAM_GRADE.x + 16.0)
     return clamp(w + pad.x, MIN_WIDTH, MAX_WIDTH) - pad.x
 
 func _text_width(label: Label) -> float:

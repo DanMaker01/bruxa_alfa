@@ -41,3 +41,6 @@ func fechar(resultado: Dictionary = {}) -> void:
 func _aplicar_resultado(resultado: Dictionary) -> void:
 	if resultado.has("item") and gm.game_temp:
 		gm.game_temp.add_item(resultado.item, resultado.get("quantidade", 1))
+		# missão 1: qualquer poção feita libera os guardas (ponte e estradaB)
+		if gm.game_temp.get_var("missao01_pocao_feita") != 1.0:
+			gm.game_temp.set_var("missao01_pocao_feita", 1.0)

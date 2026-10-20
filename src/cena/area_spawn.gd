@@ -40,7 +40,10 @@ const TEMPO_APARECER: float = 0.5
 		variacao_y = v
 		queue_redraw()
 ## Tempo (s) depois de coletar até nascer um novo.
-@export var cooldown: float = 20.0
+@export var cooldown: float = 1.0
+## Distância mínima (px, no eixo x) entre os centros de dois itens, para não se sobreporem.
+## Se a faixa não tiver espaço livre, o item nasce em qualquer lugar (pode sobrepor).
+@export var distancia_min: float = 70.0
 
 var _gt = null
 var _chave: String = ""
@@ -64,7 +67,7 @@ func _ready() -> void:
 	else:
 		_dados = {"pos": [], "renasce": []}
 		for i in range(quantidade):
-			_dados.pos.append(_ponto_aleatorio())
+			_dados.pos.append(_ponto_livre(_dados.pos))
 			_dados.renasce.append(-1.0)
 		if _gt:
 			_gt.spawns[_chave] = _dados
@@ -107,7 +110,11 @@ func _rodando(chave_no: String) -> bool:
 
 func _renascer(i: int) -> void:
 	var no = _copias[i]
-	var nova := _ponto_aleatorio()
+	var outras: Array = []
+	for k in range(_dados.pos.size()):
+		if k != i and _dados.renasce[k] < 0.0:   # só as que estão no mapa
+			outras.append(_dados.pos[k])
+	var nova := _ponto_livre(outras)
 	no.position = nova
 	_dados.pos[i] = nova
 	_dados.renasce[i] = -1.0
@@ -117,6 +124,41 @@ func _renascer(i: int) -> void:
 	if no.has_method("refresh_event"):
 		no.refresh_event()
 	_efeito_nascer(no)
+
+## Ponto aleatório da faixa sem sobrepor "outras" (distância em x >= distancia_min),
+## sorteado uniformemente entre os trechos livres. Sem trecho livre: qualquer ponto.
+func _ponto_livre(outras: Array) -> Vector2:
+	var a := -largura * 0.5
+	var b := largura * 0.5
+	# trechos livres = faixa menos (x - d, x + d) de cada outra
+	var livres: Array = [Vector2(a, b)]   # Vector2(início, fim)
+	for q in outras:
+		var ini: float = q.x - distancia_min
+		var fim: float = q.x + distancia_min
+		var novos: Array = []
+		for t in livres:
+			if fim <= t.x or ini >= t.y:
+				novos.append(t)
+				continue
+			if ini > t.x:
+				novos.append(Vector2(t.x, ini))
+			if fim < t.y:
+				novos.append(Vector2(fim, t.y))
+		livres = novos
+	var total := 0.0
+	for t in livres:
+		total += t.y - t.x
+	if total <= 0.0:
+		return _ponto_aleatorio()
+	var sorteio := randf() * total
+	var x := b
+	for t in livres:
+		var tam: float = t.y - t.x
+		if sorteio <= tam:
+			x = t.x + sorteio
+			break
+		sorteio -= tam
+	return Vector2(x, randf_range(-variacao_y, variacao_y))
 
 func _ponto_aleatorio() -> Vector2:
 	return Vector2(randf_range(-largura * 0.5, largura * 0.5), randf_range(-variacao_y, variacao_y))

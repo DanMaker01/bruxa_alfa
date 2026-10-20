@@ -11,7 +11,9 @@ const T_AMB: float = 20.0
 const F_EQ: float = 800.0
 const T_EQ: float = 100.0
 
-const K: float = 0.5
+## Troca de calor fogo↔caldo. Menor = o fogo perde calor mais devagar depois de atiçado
+## (e também esquenta mais devagar). A relação fogo→temperatura de equilíbrio não muda.
+const K: float = 0.3
 const HF: float = 0.01
 const C: float = 2.0
 const C_F: float = 2.0
@@ -27,7 +29,8 @@ var P_comb: float
 # =============================================================================
 # CONSTANTES DE AÇÃO
 # =============================================================================
-const CONST_A: float = 20.0	# pulso de fogo (clique curto no botão F)
+## Pulso de fogo (clique curto no botão F). Com K = 0,3: ~1 clique/s segura T perto de 120 °C.
+const CONST_A: float = 30.0
 const CONST_B: float = 10.0	# queda de T quando um ingrediente entra
 ## Segurando o botão de fogo (aceso): tira CONST_A de F a cada 0,3 s ("abafar").
 ## Se F ficar abaixo disto ao abafar, o fogo apaga.
@@ -166,36 +169,41 @@ func get_intensidade_fogo() -> float:
 # =============================================================================
 # Vermelho escuro → laranja → amarelo claro
 # =============================================================================
+## Cor da chama = termômetro. Cada faixa de F tem uma cor bem distinta, ligada à
+## temperatura que o caldo atinge com esse fogo (T de equilíbrio ≈ (F + 175) / 9,75):
+##   vermelho escuro  brasa              (caldo frio)
+##   laranja          F 800   → caldo ~100 °C (fervura)
+##   amarelo          F 900   → ~110 °C
+##   branco           F 1000  → ~120 °C (ponto de fritar o cogumelo)
+##   branco-azulado   F 1100  → ~130 °C (limite da erva)
+##   azul             F 1180+ → ~140 °C (queimando a erva)
+## Dentro de cada faixa a cor "segura" no meio e troca rápido perto da próxima,
+## para dar para ler a faixa sem números.
+const CORES_FOGO := [
+	[70.0, Color(0.55, 0.08, 0.04)],
+	[600.0, Color(1.0, 0.22, 0.06)],
+	[800.0, Color(1.0, 0.55, 0.12)],
+	[900.0, Color(1.0, 0.88, 0.2)],
+	[1000.0, Color(1.0, 1.0, 0.85)],
+	[1100.0, Color(0.72, 0.92, 1.0)],
+	[1180.0, Color(0.3, 0.5, 1.0)],
+]
+
 func get_cor_fogo() -> Color:
 	var i = get_intensidade_fogo()
-	
 	if i <= 0.0:
 		return Color(1.0, 0.4, 0.1, 0.0)
-	
-	if F < FASE_2_MIN:
-		# brasa: vermelho escuro
-		var t = i / 0.35	# 0..1
-		return Color(
-			0.9 + 0.1 * t,	   # R: 0.9 → 1.0
-			0.2 + 0.3 * t,	   # G: 0.2 → 0.5
-			0.05 + 0.05 * t,	 # B: 0.05 → 0.1
-			i
-		)
-	elif F < FASE_3_MIN:
-		# chama: laranja
-		var t = (i - 0.35) / 0.55   # 0..1
-		return Color(
-			1.0,				 # R
-			0.5 + 0.3 * t,	   # G: 0.5 → 0.8
-			0.1 + 0.1 * t,	   # B: 0.1 → 0.2
-			i
-		)
+	var cor: Color = CORES_FOGO[-1][1]
+	if F <= CORES_FOGO[0][0]:
+		cor = CORES_FOGO[0][1]
 	else:
-		# intenso: amarelo claro
-		var t = (i - 0.90) / 0.10   # 0..1
-		return Color(
-			1.0,				 # R
-			0.8 + 0.2 * t,	   # G: 0.8 → 1.0
-			0.2 + 0.4 * t,	   # B: 0.2 → 0.6
-			i
-		)
+		for k in range(CORES_FOGO.size() - 1):
+			var f0: float = CORES_FOGO[k][0]
+			var f1: float = CORES_FOGO[k + 1][0]
+			if F < f1:
+				var t: float = clampf((F - f0) / (f1 - f0), 0.0, 1.0)
+				t = t * t * t * (t * (t * 6.0 - 15.0) + 10.0)   # smootherstep: faixas mais marcadas
+				cor = CORES_FOGO[k][1].lerp(CORES_FOGO[k + 1][1], t)
+				break
+	cor.a = i
+	return cor

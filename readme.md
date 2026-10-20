@@ -50,14 +50,14 @@ EstradaB
 [ ] v3
 [ ] 	debug:limpar placeholder vars, definir algumas personalidades (todos npc terão personalidade. index z maior. 
 [ ]		balancear itens e preparo. 4 primeiros ingredientes oficiais. erva, cogu, pena de urubu,olho de salamandra(ou outro)
+			Erva + cogumelo (1ª receita): erva m5200 s2000/3000 Tmin50 k.3 Tmax135 k.15 (queima ~140+) t25–90 h.4; cogumelo m1200 s600/900 Tmin100 k.15 Tmax160 k.15 t5–25 h.4/.5; CONST_A 60.
+			Receita ideal (~60 s): acende → erva quando a água esquentar (~8 s, T>60) → cozinha até ~45 s → ~1 clique/s no fogo → cogumelo com T≥115 (~50 s) → frita ~10 s → termina. Perfeito: C e E se anulam, só N cai (0,93).
 
 [ ] Cena de poção preparada:
 [?]		Layout: Definir localização das janelas e informações. 
 [ ]			revisar como mostrar os valores fora das diagonais.
 [ ]		Nomear as poções de referência no catálogo (PocaoReferencia: nome, descrição, A)
-
-[?] UI - notificação está estranha, tenho que ver se ela fica com uma fução mais bem definida, com multiplas notificações ou senão só tiro as notificações.
-		Feito: notificações empilhadas (cópias de NotificacaoItem), fade de entrada/saída, até 4 ao mesmo tempo. Ajustar: NOTIF_TEMPO, NOTIF_FADE, NOTIF_MAX (game_manager).
+[ ]		As poções nomeadas não devem ficar salvas no user, e sim salvas no GameTemp, valem só para aquela secção.
 
 [ ] História / missão: (em ordem)
 [ ]		Diálogos devem condizer com a época
@@ -72,9 +72,10 @@ EstradaB
 					AreaSpawn (src/cena/area_spawn.gd): no máximo N cópias de um EventoData numa faixa; posições e cooldowns salvos no GameTemp (voltar ao mapa = mesmas posições); coletou 1 (self A = 1) → após o cooldown (s) renasce num ponto qualquer da faixa, com efeito de brilho. estradaA: AreaCogumelo (3x spawn_cogumelo), floresta: AreaErva (3x spawn_erva).
 					Ajustar no editor: posição/largura das áreas. estradaA_cogumelo.tres e floresta_erva.tres ficaram sem uso (apagar).
 [?]			A bruxa diz quais & qtos itens tem que pegar e libera controle na primeira missão.
-[ ]			com ingredientes na mão, interagir com o caldeirão, ela explica como usar a 1ª vez.
+[ ]			com ingredientes na mão, interagir com o caldeirão, ela explica como usar a 1ª vez. (DEPOIS DO CAP. 1)
 					Evento bruxa_in_caldeirao ainda é só "caldeirão (em construção)".
-[ ]			após criar, vem cena NPC, basta ir no castelo, guardas deixam passar agora.
+[?]			após criar, vem cena NPC, basta ir no castelo, guardas deixam passar agora.
+					Feito: criar qualquer poção (ControlePreparo) → missao01_pocao_feita = 1 → ponte_guarda e estradaB_guarda ganham página 2 (passável, "Pode passar."). Falta a cena do NPC.
 					ponte_guarda e estradaB_guarda só bloqueiam, sem condição.
 [ ]			finalização, entrega poção e resultados possíveis.
 					castelo_in só tem a passagem.
@@ -86,6 +87,7 @@ EstradaB
 ```
 
 [ ] Bugs/Revisão:
+[ ]		Camera trava quando chega num canto de tela mas o parallax não deve travar, senão dá uma sensação ruim de impacto quando chega perto de um canto de tela.
 [?]		Página com várias condições (todas precisam valer): variável, item, personalidade, posição, direção
 [?]		Página reavalia ao ganhar/perder item e ao mudar personalidade
 [?]		Notificação de item nunca aparece (NotificacaoItem sem Label em main.tscn)
@@ -115,7 +117,7 @@ EstradaB
 
 [ ]	Caldeirão:
 [ ]		Ajustes mínimos: cor, shake, efeitos, aparar para a versão final.
-[ ]		Tutorial(leve) na primeira vez.
+[ ]		Tutorial(leve) na primeira vez. (DEPOIS DO CAP. 1)
 
 [ ] Mapa:
 [?]     Spawn de itens: existem as áreas de spawn, que invocam um tipo de evento, limitados por qtd de invocações no mapa.  
@@ -138,14 +140,15 @@ EstradaB
 		Toque no verso abre; 4 s sem tocar na carta (nem popup do item aberto) desvira. Independentes. Fechada ocupa o mesmo espaço.
 		Diálogo/opções: DialogBox e OptionBox vão para dentro das cartas (face de prioridade); a carta vira sozinha e volta para onde estava.
 		mostrar_hud/sumir_hud: ativa/desativa as cartas (inativas somem, mas aparecem no diálogo).
-		Ajustar: tempo_aberta, tempo_virar, levantar (Inspector da carta). Falta: arte do verso, sombra.
-[!]     Separar o Inventário do HUD. O HUD deve fazer o esquema de carta que vira ao clicar em um de seus componentes (inventário ou status), pensar como vai ser a dinâmica da carta girando, ativação, desativação, etc. Um clique em cima para mostrar, e se ficar alguns segundos sem interação ele desvira.
-[!]		Animar o inventário e o status como um card que gira/abre ou algo assim. 
-[!]		Fazer uma animação de carta virando para os diálogos, opções, inventário e status. 
-[ ]		Posição da foto não deveria se mover enquanto a carta gira, ela só faz fade.
-[ ]		Criar um estilo para os botões de opção, deve ser preto
-[ ]		Nome não gira, só deve fazer fade tbm. 
-[ ]		Se o próximo diálogo tiver a mesma foto, não precisa fazer fade da foto, só manter.
+		Virada na diagonal (angulo_diagonal 45°), sem pulinho. Conteúdo vai para um Node2D "Giro" no _ready: use carta.face("Nome").
+		Margem só no conteúdo (MARGEM_CONTEUDO = 20, hud.gd); botões de opção ocupam a carta toda e são pretos.
+		Foto e nome do falante ficam fora da carta (CanvasLayer): não giram, fade só quando mudam.
+		Ajustar: tempo_aberta, tempo_virar, angulo_diagonal (Inspector da carta).
+		Verso provisório: pentagrama desenhado (src/ui/pentagrama_verso.gd, gira devagar; cor/espessura/raio/giro no Inspector). Trocar pela arte quando existir.
+[ ]     Separar o Inventário do HUD. O HUD deve fazer o esquema de carta que vira ao clicar em um de seus componentes (inventário ou status), pensar como vai ser a dinâmica da carta girando, ativação, desativação, etc. Um clique em cima para mostrar, e se ficar alguns segundos sem interação ele desvira.
+[ ]		Animar o inventário e o status como um card que gira/abre ou algo assim. 
+[ ]		Fazer uma animação de carta virando para os diálogos, opções, inventário e status. 
+
 
 
 [ ]	Arte Visual
@@ -182,12 +185,12 @@ EstradaB
 
 
 [ ]	Status: ()
-[ ]		popup do nome da característica quando hover ou click. ou algo legal.
+[?]		popup do nome da característica quando hover ou click. ou algo legal. (status.gd: toque no ícone → balão com nome e valor por 1,5 s)
 [ ]		Animação de aparição. (como se virasse uma carta, etc) 
 
 
 [ ]	Menu Principal e Pausa
-[ ]	Save/Load
+[ ]	Save/Load (DEPOIS: muita coisa ainda pode mudar)
 [ ]		Game_Temp deve ter save e load de arquivo_unico de titulo "save"+time_stamp
 [ ]		GameTemp, posição player, mapa
 [?]	Animações do player e eventos melhor organizada e testes.

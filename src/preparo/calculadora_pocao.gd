@@ -366,6 +366,32 @@ static func nome_item_unico(diagnosticos: Array) -> String:
 	var adj := adjetivo_qualidade(soma_a / diagnosticos.size())
 	return ("Poção de %s %s" % [nome, adj]) if adj != "" else ("Poção de %s" % nome)
 
+## Poção cuja matriz é parecida com a de um ingrediente puro → "Poção de [ingrediente]".
+## Parecida = distância (Frobenius) até a matriz do ingrediente <= SEMELHANCA_MAX × o quanto
+## esse ingrediente se afasta da identidade. Só ingredientes do banco (não poções feitas).
+## Nenhum parecido → "".
+const SEMELHANCA_MAX: float = 0.3
+
+static func nome_por_ingrediente(A: Array, database) -> String:
+	if database == null:
+		return ""
+	var dinamicos: Dictionary = database.get("itens_dinamicos") if database.get("itens_dinamicos") != null else {}
+	var melhor_nome := ""
+	var melhor_rel := INF
+	for id in database.get_items():
+		if dinamicos.has(id):
+			continue
+		var item: ItemData = database.get_item(id)
+		var Ai := matriz_do_item(item)
+		var efeito := CatalogoPocoes.distancia(Ai, identidade())
+		if efeito < 0.001:
+			continue   # não faz nada (identidade)
+		var rel := CatalogoPocoes.distancia(A, Ai) / efeito
+		if rel < melhor_rel:
+			melhor_rel = rel
+			melhor_nome = item.get_nome()
+	return ("Poção de " + melhor_nome) if melhor_rel <= SEMELHANCA_MAX else ""
+
 ## Média dos atributos dos ingredientes, pesada pelo aproveitamento (a) de cada um.
 ## Limites (Tmin, Tmax, tmin, tmax) só entram na média de quem TEM aquele limite
 ## (0 ou >= 999 = sem limite); a folga vai junto com o limite (kmin com Tmin etc.).

@@ -131,6 +131,7 @@ func _process(delta: float) -> void:
 	visual.atualizar(sistema, delta, _perda_media(), _punindo_agora)
 	if som:
 		som.definir(sistema.T, _quente_agora, _frio_agora)
+		som.definir_fogo(sistema.F, sistema.fogo_ligado)
 
 # =============================================================================
 # INICIALIZAÇÃO

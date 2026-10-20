@@ -244,6 +244,8 @@ func _on_item_button_pressed(item_name: String):
 	var item: ItemData = database.get_item(item_name) if database else null
 	var titulo = item.get_nome() if item else item_name
 	var item_data = {"descricao": item.descricao} if item and item.descricao != "" else {}
+	if item:
+		item_data["A"] = CalculadoraPocao.matriz_do_item(item)
 	
 	# 🔥 O POPUP SE POSICIONA SOZINHO depois de saber o próprio tamanho:
 	# centralizado no clique (x) e sempre inteiro dentro da área acima do HUD.

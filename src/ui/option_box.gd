@@ -208,11 +208,12 @@ func _estilizar_botao(btn: Button) -> void:
 	btn.add_theme_color_override("font_color", Color.WHITE)
 	btn.add_theme_color_override("font_hover_color", Color(1.0, 0.9, 0.6))
 	btn.add_theme_color_override("font_pressed_color", Color(1.0, 0.85, 0.45))
-	var cores := {"normal": Color(0.2, 0.2, 0.3), "hover": Color(0.28, 0.28, 0.42), "pressed": Color(0.36, 0.33, 0.5)}
+	# botões pretos (claros só ao passar/apertar)
+	var cores := {"normal": Color(0, 0, 0), "hover": Color(0.12, 0.12, 0.12), "pressed": Color(0.22, 0.22, 0.22)}
 	for estado in cores:
 		var st := StyleBoxFlat.new()
 		st.bg_color = cores[estado]
-		st.border_color = Color(0.6, 0.6, 0.8, 0.8)
+		st.border_color = Color(0.4, 0.4, 0.4, 0.8)
 		st.set_border_width_all(2)
 		st.set_corner_radius_all(12)
 		st.set_content_margin_all(margem_texto)

@@ -281,10 +281,7 @@ func _criar_falante_ui() -> void:
 	_foto.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	_foto.z_as_relative = false
 	_foto.z_index = Z_FOTO
-	# não acompanha a carta quando ela vira (posição/escala só pela tela)
-	_foto.top_level = true
-	# sempre que passa a aparecer (inclusive quando a carta termina de virar): fade
-	_foto.visibility_changed.connect(_fade_foto)
+	_foto.process_mode = Node.PROCESS_MODE_ALWAYS   # o fade roda com o jogo pausado
 	_foto.visible = false
 	add_child(_foto)
 	move_child(_foto, 0)
@@ -295,6 +292,7 @@ func _criar_falante_ui() -> void:
 	# z absoluto: acima da caixa, do texto e dos botões de opção (os z da cena se somam até ~505)
 	_nome_painel.z_as_relative = false
 	_nome_painel.z_index = Z_NOME
+	_nome_painel.process_mode = Node.PROCESS_MODE_ALWAYS
 	var st := StyleBoxFlat.new()
 	st.bg_color = Color(0.16, 0.16, 0.22, 1.0)
 	st.border_color = Color(0.6, 0.6, 0.8, 0.9)
@@ -312,15 +310,9 @@ func _criar_falante_ui() -> void:
 	_nome_painel.visible = false
 	add_child(_nome_painel)
 	resized.connect(_posicionar_falante)
+	visibility_changed.connect(_on_caixa_visibilidade)
 
 ## Separa "[nome;pos_nome;foto;pos_foto] texto" (ver falante.gd).
-func _fade_foto() -> void:
-	if not _foto.is_visible_in_tree():
-		return
-	_foto.modulate.a = 0.0
-	_foto.create_tween().tween_property(_foto, "modulate:a", 1.0, 0.25)
-	_posicionar_falante.call_deferred()
-
 func _resolver_fala(msg: String) -> Dictionary:
 	var r := Falante.do_texto(msg)
 	var fal: Falante = r["falante"]
@@ -331,8 +323,17 @@ func _resolver_fala(msg: String) -> Dictionary:
 func _aplicar_falante(fal: Falante, nome: String) -> void:
 	if not _nome_painel:
 		return
+	if _tw_falante and _tw_falante.is_valid():
+		_tw_falante.kill()   # cancela um fade de saída em andamento
+		_foto.modulate.a = 1.0
+		_nome_painel.modulate.a = 1.0
 	_nome_label.text = nome
 	_nome_painel.visible = nome != ""
+	if nome != "" and nome != _nome_atual:
+		# nome novo: entra com fade
+		_nome_painel.modulate.a = 0.0
+		_nome_painel.create_tween().tween_property(_nome_painel, "modulate:a", 1.0, 0.25)
+	_nome_atual = nome
 	var tex: Texture2D = fal.foto if fal else null
 	_foto.visible = tex != null
 	if tex:
@@ -348,6 +349,40 @@ func _aplicar_falante(fal: Falante, nome: String) -> void:
 	_posicionar_falante.call_deferred()
 
 var _falante_ui: Falante = null
+var _nome_atual: String = ""
+var _tw_falante: Tween
+var _esconder_id: int = 0
+
+## Topo da caixa na tela. Dentro de uma carta usa a carta (que não gira), para a foto e o
+## nome não se mexerem enquanto ela vira.
+func _topo_caixa() -> float:
+	var n := get_parent()
+	while n:
+		if n is Carta:
+			return n.global_position.y
+		n = n.get_parent()
+	return panel.global_position.y
+
+## Caixa fechou: espera um instante (outra fala pode vir em seguida, com a mesma foto/nome,
+## e aí eles só continuam); se não vier, foto e nome saem com fade.
+func _on_caixa_visibilidade() -> void:
+	_esconder_id += 1
+	if visible:
+		return
+	var meu_id := _esconder_id
+	await get_tree().create_timer(0.2, true).timeout
+	if meu_id != _esconder_id or visible:
+		return
+	_foto_atual = null
+	_nome_atual = ""
+	_tw_falante = _foto.create_tween().set_parallel(true)
+	_tw_falante.tween_property(_foto, "modulate:a", 0.0, 0.2)
+	_tw_falante.tween_property(_nome_painel, "modulate:a", 0.0, 0.2)
+	_tw_falante.chain().tween_callback(func():
+		_foto.visible = false
+		_nome_painel.visible = false
+		_foto.modulate.a = 1.0
+		_nome_painel.modulate.a = 1.0)
 
 func _posicionar_falante() -> void:
 	if not _nome_painel or not panel:
@@ -366,14 +401,14 @@ func _posicionar_falante() -> void:
 		if fal and _foto.visible and _foto.texture:
 			var centro_foto: float = _x_foto(fal) + _largura_foto(fal) / 2.0
 			x_nome = clampf(centro_foto - tam.x / 2.0, MARGEM_NOME, x_max)
-		_nome_painel.global_position = Vector2(x_nome, panel.global_position.y - tam.y + 6.0)
+		_nome_painel.global_position = Vector2(x_nome, _topo_caixa() - tam.y + 6.0)
 	# foto: na tela inteira, de 0% (encostada à esq) a 100% (encostada à dir),
 	# com a parte de baixo escondida atrás da caixa
 	if _foto.visible and _foto.texture:
 		var h: float = fal.altura_foto if fal else 420.0
 		var w: float = _largura_foto(fal)
 		var x_global := _x_foto(fal)
-		var topo_caixa: float = panel.global_position.y
+		var topo_caixa: float = _topo_caixa()
 		_foto.size = Vector2(w, h)
 		_foto.global_position = Vector2(x_global, topo_caixa + SOBREPOSICAO_FOTO - h)
 
@@ -411,6 +446,11 @@ func _criar_escurecer() -> void:
 	var pai := get_parent()
 	if pai:
 		pai.add_child(_escurecer)
+		# foto e nome também ficam fora da caixa: não giram com a carta nem piscam entre falas
+		if _foto:
+			_foto.reparent(pai, false)
+		if _nome_painel:
+			_nome_painel.reparent(pai, false)
 	else:
 		add_child(_escurecer)
 	_ajustar_escurecer()

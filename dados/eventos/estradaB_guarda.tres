@@ -33,7 +33,25 @@ area_pos = Vector2(0, -10)
 area_scale = Vector2(16, 20.25)
 comandos = Array[ExtResource("2_yjafp")]([SubResource("Resource_26t8c"), SubResource("Resource_bifsd"), SubResource("Resource_g5u7y"), SubResource("Resource_thguq")])
 
+[sub_resource type="Resource" id="Resource_libera_msg"]
+script = ExtResource("3_lj3un")
+texto = "[GUARDA] Ah, a bruxa da poção. Pode passar. "
+
+[sub_resource type="Resource" id="Resource_libera_cond"]
+script = ExtResource("5_yjafp")
+variavel = "missao01_pocao_feita"
+valor = 1.0
+
+[sub_resource type="Resource" id="Resource_libera_pag"]
+script = ExtResource("1_n2758")
+condicoes = Array[ExtResource("5_yjafp")]([SubResource("Resource_libera_cond")])
+sprite_frames = ExtResource("5_jiap1")
+colisao_scale = Vector2(9, 20.25)
+area_pos = Vector2(0, -10)
+area_scale = Vector2(16, 20.25)
+comandos = Array[ExtResource("2_yjafp")]([SubResource("Resource_libera_msg")])
+
 [resource]
 script = ExtResource("6_32dyt")
 id = "estradaB_guarda"
-paginas = Array[ExtResource("1_n2758")]([SubResource("Resource_tycrd")])
+paginas = Array[ExtResource("1_n2758")]([SubResource("Resource_tycrd"), SubResource("Resource_libera_pag")])

@@ -37,12 +37,12 @@ const COR_FAISCA := Color(1.0, 0.92, 0.6)
 const COR_FAISCA_FIM := Color(1.0, 0.45, 0.1, 0.0)
 # ---- tremor e vermelho (pela temperatura T do caldo) ----
 ## Começa a tremer em T_TREMOR_INICIO e chega no tremor leve em T_FERVURA (100 °C).
-const T_TREMOR_INICIO: float = 80.0
+const T_TREMOR_INICIO: float = 95.0
 const T_FERVURA: float = 100.0
 ## Acima da fervura ele fica avermelhado até o máximo em T_VERMELHO_MAX.
 const T_VERMELHO_MAX: float = 200.0
-const TREMOR_LEVE_PX: float = 0.6      # amplitude em 100 °C
-const TREMOR_MAX_PX: float = 3.0       # amplitude em T_VERMELHO_MAX
+const TREMOR_LEVE_PX: float = 1.5      # amplitude em 100 °C
+const TREMOR_MAX_PX: float = 3.5       # amplitude em T_VERMELHO_MAX
 const VERMELHO_MAX: float = 0.6        # 0..1: quanto puxa para COR_VERMELHO no máximo
 const COR_VERMELHO := Color(1.0, 0.35, 0.3)
 # ---- caldo turvo (visão geral do aproveitamento) ----
@@ -108,7 +108,6 @@ func resetar() -> void:
 	_fogo_escala_F = FOGO_ESCALA_MIN
 	_fogo_pulso = Vector2.ONE
 	_fogo_aceso = false
-	_fogo_aceso = false
 	_aplicar_escala_fogo()
 	if caldeirao:
 		caldeirao.position = _caldeirao_pos_base
@@ -136,7 +135,6 @@ func atualizar(sistema: SistemaTermico, delta: float, perda_media: float, _punin
 		if sistema.fogo_ligado:
 			cor.a=maxf(cor.a,FOGO_ALFA_MIN)
 		_fogo_aceso = sistema.fogo_ligado
-		_fogo_aceso = sistema.fogo_ligado
 		fogo.self_modulate = cor
 		fogo.visible = sistema.fogo_ligado or cor.a > 0.05
 		_fogo_escala_F = lerpf(_fogo_escala_F, escala_por_F(sistema.F), clampf(delta * FOGO_SUAVIZACAO, 0.0, 1.0))
@@ -156,8 +154,6 @@ func atualizar(sistema: SistemaTermico, delta: float, perda_media: float, _punin
 ## Bolhas: mais e mais rápidas conforme T. Brilhos: sobem mais alto, abrem mais e giram mais.
 ## A velocidade é a INICIAL (sorteada quando a partícula nasce, conforme o T daquela hora):
 ## as que já estão na tela não aceleram nem freiam quando T muda (speed_scale fica fixo).
-## A velocidade é a INICIAL (sorteada quando a partícula nasce, conforme o T daquela hora):
-## as que já estão na tela não aceleram nem freiam quando T muda (speed_scale fica fixo).
 func _atualizar_particulas(T: float) -> void:
 	_aplicar_particulas(clampf((T - SistemaTermico.T_AMB) / (T_PARTICULAS_MAX - SistemaTermico.T_AMB), 0.0, 1.0))
 
@@ -165,19 +161,13 @@ func _aplicar_particulas(tn: float) -> void:
 	if bolhas:
 		bolhas.amount_ratio = lerpf(0.03, 1.0, tn)
 		bolhas.speed_scale = 1.0
-		bolhas.speed_scale = 1.0
 	if _mat_bolhas:
-		_mat_bolhas.initial_velocity_min = lerpf(3.0, 45.0, sqrt(tn))
-		_mat_bolhas.initial_velocity_max = lerpf(8.0, 220.0, tn)
 		_mat_bolhas.initial_velocity_min = lerpf(3.0, 45.0, sqrt(tn))
 		_mat_bolhas.initial_velocity_max = lerpf(8.0, 220.0, tn)
 	if brilhos:
 		brilhos.amount_ratio = lerpf(0.01, 1.0, tn * tn)
 		brilhos.speed_scale = 1.0
-		brilhos.speed_scale = 1.0
 	if _mat_brilhos:
-		_mat_brilhos.initial_velocity_min = lerpf(5.0, 150.0, tn)
-		_mat_brilhos.initial_velocity_max = lerpf(15.0, 260.0, tn)   # chegam mais longe
 		_mat_brilhos.initial_velocity_min = lerpf(5.0, 150.0, tn)
 		_mat_brilhos.initial_velocity_max = lerpf(15.0, 260.0, tn)   # chegam mais longe
 		_mat_brilhos.spread = lerpf(20.0, 50.0, tn)                     # abrem mais
@@ -262,8 +252,6 @@ func _aplicar_escala_fogo() -> void:
 	fogo.scale = escala
 	fogo.skew = cisalha
 	# mantém a base (embaixo, no centro) no mesmo lugar, mesmo inclinada
-	fogo.skew = cisalha
-	# mantém a base (embaixo, no centro) no mesmo lugar, mesmo inclinada
 	var meia_altura: float = _altura_frame_fogo() * 0.5
 	var base_agora: Vector2 = Transform2D(0.0, escala, cisalha, Vector2.ZERO).basis_xform(Vector2(0, meia_altura))
 	var base_original: Vector2 = Vector2(0, meia_altura * _fogo_escala_base.y)
@@ -314,7 +302,6 @@ func carregando_fogo(botao: Control, progresso: float, fogo_ligado: bool) -> voi
 		if _faisca_timer <= 0.0:
 			_faisca_timer = lerpf(FAISCA_INTERVALO_INICIO, FAISCA_INTERVALO_FIM, progresso) * randf_range(0.7, 1.3)
 			_faiscas(randi_range(1, 5 + int(6.0 * progresso)), lerpf(1.2, 1.8, progresso), 0.0)
-			_faiscas(randi_range(1, 5 + int(6.0 * progresso)), lerpf(1.2, 1.8, progresso), 0.0)
 
 ## Disparou: pop do botão e o fogo nasce (ligou) ou achata (desligou). Devolve a cor do aviso.
 func liga_desliga(botao: Control, ligou: bool) -> Color:
@@ -331,8 +318,6 @@ func liga_desliga(botao: Control, ligou: bool) -> Color:
 	if fogo:
 		if ligou:
 			# faísca de sucesso: estouro grande + clarão, e o fogo nasce de baixo
-			_faiscas(64, 2.6, 1.0)
-			get_tree().create_timer(0.12).timeout.connect(func(): _faiscas(32, 1.9, 1.0))
 			_faiscas(64, 2.6, 1.0)
 			get_tree().create_timer(0.12).timeout.connect(func(): _faiscas(32, 1.9, 1.0))
 			fogo.visible = true
@@ -401,7 +386,6 @@ func _fumaca_apagar() -> void:
 ## Toque no botão com o fogo apagado: uma faísca na hora. Se continuar segurando,
 ## carregando_fogo() segue faiscando (a próxima vem depois do intervalo inicial).
 func faisca_inicial() -> void:
-	_faiscas(randi_range(6, 9), 1.5, 0.0)
 	_faiscas(randi_range(6, 9), 1.5, 0.0)
 	_faisca_timer = FAISCA_INTERVALO_INICIO
 

@@ -33,7 +33,25 @@ area_pos = Vector2(0, -10)
 area_scale = Vector2(16, 20.25)
 comandos = Array[ExtResource("2_ogism")]([SubResource("Resource_cgbke"), SubResource("Resource_fhp8i"), SubResource("Resource_o673b"), SubResource("Resource_1r12l")])
 
+[sub_resource type="Resource" id="Resource_libera_msg"]
+script = ExtResource("3_3ip05")
+texto = "[GUARDA] Ah, a bruxa da poção. Pode passar. "
+
+[sub_resource type="Resource" id="Resource_libera_cond"]
+script = ExtResource("5_ogism")
+variavel = "missao01_pocao_feita"
+valor = 1.0
+
+[sub_resource type="Resource" id="Resource_libera_pag"]
+script = ExtResource("1_7h86o")
+condicoes = Array[ExtResource("5_ogism")]([SubResource("Resource_libera_cond")])
+sprite_frames = ExtResource("5_5760w")
+colisao_scale = Vector2(9, 20.25)
+area_pos = Vector2(0, -10)
+area_scale = Vector2(16, 20.25)
+comandos = Array[ExtResource("2_ogism")]([SubResource("Resource_libera_msg")])
+
 [resource]
 script = ExtResource("6_lb0rw")
 id = "ponte_guarda"
-paginas = Array[ExtResource("1_7h86o")]([SubResource("Resource_imu6s")])
+paginas = Array[ExtResource("1_7h86o")]([SubResource("Resource_imu6s"), SubResource("Resource_libera_pag")])
