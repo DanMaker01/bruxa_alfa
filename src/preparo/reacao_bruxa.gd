@@ -29,6 +29,7 @@ const FALAS := {
 	"perto": ["Cuidado...", "Hmm, quase...", "Atenção!"],
 	"perfeito": ["Isso!", "Perfeito!", "No ponto!"],
 	"novo": ["Vamos ver...", "Mais um.", "Hmm."],
+	"apagando": ["O fogo tá morrendo!", "Vai apagar...", "Cuidado com o fogo!"],
 }
 
 var _foto: Sprite2D
@@ -81,6 +82,11 @@ func resetar() -> void:
 	_balao.modulate.a = 0.0
 
 ## Um ingrediente entrou no caldeirão.
+## Fala avulsa (ex.: "apagando").
+func avisar(motivo: String) -> void:
+	_ultima_fala = -100.0   # aviso importante: fala mesmo que tenha falado agora há pouco
+	_falar(motivo)
+
 func novo_ingrediente() -> void:
 	_falar("novo")
 

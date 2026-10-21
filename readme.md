@@ -52,20 +52,14 @@ EstradaB
 		  Ícones item_a (flor) / item_b (musgo). Coleta: castelo_out — flor 2 áreas (1 cada, cooldown 50 s), musgo 3 (cooldown 15 s); musgo 1 à direita do guarda da ponte e 1 à esquerda do guarda da estradaB (15 s). Ajustar posições/altura no editor.
 
 
-[.] Caldeirão/Preparo:
-[?]		Se segurar o botão de fogo quero que retire const_A a cada 0.3seg ao invés de desligar o fogo. Como não há como desligar mais o fogo, caso a temperatura do fogo fique abaixo de F_LIMIT_MIN ele faz um efeito e apaga.
-			Feito: segurar com o fogo aceso abafa (−CONST_A a cada 0,3 s); F < F_LIMIT_MIN (600, em sistema_termico) → fumaça e apaga. Apagado: segurar 1 s acende.
-			Calibrar: CONST_A, F_LIMIT_MIN, de resto ok.
-
 [ ] Cena de poção preparada:
 [.]		Layout: Definir localização das janelas e informações. 
 [?]			revisar como mostrar os valores fora das diagonais.  (toque na célula da grade: balão "C → N −3%")
-[?]			Revisar posições das informações. Ingredientes ficam muito pra baixo, vão caber uns 2 ou 3. (layout compacto + lista rolável: cabem quantos houver)
 [.]			Anotar o tempo e temperatura no momento que cada item entrou nos itens. quero não só número, mas uma representação visual útil.
 [?]			Gostei do grafico. Mas a receita começa quando o primeiro ingrediente entra. (gráfico vai da entrada do 1º ingrediente ao fim; tempos contados a partir dela)
+[?]			Uma curva só T(t), grande: ela se desenha e fica em foco (o resto apagadinho); depois a área (∫T dt) de cada ingrediente sai de trás dela, um por um, e desce até a linha dele.
 [.]		Nomear as poções de referência no catálogo (PocaoReferencia: nome, descrição, A)
-[?]			As poções nomeadas não devem ficar salvas no user, e sim salvas no GameTemp, valem só para aquela secção. (GameTemp.pocoes_nomeadas)
-[?]		Ao sair do preparo, a poção vai para o meio e o resto da janela vai sumindo em fade. a poção sai do meio e vai para o inventário. (janela_resultado._fechar/_voar) A poção deve ir sem girar, abre a carta do inventário, mostra o item indo para lá e mostra aparecendo o nome dela no inventário. → feito: sem girar; carta abre antes, poção voa até a linha dela, a linha aparece com brilho dourado.
+
 
 
 [ ] História / missão: (em ordem)
@@ -137,7 +131,8 @@ EstradaB
 
 
 [ ]	Caldeirão:
-[?]		Ajustes mínimos: cor, shake, efeitos, aparar para a versão final. (vapor acima de 100 °C, baforada de fumaça ao abafar)
+[x]		Ajustes mínimos: cor, shake, efeitos, aparar para a versão final. (vapor acima de 100 °C, baforada de fumaça ao abafar)
+[?]		Labaredas (faíscas laranja subindo) ao abanar o fogo.
 [ ]		Tutorial(leve) na primeira vez. (DEPOIS DO CAP. 1)
 
 [ ] Mapa:

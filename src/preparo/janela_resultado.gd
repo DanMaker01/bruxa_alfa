@@ -54,6 +54,9 @@ var _titulo: Label
 var _pentagono: PentagonoOcean
 var _grade: GradeMatriz
 var _ingredientes: VBoxContainer
+## Curva principal T(t) e, de cada ingrediente, [LinhaTempo, [nós que aparecem junto]].
+var _curva: LinhaTempo
+var _linhas_tempo: Array = []
 var _lista: ListaRolavel
 var _dica: Label
 var _t: float = 0.0
@@ -263,7 +266,8 @@ func abrir(resultado: Dictionary) -> void:
 	await tw.finished
 	_pentagono.mostrar(A)
 	_grade.mostrar(A)
-	await get_tree().create_timer(0.9, true).timeout
+	await _animar_curvas()
+	await get_tree().create_timer(0.5, true).timeout
 
 	# 3. nome: poção nova → pergunta o nome e já coloca nas informações
 	if pedir_nome:
@@ -350,6 +354,12 @@ func _preencher_parametros(_A: Array) -> void:
 	cab.text = "Ingredientes"
 	cab.add_theme_color_override("font_color", Color(1, 1, 1, 0.6))
 	_ingredientes.add_child(cab)
+	_linhas_tempo.clear()
+	_curva = LinhaTempo.new()
+	_curva.configurar_principal(_res.get("historico_T", []), float(_res.get("t_final", 1.0)), _inicio_receita())
+	_curva.z_index = 1   # as áreas saem de trás dela
+	_curva.esconder()
+	_ingredientes.add_child(_curva)
 	var diags: Array = _res.get("diagnosticos", [])
 	if diags.is_empty():
 		var nada := _label(20, HORIZONTAL_ALIGNMENT_LEFT)
@@ -402,7 +412,40 @@ func _linha_ingrediente(d: Dictionary) -> Control:
 	var lt := LinhaTempo.new()
 	lt.configurar(_res.get("historico_T", []), float(d.get("t0", 0.0)), float(_res.get("t_final", 1.0)), _inicio_receita())
 	linha.add_child(lt)
+	lt.esconder()
+	topo.modulate.a = 0.0
+	tags.modulate.a = 0.0
+	_linhas_tempo.append([lt, [topo, tags]])
 	return linha
+
+## Uma curva só: ela se desenha e fica um tempo em foco (o resto apagadinho);
+## depois as áreas dos ingredientes saem de trás dela, uma por uma, e descem até o lugar.
+func _animar_curvas() -> void:
+	if _curva == null:
+		return
+	var resto: Array = [_pentagono, _grade]
+	var tw := create_tween().set_parallel(true)
+	for c in resto:
+		if c:
+			tw.tween_property(c, "modulate:a", 0.3, 0.4)
+	await _curva.revelar(1.4).finished
+	await get_tree().create_timer(1.2, true).timeout    # foco na curva
+	var ultimo: Tween = null
+	for i in _linhas_tempo.size():
+		var par: Array = _linhas_tempo[i]
+		var lt: LinhaTempo = par[0]
+		ultimo = lt.sair_da_principal(_curva, 0.9)
+		var tw_o := create_tween().set_parallel(true)
+		for o in par[1]:
+			tw_o.tween_property(o, "modulate:a", 1.0, 0.4).set_delay(0.6)
+		await get_tree().create_timer(0.45, true).timeout
+	if ultimo:
+		await ultimo.finished
+	tw = create_tween().set_parallel(true)
+	for c in resto:
+		if c:
+			tw.tween_property(c, "modulate:a", 1.0, 0.4)
+	await tw.finished
 
 ## A receita começa quando o primeiro ingrediente entra.
 func _inicio_receita() -> float:
@@ -543,8 +586,13 @@ func _fechar() -> void:
 		carta.segurar = false
 		carta.fechar()
 	await _esperar(0.6)
+	# o inventário (já de verso) some com fade
 	if carta:
+		var tw_c: Tween = carta.create_tween()
+		tw_c.tween_property(carta, "modulate:a", 0.0, 0.5)
+		await tw_c.finished
 		carta.ativa = ativa_antes
+		carta.modulate.a = 1.0
 	if carta and pai_carta:
 		carta.reparent(pai_carta, true)
 		pai_carta.move_child(carta, idx_carta)

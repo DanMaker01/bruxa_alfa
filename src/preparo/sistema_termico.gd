@@ -32,11 +32,13 @@ var P_comb: float
 ## Pulso de fogo (clique curto no botão F). Com K = 0,3: ~1 clique/s segura T perto de 120 °C.
 const CONST_A: float = 30.0
 const CONST_B: float = 10.0	# queda de T quando um ingrediente entra
-## Segurando o botão de fogo (aceso): tira CONST_A de F a cada 0,3 s ("abafar").
+## Segurando o botão de fogo (aceso): tira CONST_C de F a cada 0,3 s ("abafar").
 ## Se F ficar abaixo disto ao abafar, o fogo apaga.
-## Obs.: com as constantes atuais, segurando sem parar F se estabiliza perto de ~510
-## (o fogo aceso puxa F de volta para F_EQ), então o limite precisa ficar acima disso.
-const F_LIMIT_MIN: float = 600.0
+## Medido (K 0,3): segurando sem parar, F cairia até ~320 (caldo ~50 °C); com o limite
+## em 450 o fogo apaga antes disso. Soltando, F volta sozinho para F_EQ (800).
+const F_LIMIT_MIN: float = 450.0   # caldo ~64 °C: dá para infusão baixa (flor-de-farra ~75–95 °C)
+## Quanto cada passo de abafar (segurando o botão, a cada 0,3 s) tira de F. Menor = controle mais fino.
+const CONST_C: float = 20.0
 
 # =============================================================================
 # PASSO DE INTEGRAÇÃO
@@ -91,12 +93,12 @@ func dar_pulso_fogo() -> void:
 
 # Ingrediente (clique na lista) — por enquanto é o mesmo pulso
 # (no futuro, cada ingrediente pode ter efeito próprio)
-# Abafar (segurando o botão com o fogo aceso) → −CONST_A em F.
+# Abafar (segurando o botão com o fogo aceso) → −CONST_C em F.
 # Devolve true se o fogo ficou fraco demais (F < F_LIMIT_MIN) e apagou.
 func abafar_fogo() -> bool:
 	if not fogo_ligado:
 		return false
-	F = maxf(F - CONST_A, T_AMB)
+	F = maxf(F - CONST_C, T_AMB)
 	if F < F_LIMIT_MIN:
 		desligar_fogo()
 		return true

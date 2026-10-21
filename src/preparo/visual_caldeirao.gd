@@ -83,6 +83,10 @@ var _bolha_escala_base := Vector2.ONE  # scale_min/max originais do material das
 const T_VAPOR_MAX: float = 160.0
 const COR_VAPOR := Color(0.92, 0.92, 1.0, 0.35)
 var _vapor: CPUParticles2D
+## Fumaça contínua quando o fogo está quase apagando (F perto de F_LIMIT_MIN).
+var _fumaca_fraca: CPUParticles2D
+## Quanto acima de F_LIMIT_MIN já conta como "quase apagando".
+const MARGEM_APAGAR: float = 80.0
 
 
 func configurar(p_caldeirao: AnimatedSprite2D, p_fogo: AnimatedSprite2D, p_bolhas: GPUParticles2D, p_brilhos: GPUParticles2D) -> void:
@@ -147,6 +151,7 @@ func atualizar(sistema: SistemaTermico, delta: float, perda_media: float, _punin
 		_aplicar_escala_fogo()
 	_atualizar_particulas(sistema.T)
 	_atualizar_vapor(sistema.T)
+	_atualizar_fumaca_fraca(sistema)
 	_aplicar_turvo(delta, perda_media)
 	# volta do sprite forte
 	if _tempo_fogo_alto > 0.0:
@@ -294,6 +299,7 @@ func aticar() -> void:
 		fogo.play(ANIM_FOGO_ALTO)
 		_tempo_fogo_alto = TEMPO_FOGO_ALTO
 	_pulsar_fogo(Vector2(1.15, 1.35), TEMPO_FOGO_ALTO)
+	_labaredas()
 
 ## Enquanto segura o botão de fogo: ele vai "esquentando" (laranja se vai acender,
 ## cinza se vai abafar) e treme cada vez mais, até disparar.
@@ -395,6 +401,77 @@ func apagou(botao: Control) -> Color:
 	var cor := liga_desliga(botao, false)
 	_fumaca_apagar()
 	return cor
+
+## true quando o fogo está aceso mas quase apagando.
+static func quase_apagando(sistema: SistemaTermico) -> bool:
+	return sistema.fogo_ligado and sistema.F < SistemaTermico.F_LIMIT_MIN + MARGEM_APAGAR
+
+func _atualizar_fumaca_fraca(sistema: SistemaTermico) -> void:
+	if not fogo or not fogo.get_parent():
+		return
+	if _fumaca_fraca == null:
+		var p := CPUParticles2D.new()
+		p.amount = 14
+		p.lifetime = 1.6
+		p.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
+		p.emission_rect_extents = Vector2(22, 3)
+		p.direction = Vector2.UP
+		p.spread = 20.0
+		p.initial_velocity_min = 20.0
+		p.initial_velocity_max = 45.0
+		p.gravity = Vector2(0, -15)
+		p.scale_amount_min = 5.0
+		p.scale_amount_max = 10.0
+		var rampa := Gradient.new()
+		rampa.set_color(0, Color(0.4, 0.4, 0.4, 0.6))
+		rampa.set_color(1, Color(0.25, 0.25, 0.25, 0.0))
+		p.color_ramp = rampa
+		p.z_index = fogo.z_index + 1
+		p.emitting = false
+		fogo.get_parent().add_child(p)
+		_fumaca_fraca = p
+	_fumaca_fraca.position = _base_fogo()
+	var perto := quase_apagando(sistema)
+	if _fumaca_fraca.emitting != perto:
+		_fumaca_fraca.emitting = perto
+	if perto:   # mais perto de apagar = mais densa
+		var v := 1.0 - (sistema.F - SistemaTermico.F_LIMIT_MIN) / MARGEM_APAGAR
+		_fumaca_fraca.modulate.a = lerpf(0.4, 1.0, clampf(v, 0.0, 1.0))
+
+## Labaredas: faíscas/chamas subindo quando abana (atiça) o fogo.
+func _labaredas() -> void:
+	if not fogo or not fogo.get_parent():
+		return
+	var p := CPUParticles2D.new()
+	p.one_shot = true
+	p.explosiveness = 0.85
+	p.amount = 16
+	p.lifetime = 0.6
+	p.position = _base_fogo()
+	p.z_index = fogo.z_index + 1
+	p.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
+	p.emission_rect_extents = Vector2(24, 4)
+	p.direction = Vector2.UP
+	p.spread = 22.0
+	p.initial_velocity_min = 90.0
+	p.initial_velocity_max = 170.0
+	p.gravity = Vector2(0, -60)
+	p.damping_min = 30.0
+	p.damping_max = 60.0
+	p.scale_amount_min = 3.0
+	p.scale_amount_max = 7.0
+	var curva := Curve.new()
+	curva.add_point(Vector2(0, 1.0))
+	curva.add_point(Vector2(1, 0.2))
+	p.scale_amount_curve = curva
+	var rampa := Gradient.new()
+	rampa.set_color(0, Color(1.0, 0.95, 0.6, 1.0))
+	rampa.set_color(1, Color(0.9, 0.2, 0.05, 0.0))
+	rampa.add_point(0.4, Color(1.0, 0.55, 0.1, 0.9))
+	p.color_ramp = rampa
+	fogo.get_parent().add_child(p)
+	p.emitting = true
+	get_tree().create_timer(p.lifetime + 0.3).timeout.connect(p.queue_free)
 
 ## Baforada pequena de fumaça a cada passo de abafar.
 func _baforada() -> void:

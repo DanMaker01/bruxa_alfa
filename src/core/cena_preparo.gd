@@ -60,6 +60,7 @@ var feedback: FeedbackPreparo
 var segurar_fogo: BotaoSegurar
 var segurar_pocao: BotaoSegurar
 var reacao: ReacaoBruxa
+var _avisou_apagando: bool = false
 var janela_resultado: JanelaResultado
 var som: SomCaldeirao
 
@@ -130,6 +131,11 @@ func _process(delta: float) -> void:
 	if indicadores_label:
 		indicadores_label.text = "\n".join(indicadores.get_linhas_ui(sistema))
 	visual.atualizar(sistema, delta, _perda_media(), _punindo_agora)
+	# fogo quase apagando: a bruxa avisa (uma vez a cada vez que chega perto)
+	var quase := VisualCaldeirao.quase_apagando(sistema)
+	if quase and not _avisou_apagando:
+		reacao.avisar("apagando")
+	_avisou_apagando = quase
 	if som:
 		som.definir(sistema.T, _quente_agora, _frio_agora)
 		som.definir_fogo(sistema.F, sistema.fogo_ligado)
