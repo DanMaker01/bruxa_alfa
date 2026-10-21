@@ -41,6 +41,17 @@ var ativa: bool = true:
 		# desativou com a carta em repouso: some na hora (sem animação)
 		if not v and not _virando and _atual != face_prioridade and is_node_ready():
 			_mostrar(NADA)
+## z absoluto forçado (ex.: por cima da janela da poção). -1 = comportamento normal.
+var z_forcado: int = -1:
+	set(v):
+		z_forcado = v
+		if v >= 0:
+			z_as_relative = false
+			z_index = v
+		else:
+			var prio: bool = _atual == face_prioridade
+			z_as_relative = not prio
+			z_index = Z_CARTA if prio else 0
 var segurar: bool = false:
 	set(v):
 		segurar = v
@@ -166,8 +177,12 @@ func _mostrar(nome_face: String) -> void:
 	_atual = nome_face
 	visible = nome_face != NADA
 	var prioridade := nome_face == face_prioridade
-	z_as_relative = not prioridade
-	z_index = Z_CARTA if prioridade else 0
+	if z_forcado >= 0:
+		z_as_relative = false
+		z_index = z_forcado
+	else:
+		z_as_relative = not prioridade
+		z_index = Z_CARTA if prioridade else 0
 	for nome in [VERSO, face_aberta, face_prioridade]:
 		var n := face(nome)
 		if n is CanvasItem:

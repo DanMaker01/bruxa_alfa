@@ -228,7 +228,7 @@ func abrir(resultado: Dictionary) -> void:
 
 	# 1. entrada: escurece e a poção surge com um estouro de brilhos
 	var tw := create_tween()
-	tw.tween_property(_fundo, "color:a", ALFA_FUNDO, 0.35)
+	tw.tween_property(_fundo, "color:a", ALFA_FUNDO, 0.8)
 	await tw.finished
 	_estourar_brilhos(CENTRO_POCAO)
 	tw = create_tween().set_parallel(true)
@@ -258,7 +258,7 @@ func abrir(resultado: Dictionary) -> void:
 	await tw.finished
 	_painel.position.x = 40.0
 	tw = create_tween().set_parallel(true)
-	tw.tween_property(_painel, "modulate:a", 1.0, 0.4)
+	tw.tween_property(_painel, "modulate:a", 1.0, 0.8)
 	tw.tween_property(_painel, "position:x", 0.0, 0.4).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	await tw.finished
 	_pentagono.mostrar(A)
@@ -311,7 +311,7 @@ func _resetar() -> void:
 	_caixa_nome.visible = false
 	_titulo.scale = Vector2.ONE
 	_campo_nome.text = ""
-	_painel.modulate.a = 0.0
+	_painel.modulate = Color(1, 1, 1, 0)
 	_dica.visible = false
 
 ## Troca o título com um "pop" (o nome acabou de ser dado).
@@ -473,76 +473,123 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		_fechar()
 
+## Saída (jogo pausado). Tudo que anima fica em CanvasLayers próprias, ACIMA da janela,
+## então nada da janela (pentágono, textos) aparece por cima:
+##   camada 10: escuro por cima da janela (escurece as informações)
+##   camada 11: carta do inventário (emprestada do HUD)
+##   camada 12: a poção
+## Sequência: escurece + poção ao meio → carta abre → poção desce → nome dourado →
+## carta fecha → escuro total → preparo e janela fecham por baixo → escuro some (mapa).
 func _fechar() -> void:
 	_estado = Estado.SAINDO
 	_dica.visible = false
-	# 1. tudo some, menos a poção, que volta para o meio
+	var hud = get_node_or_null("/root/Main/CanvasLayer/HUD")
+	var carta = hud.get("carta_inventario") if hud else null
+	var gt = get_node_or_null("/root/Main/GameManager/GameTemp")
+	var id: String = str(_res.get("item", _pocao_item.id if _pocao_item else ""))
+
+	var escuro_camada := _camada(10)
+	var escuro := ColorRect.new()
+	escuro.color = Color(0, 0, 0, 0)
+	escuro.size = Vector2(640, 960)
+	escuro.mouse_filter = Control.MOUSE_FILTER_STOP
+	escuro_camada.add_child(escuro)
+	var voo := _copia_pocao(12)
+	_pocao.visible = false
+	_halo.visible = false
+
+	# 1. escurece a janela e a poção vai para o meio
 	var tw := create_tween().set_parallel(true)
-	for c in get_children():
-		if c != _pocao and c != _halo and c is CanvasItem:
-			tw.tween_property(c, "modulate:a", 0.0, 0.4)
-	tw.tween_property(_halo, "modulate:a", 0.0, 0.4)
-	tw.tween_property(_pocao, "position", CENTRO_POCAO - TAM_POCAO * 0.5, 0.45).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
-	tw.tween_property(_pocao, "rotation", 0.0, 0.3)
+	tw.tween_property(escuro, "color:a", 0.7, 0.6)
+	tw.tween_property(voo, "position", CENTRO_POCAO - TAM_POCAO * 0.5, 0.8).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
 	await tw.finished
-	# 2. a poção passa para uma camada própria (o preparo vai fechar) e voa até o inventário
-	var voo := _criar_voo()
+	if gt and id != "":
+		gt.add_item(id, int(_res.get("quantidade", 1)))
+		_res["item_ja_adicionado"] = true
+
+	# 2. a carta do inventário vem para a camada 11 e abre
+	var carta_camada := _camada(11)
+	var pai_carta: Node = carta.get_parent() if carta else null
+	var idx_carta: int = carta.get_index() if carta else 0
+	# o evento do caldeirão esconde o HUD (cartas inativas não aparecem): ativa só esta
+	var ativa_antes: bool = carta.ativa if carta else true
+	if carta:
+		carta.reparent(carta_camada, true)
+		carta.fechar()          # primeiro aparece de verso...
+		carta.ativa = true
+		carta.segurar = true
+		await _esperar(1.5)     # verso fica um tempo na tela
+		carta.abrir()           # ...depois vira e abre
+	await _esperar(1.0)
+
+	# 3. a poção desce até a linha dela
+	var destino := DESTINO_INVENTARIO
+	if hud and hud.has_method("preparar_item_chegando") and id != "":
+		destino = hud.preparar_item_chegando(id, true)
+	tw = create_tween().set_parallel(true)
+	tw.tween_property(voo, "position", destino - TAM_POCAO * 0.5, 1.3).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	tw.tween_property(voo, "scale", Vector2(0.22, 0.22), 1.3).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	await tw.finished
+	tw = create_tween()
+	tw.tween_property(voo, "modulate:a", 0.0, 0.2)
+	await tw.finished
+	voo.get_parent().queue_free()
+
+	# 4. nome dourado, espera, carta fecha e volta para o HUD
+	if hud and hud.has_method("destacar_item") and id != "":
+		hud.destacar_item(id)
+	await _esperar(1.6)
+	if carta:
+		carta.segurar = false
+		carta.fechar()
+	await _esperar(0.6)
+	if carta:
+		carta.ativa = ativa_antes
+	if carta and pai_carta:
+		carta.reparent(pai_carta, true)
+		pai_carta.move_child(carta, idx_carta)
+	carta_camada.queue_free()
+
+	# 5. janela, preparo e escuro somem juntos (fade simples), revelando o mapa
+	var cena := get_parent() as CanvasItem
+	tw = create_tween().set_parallel(true)
+	tw.tween_property(escuro, "color:a", 0.0, 0.8)
+	tw.tween_property(self, "modulate:a", 0.0, 0.8)
+	if cena:
+		tw.tween_property(cena, "modulate:a", 0.0, 0.8)
+	await tw.finished
+	escuro_camada.queue_free()
 	visible = false
 	modulate.a = 1.0
-	for c in get_children():
-		if c is CanvasItem:
-			c.modulate.a = 1.0
+	_pocao.visible = true
+	_halo.visible = true
 	_estado = Estado.FECHADA
-	fechou.emit(_res)
-	if voo:
-		await _voar(voo)
+	fechou.emit(_res)   # o preparo fecha (já invisível) e o jogo despausa
 
-## Cópia da poção numa CanvasLayer no topo da árvore (sobrevive ao preparo fechar).
-func _criar_voo() -> TextureRect:
-	var camada := CanvasLayer.new()
-	camada.layer = 100
-	camada.process_mode = Node.PROCESS_MODE_ALWAYS
-	get_tree().root.add_child(camada)
+func _camada(n: int) -> CanvasLayer:
+	var c := CanvasLayer.new()
+	c.layer = n
+	c.process_mode = Node.PROCESS_MODE_ALWAYS
+	get_tree().root.add_child(c)
+	return c
+
+## Cópia da poção (mesma posição/tamanho) numa CanvasLayer acima de tudo.
+func _copia_pocao(camada_n: int) -> TextureRect:
+	var camada := _camada(camada_n)
 	var p := TextureRect.new()
 	p.texture = _pocao.texture
 	p.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	p.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	p.size = TAM_POCAO
 	p.pivot_offset = TAM_POCAO * 0.5
-	p.position = CENTRO_POCAO - TAM_POCAO * 0.5
+	p.position = _pocao.position
 	p.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	camada.add_child(p)
 	return p
 
-func _voar(p: TextureRect) -> void:
-	var hud = get_node_or_null("/root/Main/CanvasLayer/HUD")
-	var carta = hud.get("carta_inventario") if hud else null
-	var id: String = _pocao_item.id if _pocao_item else ""
-	# 1. a carta do inventário abre primeiro (e fica aberta durante o voo)
-	if carta and carta.has_method("abrir"):
-		carta.abrir()
-		carta.segurar = true
-		await get_tree().create_timer(0.5, true).timeout
-	# 2. destino: a linha da poção na lista (fica escondida até a poção chegar)
-	var destino := DESTINO_INVENTARIO
-	if hud and hud.has_method("preparar_item_chegando") and id != "":
-		destino = hud.preparar_item_chegando(id, true)
-	elif carta is Control:
-		destino = carta.global_position + carta.size * 0.5
-	# 3. voa (sem girar), encolhendo até o tamanho da linha
-	var tw := p.create_tween().set_parallel(true)
-	tw.tween_property(p, "position", destino - TAM_POCAO * 0.5, 0.7).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
-	tw.tween_property(p, "scale", Vector2(0.22, 0.22), 0.7).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
-	await tw.finished
-	# 4. a poção "entra" na lista: some e o nome dela aparece com brilho
-	var fim := p.create_tween()
-	fim.tween_property(p, "modulate:a", 0.0, 0.12)
-	await fim.finished
-	if hud and hud.has_method("destacar_item") and id != "":
-		hud.destacar_item(id)
-	p.get_parent().queue_free()
-	if carta:
-		carta.segurar = false   # volta a desvirar sozinha depois de alguns segundos
+## Espera que roda mesmo com o jogo pausado.
+func _esperar(s: float) -> void:
+	await get_tree().create_timer(s, true).timeout
 
 func esta_aberta() -> bool:
 	return _estado != Estado.FECHADA
