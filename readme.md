@@ -39,60 +39,45 @@ EstradaB
 
 ```
 
-[ ] v3
-[ ]		balancear itens e preparo. 4 primeiros ingredientes oficiais. erva, cogu, pena de urubu,olho de salamandra(ou outro) (pena e olho: DEPOIS)
-			Erva + cogumelo (1ª receita): erva m5200 s2000/3000 Tmin50 k.3 Tmax135 k.15 (queima ~140+) t25–90 h.4; cogumelo m1200 s600/900 Tmin100 k.15 Tmax160 k.15 t5–25 h.4/.5. Fogo: K 0.3, CONST_A 30.
-			Receita ideal (~60 s): acende → erva com água morna (~8 s) → cozinha até ~40 s → ~1 clique/s até chama BRANCA (~120 °C) → cogumelo (~48–50 s) → frita ~10 s → termina. Perfeito → Poção da Calma Profunda (só N cai, 0,93).
-[?]		Ao interagir com eventos a bruxa deve virar para ele antes. (evento_base._virar_player_para_mim, clique/toque). E quando não quiser que vire? → PaginaData.virar_bruxa (desligue na página).
-[.]		Scroll do inventário é muito pequeno e difícil puxar, eu queria que fosse uma lista e com o touch eu pudesse clicar e arrastar para fazer rolar.
-			Feito: ListaRolavel (src/ui/lista_rolavel.gd): arrastar rola com inércia, toque sem arrastar abre o item. Linhas de 56 px, fonte 22.
-[?]			Corrigir: Quando clico num item do inventário nada acontece. (caminho errado depois do Giro; corrigido)
-[?]			Implementar: Inventário deve indicar que dá pra subir ou descer quando houver itens ocultados. (setas pulsando nas bordas, ListaRolavel)
-[ ]	Sprite placeholder de:
-[ ]		Campones, foto
-[ ]		Guarda1, foto
-[ ]		Guarda2, foto
+[.] v3
+[.] Sprite placeholder de:
+[.]		Campones, foto
+[.]		Guarda1, foto
+[.]		Guarda2, foto
+[ ]	balancear itens e preparo. 4 primeiros ingredientes oficiais. erva, cogu, pena de urubu,olho de salamandra(ou outro) (pena e olho: DEPOIS)
+		Erva + cogumelo (1ª receita): erva m5200 s2000/3000 Tmin50 k.3 Tmax135 k.15 (queima ~140+) t25–90 h.4; cogumelo m1200 s600/900 Tmin100 k.15 Tmax160 k.15 t5–25 h.4/.5. Fogo: K 0.3, CONST_A 30.
+		Receita ideal (~60 s): acende → erva com água morna (~8 s) → cozinha até ~40 s → ~1 clique/s até chama BRANCA (~120 °C) → cogumelo (~48–50 s) → frita ~10 s → termina. Perfeito → Poção da Calma Profunda (só N cai, 0,93).
 
 
-[ ] Caldeirão/Preparo:
+[.] Caldeirão/Preparo:
 [?]		Se segurar o botão de fogo quero que retire const_A a cada 0.3seg ao invés de desligar o fogo. Como não há como desligar mais o fogo, caso a temperatura do fogo fique abaixo de F_LIMIT_MIN ele faz um efeito e apaga.
 			Feito: segurar com o fogo aceso abafa (−CONST_A a cada 0,3 s); F < F_LIMIT_MIN (600, em sistema_termico) → fumaça e apaga. Apagado: segurar 1 s acende.
 			Calibrar: CONST_A, F_LIMIT_MIN, de resto ok.
-[?]		Botão de confirmar após apertar o botão de finalizar poção deve ser maior para facilitar o clique.		 (botões 200x96, fonte 34)
-[ ]		Layout deve mudar agora que não tem grafico nem barra lateral. tudo pode ficar maior (os sprites eu mesmo edito), para ficar mais fácil interagir no celular.
-[?]		Inventário deve ter scrool com touch, arrastando, assim como o inventário normal foi adaptado. (ListaRolavel horizontal no preparo)
-
 
 [ ] Cena de poção preparada:
 [.]		Layout: Definir localização das janelas e informações. 
 [ ]			revisar como mostrar os valores fora das diagonais. 
-[?]			Revisar posições das informações.
-[?]			Mostrar qual foi o erro por ingrediente nos ingredientes da receita. 
-[ ]			Anotar o tempo e temperatura no momento que cada item entrou nos itens. quero não só número, mas uma representação visual útil.
+[.]			Revisar posições das informações. Ingredientes ficam muito pra baixo, vão caber uns 2 ou 3.
+[.]			Anotar o tempo e temperatura no momento que cada item entrou nos itens. quero não só número, mas uma representação visual útil.
 [ ]			Gostei do grafico. Mas a receita começa quando o primeiro ingrediente entra.
-[ ]			Veja que o layout está bom mas só cabem uns 2 ou 3 ingredientes da receita na tela.
 [.]		Nomear as poções de referência no catálogo (PocaoReferencia: nome, descrição, A)
 [?]			As poções nomeadas não devem ficar salvas no user, e sim salvas no GameTemp, valem só para aquela secção. (GameTemp.pocoes_nomeadas)
 [?]		Ao sair do preparo, a poção vai para o meio e o resto da janela vai sumindo em fade. a poção sai do meio e vai para o inventário. (janela_resultado._fechar/_voar) A poção deve ir sem girar, abre a carta do inventário, mostra o item indo para lá e mostra aparecendo o nome dela no inventário.
-[ ]		
 
 
 [ ] História / missão: (em ordem)
-[ ]		Diálogos devem condizer com a época
-[ ]		Cada personagem tem seu linguajar próprio e manias.
-[?]		Camponês bate na porta (TOC! TOC! TOC!), opção Deixar entrar / Ignorar. Ele pede ajuda para a irmã que vai casar → Poção da Calma Lúcida. Guardas ainda não deixam passar.
-[?]			Corrigir fala: "E uma folha que posso , onde as árvores acabam." (bruxa_in_auto / bruxa_in_passagem). ("depoisé" já corrigido)
+[.]		Camponês bate na porta (TOC! TOC! TOC!), opção Deixar entrar / Ignorar. Ele pede ajuda para a irmã que vai casar → Poção da Calma Lúcida. Guardas ainda não deixam passar.
+[.]			Corrigir fala: "E uma folha que posso , onde as árvores acabam." (bruxa_in_auto / bruxa_in_passagem). ("depoisé" já corrigido)
 					A Bruxa diz que o cogumelo cresce "onde a floresta acaba", mas ele está na estradaA.
 					Feito: agora "E uma erva que posso pegar no fim da floresta." e "Um cogumelo que cresce na beira da estrada, depois da cidade."
-[?]			fazer área de spawn de evento no fim da floresta, outro na estradaA. Fazer farm com qtd na tela. (3 cogu, 3 erva) 
+[.]			fazer área de spawn de evento no fim da floresta, outro na estradaA. Fazer farm com qtd na tela. (3 cogu, 3 erva) 
 					Hoje: 1 cogumelo (estradaA) + 1 erva (floresta), coleta única por variável. Fazer o spawn de eventos, nas páginas vai ter uma também uma nova condição de self-variable, valores 0 e 1; e no interprete quero um comando de ativar/desativar self-variable de um evento.
 					Feito: self-variables A/B/C/D por nó de evento (GameTemp.self_vars). Condição tipo "self" (páginas, if, while). Comando CmdSelfVar (vazio = este evento).
 					AreaSpawn (src/cena/area_spawn.gd): no máximo N cópias de um EventoData numa faixa; posições e cooldowns salvos no GameTemp (voltar ao mapa = mesmas posições); coletou 1 (self A = 1) → após o cooldown (s) renasce num ponto qualquer da faixa, com efeito de brilho. estradaA: AreaCogumelo (3x spawn_cogumelo), floresta: AreaErva (3x spawn_erva).
 					Ajustar no editor: posição/largura das áreas. estradaA_cogumelo.tres e floresta_erva.tres ficaram sem uso (apagar).
-[?]			A bruxa diz quais & qtos itens tem que pegar e libera controle na primeira missão.
-[ ]			com ingredientes na mão, interagir com o caldeirão, ela explica como usar a 1ª vez. (DEPOIS DO CAP. 1)
+[.]			A bruxa diz quais & qtos itens tem que pegar e libera controle na primeira missão.
 					Evento bruxa_in_caldeirao ainda é só "caldeirão (em construção)".
-[?]			após criar, vem cena NPC, basta ir no castelo, guardas deixam passar agora.
+[.]			após criar, vem cena NPC, basta ir no castelo, guardas deixam passar agora.
 					Feito: criar qualquer poção (ControlePreparo) → missao01_pocao_feita = 1 → ponte_guarda e estradaB_guarda ganham página 2 (passável, "Pode passar."). Falta a cena do NPC.
 					ponte_guarda e estradaB_guarda só bloqueiam, sem condição.
 [ ]			finalização, entrega poção e resultados possíveis.
@@ -112,7 +97,12 @@ EstradaB
 [?]		Notificação de item nunca aparece (NotificacaoItem sem Label em main.tscn)
 			Label já existe; agora o painel começa escondido e uma notificação nova não é mais apagada pelo timer da anterior.
 [?]		Segurar o botão de poção para sair agora é 0,7 s (TEMPO_LONGO)
+[ ]		Tutorial do caldeirão na 1ª vez.
 
+
+[ ]	Escrita/Estilo:
+[ ]		Diálogos devem condizer com a época
+[ ]		Cada personagem tem seu linguajar próprio e manias.
 
 [ ]	Cena Livro de Receitas:
 [ ]		Ao criar uma poção nova a bruxa tem opção de anotar a receita no livro. Caso escolha anotar: Abre a cena do livro de receitas já anotando.
@@ -207,7 +197,7 @@ EstradaB
 [ ]		Efeitos (...)
 
 [ ]	Animações:
-[ ]	
+[ ]
 
 
 [ ] Estilo:
@@ -245,5 +235,4 @@ EstradaB
 [ ]	Sistema de mercado/valor dinâmico
 [ ]	Sistema de fama
 [ ]	Sistema de compra/venda
-
 ```
