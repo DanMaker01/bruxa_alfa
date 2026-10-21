@@ -18,16 +18,16 @@ signal _nome_definido
 # ---- ajuste aqui ----
 const ICONE_POCAO := "res://assets/game_caldeirao/pocao.png"
 const ALFA_FUNDO: float = 0.85
-const TAM_POCAO := Vector2(200, 200)
+const TAM_POCAO := Vector2(160, 160)
 # Layout (640x960), de cima para baixo:
 #   título (largura toda) | poção à esquerda + pentágono à direita | grade embaixo da poção
 #   | ingredientes (largura toda): nome, barra de aproveitamento e tags do que errou | dica
-const CENTRO_POCAO := Vector2(320, 330)       # onde a poção surge
+const CENTRO_POCAO := Vector2(320, 220)       # onde a poção surge
 const POCAO_ESQUERDA_X: float = 30.0          # para onde ela desliza (posição x)
-const TITULO_RECT := Rect2(20, 40, 600, 80)
-const PENTAGONO_RECT := Rect2(250, 130, 370, 360)
-const GRADE_RECT := Rect2(50, 455, 170, 170)
-const INGREDIENTES_RECT := Rect2(30, 640, 580, 255)
+const TITULO_RECT := Rect2(20, 30, 600, 70)
+const PENTAGONO_RECT := Rect2(220, 105, 400, 350)
+const GRADE_RECT := Rect2(40, 310, 150, 150)
+const INGREDIENTES_RECT := Rect2(30, 490, 580, 400)
 ## Para onde a poção voa ao sair (fallback, se a carta do inventário não for achada).
 const DESTINO_INVENTARIO := Vector2(192, 800)
 const NOME_DESCONHECIDO := "Poção desconhecida"
@@ -54,6 +54,7 @@ var _titulo: Label
 var _pentagono: PentagonoOcean
 var _grade: GradeMatriz
 var _ingredientes: VBoxContainer
+var _lista: ListaRolavel
 var _dica: Label
 var _t: float = 0.0
 
@@ -175,11 +176,16 @@ func _construir() -> void:
 	linha.position = Vector2(INGREDIENTES_RECT.position.x, INGREDIENTES_RECT.position.y - 14)
 	linha.size = Vector2(INGREDIENTES_RECT.size.x, 2)
 	_painel.add_child(linha)
+	# lista rolável: cabem quantos ingredientes houver (arrastar para ver o resto)
+	_lista = ListaRolavel.new()
+	_lista.position = INGREDIENTES_RECT.position
+	_lista.size = INGREDIENTES_RECT.size
+	_painel.add_child(_lista)
 	_ingredientes = VBoxContainer.new()
-	_ingredientes.position = INGREDIENTES_RECT.position
-	_ingredientes.size = INGREDIENTES_RECT.size
-	_ingredientes.add_theme_constant_override("separation", 10)
-	_painel.add_child(_ingredientes)
+	_ingredientes.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_ingredientes.custom_minimum_size = Vector2(INGREDIENTES_RECT.size.x - 8.0, 0)
+	_ingredientes.add_theme_constant_override("separation", 14)
+	_lista.add_child(_ingredientes)
 	add_child(_painel)
 
 	add_child(_faixa_nome)
@@ -394,9 +400,16 @@ func _linha_ingrediente(d: Dictionary) -> Control:
 	linha.add_child(tags)
 	# quando entrou e a temperatura do caldo ao longo do preparo
 	var lt := LinhaTempo.new()
-	lt.configurar(_res.get("historico_T", []), float(d.get("t0", 0.0)), float(_res.get("t_final", 1.0)))
+	lt.configurar(_res.get("historico_T", []), float(d.get("t0", 0.0)), float(_res.get("t_final", 1.0)), _inicio_receita())
 	linha.add_child(lt)
 	return linha
+
+## A receita começa quando o primeiro ingrediente entra.
+func _inicio_receita() -> float:
+	var t := INF
+	for d in _res.get("diagnosticos", []):
+		t = minf(t, float(d.get("t0", 0.0)))
+	return 0.0 if t == INF else t
 
 func _tag(texto: String, cor: Color) -> Control:
 	var p := PanelContainer.new()
@@ -454,6 +467,9 @@ func _input(event: InputEvent) -> void:
 		var pos: Vector2 = event.position
 		if _grade and _grade.get_global_rect().has_point(pos):
 			return
+		# na lista de ingredientes o toque é para arrastar/rolar
+		if _lista and _lista.get_global_rect().has_point(pos):
+			return
 		get_viewport().set_input_as_handled()
 		_fechar()
 
@@ -499,22 +515,34 @@ func _criar_voo() -> TextureRect:
 	return p
 
 func _voar(p: TextureRect) -> void:
-	var destino := DESTINO_INVENTARIO
-	var carta = get_node_or_null("/root/Main/CanvasLayer/HUD/CartaInventario")
-	if carta is Control:
-		destino = carta.global_position + carta.size * 0.5
-	var tw := p.create_tween().set_parallel(true)
-	tw.tween_property(p, "position", destino - TAM_POCAO * 0.5, 0.7).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
-	tw.tween_property(p, "scale", Vector2(0.18, 0.18), 0.7).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
-	tw.tween_property(p, "rotation", TAU, 0.7)
-	await tw.finished
-	# chegou: a carta do inventário dá uma "pulsada" e abre para mostrar o item novo
+	var hud = get_node_or_null("/root/Main/CanvasLayer/HUD")
+	var carta = hud.get("carta_inventario") if hud else null
+	var id: String = _pocao_item.id if _pocao_item else ""
+	# 1. a carta do inventário abre primeiro (e fica aberta durante o voo)
 	if carta and carta.has_method("abrir"):
 		carta.abrir()
+		carta.segurar = true
+		await get_tree().create_timer(0.5, true).timeout
+	# 2. destino: a linha da poção na lista (fica escondida até a poção chegar)
+	var destino := DESTINO_INVENTARIO
+	if hud and hud.has_method("preparar_item_chegando") and id != "":
+		destino = hud.preparar_item_chegando(id, true)
+	elif carta is Control:
+		destino = carta.global_position + carta.size * 0.5
+	# 3. voa (sem girar), encolhendo até o tamanho da linha
+	var tw := p.create_tween().set_parallel(true)
+	tw.tween_property(p, "position", destino - TAM_POCAO * 0.5, 0.7).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	tw.tween_property(p, "scale", Vector2(0.22, 0.22), 0.7).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	await tw.finished
+	# 4. a poção "entra" na lista: some e o nome dela aparece com brilho
 	var fim := p.create_tween()
-	fim.tween_property(p, "modulate:a", 0.0, 0.15)
+	fim.tween_property(p, "modulate:a", 0.0, 0.12)
 	await fim.finished
+	if hud and hud.has_method("destacar_item") and id != "":
+		hud.destacar_item(id)
 	p.get_parent().queue_free()
+	if carta:
+		carta.segurar = false   # volta a desvirar sozinha depois de alguns segundos
 
 func esta_aberta() -> bool:
 	return _estado != Estado.FECHADA

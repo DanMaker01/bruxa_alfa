@@ -44,9 +44,12 @@ EstradaB
 [.]		Campones, foto
 [.]		Guarda1, foto
 [.]		Guarda2, foto
-[ ]	balancear itens e preparo. 4 primeiros ingredientes oficiais. erva, cogu, pena de urubu,olho de salamandra(ou outro) (pena e olho: DEPOIS)
+[?]	balancear itens e preparo. 4 primeiros ingredientes oficiais: erva, cogumelo, flor-de-farra, musgo-do-recato. Baú dá 15 de cada.
 		Erva + cogumelo (1ª receita): erva m5200 s2000/3000 Tmin50 k.3 Tmax135 k.15 (queima ~140+) t25–90 h.4; cogumelo m1200 s600/900 Tmin100 k.15 Tmax160 k.15 t5–25 h.4/.5. Fogo: K 0.3, CONST_A 30.
 		Receita ideal (~60 s): acende → erva com água morna (~8 s) → cozinha até ~40 s → ~1 clique/s até chama BRANCA (~120 °C) → cogumelo (~48–50 s) → frita ~10 s → termina. Perfeito → Poção da Calma Profunda (só N cai, 0,93).
+		2ª receita (E): Flor-de-farra (E +20%, mas C −5%, A −6% e N +5% de E) em INFUSÃO 75–95 °C (ferver estraga), m2400 (~30 s a 85 °C), t 20–70 s.
+		  Musgo-do-recato (compensa C, A e N) entra POR ÚLTIMO: sem cozimento, t 2–12 s. → Poção da Desenvoltura: só E +20%.
+		  Ícones item_a (flor) / item_b (musgo). Coleta: castelo_out — flor 2 áreas (1 cada, cooldown 50 s), musgo 3 (cooldown 15 s); musgo 1 à direita do guarda da ponte e 1 à esquerda do guarda da estradaB (15 s). Ajustar posições/altura no editor.
 
 
 [.] Caldeirão/Preparo:
@@ -56,17 +59,17 @@ EstradaB
 
 [ ] Cena de poção preparada:
 [.]		Layout: Definir localização das janelas e informações. 
-[ ]			revisar como mostrar os valores fora das diagonais. 
-[.]			Revisar posições das informações. Ingredientes ficam muito pra baixo, vão caber uns 2 ou 3.
+[?]			revisar como mostrar os valores fora das diagonais.  (toque na célula da grade: balão "C → N −3%")
+[?]			Revisar posições das informações. Ingredientes ficam muito pra baixo, vão caber uns 2 ou 3. (layout compacto + lista rolável: cabem quantos houver)
 [.]			Anotar o tempo e temperatura no momento que cada item entrou nos itens. quero não só número, mas uma representação visual útil.
-[ ]			Gostei do grafico. Mas a receita começa quando o primeiro ingrediente entra.
+[?]			Gostei do grafico. Mas a receita começa quando o primeiro ingrediente entra. (gráfico vai da entrada do 1º ingrediente ao fim; tempos contados a partir dela)
 [.]		Nomear as poções de referência no catálogo (PocaoReferencia: nome, descrição, A)
 [?]			As poções nomeadas não devem ficar salvas no user, e sim salvas no GameTemp, valem só para aquela secção. (GameTemp.pocoes_nomeadas)
-[?]		Ao sair do preparo, a poção vai para o meio e o resto da janela vai sumindo em fade. a poção sai do meio e vai para o inventário. (janela_resultado._fechar/_voar) A poção deve ir sem girar, abre a carta do inventário, mostra o item indo para lá e mostra aparecendo o nome dela no inventário.
+[?]		Ao sair do preparo, a poção vai para o meio e o resto da janela vai sumindo em fade. a poção sai do meio e vai para o inventário. (janela_resultado._fechar/_voar) A poção deve ir sem girar, abre a carta do inventário, mostra o item indo para lá e mostra aparecendo o nome dela no inventário. → feito: sem girar; carta abre antes, poção voa até a linha dela, a linha aparece com brilho dourado.
 
 
 [ ] História / missão: (em ordem)
-[.]		Camponês bate na porta (TOC! TOC! TOC!), opção Deixar entrar / Ignorar. Ele pede ajuda para a irmã que vai casar → Poção da Calma Lúcida. Guardas ainda não deixam passar.
+[.]		Camponês bate na porta (TOC! TOC! TOC!), opção Deixar entrar / Ignorar. Ele pede ajuda para a irmã que vai casar → Poção da Calma Profunda. Guardas ainda não deixam passar.
 [.]			Corrigir fala: "E uma folha que posso , onde as árvores acabam." (bruxa_in_auto / bruxa_in_passagem). ("depoisé" já corrigido)
 					A Bruxa diz que o cogumelo cresce "onde a floresta acaba", mas ele está na estradaA.
 					Feito: agora "E uma erva que posso pegar no fim da floresta." e "Um cogumelo que cresce na beira da estrada, depois da cidade."
@@ -76,7 +79,7 @@ EstradaB
 					AreaSpawn (src/cena/area_spawn.gd): no máximo N cópias de um EventoData numa faixa; posições e cooldowns salvos no GameTemp (voltar ao mapa = mesmas posições); coletou 1 (self A = 1) → após o cooldown (s) renasce num ponto qualquer da faixa, com efeito de brilho. estradaA: AreaCogumelo (3x spawn_cogumelo), floresta: AreaErva (3x spawn_erva).
 					Ajustar no editor: posição/largura das áreas. estradaA_cogumelo.tres e floresta_erva.tres ficaram sem uso (apagar).
 [.]			A bruxa diz quais & qtos itens tem que pegar e libera controle na primeira missão.
-					Evento bruxa_in_caldeirao ainda é só "caldeirão (em construção)".
+					Evento bruxa_in_caldeirao agora tem um texto simples da bruxa (tutorial depois do Cap. 1).
 [.]			após criar, vem cena NPC, basta ir no castelo, guardas deixam passar agora.
 					Feito: criar qualquer poção (ControlePreparo) → missao01_pocao_feita = 1 → ponte_guarda e estradaB_guarda ganham página 2 (passável, "Pode passar."). Falta a cena do NPC.
 					ponte_guarda e estradaB_guarda só bloqueiam, sem condição.
@@ -104,7 +107,7 @@ EstradaB
 [ ]		Diálogos devem condizer com a época
 [ ]		Cada personagem tem seu linguajar próprio e manias.
 
-[ ]	Cena Livro de Receitas:
+[ ]	Cena Livro de Receitas: (DEPOIS DO CAP. 1)
 [ ]		Ao criar uma poção nova a bruxa tem opção de anotar a receita no livro. Caso escolha anotar: Abre a cena do livro de receitas já anotando.
 [ ]		Iniciar o livro de receitas, cena com janela que inicia após uma nova receita. A cena de livro abre e é escrita uma nova receita.
 [ ]		Pensar no Layout
@@ -118,7 +121,7 @@ EstradaB
 				Passo do Inspector agora é 0.00001 (item_data.gd). Conferir no editor.
 
 
-[ ] Intro:
+[ ] Intro: (Cap. 1)
 [ ]		Melhorar texto: reduzir? etc...
 [ ]		Melhorar representação do texto subindo.
 
@@ -134,11 +137,11 @@ EstradaB
 
 
 [ ]	Caldeirão:
-[ ]		Ajustes mínimos: cor, shake, efeitos, aparar para a versão final.
+[?]		Ajustes mínimos: cor, shake, efeitos, aparar para a versão final. (vapor acima de 100 °C, baforada de fumaça ao abafar)
 [ ]		Tutorial(leve) na primeira vez. (DEPOIS DO CAP. 1)
 
 [ ] Mapa:
-[ ]	Só 1 cogumelo no bosque a cada 10seg. na estradaA tem 5 cogumelos com delay de 2seg.
+[?]	Só 1 cogumelo no bosque a cada 10seg. na estradaA tem 5 cogumelos com delay de 2seg.
 [?]     Spawn de itens: existem as áreas de spawn, que invocam um tipo de evento, limitados por qtd de invocações no mapa.  
 [.]         Remover todos eventos placeholders de item dos mapas
 				Removidos os 6 cogumelos de teste (teste_magia) de bruxa_out e castelo_out. Fica só o da história (estradaA). teste_magia.tres sem uso.
@@ -152,7 +155,7 @@ EstradaB
 			Feito: mapa_base tem bgm/bgm_volume no Inspector. Mesmo bgm = continua; outro = troca; vazio = para. Só a floresta tem bgm (floresta.mp3).
 [ ]		SE nos teleport (depois: som de passos na transição)
 [?]		Tela preta das passagens mais curta: "esperar" depois do teleporte baixado de 0.4 para 0.2
-[ ]	Paralaxe 1.01 deve ser 0.99
+[ ]	Verificar todos os parallaxes (valores, direção, bordas).
 
 [.]	HUD/inventário:
 		Feito (1ª versão): src/ui/carta.gd + hud.tscn refeito. Duas cartas: CartaInventario (Verso/Inventario/Dialogo) e CartaStatus (Verso/Status/Opcoes).
@@ -164,13 +167,13 @@ EstradaB
 		Foto e nome do falante ficam fora da carta (CanvasLayer): não giram, fade só quando mudam.
 		Ajustar: tempo_aberta, tempo_virar, angulo_diagonal (Inspector da carta).
 		Verso provisório: pentagrama desenhado (src/ui/pentagrama_verso.gd, gira devagar; cor/espessura/raio/giro no Inspector). Trocar pela arte quando existir.
-[ ]     Separar o Inventário do HUD. O HUD deve fazer o esquema de carta que vira ao clicar em um de seus componentes (inventário ou status), pensar como vai ser a dinâmica da carta girando, ativação, desativação, etc. Um clique em cima para mostrar, e se ficar alguns segundos sem interação ele desvira.
-[ ]		Animar o inventário e o status como um card que gira/abre ou algo assim. 
-[ ]		Fazer uma animação de carta virando para os diálogos, opções, inventário e status. 
-[ ]		Diminuir o botão de avançar diálogo em todas as laterais, pouca coisa.
-[ ]		Mostrar o pentagrama por cima dos Cards, talvez é problema de zindex.
-[ ]		No diálogo a tela deve escurecer um pouco mais.
-[ ]		No avançar diálogo o cursor triangular deve ficar com movimento y=sin((2pi/L)*x)
+[?]     Separar o Inventário do HUD. O HUD deve fazer o esquema de carta que vira ao clicar em um de seus componentes (inventário ou status), pensar como vai ser a dinâmica da carta girando, ativação, desativação, etc. Um clique em cima para mostrar, e se ficar alguns segundos sem interação ele desvira.
+[?]		Animar o inventário e o status como um card que gira/abre ou algo assim. 
+[?]		Fazer uma animação de carta virando para os diálogos, opções, inventário e status. 
+[?]		Diminuir o botão de avançar diálogo em todas as laterais, pouca coisa.
+[?]		Mostrar o pentagrama por cima dos Cards, talvez é problema de zindex.
+[?]		No diálogo a tela deve escurecer um pouco mais.
+[?]		No avançar diálogo o cursor triangular deve ficar com movimento y=sin((2pi/L)*x)
 
 
 
@@ -208,16 +211,15 @@ EstradaB
 
 
 [ ]	Estudar se vale:
-[ ]		- Não precisa mais ser CharacterBody2D?. (problema de falta de collision shape foi resolvido para os eventos, agora usa o da página)
 [ ]		- Definir posição dos eventos no mapa, tudo por código
 
 
 [ ]	Status: ()
 [?]		popup do nome da característica quando hover ou click. ou algo legal. (status.gd: toque no ícone → balão com nome e valor por 1,5 s)
-[ ]		Animação de aparição. (como se virasse uma carta, etc) 
+[?]		Animação de aparição. (como se virasse uma carta, etc)  (o status já vira como carta)
 
 
-[ ]	Menu Principal e Pausa
+[ ]	Menu Principal e Pausa (DEPOIS DO CAP. 1)
 [ ]	Save/Load (DEPOIS: muita coisa ainda pode mudar)
 [ ]		Game_Temp deve ter save e load de arquivo_unico de titulo "save"+time_stamp
 [ ]		GameTemp, posição player, mapa

@@ -78,11 +78,13 @@ func _input(event: InputEvent) -> void:
 				_rolagem = _pos_atual()
 		elif _apertado:
 			_apertado = false
-			if not _arrastando:
+			if _arrastando:
+				get_viewport().set_input_as_handled()   # arrastou: nenhum botão dispara
+			else:
+				# toque: linhas com mouse_filter IGNORE usam o sinal; botões normais recebem o clique
 				var linha := _linha_em(event.position)
-				if linha:
+				if linha and linha.mouse_filter == Control.MOUSE_FILTER_IGNORE:
 					linha_tocada.emit(linha)
-			get_viewport().set_input_as_handled()
 	elif event is InputEventMouseMotion and _apertado:
 		if not _arrastando and event.position.distance_to(_inicio) > LIMIAR_ARRASTE:
 			_arrastando = true

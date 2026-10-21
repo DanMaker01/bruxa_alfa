@@ -78,6 +78,11 @@ var _faisca_timer: float = 0.0
 var _fogo_aceso: bool = false
 var _turvo: float = 0.0                # 0 = limpo, 1 = turvo (suavizado)
 var _bolha_escala_base := Vector2.ONE  # scale_min/max originais do material das bolhas
+# ---- vapor (acima de 100 °C) ----
+## O vapor começa na fervura e fica no máximo em T_VAPOR_MAX.
+const T_VAPOR_MAX: float = 160.0
+const COR_VAPOR := Color(0.92, 0.92, 1.0, 0.35)
+var _vapor: CPUParticles2D
 
 
 func configurar(p_caldeirao: AnimatedSprite2D, p_fogo: AnimatedSprite2D, p_bolhas: GPUParticles2D, p_brilhos: GPUParticles2D) -> void:
@@ -99,6 +104,7 @@ func configurar(p_caldeirao: AnimatedSprite2D, p_fogo: AnimatedSprite2D, p_bolha
 	if brilhos and brilhos.process_material:
 		_mat_brilhos = brilhos.process_material.duplicate()
 		brilhos.process_material = _mat_brilhos
+	_criar_vapor()
 	resetar()
 
 func resetar() -> void:
@@ -140,6 +146,7 @@ func atualizar(sistema: SistemaTermico, delta: float, perda_media: float, _punin
 		_fogo_escala_F = lerpf(_fogo_escala_F, escala_por_F(sistema.F), clampf(delta * FOGO_SUAVIZACAO, 0.0, 1.0))
 		_aplicar_escala_fogo()
 	_atualizar_particulas(sistema.T)
+	_atualizar_vapor(sistema.T)
 	_aplicar_turvo(delta, perda_media)
 	# volta do sprite forte
 	if _tempo_fogo_alto > 0.0:
@@ -331,8 +338,51 @@ func liga_desliga(botao: Control, ligou: bool) -> Color:
 			tw_apaga.tween_property(self, "_fogo_pulso", Vector2.ONE, 0.35)
 	return cor
 
+## Vapor saindo da boca do caldeirão: nada até 100 °C, cada vez mais denso e rápido acima.
+func _criar_vapor() -> void:
+	if not caldeirao or not caldeirao.get_parent():
+		return
+	_vapor = CPUParticles2D.new()
+	_vapor.name = "Vapor"
+	_vapor.amount = 40
+	_vapor.lifetime = 1.8
+	_vapor.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
+	_vapor.emission_rect_extents = Vector2(60, 4)
+	_vapor.direction = Vector2.UP
+	_vapor.spread = 18.0
+	_vapor.gravity = Vector2(0, -25)
+	_vapor.initial_velocity_min = 25.0
+	_vapor.initial_velocity_max = 60.0
+	_vapor.damping_min = 5.0
+	_vapor.damping_max = 15.0
+	_vapor.scale_amount_min = 8.0
+	_vapor.scale_amount_max = 16.0
+	var curva := Curve.new()
+	curva.add_point(Vector2(0, 0.4))
+	curva.add_point(Vector2(1, 1.8))
+	_vapor.scale_amount_curve = curva
+	var rampa := Gradient.new()
+	rampa.set_color(0, Color(COR_VAPOR, 0.0))
+	rampa.set_color(1, Color(COR_VAPOR, 0.0))
+	rampa.add_point(0.25, COR_VAPOR)
+	_vapor.color_ramp = rampa
+	_vapor.z_index = caldeirao.z_index + 2
+	_vapor.emitting = false
+	caldeirao.get_parent().add_child(_vapor)
+	_vapor.global_position = boca()
+
+func _atualizar_vapor(T: float) -> void:
+	if not _vapor:
+		return
+	var v: float = clampf((T - 100.0) / (T_VAPOR_MAX - 100.0), 0.0, 1.0)
+	_vapor.emitting = v > 0.01
+	_vapor.modulate.a = lerpf(0.25, 1.0, v)   # CPUParticles2D não tem amount_ratio: mais denso = mais opaco
+	_vapor.speed_scale = lerpf(0.7, 1.6, v)
+	_vapor.global_position = boca()
+
 ## Abafando (segurando o botão com o fogo aceso): o fogo achata um pouco a cada passo.
 func abafar(botao: Control) -> void:
+	_baforada()
 	if botao:
 		botao.pivot_offset = botao.size * 0.5
 		botao.scale = Vector2(0.8, 0.8)
@@ -345,6 +395,34 @@ func apagou(botao: Control) -> Color:
 	var cor := liga_desliga(botao, false)
 	_fumaca_apagar()
 	return cor
+
+## Baforada pequena de fumaça a cada passo de abafar.
+func _baforada() -> void:
+	if not fogo or not fogo.get_parent():
+		return
+	var p := CPUParticles2D.new()
+	p.one_shot = true
+	p.explosiveness = 0.9
+	p.amount = 8
+	p.lifetime = 0.8
+	p.position = _base_fogo()
+	p.z_index = fogo.z_index + 1
+	p.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
+	p.emission_rect_extents = Vector2(20, 3)
+	p.direction = Vector2.UP
+	p.spread = 35.0
+	p.initial_velocity_min = 30.0
+	p.initial_velocity_max = 60.0
+	p.gravity = Vector2(0, -20)
+	p.scale_amount_min = 4.0
+	p.scale_amount_max = 8.0
+	var rampa := Gradient.new()
+	rampa.set_color(0, Color(0.5, 0.5, 0.5, 0.55))
+	rampa.set_color(1, Color(0.3, 0.3, 0.3, 0.0))
+	p.color_ramp = rampa
+	fogo.get_parent().add_child(p)
+	p.emitting = true
+	get_tree().create_timer(p.lifetime + 0.3).timeout.connect(p.queue_free)
 
 ## Nuvem de fumaça cinza subindo da lenha.
 func _fumaca_apagar() -> void:

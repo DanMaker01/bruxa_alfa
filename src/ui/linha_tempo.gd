@@ -19,14 +19,17 @@ const LARGURA_TEXTO: float = 190.0
 var _hist: Array = []
 var _t0: float = 0.0
 var _tf: float = 1.0
+var _ti: float = 0.0
 var _T_entrada: float = 20.0
 var _cor_entrada := Color.WHITE
 
 ## historico: [{"t", "T"}...] do preparo; t0: entrada do ingrediente; tf: fim do preparo.
-func configurar(historico: Array, t0: float, tf: float) -> void:
+## t_inicio: começo da receita (entrada do 1º ingrediente); o gráfico vai de t_inicio a tf.
+func configurar(historico: Array, t0: float, tf: float, t_inicio: float = 0.0) -> void:
 	_hist = historico
+	_ti = t_inicio
 	_t0 = t0
-	_tf = maxf(tf, 0.001)
+	_tf = maxf(tf, t_inicio + 0.001)
 	_T_entrada = _T_em(t0)
 	_cor_entrada = cor_da_temperatura(_T_entrada)
 	custom_minimum_size = Vector2(0, ALTURA)
@@ -59,8 +62,10 @@ func _draw() -> void:
 	var trecho := PackedVector2Array()
 	for p in _hist:
 		var t: float = float(p.get("t", 0.0))
+		if t < _ti:
+			continue
 		var T: float = float(p.get("T", T_MIN))
-		var v := Vector2(w * t / _tf, h - h * clampf((T - T_MIN) / (T_MAX - T_MIN), 0.0, 1.0))
+		var v := Vector2(w * (t - _ti) / (_tf - _ti), h - h * clampf((T - T_MIN) / (T_MAX - T_MIN), 0.0, 1.0))
 		pts.append(v)
 		if t >= _t0:
 			trecho.append(v)
@@ -72,11 +77,11 @@ func _draw() -> void:
 	var y100: float = h - h * (100.0 - T_MIN) / (T_MAX - T_MIN)
 	draw_dashed_line(Vector2(0, y100), Vector2(w, y100), Color(1, 1, 1, 0.15), 1.0, 4.0)
 	# bolinha da entrada
-	var x0: float = w * _t0 / _tf
+	var x0: float = w * (_t0 - _ti) / (_tf - _ti)
 	var y0: float = h - h * clampf((_T_entrada - T_MIN) / (T_MAX - T_MIN), 0.0, 1.0)
 	draw_circle(Vector2(x0, y0), 6.0, Color(0, 0, 0, 0.6))
 	draw_circle(Vector2(x0, y0), 4.5, _cor_entrada)
 	# texto
 	var fonte := get_theme_default_font()
-	var txt := "entrou aos %d s · %d °C" % [roundi(_t0), roundi(_T_entrada)]
+	var txt := "entrou aos %d s · %d °C" % [roundi(_t0 - _ti), roundi(_T_entrada)]
 	draw_string(fonte, Vector2(w + 10.0, h * 0.5 + 6.0), txt, HORIZONTAL_ALIGNMENT_LEFT, LARGURA_TEXTO - 10.0, 16, Color(1, 1, 1, 0.75))

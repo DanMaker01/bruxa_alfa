@@ -10,12 +10,39 @@
 [ext_resource type="Resource" uid="uid://dwsw60svkvwq8" path="res://dados/personalidades/bruxa.tres" id="15_bsoya"]
 [ext_resource type="Resource" uid="uid://cyj1mrts043f4" path="res://dados/personalidades/guarda.tres" id="16_a1bkd"]
 [ext_resource type="Resource" path="res://dados/personalidades/rei.tres" id="17_gpqo5"]
-[ext_resource type="Resource" path="res://dados/personalidades/guarda_ponte.tres" id="p_gponte"]
-[ext_resource type="Resource" path="res://dados/personalidades/guarda_estradaB.tres" id="p_gestrada"]
-[ext_resource type="Resource" path="res://dados/personalidades/campones.tres" id="p_campones"]
+[ext_resource type="Resource" path="res://dados/itens/flor_farra.tres" id="i_pena"]
+[ext_resource type="Resource" path="res://dados/itens/musgo_recato.tres" id="i_olho"]
 [ext_resource type="Script" uid="uid://cpsgy5p545y3q" path="res://src/dados/banco_dados.gd" id="18_20li3"]
 [ext_resource type="Script" uid="uid://cgrx3adgd06tf" path="res://src/dados/variavel_data.gd" id="19_wsgxr"]
 [ext_resource type="Resource" uid="uid://bkpyaw7owkkb1" path="res://dados/itens/maca.tres" id="20_maca"]
+
+[sub_resource type="Resource" id="Resource_gcosg"]
+script = ExtResource("19_wsgxr")
+nome = "var00"
+
+[sub_resource type="Resource" id="Resource_58tkc"]
+script = ExtResource("19_wsgxr")
+nome = "var01"
+valor_numero = 10.0
+
+[sub_resource type="Resource" id="Resource_lht0q"]
+script = ExtResource("19_wsgxr")
+nome = "var02"
+valor_numero = 1.0
+
+[sub_resource type="Resource" id="Resource_xr22h"]
+script = ExtResource("19_wsgxr")
+nome = "ouro"
+valor_numero = 150.0
+
+[sub_resource type="Resource" id="Resource_6jpmy"]
+script = ExtResource("19_wsgxr")
+nome = "reputacao"
+valor_numero = -3.0
+
+[sub_resource type="Resource" id="Resource_1am3v"]
+script = ExtResource("19_wsgxr")
+nome = "pegou_maca"
 
 [sub_resource type="Resource" id="Resource_yfc4k"]
 script = ExtResource("19_wsgxr")
@@ -29,12 +56,16 @@ nome = "missao01_aceita"
 script = ExtResource("19_wsgxr")
 nome = "bruxa_in_npc_visivel"
 
-[sub_resource type="Resource" id="Resource_pocao01"]
+[sub_resource type="Resource" id="Resource_r6bk8"]
 script = ExtResource("19_wsgxr")
-nome = "missao01_pocao_feita"
+nome = "estradaA_pegou_cogumelo"
+
+[sub_resource type="Resource" id="Resource_erva1"]
+script = ExtResource("19_wsgxr")
+nome = "pegou_floresta_erva"
 
 [resource]
 script = ExtResource("18_20li3")
-itens = Array[ExtResource("1_nbf8o")]([ExtResource("6_ors41"), ExtResource("6_tjhoh"), ExtResource("11_x7c51"), ExtResource("3_fedlk"), ExtResource("20_maca"), ExtResource("7_6lumw")])
-personalidades = Array[ExtResource("14_ufffv")]([ExtResource("15_bsoya"), ExtResource("16_a1bkd"), ExtResource("17_gpqo5"), ExtResource("p_gponte"), ExtResource("p_gestrada"), ExtResource("p_campones")])
-variaveis = Array[ExtResource("19_wsgxr")]([SubResource("Resource_yfc4k"), SubResource("Resource_71rhn"), SubResource("Resource_k6iyi"), SubResource("Resource_pocao01")])
+itens = Array[ExtResource("1_nbf8o")]([ExtResource("6_ors41"), ExtResource("6_tjhoh"), ExtResource("11_x7c51"), ExtResource("3_fedlk"), ExtResource("20_maca"), ExtResource("7_6lumw"), ExtResource("i_pena"), ExtResource("i_olho")])
+personalidades = Array[ExtResource("14_ufffv")]([ExtResource("15_bsoya"), ExtResource("16_a1bkd"), ExtResource("17_gpqo5")])
+variaveis = Array[ExtResource("19_wsgxr")]([SubResource("Resource_gcosg"), SubResource("Resource_58tkc"), SubResource("Resource_lht0q"), SubResource("Resource_xr22h"), SubResource("Resource_6jpmy"), SubResource("Resource_1am3v"), SubResource("Resource_yfc4k"), SubResource("Resource_71rhn"), SubResource("Resource_k6iyi"), SubResource("Resource_r6bk8"), SubResource("Resource_erva1")])

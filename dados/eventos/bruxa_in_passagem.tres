@@ -141,11 +141,11 @@ texto = "[BRUXA;bruxa_grande;0] (pensando) Parece que alguém tem um alarme que 
 
 [sub_resource type="Resource" id="Resource_y11e0"]
 script = ExtResource("9_knu6e")
-texto = "[BRUXA;bruxa_grande;0] Entendi. Ela precisa de uma Poção da Calma Lúcida."
+texto = "[BRUXA;bruxa_grande;0] Entendi. Ela precisa de uma Poção da Calma Profunda."
 
 [sub_resource type="Resource" id="Resource_ut354"]
 script = ExtResource("9_knu6e")
-texto = "[CAMPONÊS;campones;100] Calma lúcida?"
+texto = "[CAMPONÊS;campones;100] Calma profunda?"
 
 [sub_resource type="Resource" id="Resource_50d2e"]
 script = ExtResource("9_knu6e")

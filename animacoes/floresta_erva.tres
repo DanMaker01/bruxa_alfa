@@ -1,6 +1,6 @@
-[gd_resource type="SpriteFrames" format=3]
+[gd_resource type="SpriteFrames" format=3 uid="uid://3d8yoldrsi2c"]
 
-[ext_resource type="Texture2D" path="res://assets/mapa_floresta/floresta_erva.png" id="1_181kk"]
+[ext_resource type="Texture2D" uid="uid://0mbq87mk43a1" path="res://assets/mapa_floresta/floresta_erva.png" id="1_181kk"]
 
 [resource]
 animations = [{

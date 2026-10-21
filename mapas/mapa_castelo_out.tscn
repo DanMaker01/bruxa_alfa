@@ -4,9 +4,12 @@
 [ext_resource type="Texture2D" uid="uid://c4a5dy4sgu70t" path="res://assets/mapa_castelo_out/mapa_castelo_out_fundo.png" id="2_pkhhh"]
 [ext_resource type="Texture2D" uid="uid://yervxek562yg" path="res://assets/mapa_castelo_out/mapa_castelo_out_frente.png" id="3_a3gdg"]
 [ext_resource type="Script" uid="uid://bjxlt3vqym72w" path="res://src/cena/evento_base.gd" id="4_igm17"]
+[ext_resource type="Script" uid="uid://ci10r4ypiyt11" path="res://src/cena/area_spawn.gd" id="area_spawn_x"]
 [ext_resource type="Resource" uid="uid://b2psyc1gccc2a" path="res://dados/eventos/castelo_out_passagem1.tres" id="ev_castelo_out_passagem1"]
 [ext_resource type="Resource" uid="uid://dlu16ujwlexxw" path="res://dados/eventos/castelo_out_passagem2.tres" id="ev_castelo_out_passagem2"]
 [ext_resource type="Resource" uid="uid://i5d000wfduhh" path="res://dados/eventos/castelo_out_passagem_castelo_in.tres" id="ev_castelo_out_passagem_castelo_in"]
+[ext_resource type="Resource" uid="uid://boetws53g0pmi" path="res://dados/eventos/spawn_flor_farra.tres" id="ev_flor"]
+[ext_resource type="Resource" uid="uid://cfmqv8x5131bu" path="res://dados/eventos/spawn_musgo_recato.tres" id="ev_musgo"]
 
 [node name="MapaCasteloOut" type="Node2D" unique_id=231347479]
 script = ExtResource("1_pkhhh")
@@ -52,3 +55,29 @@ z_index = 3
 position = Vector2(1090, 543)
 script = ExtResource("4_igm17")
 evento = ExtResource("ev_castelo_out_passagem_castelo_in")
+
+[node name="AreaFlorEsq" type="Node2D" parent="Eventos" unique_id=1326169982]
+z_index = 3
+position = Vector2(567, 580)
+script = ExtResource("area_spawn_x")
+evento = ExtResource("ev_flor")
+quantidade = 1
+largura = 80.0
+cooldown = 50.0
+
+[node name="AreaFlorDir" type="Node2D" parent="Eventos" unique_id=784961491]
+z_index = 3
+position = Vector2(2771, 580)
+script = ExtResource("area_spawn_x")
+evento = ExtResource("ev_flor")
+quantidade = 1
+largura = 80.0
+cooldown = 50.0
+
+[node name="AreaMusgo" type="Node2D" parent="Eventos" unique_id=1618855334]
+z_index = 3
+position = Vector2(1512, 608)
+script = ExtResource("area_spawn_x")
+evento = ExtResource("ev_musgo")
+largura = 2799.9999999999104
+cooldown = 15.0

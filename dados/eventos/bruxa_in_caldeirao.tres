@@ -15,7 +15,7 @@ mostrar = false
 
 [sub_resource type="Resource" id="Resource_a3djt"]
 script = ExtResource("7_a2amw")
-texto = "caldeirão (em construção)"
+texto = "[BRUXA;bruxa_grande;0] Vamos ver o que sai deste caldeirão."
 
 [sub_resource type="Resource" id="Resource_u2v5q"]
 script = ExtResource("8_4j1sn")

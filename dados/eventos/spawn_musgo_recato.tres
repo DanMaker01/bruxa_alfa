@@ -1,0 +1,46 @@
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://cfmqv8x5131bu"]
+
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="1_pag"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_cmd"]
+[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="3_msg"]
+[ext_resource type="Resource" path="res://dados/itens/musgo_recato.tres" id="4_cogu"]
+[ext_resource type="Script" uid="uid://bg82uh5klkyf6" path="res://src/dados/comandos/cmd_item.gd" id="5_item"]
+[ext_resource type="Script" uid="uid://bkq6tqfqx1531" path="res://src/dados/comandos/cmd_self_var.gd" id="6_self"]
+[ext_resource type="SpriteFrames" uid="uid://cni8h54vvqrak" path="res://animacoes/musgo_recato.tres" id="7_anim"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="8_cond"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="9_ev"]
+
+[sub_resource type="Resource" id="Resource_msg"]
+script = ExtResource("3_msg")
+texto = "Musgo-do-recato. Vou levar um pouco."
+
+[sub_resource type="Resource" id="Resource_item"]
+script = ExtResource("5_item")
+item = ExtResource("4_cogu")
+
+[sub_resource type="Resource" id="Resource_self"]
+script = ExtResource("6_self")
+
+[sub_resource type="Resource" id="Resource_pag0"]
+script = ExtResource("1_pag")
+sprite_frames = ExtResource("7_anim")
+direcao = 2
+area_pos = Vector2(-2.5, -6)
+area_scale = Vector2(6.25, 6.25)
+comandos = Array[ExtResource("2_cmd")]([SubResource("Resource_msg"), SubResource("Resource_item"), SubResource("Resource_self")])
+
+[sub_resource type="Resource" id="Resource_cond"]
+script = ExtResource("8_cond")
+tipo = 6
+valor = 1.0
+
+[sub_resource type="Resource" id="Resource_pag1"]
+script = ExtResource("1_pag")
+condicoes = Array[ExtResource("8_cond")]([SubResource("Resource_cond")])
+direcao = 2
+area_scale = Vector2(0.1, 0.1)
+
+[resource]
+script = ExtResource("9_ev")
+id = "spawn_musgo_recato"
+paginas = Array[ExtResource("1_pag")]([SubResource("Resource_pag0"), SubResource("Resource_pag1")])

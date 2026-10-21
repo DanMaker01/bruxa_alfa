@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/itens_icones/item_b.png" id="2_ic"]
+[ext_resource type="Script" uid="uid://b6ahlah4mhwps" path="res://src/dados/item_data.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+id = "musgo_recato"
+nome = "Musgo-do-recato"
+descricao = "Devolve o juízo, a gentileza e a calma. Entra por último e não pode demorar no caldeirão."
+icone = ExtResource("2_ic")
+A = Array[PackedFloat32Array]([PackedFloat32Array(1, 0, 0, 0, 0), PackedFloat32Array(0, 1.05263, 0, 0, 0), PackedFloat32Array(0, 0, 1, 0, 0), PackedFloat32Array(0, 0, 0, 1.06383, 0), PackedFloat32Array(0, 0, -0.05, 0, 1)])
+m = 0.0
+T_min = 60.0
+k_min = 0.3
+T_max = 140.0
+k_max = 0.3
+t_min = 2.0
+h_min = 0.5
+t_max = 12.0
+h_max = 0.5

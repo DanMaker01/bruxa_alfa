@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://skp7sjj0lecr"]
+
+[ext_resource type="Texture2D" uid="uid://cwr6ecamm56ag" path="res://assets/e_flor/flor.png" id="1_42mja"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_42mja")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

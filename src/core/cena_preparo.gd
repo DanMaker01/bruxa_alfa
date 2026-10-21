@@ -104,6 +104,7 @@ func _ready() -> void:
 	if game_temp and game_temp.has_signal("inventory_changed"):
 		game_temp.inventory_changed.connect(_popular_inventario)
 	_popular_inventario()
+	var lista = lista_ingredientes.get_parent() if lista_ingredientes else null
 
 func _process(delta: float) -> void:
 	_aplicar_debug()
@@ -264,9 +265,14 @@ func _criar_botao_item(item_name: String, item: ItemData, quantidade: int) -> Bu
 	btn.add_theme_stylebox_override("normal", _estilo(Color(0.2, 0.2, 0.3, 0.9)))
 	btn.add_theme_stylebox_override("hover", _estilo(Color(0.3, 0.3, 0.5, 0.9)))
 	btn.add_theme_stylebox_override("pressed", _estilo(Color(0.4, 0.4, 0.6, 0.9)))
+	btn.set_meta("item", item_name)
+	btn.mouse_filter = Control.MOUSE_FILTER_PASS   # arrastar rola a lista (ListaRolavel); tocar aperta o botão
 	btn.pressed.connect(_on_item_selecionado.bind(item_name, btn))
-	BotaoSegurar.efeito_clique(btn)
 	return btn
+
+func _on_linha_tocada(linha: Control) -> void:
+	if linha.has_meta("item"):
+		_on_item_selecionado(linha.get_meta("item"), linha)
 
 func _estilo(cor: Color) -> StyleBoxFlat:
 	var s = StyleBoxFlat.new()

@@ -4,9 +4,11 @@
 [ext_resource type="Texture2D" uid="uid://b1myg51qra0j3" path="res://assets/mapa_estradaB/mapa_estrada2_fundo.png" id="2_bfqci"]
 [ext_resource type="Texture2D" uid="uid://bja4ewdh1mb58" path="res://assets/mapa_estradaB/mapa_estrada2_frente.png" id="3_58y7l"]
 [ext_resource type="Script" uid="uid://bjxlt3vqym72w" path="res://src/cena/evento_base.gd" id="4_08wjo"]
+[ext_resource type="Script" uid="uid://ci10r4ypiyt11" path="res://src/cena/area_spawn.gd" id="area_spawn_x"]
 [ext_resource type="Resource" uid="uid://brxbmftv5ps6n" path="res://dados/eventos/estradaB_guarda.tres" id="ev_estradaB_guarda"]
 [ext_resource type="Resource" uid="uid://daf4cp45exys3" path="res://dados/eventos/estradaB_passagem1.tres" id="ev_estradaB_passagem1"]
 [ext_resource type="Resource" uid="uid://bih5yjybiuy3o" path="res://dados/eventos/estradaB_passagem2.tres" id="ev_estradaB_passagem2"]
+[ext_resource type="Resource" uid="uid://cfmqv8x5131bu" path="res://dados/eventos/spawn_musgo_recato.tres" id="ev_musgo"]
 
 [node name="MapaEstradaB" type="Node2D" unique_id=231347479]
 script = ExtResource("1_artrk")
@@ -46,3 +48,12 @@ z_index = 3
 position = Vector2(32, 496)
 script = ExtResource("4_08wjo")
 evento = ExtResource("ev_estradaB_passagem1")
+
+[node name="AreaMusgo" type="Node2D" parent="Eventos" unique_id=627659158]
+z_index = 3
+position = Vector2(320, 576)
+script = ExtResource("area_spawn_x")
+evento = ExtResource("ev_musgo")
+quantidade = 1
+largura = 399.9999999999872
+cooldown = 15.0

@@ -196,6 +196,38 @@ func _populate_inventory(inventory: Dictionary):
 		button.mouse_filter = Control.MOUSE_FILTER_IGNORE   # quem decide toque x arraste é a ListaRolavel
 		inventory_container.add_child(button)
 
+# =============================================================================
+# ITEM NOVO (poção chegando no inventário)
+# =============================================================================
+func _linha_do_item(id: String) -> Control:
+	for c in inventory_container.get_children():
+		if c.has_meta("item") and c.get_meta("item") == id and not c.is_queued_for_deletion():
+			return c
+	return null
+
+## Rola a lista até a linha do item e devolve o centro dela na tela (ou da carta, se não achar).
+## esconder = true deixa a linha invisível até destacar_item().
+func preparar_item_chegando(id: String, esconder: bool = true) -> Vector2:
+	var linha := _linha_do_item(id)
+	if linha == null:
+		return carta_inventario.global_position + carta_inventario.size * 0.5
+	var lista = inventory_container.get_parent()
+	if lista is ScrollContainer:
+		lista.ensure_control_visible(linha)
+	if esconder:
+		linha.modulate.a = 0.0
+	return linha.global_position + linha.size * 0.5
+
+## A linha do item aparece com um brilho dourado.
+func destacar_item(id: String) -> void:
+	var linha := _linha_do_item(id)
+	if linha == null:
+		return
+	linha.modulate = Color(1.6, 1.3, 0.6, 0.0)
+	var tw := linha.create_tween()
+	tw.tween_property(linha, "modulate", Color(1.6, 1.3, 0.6, 1.0), 0.2)
+	tw.tween_property(linha, "modulate", Color.WHITE, 0.6)
+
 func _create_item_button(item_name: String, quantity: int) -> Button:
 	"""Cria um botão para um item do inventário"""
 	var button = Button.new()
