@@ -9,35 +9,91 @@
 [ext_resource type="Script" uid="uid://bnrknn0lpp5ss" path="res://src/dados/comandos/cmd_teleportar.gd" id="7_bfmu5"]
 [ext_resource type="Script" uid="uid://dk7m46jhepr5v" path="res://src/dados/comandos/cmd_hud.gd" id="8_b0yjd"]
 [ext_resource type="Script" uid="uid://u1lexc30s8be" path="res://src/dados/comandos/cmd_player.gd" id="9_8cojv"]
-[ext_resource type="SpriteFrames" uid="uid://vcb8rfgmjljf" path="res://animacoes/intro_historia.tres" id="10_hm86d"]
 [ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="11_m57lc"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="12_n0agp"]
+[ext_resource type="Script" uid="uid://c8c7nvlca7oyd" path="res://src/dados/comandos/cmd_legenda.gd" id="13_leg"]
+[ext_resource type="Script" uid="uid://c57bkkyuga7b" path="res://src/dados/comandos/cmd_pular_com_toque.gd" id="14_pul"]
+[ext_resource type="Script" uid="uid://crwb7mjauibuo" path="res://src/dados/comandos/cmd_label.gd" id="15_lab"]
+[ext_resource type="SpriteFrames" path="res://animacoes/intro_fundo.tres" id="16_fundo"]
 
 [sub_resource type="Resource" id="Resource_4j387"]
 script = ExtResource("5_sauaa")
 variavel = "missao01_aceita"
-valor = 2.0
 metadata/_custom_type_script = "uid://bercma7w4moqu"
 
-[sub_resource type="Resource" id="Resource_amo4t"]
+[sub_resource type="Resource" id="Resource_pular"]
+script = ExtResource("14_pul")
+label = "fim"
+
+[sub_resource type="Resource" id="Resource_subir"]
 script = ExtResource("3_5fpwa")
 evento = "intro_historia"
 posicao = Vector2(320, -640)
-velocidade = 20.0
+velocidade = 45.0
 direcao = 2
 esperar = false
 
-[sub_resource type="Resource" id="Resource_j3l27"]
+[sub_resource type="Resource" id="Resource_ghp5v"]
 script = ExtResource("4_ghp5v")
-segundos = 0.0
+segundos = 6.999999999999776
+metadata/_custom_type_script = "uid://dkw5y5gsrn515"
+
+[sub_resource type="Resource" id="Resource_leg0"]
+script = ExtResource("13_leg")
+texto = "Entre o mundo dos vivos e o dos mortos existe um véu.
+
+Poucos o percebem, mas quem lida com magia enxerga através dele."
+segundos = 7.999999999999744
+
+[sub_resource type="Resource" id="Resource_leg1"]
+script = ExtResource("13_leg")
+texto = "Em 1484, o Papa deu aos inquisidores o poder de caçar bruxas.
+
+Toda mulher que vivesse sozinha, falasse com os mortos ou entendesse de ervas passou a ser suspeita."
+segundos = 7.999999999999744
+
+[sub_resource type="Resource" id="Resource_leg2"]
+script = ExtResource("13_leg")
+texto = "A Bruxa precisava se esconder.
+
+Mas vivos e mortos continuavam batendo à sua porta, pedindo poções e favores."
+segundos = 7.999999999999744
+
+[sub_resource type="Resource" id="Resource_leg3"]
+script = ExtResource("13_leg")
+texto = "Para quem tem bons olhos, atrás do castelo se vê o véu, fino como névoa.
+
+Com um pedaço dele na porta de casa, ela poderia chegar a qualquer lugar sem que ninguém a visse."
+segundos = 9.99999999999968
+
+[sub_resource type="Resource" id="Resource_leg4"]
+script = ExtResource("13_leg")
+texto = "Em três dias, ela ergueu a casa na floresta.
+
+Amanhã, ela iria buscar o véu."
+segundos = 7.999999999999744
+
+[sub_resource type="Resource" id="Resource_sauaa"]
+script = ExtResource("4_ghp5v")
+segundos = 2.999999999999904
+metadata/_custom_type_script = "uid://dkw5y5gsrn515"
+
+[sub_resource type="Resource" id="Resource_fim"]
+script = ExtResource("15_lab")
+nome = "fim"
+
+[sub_resource type="Resource" id="Resource_82dll"]
+script = ExtResource("6_qvtfd")
+tempo = 1.499999999999952
+
+[sub_resource type="Resource" id="Resource_qvtfd"]
+script = ExtResource("4_ghp5v")
+metadata/_custom_type_script = "uid://dkw5y5gsrn515"
 
 [sub_resource type="Resource" id="Resource_0fsx2"]
 script = ExtResource("5_sauaa")
 variavel = "intro_historia"
 valor = 1.0
-
-[sub_resource type="Resource" id="Resource_82dll"]
-script = ExtResource("6_qvtfd")
 
 [sub_resource type="Resource" id="Resource_cy5o6"]
 script = ExtResource("7_bfmu5")
@@ -55,12 +111,17 @@ acao = 2
 [sub_resource type="Resource" id="Resource_jid0h"]
 script = ExtResource("6_qvtfd")
 tipo = 1
+tempo = 1.499999999999952
+
+[sub_resource type="Resource" id="Resource_bfmu5"]
+script = ExtResource("4_ghp5v")
+metadata/_custom_type_script = "uid://dkw5y5gsrn515"
 
 [sub_resource type="Resource" id="Resource_r8f8t"]
 script = ExtResource("1_4j387")
 gatilho = 2
-sprite_frames = ExtResource("10_hm86d")
-comandos = Array[ExtResource("2_ku1uc")]([SubResource("Resource_4j387"), SubResource("Resource_amo4t"), SubResource("Resource_j3l27"), SubResource("Resource_0fsx2"), SubResource("Resource_82dll"), SubResource("Resource_cy5o6"), SubResource("Resource_cdvw3"), SubResource("Resource_d27pl"), SubResource("Resource_jid0h")])
+sprite_frames = ExtResource("16_fundo")
+comandos = Array[ExtResource("2_ku1uc")]([SubResource("Resource_4j387"), SubResource("Resource_pular"), SubResource("Resource_subir"), SubResource("Resource_ghp5v"), SubResource("Resource_leg0"), SubResource("Resource_leg1"), SubResource("Resource_leg2"), SubResource("Resource_leg3"), SubResource("Resource_leg4"), SubResource("Resource_sauaa"), SubResource("Resource_fim"), SubResource("Resource_82dll"), SubResource("Resource_qvtfd"), SubResource("Resource_0fsx2"), SubResource("Resource_cy5o6"), SubResource("Resource_cdvw3"), SubResource("Resource_d27pl"), SubResource("Resource_jid0h"), SubResource("Resource_bfmu5")])
 
 [sub_resource type="Resource" id="Resource_1rxl6"]
 script = ExtResource("11_m57lc")

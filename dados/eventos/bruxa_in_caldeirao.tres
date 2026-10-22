@@ -8,6 +8,8 @@
 [ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="7_a2amw"]
 [ext_resource type="Script" uid="uid://bqhd785i1urnr" path="res://src/dados/comandos/cmd_preparo.gd" id="8_4j1sn"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="10_6wmrf"]
+[ext_resource type="Script" uid="uid://cwdgcnn30o052" path="res://src/dados/comandos/cmd_if.gd" id="11_if"]
+[ext_resource type="Script" uid="uid://phmwdet0nd7d" path="res://src/dados/comandos/cmd_end.gd" id="12_end"]
 
 [sub_resource type="Resource" id="Resource_jjusl"]
 script = ExtResource("3_fy88y")
@@ -23,12 +25,39 @@ script = ExtResource("8_4j1sn")
 [sub_resource type="Resource" id="Resource_nv25v"]
 script = ExtResource("3_fy88y")
 
+[sub_resource type="Resource" id="Resource_c_pocao"]
+script = ExtResource("6_4a26e")
+variavel = "missao01_pocao_feita"
+valor = 1.0
+
+[sub_resource type="Resource" id="Resource_if_pocao"]
+script = ExtResource("11_if")
+condicao = SubResource("Resource_c_pocao")
+
+[sub_resource type="Resource" id="Resource_c_guarda"]
+script = ExtResource("6_4a26e")
+variavel = "missao01_passou_guarda"
+
+[sub_resource type="Resource" id="Resource_if_guarda"]
+script = ExtResource("11_if")
+condicao = SubResource("Resource_c_guarda")
+
+[sub_resource type="Resource" id="Resource_msg_guarda"]
+script = ExtResource("7_a2amw")
+texto = "[BRUXA;bruxa_grande;0] Pronto. Agora é só dizer aos guardas que levo uma poção para a realeza."
+
+[sub_resource type="Resource" id="Resource_end1"]
+script = ExtResource("12_end")
+
+[sub_resource type="Resource" id="Resource_end2"]
+script = ExtResource("12_end")
+
 [sub_resource type="Resource" id="Resource_texnt"]
 script = ExtResource("1_bxe3x")
 sprite_frames = ExtResource("7_4a26e")
 area_pos = Vector2(0, -10)
 area_scale = Vector2(9, 36)
-comandos = Array[ExtResource("2_pipfk")]([SubResource("Resource_jjusl"), SubResource("Resource_a3djt"), SubResource("Resource_u2v5q"), SubResource("Resource_nv25v")])
+comandos = Array[ExtResource("2_pipfk")]([SubResource("Resource_jjusl"), SubResource("Resource_a3djt"), SubResource("Resource_u2v5q"), SubResource("Resource_nv25v"), SubResource("Resource_if_pocao"), SubResource("Resource_if_guarda"), SubResource("Resource_msg_guarda"), SubResource("Resource_end1"), SubResource("Resource_end2")])
 
 [resource]
 script = ExtResource("10_6wmrf")

@@ -1,6 +1,6 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://cni8h54vvqrak"]
 
-[ext_resource type="Texture2D" uid="uid://boqjr8p4jtefe" path="res://assets/e_musgo/musgo.png" id="1_wwabm"]
+[ext_resource type="Texture2D" uid="uid://boqjr8p4jtefe" path="res://assets/eventos/e_musgo/musgo.png" id="1_wwabm"]
 
 [resource]
 animations = [{

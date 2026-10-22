@@ -1,6 +1,6 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://dm0wu7vpqtyqg"]
 
-[ext_resource type="Texture2D" uid="uid://cdcejvwb2n6g6" path="res://assets/mapa_bruxa_in/bau.png" id="1_vrwr1"]
+[ext_resource type="Texture2D" uid="uid://xvro6h27qioh" path="res://assets/eventos/bau/bau.png" id="1_vrwr1"]
 
 [resource]
 animations = [{

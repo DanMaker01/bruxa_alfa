@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://bonejx17jr8ru"]
 
 [ext_resource type="Script" uid="uid://dsxujjugldv23" path="res://src/cena/mapa_base.gd" id="1_1lk5r"]
-[ext_resource type="Texture2D" uid="uid://dmhwg0bvlbddo" path="res://assets/mapa_bruxa_in/mapa_bruxa_in_fundo.png" id="2_1lk5r"]
-[ext_resource type="Texture2D" uid="uid://bfakk4vmiqolb" path="res://assets/mapa_bruxa_in/mapa_bruxa_in_frente.png" id="3_l44og"]
+[ext_resource type="Texture2D" uid="uid://dmhwg0bvlbddo" path="res://assets/mapa/mapa_bruxa_in/mapa_bruxa_in_fundo.png" id="2_1lk5r"]
+[ext_resource type="Texture2D" uid="uid://bfakk4vmiqolb" path="res://assets/mapa/mapa_bruxa_in/mapa_bruxa_in_frente.png" id="3_l44og"]
 [ext_resource type="Script" uid="uid://bjxlt3vqym72w" path="res://src/cena/evento_base.gd" id="4_iquun"]
 [ext_resource type="Resource" uid="uid://bgywscj5liwe5" path="res://dados/eventos/bruxa_in_auto.tres" id="ev_bruxa_in_auto"]
 [ext_resource type="Resource" uid="uid://b5d8vkh0ayaqn" path="res://dados/eventos/bruxa_in_bau.tres" id="ev_bruxa_in_bau"]
@@ -56,6 +56,7 @@ evento = ExtResource("ev_bruxa_in_caldeirao")
 
 [node name="Autostart" type="CharacterBody2D" parent="Eventos" unique_id=331970883]
 z_index = 3
+position = Vector2(48, 48)
 script = ExtResource("4_iquun")
 evento = ExtResource("ev_bruxa_in_auto")
 

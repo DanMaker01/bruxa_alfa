@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://d3ieobr1k1qcu"]
 
 [ext_resource type="Script" uid="uid://dsxujjugldv23" path="res://src/cena/mapa_base.gd" id="1_4bgty"]
-[ext_resource type="Texture2D" uid="uid://cnq3etyechy23" path="res://assets/mapa_cidadeA/mapa_cidadeA_fundo.png" id="2_4bgty"]
-[ext_resource type="Texture2D" uid="uid://b0vm76umpterx" path="res://assets/mapa_cidadeA/mapa_cidadeA_frente.png" id="3_c1d3n"]
-[ext_resource type="Texture2D" uid="uid://boo4wfpu172ha" path="res://assets/mapa_cidadeA/cidadeA_casa1.png" id="3_kgy4o"]
+[ext_resource type="Texture2D" uid="uid://cnq3etyechy23" path="res://assets/mapa/mapa_cidadeA/mapa_cidadeA_fundo.png" id="2_4bgty"]
+[ext_resource type="Texture2D" uid="uid://b0vm76umpterx" path="res://assets/mapa/mapa_cidadeA/mapa_cidadeA_frente.png" id="3_c1d3n"]
+[ext_resource type="Texture2D" uid="uid://boo4wfpu172ha" path="res://assets/eventos/casa/cidadeA_casa1.png" id="3_kgy4o"]
 [ext_resource type="Script" uid="uid://bjxlt3vqym72w" path="res://src/cena/evento_base.gd" id="4_ka47h"]
 [ext_resource type="Resource" uid="uid://b5ndemxtygux0" path="res://dados/eventos/bos_goblin.tres" id="ev_bos_goblin"]
 [ext_resource type="Resource" uid="uid://b15dthvgmkjey" path="res://dados/eventos/cidadeA_passagem1.tres" id="ev_cidadeA_passagem1"]

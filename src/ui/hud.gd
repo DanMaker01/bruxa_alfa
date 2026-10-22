@@ -39,6 +39,15 @@ var database = null
 var popup_instance = null
 
 # =============================================================================
+# ESCOLHER ITEM (CmdAplicarPocao): o inventário abre, tocar num item mostra um
+# botão de ação no popup; "Desistir" cancela. Resultado no sinal item_escolhido.
+# =============================================================================
+signal item_escolhido(id: String)   # "" = desistiu
+var _escolha_texto: String = ""
+var _escolha_ativo_antes: bool = true
+var _botao_desistir: Button
+
+# =============================================================================
 # CICLO DE VIDA
 # =============================================================================
 
@@ -290,6 +299,38 @@ func _on_item_button_pressed(item_name: String):
 	var area = Rect2(0, 0, screen_size.x, POPUP_AREA_BOTTOM)
 	carta_inventario.segurar = true   # não desvira com o popup aberto
 	popup_instance.show_item(titulo, item_data, quantity, anchor, area)
+	if _escolha_texto != "":
+		popup_instance.mostrar_acao(_escolha_texto, _terminar_escolha.bind(item_name))
+
+## Abre o inventário para escolher um item. texto_botao: ação no popup (ex.: "Aplicar poção").
+func escolher_item(texto_botao: String) -> void:
+	_escolha_texto = texto_botao
+	_escolha_ativo_antes = carta_inventario.ativa
+	set_ativo(true)
+	carta_inventario.abrir()
+	carta_inventario.segurar = true
+	if _botao_desistir == null:
+		_botao_desistir = Button.new()
+		_botao_desistir.text = "Desistir"
+		_botao_desistir.add_theme_font_size_override("font_size", 24)
+		_botao_desistir.size = Vector2(180, 56)
+		_botao_desistir.pressed.connect(func(): _terminar_escolha(""))
+		add_child(_botao_desistir)
+	_botao_desistir.position = Vector2((get_viewport().get_visible_rect().size.x - 180.0) * 0.5, POPUP_AREA_BOTTOM - 70.0)
+	_botao_desistir.visible = true
+
+func _terminar_escolha(id: String) -> void:
+	if _escolha_texto == "":
+		return
+	_escolha_texto = ""
+	if _botao_desistir:
+		_botao_desistir.visible = false
+	if popup_instance and popup_instance.visible:
+		popup_instance.hide_item()
+	carta_inventario.segurar = false
+	carta_inventario.fechar()
+	set_ativo(_escolha_ativo_antes)
+	item_escolhido.emit(id)
 
 func _on_linha_tocada(linha: Control) -> void:
 	if linha.has_meta("item"):
@@ -299,7 +340,7 @@ func _on_popup_closed():
 	"""Fecha o popup"""
 	if popup_instance:
 		popup_instance.visible = false
-	carta_inventario.segurar = false
+	carta_inventario.segurar = _escolha_texto != ""   # escolhendo item: o inventário fica aberto
 
 # =============================================================================
 # STATUS

@@ -1,14 +1,13 @@
 [gd_scene format=3 uid="uid://bsddwahnqp28i"]
 
 [ext_resource type="Script" uid="uid://boos1upi7c7fn" path="res://src/ui/hud.gd" id="1_oo0fn"]
-[ext_resource type="Script" path="res://src/ui/carta.gd" id="2_carta"]
-[ext_resource type="Script" path="res://src/ui/pentagrama_verso.gd" id="6_penta_verso"]
+[ext_resource type="Script" uid="uid://bsqlrolg2y4yy" path="res://src/ui/carta.gd" id="2_carta"]
 [ext_resource type="PackedScene" uid="uid://c2hpmhdnt43qb" path="res://scenes/status.tscn" id="3_5ysmq"]
-[ext_resource type="Texture2D" uid="uid://b8g17f8odkjvu" path="res://assets/game_ui/hud_frame2.png" id="4_6fi6k"]
-[ext_resource type="Texture2D" uid="uid://cr1ab2huesgjk" path="res://assets/game_ui/pentagrama.png" id="5_penta"]
-[ext_resource type="Script" path="res://src/ui/lista_rolavel.gd" id="7_lista"]
+[ext_resource type="Texture2D" uid="uid://b8g17f8odkjvu" path="res://assets/ui/hud_frame2.png" id="4_6fi6k"]
+[ext_resource type="Script" uid="uid://bos74dewdq3ix" path="res://src/ui/pentagrama_verso.gd" id="6_penta_verso"]
+[ext_resource type="Script" uid="uid://d3rgd1vdjsoeo" path="res://src/ui/lista_rolavel.gd" id="7_lista"]
 
-[node name="HUD" type="Control"]
+[node name="HUD" type="Control" unique_id=1974108429]
 z_index = 20
 layout_mode = 3
 anchors_preset = 15
@@ -21,7 +20,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_oo0fn")
 
-[node name="FundoHUD" type="ColorRect" parent="."]
+[node name="FundoHUD" type="ColorRect" parent="." unique_id=1341102063]
 layout_mode = 0
 offset_top = 640.0
 offset_right = 640.0
@@ -29,43 +28,47 @@ offset_bottom = 960.0
 mouse_filter = 2
 color = Color(0.29965127, 0.29965127, 0.29965127, 1)
 
-[node name="CartaInventario" type="Control" parent="."]
-layout_mode = 0
+[node name="CartaInventario" type="Control" parent="." unique_id=308677492]
+anchors_preset = 0
 offset_top = 640.0
 offset_right = 384.0
 offset_bottom = 960.0
 mouse_filter = 2
 script = ExtResource("2_carta")
-face_aberta = "Inventario"
-face_prioridade = "Dialogo"
 
-[node name="Fundo" type="ColorRect" parent="CartaInventario"]
+[node name="Fundo" type="ColorRect" parent="CartaInventario" unique_id=2070938351]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 color = Color(0.1, 0.1, 0.15, 1)
 
-[node name="Verso" type="Control" parent="CartaInventario"]
+[node name="Verso" type="Control" parent="CartaInventario" unique_id=1734112217]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 
-[node name="Simbolo" type="Control" parent="CartaInventario/Verso"]
+[node name="Simbolo" type="Control" parent="CartaInventario/Verso" unique_id=583956842]
 z_index = 2
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("6_penta_verso")
 raio_rel = 0.28
 giro_graus_s = 1.0
 
-[node name="Titulo" type="Label" parent="CartaInventario/Verso"]
+[node name="Titulo" type="Label" parent="CartaInventario/Verso" unique_id=830864844]
 modulate = Color(1, 1, 1, 0.6)
 layout_mode = 1
 anchors_preset = 12
@@ -74,20 +77,24 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = -96.0
 offset_bottom = -56.0
+grow_horizontal = 2
+grow_vertical = 0
 theme_override_font_sizes/font_size = 24
 text = "Inventário"
 horizontal_alignment = 1
 
-[node name="Inventario" type="Control" parent="CartaInventario"]
+[node name="Inventario" type="Control" parent="CartaInventario" unique_id=764623393]
 visible = false
 z_index = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="CartaInventario/Inventario"]
+[node name="MarginContainer" type="MarginContainer" parent="CartaInventario/Inventario" unique_id=1934364564]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -96,37 +103,43 @@ offset_left = 20.0
 offset_top = 20.0
 offset_right = -20.0
 offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="CartaInventario/Inventario/MarginContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="CartaInventario/Inventario/MarginContainer" unique_id=850640858]
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("7_lista")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CartaInventario/Inventario/MarginContainer/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CartaInventario/Inventario/MarginContainer/ScrollContainer" unique_id=987932550]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Dialogo" type="Control" parent="CartaInventario"]
+[node name="Dialogo" type="Control" parent="CartaInventario" unique_id=352327378]
 visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 
-[node name="Moldura" type="TextureRect" parent="CartaInventario"]
+[node name="Moldura" type="TextureRect" parent="CartaInventario" unique_id=1765652420]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("4_6fi6k")
 expand_mode = 1
 
-[node name="CartaStatus" type="Control" parent="."]
-layout_mode = 0
+[node name="CartaStatus" type="Control" parent="." unique_id=1799679284]
+anchors_preset = 0
 offset_left = 384.0
 offset_top = 640.0
 offset_right = 640.0
@@ -136,33 +149,39 @@ script = ExtResource("2_carta")
 face_aberta = "Status"
 face_prioridade = "Opcoes"
 
-[node name="Fundo" type="ColorRect" parent="CartaStatus"]
+[node name="Fundo" type="ColorRect" parent="CartaStatus" unique_id=136116851]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 color = Color(0.1, 0.1, 0.15, 1)
 
-[node name="Verso" type="Control" parent="CartaStatus"]
+[node name="Verso" type="Control" parent="CartaStatus" unique_id=221661226]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 
-[node name="Simbolo" type="Control" parent="CartaStatus/Verso"]
+[node name="Simbolo" type="Control" parent="CartaStatus/Verso" unique_id=299203275]
 z_index = 2
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("6_penta_verso")
 raio_rel = 0.28
 giro_graus_s = 1.0
 
-[node name="Titulo" type="Label" parent="CartaStatus/Verso"]
+[node name="Titulo" type="Label" parent="CartaStatus/Verso" unique_id=384082724]
 modulate = Color(1, 1, 1, 0.6)
 layout_mode = 1
 anchors_preset = 12
@@ -171,38 +190,46 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = -96.0
 offset_bottom = -56.0
+grow_horizontal = 2
+grow_vertical = 0
 theme_override_font_sizes/font_size = 24
 text = "Status"
 horizontal_alignment = 1
 
-[node name="Status" type="Control" parent="CartaStatus"]
+[node name="Status" type="Control" parent="CartaStatus" unique_id=1999693064]
 visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 
-[node name="Status" parent="CartaStatus/Status" instance=ExtResource("3_5ysmq")]
+[node name="Status" parent="CartaStatus/Status" unique_id=431661772 instance=ExtResource("3_5ysmq")]
 layout_mode = 1
 offset_left = -3.0
 offset_top = 28.0
 offset_right = -259.0
 offset_bottom = -292.0
 
-[node name="Opcoes" type="Control" parent="CartaStatus"]
+[node name="Opcoes" type="Control" parent="CartaStatus" unique_id=538485299]
 visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 
-[node name="Moldura" type="TextureRect" parent="CartaStatus"]
+[node name="Moldura" type="TextureRect" parent="CartaStatus" unique_id=1410911598]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("4_6fi6k")
 expand_mode = 1

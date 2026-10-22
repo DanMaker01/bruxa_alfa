@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://cqry5b20h72r7"]
 
 [ext_resource type="Script" uid="uid://dsxujjugldv23" path="res://src/cena/mapa_base.gd" id="1_7tbou"]
-[ext_resource type="Texture2D" uid="uid://cargpfi3dh2wk" path="res://assets/mapa_bosque/mapa_bosque_fundo.png" id="1_lucx4"]
-[ext_resource type="Texture2D" uid="uid://lkxqmoprwx4" path="res://assets/mapa_bosque/mapa_bosque_frente.png" id="2_be1d2"]
+[ext_resource type="Texture2D" uid="uid://cargpfi3dh2wk" path="res://assets/mapa/mapa_bosque/mapa_bosque_fundo.png" id="1_lucx4"]
+[ext_resource type="Texture2D" uid="uid://lkxqmoprwx4" path="res://assets/mapa/mapa_bosque/mapa_bosque_frente.png" id="2_be1d2"]
 [ext_resource type="Script" uid="uid://bjxlt3vqym72w" path="res://src/cena/evento_base.gd" id="3_ofmjg"]
 [ext_resource type="Script" uid="uid://ci10r4ypiyt11" path="res://src/cena/area_spawn.gd" id="area_spawn"]
 [ext_resource type="Resource" uid="uid://ce10d2m4o0epu" path="res://dados/eventos/bosque_passagem1.tres" id="ev_bosque_passagem1"]
@@ -56,6 +56,6 @@ z_index = 3
 position = Vector2(1344, 608)
 script = ExtResource("area_spawn")
 evento = ExtResource("ev_spawn_cogumelo")
-largura = 700.0
 quantidade = 1
+largura = 700.0
 cooldown = 10.0

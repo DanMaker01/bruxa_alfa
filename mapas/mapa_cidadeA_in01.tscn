@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://bnjb2yq252740"]
 
 [ext_resource type="Script" uid="uid://dsxujjugldv23" path="res://src/cena/mapa_base.gd" id="1_0hpv6"]
-[ext_resource type="Texture2D" uid="uid://b18t7bhpqpfqr" path="res://assets/mapa_cidadeA_in01/mapa_cidadeA_in01_fundo.png" id="2_cdd6b"]
-[ext_resource type="Texture2D" uid="uid://c8mku7q0rsfey" path="res://assets/mapa_cidadeA_in01/mapa_cidadeA_in01_frente.png" id="2_ubx4i"]
+[ext_resource type="Texture2D" uid="uid://b18t7bhpqpfqr" path="res://assets/mapa/mapa_cidadeA_in01/mapa_cidadeA_in01_fundo.png" id="2_cdd6b"]
+[ext_resource type="Texture2D" uid="uid://c8mku7q0rsfey" path="res://assets/mapa/mapa_cidadeA_in01/mapa_cidadeA_in01_frente.png" id="2_ubx4i"]
 [ext_resource type="Script" uid="uid://bjxlt3vqym72w" path="res://src/cena/evento_base.gd" id="5_vbqe2"]
 [ext_resource type="Resource" path="res://dados/eventos/cidadeA_in01_maca.tres" id="ev_cidadeA_in01_maca"]
 [ext_resource type="Resource" path="res://dados/eventos/cidadeA_in01_passagem.tres" id="ev_cidadeA_in01_passagem"]

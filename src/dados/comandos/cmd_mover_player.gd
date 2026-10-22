@@ -56,7 +56,11 @@ func executar(interp, ev) -> int:
 ## Espera o InputManager terminar (chegou, travou ou foi cancelado), vira e libera o evento.
 func _acompanhar(interp, ev, im, player) -> void:
 	var tree = interp.get_tree()
-	await tree.process_frame
+	# espera o movimento COMEÇAR (pode levar alguns frames) antes de esperar ele acabar
+	var t := 0.0
+	while is_instance_valid(im) and not im.is_moving and t < 0.5:
+		await tree.process_frame
+		t += tree.root.get_process_delta_time()
 	while is_instance_valid(im) and im.is_moving:
 		await tree.process_frame
 	if is_instance_valid(player) and direcao_final != DirecaoFinal.MANTER and player.has_method("virar"):

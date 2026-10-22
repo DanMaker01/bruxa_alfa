@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ItemData" format=3]
 
-[ext_resource type="Texture2D" path="res://assets/itens_icones/item_b.png" id="2_ic"]
+[ext_resource type="Texture2D" path="res://assets/icones/item_musgo.png" id="2_ic"]
 [ext_resource type="Script" uid="uid://b6ahlah4mhwps" path="res://src/dados/item_data.gd" id="1_item"]
 
 [resource]

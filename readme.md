@@ -41,7 +41,6 @@ EstradaB
 
 [.] v3
 [.] Sprite placeholder de:
-[.]		Campones, foto
 [.]		Guarda1, foto
 [.]		Guarda2, foto
 [?]	balancear itens e preparo. 4 primeiros ingredientes oficiais: erva, cogumelo, flor-de-farra, musgo-do-recato. Baú dá 15 de cada.
@@ -49,36 +48,43 @@ EstradaB
 		Receita ideal (~60 s): acende → erva com água morna (~8 s) → cozinha até ~40 s → ~1 clique/s até chama BRANCA (~120 °C) → cogumelo (~48–50 s) → frita ~10 s → termina. Perfeito → Poção da Calma Profunda (só N cai, 0,93).
 		2ª receita (E): Flor-de-farra (E +20%, mas C −5%, A −6% e N +5% de E) em INFUSÃO 75–95 °C (ferver estraga), m2400 (~30 s a 85 °C), t 20–70 s.
 		  Musgo-do-recato (compensa C, A e N) entra POR ÚLTIMO: sem cozimento, t 2–12 s. → Poção da Desenvoltura: só E +20%.
-		  Ícones item_a (flor) / item_b (musgo). Coleta: castelo_out — flor 2 áreas (1 cada, cooldown 50 s), musgo 3 (cooldown 15 s); musgo 1 à direita do guarda da ponte e 1 à esquerda do guarda da estradaB (15 s). Ajustar posições/altura no editor.
+[ ]	Renomear direito. 
+		  Ícones item_a (flor) / item_b (musgo). Coleta: castelo_out — flor 2 áreas (1 cada, cooldown 50 s), musgo 2 (cooldown 15 s); musgo 1 à direita do guarda da ponte e 1 à esquerda do guarda da estradaB (15 s). Ajustar posições/altura no editor.
 
+
+[.] Caldeirão/Preparo:
+[?]		Abafar usa CONST_C = 20 por passo de 0,3 s (CONST_A só para o clique). Calibrar CONST_C.
+[.]		Quase apagando (F < F_LIMIT_MIN + 80): fumaça contínua saindo da lenha e a bruxa avisa ("O fogo tá morrendo!").Quando o fogo inicia dá aviso de perto do F_LIMIT_MIN, mas quando acaba de iniciar não faz sentido avisar isso.
 
 [ ] Cena de poção preparada:
-[.]		Layout: Definir localização das janelas e informações. 
+[.]		Layout: Definir localização das janelas e informações. Tentar fazer em 2 colunas, a poção, pentagram e matriz de um lado, do outro lado a lista de ingredientes.
 [?]			revisar como mostrar os valores fora das diagonais.  (toque na célula da grade: balão "C → N −3%")
 [.]			Anotar o tempo e temperatura no momento que cada item entrou nos itens. quero não só número, mas uma representação visual útil.
 [?]			Gostei do grafico. Mas a receita começa quando o primeiro ingrediente entra. (gráfico vai da entrada do 1º ingrediente ao fim; tempos contados a partir dela)
-[?]			Uma curva só T(t), grande: ela se desenha e fica em foco (o resto apagadinho); depois a área (∫T dt) de cada ingrediente sai de trás dela, um por um, e desce até a linha dele.
+[!]			Uma curva só T(t), grande: ela se desenha e fica em foco (o resto apagadinho); depois a área (∫T dt) de cada ingrediente sai de trás dela, um por um, e desce até a linha dele.
 [.]		Nomear as poções de referência no catálogo (PocaoReferencia: nome, descrição, A)
-
+[?]			As poções nomeadas não devem ficar salvas no user, e sim salvas no GameTemp, valem só para aquela secção. (GameTemp.pocoes_nomeadas)
 
 
 [ ] História / missão: (em ordem)
-[.]		Camponês bate na porta (TOC! TOC! TOC!), opção Deixar entrar / Ignorar. Ele pede ajuda para a irmã que vai casar → Poção da Calma Profunda. Guardas ainda não deixam passar.
+[!]		Camponês bate na porta (TOC! TOC! TOC!), opção Deixar entrar / Ignorar. Ele pede ajuda para a irmã que vai casar → Poção da Calma Profunda. Guardas ainda não deixam passar.
 [.]			Corrigir fala: "E uma folha que posso , onde as árvores acabam." (bruxa_in_auto / bruxa_in_passagem). ("depoisé" já corrigido)
-					A Bruxa diz que o cogumelo cresce "onde a floresta acaba", mas ele está na estradaA.
-					Feito: agora "E uma erva que posso pegar no fim da floresta." e "Um cogumelo que cresce na beira da estrada, depois da cidade."
-[.]			fazer área de spawn de evento no fim da floresta, outro na estradaA. Fazer farm com qtd na tela. (3 cogu, 3 erva) 
-					Hoje: 1 cogumelo (estradaA) + 1 erva (floresta), coleta única por variável. Fazer o spawn de eventos, nas páginas vai ter uma também uma nova condição de self-variable, valores 0 e 1; e no interprete quero um comando de ativar/desativar self-variable de um evento.
-					Feito: self-variables A/B/C/D por nó de evento (GameTemp.self_vars). Condição tipo "self" (páginas, if, while). Comando CmdSelfVar (vazio = este evento).
-					AreaSpawn (src/cena/area_spawn.gd): no máximo N cópias de um EventoData numa faixa; posições e cooldowns salvos no GameTemp (voltar ao mapa = mesmas posições); coletou 1 (self A = 1) → após o cooldown (s) renasce num ponto qualquer da faixa, com efeito de brilho. estradaA: AreaCogumelo (3x spawn_cogumelo), floresta: AreaErva (3x spawn_erva).
-					Ajustar no editor: posição/largura das áreas. estradaA_cogumelo.tres e floresta_erva.tres ficaram sem uso (apagar).
+[]		AreaSpawn (src/cena/area_spawn.gd): no máximo N cópias de um EventoData numa faixa; posições e cooldowns salvos no GameTemp (voltar ao mapa = mesmas posições); coletou 1 (self A = 1) → após o cooldown (s) renasce num ponto qualquer da faixa (de preferência longe de onde foi coletado), com efeito de brilho. 
 [.]			A bruxa diz quais & qtos itens tem que pegar e libera controle na primeira missão.
-					Evento bruxa_in_caldeirao agora tem um texto simples da bruxa (tutorial depois do Cap. 1).
-[.]			após criar, vem cena NPC, basta ir no castelo, guardas deixam passar agora.
-					Feito: criar qualquer poção (ControlePreparo) → missao01_pocao_feita = 1 → ponte_guarda e estradaB_guarda ganham página 2 (passável, "Pode passar."). Falta a cena do NPC.
-					ponte_guarda e estradaB_guarda só bloqueiam, sem condição.
-[ ]			finalização, entrega poção e resultados possíveis.
-					castelo_in só tem a passagem.
+[.]			Guardas (clique): "Trouxe a poção?" Sim + missao01_pocao_feita = 1 → missao01_passou_guarda = 1 → os dois guardas deixam passar e mudam a fala. Trouxe a poção é muito direto, quero mais diálogo.
+[?]			finalização, entrega poção e resultados possíveis.
+					castelo_in: Rei, Princesa (sprites provisórios: animacoes/rei.tres e princesa.tres) e CenaRei (automático).
+					1ª vez que entra (castelo_conversou = 0): cena automática (castelo_in_auto), a bruxa anda até x 700 (o diálogo só começa quando ela chega), diálogo; poção vai funcionar? sim / talvez / não (desculpa).
+					Todos os caminhos terminam no label "end": castelo_conversou = 1 e destrava a bruxa. Página 2 do castelo_in_auto (castelo_conversou == 1, vazia) impede o loop.
+					Pausas curtas (CmdEsperar 0,3–1 s) depois do movimento, entre blocos de diálogo e depois do efeito da poção.
+					Depois: anda livre no castelo; clicar no rei ou na princesa → o rei fala e volta a tentativa.
+					Sim/talvez → aplicar na princesa? aceitar → abre o inventário, toca no item → "Aplicar poção" (CmdAplicarPocao: personalidade = A · p, item sai, efeito mágico). "Desistir" ou recusar → pode voltar depois.
+					Princesa (dados/personalidades/princesa.tres): O5 C5 E4 A6 N8.
+					missao1_resultado: 0 não entregou · 1 bom (N < 4 e outros traços mudaram ≤ 2) · 2 calma, mas mudou outros traços > 2 · 3 pouco efeito (4 ≤ N ≤ 8) · 4 piorou (N > 8).
+					CmdMedirMudanca guarda em missao01_desvio a maior mudança em O, C, E, A.
+[ ]				Balancear depois: Calma Profunda (talvez ~4 cogumelos + 4 ervas) para baixar bem o N numa poção só; rever o critério N < 4 (8 → 4 é muito).
+[ ]				Reações diferentes da princesa/rei para cada resultado (hoje só "Eu... me sinto diferente." e "Veremos no casamento.").
+[ ]				Ajustar no editor: posição do Rei, Princesa e o X onde a bruxa para (Rei x 848, Princesa x 1008, bruxa para em x 700). Sprites finais do rei e da princesa.
 ```
 
 ## Terminar até o Cap. 1 (1)
@@ -86,6 +92,7 @@ EstradaB
 ```
 
 [ ] Bugs/Revisão:
+[?]		CmdMoverPlayer liberava o evento antes do movimento começar (diálogo aparecia com a bruxa andando). Agora espera começar (até 0,5 s) e depois terminar.
 [?]		Camera trava quando chega num canto de tela mas o parallax não deve travar, senão dá uma sensação ruim de impacto quando chega perto de um canto de tela.
 			Feito: camera_2d.gd lê limit_left/right e usa borda suave (BORDA_SUAVE 200 px, aproximação exponencial). Vale para todos os mapas.
 			CamadaParallax (src/cena/camada_parallax.gd, Parallax2D): textura, fator (0 céu parado, 1 mapa, >1 frente), loop_x, pan (px/s), deslocamento. Ponte: nuvens (Fundo3) convertidas. Converter as outras camadas/mapas aos poucos.
@@ -95,7 +102,8 @@ EstradaB
 			Label já existe; agora o painel começa escondido e uma notificação nova não é mais apagada pelo timer da anterior.
 [?]		Segurar o botão de poção para sair agora é 0,7 s (TEMPO_LONGO)
 [ ]		Tutorial do caldeirão na 1ª vez.
-
+[ ]		Um card depois do outro se ativer os 2. (primeiro inventário depois status). se ativar só um, só aparece ele.
+[ ]		Fazer faces tbm terem seu .tres
 
 [ ]	Escrita/Estilo:
 [ ]		Diálogos devem condizer com a época

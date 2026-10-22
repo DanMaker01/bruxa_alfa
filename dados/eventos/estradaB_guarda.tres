@@ -1,57 +1,113 @@
 [gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://brxbmftv5ps6n"]
 
-[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="1_n2758"]
-[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_yjafp"]
-[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="3_lj3un"]
-[ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="4_ge1fr"]
-[ext_resource type="SpriteFrames" uid="uid://c5yjbbworwu" path="res://animacoes/guarda02.tres" id="5_jiap1"]
-[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="5_yjafp"]
-[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="6_32dyt"]
+[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="1_x"]
+[ext_resource type="Script" uid="uid://btdlgkphiqan1" path="res://src/dados/comandos/cmd_mostrar_opcoes.gd" id="2_x"]
+[ext_resource type="Script" uid="uid://crwb7mjauibuo" path="res://src/dados/comandos/cmd_label.gd" id="3_x"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="4_x"]
+[ext_resource type="Script" uid="uid://cwdgcnn30o052" path="res://src/dados/comandos/cmd_if.gd" id="5_x"]
+[ext_resource type="Script" uid="uid://bercma7w4moqu" path="res://src/dados/comandos/cmd_mudar_var.gd" id="6_x"]
+[ext_resource type="Script" uid="uid://b2vy54pculhyg" path="res://src/dados/comandos/cmd_else.gd" id="7_x"]
+[ext_resource type="Script" uid="uid://phmwdet0nd7d" path="res://src/dados/comandos/cmd_end.gd" id="8_x"]
+[ext_resource type="Script" uid="uid://b3yty8028fcf2" path="res://src/dados/comandos/cmd_goto.gd" id="9_x"]
+[ext_resource type="SpriteFrames" uid="uid://c5yjbbworwu" path="res://animacoes/guarda02.tres" id="10_x"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="11_x"]
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="12_x"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="13_x"]
 
-[sub_resource type="Resource" id="Resource_26t8c"]
-script = ExtResource("3_lj3un")
-texto = "[GUARDA;face_base;100] Somente os conhecidos da realeza podem passar por aqui. "
+[sub_resource type="Resource" id="R_1"]
+script = ExtResource("1_x")
+texto = "[GUARDA;guarda2;100] Alto! Só passa por aqui quem tem assunto com a realeza."
 
-[sub_resource type="Resource" id="Resource_bifsd"]
-script = ExtResource("3_lj3un")
-texto = "[GUARDA;face_base;100] São ordens do Rei. "
+[sub_resource type="Resource" id="R_2"]
+script = ExtResource("2_x")
+pergunta = "[GUARDA;guarda2;100] Trouxe a poção?"
+opcoes = Array[String](["Sim, trago uma poção para a realeza.", "Não."])
+labels = Array[String](["sim", "nao"])
 
-[sub_resource type="Resource" id="Resource_g5u7y"]
-script = ExtResource("4_ge1fr")
-segundos = 0.5
+[sub_resource type="Resource" id="R_3"]
+script = ExtResource("3_x")
+nome = "sim"
 
-[sub_resource type="Resource" id="Resource_thguq"]
-script = ExtResource("3_lj3un")
-texto = "[BRUXA;bruxa_grande;0] Aff. "
-
-[sub_resource type="Resource" id="Resource_tycrd"]
-script = ExtResource("1_n2758")
-passavel = false
-sprite_frames = ExtResource("5_jiap1")
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
-comandos = Array[ExtResource("2_yjafp")]([SubResource("Resource_26t8c"), SubResource("Resource_bifsd"), SubResource("Resource_g5u7y"), SubResource("Resource_thguq")])
-
-[sub_resource type="Resource" id="Resource_libera_msg"]
-script = ExtResource("3_lj3un")
-texto = "[GUARDA;face_base;100] Ah, a bruxa da poção. Pode passar. "
-
-[sub_resource type="Resource" id="Resource_libera_cond"]
-script = ExtResource("5_yjafp")
+[sub_resource type="Resource" id="R_4"]
+script = ExtResource("4_x")
 variavel = "missao01_pocao_feita"
 valor = 1.0
 
-[sub_resource type="Resource" id="Resource_libera_pag"]
-script = ExtResource("1_n2758")
-condicoes = Array[ExtResource("5_yjafp")]([SubResource("Resource_libera_cond")])
-sprite_frames = ExtResource("5_jiap1")
+[sub_resource type="Resource" id="R_5"]
+script = ExtResource("5_x")
+condicao = SubResource("R_4")
+
+[sub_resource type="Resource" id="R_6"]
+script = ExtResource("1_x")
+texto = "[GUARDA;guarda2;100] Hm. Então pode passar, bruxa. O castelo fica logo adiante."
+
+[sub_resource type="Resource" id="R_7"]
+script = ExtResource("6_x")
+variavel = "missao01_passou_guarda"
+valor = 1.0
+
+[sub_resource type="Resource" id="R_8"]
+script = ExtResource("7_x")
+
+[sub_resource type="Resource" id="R_9"]
+script = ExtResource("1_x")
+texto = "[GUARDA;guarda2;100] Não vejo poção nenhuma aí. Volte quando tiver uma."
+
+[sub_resource type="Resource" id="R_10"]
+script = ExtResource("1_x")
+texto = "[BRUXA;bruxa_grande;0] Aff."
+
+[sub_resource type="Resource" id="R_11"]
+script = ExtResource("8_x")
+
+[sub_resource type="Resource" id="R_12"]
+script = ExtResource("9_x")
+label = "fim"
+
+[sub_resource type="Resource" id="R_13"]
+script = ExtResource("3_x")
+nome = "nao"
+
+[sub_resource type="Resource" id="R_14"]
+script = ExtResource("1_x")
+texto = "[GUARDA;guarda2;100] Então dê meia-volta. São ordens do Rei."
+
+[sub_resource type="Resource" id="R_15"]
+script = ExtResource("1_x")
+texto = "[BRUXA;bruxa_grande;0] Aff."
+
+[sub_resource type="Resource" id="R_16"]
+script = ExtResource("3_x")
+nome = "fim"
+
+[sub_resource type="Resource" id="R_17"]
+script = ExtResource("12_x")
+passavel = false
+sprite_frames = ExtResource("10_x")
 colisao_scale = Vector2(9, 20.25)
 area_pos = Vector2(0, -10)
 area_scale = Vector2(16, 20.25)
-comandos = Array[ExtResource("2_yjafp")]([SubResource("Resource_libera_msg")])
+comandos = Array[ExtResource("11_x")]([SubResource("R_1"), SubResource("R_2"), SubResource("R_3"), SubResource("R_5"), SubResource("R_6"), SubResource("R_7"), SubResource("R_8"), SubResource("R_9"), SubResource("R_10"), SubResource("R_11"), SubResource("R_12"), SubResource("R_13"), SubResource("R_14"), SubResource("R_15"), SubResource("R_16")])
+
+[sub_resource type="Resource" id="R_19"]
+script = ExtResource("1_x")
+texto = "[GUARDA;guarda2;100] Pode passar, bruxa. O Rei a espera."
+
+[sub_resource type="Resource" id="R_18"]
+script = ExtResource("4_x")
+variavel = "missao01_passou_guarda"
+valor = 1.0
+
+[sub_resource type="Resource" id="R_20"]
+script = ExtResource("12_x")
+condicoes = Array[ExtResource("4_x")]([SubResource("R_18")])
+sprite_frames = ExtResource("10_x")
+colisao_scale = Vector2(9, 20.25)
+area_pos = Vector2(0, -10)
+area_scale = Vector2(16, 20.25)
+comandos = Array[ExtResource("11_x")]([SubResource("R_19")])
 
 [resource]
-script = ExtResource("6_32dyt")
+script = ExtResource("13_x")
 id = "estradaB_guarda"
-paginas = Array[ExtResource("1_n2758")]([SubResource("Resource_tycrd"), SubResource("Resource_libera_pag")])
+paginas = Array[ExtResource("12_x")]([SubResource("R_17"), SubResource("R_20")])

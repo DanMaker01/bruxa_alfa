@@ -22,6 +22,10 @@ const SCREEN_MARGIN: float = 10.0  # Distância mínima da borda da tela
 
 var _show_token: int = 0  # evita que dois show_item seguidos se atropelem
 
+# ===== BOTÃO DE AÇÃO (ex.: "Aplicar poção"), só quando alguém pede =====
+var _botao_acao: Button
+var _acao: Callable
+
 # ===== MATRIZ (pentágono O-C-E-A-N + grade 5x5), criados por código =====
 const TAM_PENTAGONO := Vector2(210, 190)
 const TAM_GRADE := Vector2(130, 130)
@@ -36,8 +40,30 @@ func _ready():
     if close_button:
         close_button.pressed.connect(_on_close_pressed)
     _criar_matriz()
+    _criar_botao_acao()
     
     visible = false
+
+func _criar_botao_acao():
+    _botao_acao = Button.new()
+    _botao_acao.visible = false
+    _botao_acao.add_theme_font_size_override("font_size", 24)
+    _botao_acao.pressed.connect(func():
+        var acao := _acao
+        hide_item()
+        if acao.is_valid():
+            acao.call())
+    if close_button:
+        vbox.add_child(_botao_acao)
+        vbox.move_child(_botao_acao, close_button.get_index())
+
+## Mostra um botão extra no popup aberto (chame logo depois de show_item).
+func mostrar_acao(texto: String, acao: Callable):
+    if not _botao_acao:
+        return
+    _botao_acao.text = texto
+    _acao = acao
+    _botao_acao.visible = true
 
 func _setup_ui():
     """Configura a aparência do popup"""
@@ -61,6 +87,9 @@ func show_item(item_name: String, item_data: Dictionary, quantity: int, anchor =
     area: retângulo onde o popup deve caber inteiro (padrão: tela toda)."""
     _show_token += 1
     var my_token = _show_token
+    if _botao_acao:
+        _botao_acao.visible = false   # só aparece se pedirem (mostrar_acao)
+        _acao = Callable()
 
     # 🔥 ATUALIZA OS LABELS
     if title_label:

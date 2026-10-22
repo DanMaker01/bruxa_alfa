@@ -1,0 +1,349 @@
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://bv45cvnmq1w5i"]
+
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="1_x"]
+[ext_resource type="SpriteFrames" path="res://animacoes/princesa.tres" id="2_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/comando.gd" id="3_x"]
+[ext_resource type="Script" path="res://src/dados/pagina_data.gd" id="4_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_player.gd" id="5_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_esperar.gd" id="6_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_mostrar_opcoes.gd" id="7_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_label.gd" id="8_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_goto.gd" id="9_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_aplicar_pocao.gd" id="10_x"]
+[ext_resource type="Script" path="res://src/dados/condicao.gd" id="11_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_if.gd" id="12_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_end.gd" id="13_x"]
+[ext_resource type="Resource" path="res://dados/personalidades/princesa.tres" id="14_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_medir_mudanca.gd" id="15_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_mudar_var.gd" id="16_x"]
+[ext_resource type="Script" path="res://src/dados/evento_data.gd" id="17_x"]
+
+[sub_resource type="Resource" id="R_1"]
+script = ExtResource("1_x")
+texto = "[PRINCESA;princesa;100] Desculpe... não consigo pensar em nada além do casamento."
+
+[sub_resource type="Resource" id="R_2"]
+script = ExtResource("4_x")
+passavel = false
+sprite_frames = ExtResource("2_x")
+colisao_scale = Vector2(9, 20.25)
+area_pos = Vector2(0, -10)
+area_scale = Vector2(16, 20.25)
+comandos = Array[ExtResource("3_x")]([SubResource("R_1")])
+
+[sub_resource type="Resource" id="R_3"]
+script = ExtResource("5_x")
+acao = 0
+
+[sub_resource type="Resource" id="R_4"]
+script = ExtResource("1_x")
+texto = "[PRINCESA;princesa;100] Pai! A bruxa voltou."
+
+[sub_resource type="Resource" id="R_5"]
+script = ExtResource("6_x")
+segundos = 0.3
+
+[sub_resource type="Resource" id="R_6"]
+script = ExtResource("1_x")
+texto = "[REI;rei;100] Hmpf. Voltou, bruxa."
+
+[sub_resource type="Resource" id="R_7"]
+script = ExtResource("6_x")
+segundos = 0.3
+
+[sub_resource type="Resource" id="R_8"]
+script = ExtResource("7_x")
+pergunta = "[REI;rei;100] E então? Essa poção vai funcionar?"
+opcoes = Array[String](["Vai funcionar, Majestade.", "Acredito que sim...", "Não... ainda não."])
+labels = Array[String](["sim", "talvez", "nao"])
+
+[sub_resource type="Resource" id="R_9"]
+script = ExtResource("8_x")
+nome = "sim"
+
+[sub_resource type="Resource" id="R_10"]
+script = ExtResource("6_x")
+segundos = 0.3
+
+[sub_resource type="Resource" id="R_11"]
+script = ExtResource("1_x")
+texto = "[REI;rei;100] Tanta certeza assim? Veremos."
+
+[sub_resource type="Resource" id="R_12"]
+script = ExtResource("9_x")
+label = "pedir"
+
+[sub_resource type="Resource" id="R_13"]
+script = ExtResource("8_x")
+nome = "talvez"
+
+[sub_resource type="Resource" id="R_14"]
+script = ExtResource("6_x")
+segundos = 0.3
+
+[sub_resource type="Resource" id="R_15"]
+script = ExtResource("1_x")
+texto = "[REI;rei;100] \"Acredita\"? Hmpf. Pelo menos é honesta."
+
+[sub_resource type="Resource" id="R_16"]
+script = ExtResource("9_x")
+label = "pedir"
+
+[sub_resource type="Resource" id="R_17"]
+script = ExtResource("8_x")
+nome = "nao"
+
+[sub_resource type="Resource" id="R_18"]
+script = ExtResource("6_x")
+segundos = 0.3
+
+[sub_resource type="Resource" id="R_19"]
+script = ExtResource("1_x")
+texto = "[BRUXA;bruxa_grande;0] A lua ainda não está cheia. A poção precisa de mais uma noite."
+
+[sub_resource type="Resource" id="R_20"]
+script = ExtResource("1_x")
+texto = "[REI;rei;100] Desculpas. Volte quando tiver algo que preste."
+
+[sub_resource type="Resource" id="R_21"]
+script = ExtResource("9_x")
+label = "fim"
+
+[sub_resource type="Resource" id="R_22"]
+script = ExtResource("8_x")
+nome = "pedir"
+
+[sub_resource type="Resource" id="R_23"]
+script = ExtResource("6_x")
+segundos = 0.5
+
+[sub_resource type="Resource" id="R_24"]
+script = ExtResource("1_x")
+texto = "[REI;rei;100] Pois então aplique em minha filha. Aqui, na minha frente."
+
+[sub_resource type="Resource" id="R_25"]
+script = ExtResource("7_x")
+pergunta = "[REI;rei;100] E então?"
+opcoes = Array[String](["Aplicar a poção.", "Agora não, Majestade."])
+labels = Array[String](["aplicar", "recusa"])
+
+[sub_resource type="Resource" id="R_26"]
+script = ExtResource("8_x")
+nome = "recusa"
+
+[sub_resource type="Resource" id="R_27"]
+script = ExtResource("6_x")
+segundos = 0.3
+
+[sub_resource type="Resource" id="R_28"]
+script = ExtResource("1_x")
+texto = "[BRUXA;bruxa_grande;0] A princesa precisa estar em jejum para a poção fazer efeito. Volto outra hora."
+
+[sub_resource type="Resource" id="R_29"]
+script = ExtResource("1_x")
+texto = "[REI;rei;100] Hmpf. Não me faça perder tempo, bruxa."
+
+[sub_resource type="Resource" id="R_30"]
+script = ExtResource("9_x")
+label = "fim"
+
+[sub_resource type="Resource" id="R_31"]
+script = ExtResource("8_x")
+nome = "aplicar"
+
+[sub_resource type="Resource" id="R_32"]
+script = ExtResource("6_x")
+segundos = 0.3
+
+[sub_resource type="Resource" id="R_33"]
+script = ExtResource("1_x")
+texto = "[BRUXA;bruxa_grande;0] Com licença, Alteza. Fique quietinha."
+
+[sub_resource type="Resource" id="R_34"]
+script = ExtResource("6_x")
+segundos = 0.5
+
+[sub_resource type="Resource" id="R_35"]
+script = ExtResource("10_x")
+personalidade = "princesa"
+variavel = "missao01_aplicou"
+evento_alvo = "castelo_in_princesa"
+
+[sub_resource type="Resource" id="R_36"]
+script = ExtResource("11_x")
+tipo = 0
+variavel = "missao01_aplicou"
+operador = 0
+valor = 0.0
+
+[sub_resource type="Resource" id="R_37"]
+script = ExtResource("12_x")
+condicao = SubResource("R_36")
+
+[sub_resource type="Resource" id="R_38"]
+script = ExtResource("6_x")
+segundos = 0.3
+
+[sub_resource type="Resource" id="R_39"]
+script = ExtResource("1_x")
+texto = "[BRUXA;bruxa_grande;0] Hmm... pensando melhor, ainda não."
+
+[sub_resource type="Resource" id="R_40"]
+script = ExtResource("1_x")
+texto = "[REI;rei;100] Está brincando comigo, bruxa? Saia daqui."
+
+[sub_resource type="Resource" id="R_41"]
+script = ExtResource("9_x")
+label = "fim"
+
+[sub_resource type="Resource" id="R_42"]
+script = ExtResource("13_x")
+
+[sub_resource type="Resource" id="R_43"]
+script = ExtResource("15_x")
+personalidade = "princesa"
+referencia = ExtResource("14_x")
+tracos = 15
+variavel = "missao01_desvio"
+
+[sub_resource type="Resource" id="R_44"]
+script = ExtResource("6_x")
+segundos = 1.0
+
+[sub_resource type="Resource" id="R_45"]
+script = ExtResource("1_x")
+texto = "[PRINCESA;princesa;100] Eu... me sinto diferente."
+
+[sub_resource type="Resource" id="R_46"]
+script = ExtResource("16_x")
+variavel = "missao1_resultado"
+valor = 3.0
+
+[sub_resource type="Resource" id="R_47"]
+script = ExtResource("11_x")
+tipo = 2
+variavel = "princesa"
+operador = 2
+valor = 8.0
+traco = 4
+
+[sub_resource type="Resource" id="R_48"]
+script = ExtResource("12_x")
+condicao = SubResource("R_47")
+
+[sub_resource type="Resource" id="R_49"]
+script = ExtResource("16_x")
+variavel = "missao1_resultado"
+valor = 4.0
+
+[sub_resource type="Resource" id="R_50"]
+script = ExtResource("13_x")
+
+[sub_resource type="Resource" id="R_51"]
+script = ExtResource("11_x")
+tipo = 2
+variavel = "princesa"
+operador = 3
+valor = 4.0
+traco = 4
+
+[sub_resource type="Resource" id="R_52"]
+script = ExtResource("11_x")
+tipo = 0
+variavel = "missao01_desvio"
+operador = 2
+valor = 2.0
+
+[sub_resource type="Resource" id="R_53"]
+script = ExtResource("12_x")
+condicao = SubResource("R_51")
+
+[sub_resource type="Resource" id="R_54"]
+script = ExtResource("16_x")
+variavel = "missao1_resultado"
+valor = 1.0
+
+[sub_resource type="Resource" id="R_55"]
+script = ExtResource("12_x")
+condicao = SubResource("R_52")
+
+[sub_resource type="Resource" id="R_56"]
+script = ExtResource("16_x")
+variavel = "missao1_resultado"
+valor = 2.0
+
+[sub_resource type="Resource" id="R_57"]
+script = ExtResource("13_x")
+
+[sub_resource type="Resource" id="R_58"]
+script = ExtResource("13_x")
+
+[sub_resource type="Resource" id="R_59"]
+script = ExtResource("6_x")
+segundos = 0.5
+
+[sub_resource type="Resource" id="R_60"]
+script = ExtResource("1_x")
+texto = "[REI;rei;100] Veremos no casamento. Pode ir, bruxa."
+
+[sub_resource type="Resource" id="R_61"]
+script = ExtResource("8_x")
+nome = "fim"
+
+[sub_resource type="Resource" id="R_62"]
+script = ExtResource("6_x")
+segundos = 0.5
+
+[sub_resource type="Resource" id="R_63"]
+script = ExtResource("5_x")
+acao = 1
+
+[sub_resource type="Resource" id="R_64"]
+script = ExtResource("11_x")
+tipo = 0
+variavel = "castelo_conversou"
+operador = 0
+valor = 1.0
+
+[sub_resource type="Resource" id="R_65"]
+script = ExtResource("11_x")
+tipo = 0
+variavel = "missao1_resultado"
+operador = 0
+valor = 0.0
+
+[sub_resource type="Resource" id="R_66"]
+script = ExtResource("4_x")
+condicoes = Array[ExtResource("11_x")]([SubResource("R_64"), SubResource("R_65")])
+passavel = false
+sprite_frames = ExtResource("2_x")
+colisao_scale = Vector2(9, 20.25)
+area_pos = Vector2(0, -10)
+area_scale = Vector2(16, 20.25)
+comandos = Array[ExtResource("3_x")]([SubResource("R_3"), SubResource("R_4"), SubResource("R_5"), SubResource("R_6"), SubResource("R_7"), SubResource("R_8"), SubResource("R_9"), SubResource("R_10"), SubResource("R_11"), SubResource("R_12"), SubResource("R_13"), SubResource("R_14"), SubResource("R_15"), SubResource("R_16"), SubResource("R_17"), SubResource("R_18"), SubResource("R_19"), SubResource("R_20"), SubResource("R_21"), SubResource("R_22"), SubResource("R_23"), SubResource("R_24"), SubResource("R_25"), SubResource("R_26"), SubResource("R_27"), SubResource("R_28"), SubResource("R_29"), SubResource("R_30"), SubResource("R_31"), SubResource("R_32"), SubResource("R_33"), SubResource("R_34"), SubResource("R_35"), SubResource("R_37"), SubResource("R_38"), SubResource("R_39"), SubResource("R_40"), SubResource("R_41"), SubResource("R_42"), SubResource("R_43"), SubResource("R_44"), SubResource("R_45"), SubResource("R_46"), SubResource("R_48"), SubResource("R_49"), SubResource("R_50"), SubResource("R_53"), SubResource("R_54"), SubResource("R_55"), SubResource("R_56"), SubResource("R_57"), SubResource("R_58"), SubResource("R_59"), SubResource("R_60"), SubResource("R_61"), SubResource("R_62"), SubResource("R_63")])
+
+[sub_resource type="Resource" id="R_67"]
+script = ExtResource("1_x")
+texto = "[PRINCESA;princesa;100] Obrigada, senhora bruxa."
+
+[sub_resource type="Resource" id="R_68"]
+script = ExtResource("11_x")
+tipo = 0
+variavel = "missao1_resultado"
+operador = 4
+valor = 1.0
+
+[sub_resource type="Resource" id="R_69"]
+script = ExtResource("4_x")
+condicoes = Array[ExtResource("11_x")]([SubResource("R_68")])
+passavel = false
+sprite_frames = ExtResource("2_x")
+colisao_scale = Vector2(9, 20.25)
+area_pos = Vector2(0, -10)
+area_scale = Vector2(16, 20.25)
+comandos = Array[ExtResource("3_x")]([SubResource("R_67")])
+
+[resource]
+script = ExtResource("17_x")
+id = "castelo_in_princesa"
+paginas = Array[ExtResource("4_x")]([SubResource("R_2"), SubResource("R_66"), SubResource("R_69")])

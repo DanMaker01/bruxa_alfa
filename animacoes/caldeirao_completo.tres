@@ -1,6 +1,6 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://bg8m2ya25ffxc"]
 
-[ext_resource type="Texture2D" uid="uid://dbkk1olaivfuc" path="res://assets/game_caldeirao/caldeirao_completo.png" id="1_ej6a2"]
+[ext_resource type="Texture2D" uid="uid://cqhhbhfjxcmee" path="res://assets/eventos/caldeirao/caldeirao2.png" id="1_ej6a2"]
 
 [resource]
 animations = [{

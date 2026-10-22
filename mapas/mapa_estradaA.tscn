@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://cthf7hbcxqjp7"]
 
 [ext_resource type="Script" uid="uid://dsxujjugldv23" path="res://src/cena/mapa_base.gd" id="1_41qgd"]
-[ext_resource type="Texture2D" uid="uid://b8djhvum260h2" path="res://assets/mapa_estradaA/mapa_estrada1_fundo.png" id="2_3b7oq"]
-[ext_resource type="Texture2D" uid="uid://cq73iwga35ux3" path="res://assets/mapa_estradaA/mapa_estrada1_frente.png" id="3_u8pfr"]
+[ext_resource type="Texture2D" uid="uid://b8djhvum260h2" path="res://assets/mapa/mapa_estradaA/mapa_estrada1_fundo.png" id="2_3b7oq"]
+[ext_resource type="Texture2D" uid="uid://cq73iwga35ux3" path="res://assets/mapa/mapa_estradaA/mapa_estrada1_frente.png" id="3_u8pfr"]
 [ext_resource type="Script" uid="uid://bjxlt3vqym72w" path="res://src/cena/evento_base.gd" id="4_bgl00"]
 [ext_resource type="Script" uid="uid://ci10r4ypiyt11" path="res://src/cena/area_spawn.gd" id="area_spawn"]
 [ext_resource type="Resource" uid="uid://dm6ot5qbg0vlm" path="res://dados/eventos/estradaA_passagem1.tres" id="ev_estradaA_passagem1"]

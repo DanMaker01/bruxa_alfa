@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" uid="uid://omx82m2o0w7k" path="res://assets/mapa/mapa_intro/intro_fundo.png" id="1_fundo"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_fundo")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

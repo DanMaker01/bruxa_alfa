@@ -1,12 +1,12 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://bxem6bc654flx"]
 
-[ext_resource type="Texture2D" uid="uid://b4xwgxiesirtu" path="res://assets/mapa_estradaB/mapa_estrada2_guarda.png" id="1_tex"]
+[ext_resource type="Texture2D" uid="uid://dctoeud2ioy54" path="res://assets/eventos/e_campones/npc.png" id="1_yl0p2"]
 
 [resource]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_tex")
+"texture": ExtResource("1_yl0p2")
 }],
 "loop": true,
 "name": &"default",

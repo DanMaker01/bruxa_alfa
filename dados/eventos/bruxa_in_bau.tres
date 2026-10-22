@@ -7,11 +7,11 @@
 [ext_resource type="Resource" uid="uid://doj2ouv5pbxo1" path="res://dados/itens/cogumelo_brilhante.tres" id="5_cogu"]
 [ext_resource type="Resource" uid="uid://cd8kjx75t1h3t" path="res://dados/itens/erva.tres" id="6_erva"]
 [ext_resource type="Script" uid="uid://bkq6tqfqx1531" path="res://src/dados/comandos/cmd_self_var.gd" id="7_self"]
-[ext_resource type="Resource" path="res://dados/itens/flor_farra.tres" id="i_flor"]
-[ext_resource type="Resource" path="res://dados/itens/musgo_recato.tres" id="i_musgo"]
 [ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="8_cond"]
 [ext_resource type="SpriteFrames" uid="uid://dm0wu7vpqtyqg" path="res://animacoes/bruxa_in_bau.tres" id="9_3s4pt"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="9_ev"]
+[ext_resource type="Resource" uid="uid://d2w7yw5m54d5t" path="res://dados/itens/flor_farra.tres" id="i_flor"]
+[ext_resource type="Resource" path="res://dados/itens/musgo_recato.tres" id="i_musgo"]
 
 [sub_resource type="Resource" id="Resource_msg"]
 script = ExtResource("3_msg")

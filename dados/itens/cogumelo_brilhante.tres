@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://doj2ouv5pbxo1"]
 
-[ext_resource type="Texture2D" uid="uid://tmb572e8s2dd" path="res://assets/itens_icones/item_cogumelo.png" id="1_i8wy4"]
+[ext_resource type="Texture2D" uid="uid://tmb572e8s2dd" path="res://assets/icones/item_cogumelo.png" id="1_i8wy4"]
 [ext_resource type="Script" uid="uid://b6ahlah4mhwps" path="res://src/dados/item_data.gd" id="1_ijf6h"]
 
 [resource]

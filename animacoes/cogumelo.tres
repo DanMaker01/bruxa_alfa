@@ -1,6 +1,6 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://b5eatt1lqsbwi"]
 
-[ext_resource type="Texture2D" uid="uid://dmqjf1udt00bi" path="res://assets/bosque_cogumelo/mushroom-poster.png" id="1_ese37"]
+[ext_resource type="Texture2D" uid="uid://w8xrtj4pu46f" path="res://assets/eventos/cogumelo/cogumelo.png" id="1_ese37"]
 
 [resource]
 animations = [{

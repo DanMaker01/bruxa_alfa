@@ -1,6 +1,6 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://cyls7xjrwn5q6"]
 
-[ext_resource type="Texture2D" uid="uid://d2p2a132npgdr" path="res://assets/mapa_ponte/mapa_ponte_guarda.png" id="1_d8jj2"]
+[ext_resource type="Texture2D" uid="uid://bbtv08oc6jeh1" path="res://assets/eventos/guarda1/mapa_ponte_guarda.png" id="1_d8jj2"]
 
 [resource]
 animations = [{

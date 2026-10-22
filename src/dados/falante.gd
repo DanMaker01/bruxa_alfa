@@ -7,7 +7,7 @@
 class_name Falante
 extends Resource
 
-const PASTA_FOTOS := "res://assets/game_faces/"
+const PASTA_FOTOS := "res://assets/faces/"
 
 @export var nome: String = ""
 ## 0% = esquerda da caixa, 100% = direita.

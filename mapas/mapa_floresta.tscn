@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://cavyxotir3mvg"]
 
-[ext_resource type="Texture2D" uid="uid://dpuq6q80de6dm" path="res://assets/mapa_floresta/mapa_floresta_bg.png" id="1_caki5"]
+[ext_resource type="Texture2D" uid="uid://dpuq6q80de6dm" path="res://assets/mapa/mapa_floresta/mapa_floresta_bg.png" id="1_caki5"]
 [ext_resource type="Script" uid="uid://dsxujjugldv23" path="res://src/cena/mapa_base.gd" id="1_fs1tk"]
 [ext_resource type="Script" uid="uid://bjxlt3vqym72w" path="res://src/cena/evento_base.gd" id="3_0h868"]
-[ext_resource type="Texture2D" uid="uid://s7fsf5qmeqi2" path="res://assets/mapa_bruxa_out/casa_bruxa.png" id="4_v0cwm"]
+[ext_resource type="Texture2D" uid="uid://s7fsf5qmeqi2" path="res://assets/eventos/casa_bruxa/casa_bruxa.png" id="4_v0cwm"]
 [ext_resource type="Script" uid="uid://ci10r4ypiyt11" path="res://src/cena/area_spawn.gd" id="area_spawn"]
 [ext_resource type="Resource" uid="uid://0m5adb2hqhhk" path="res://dados/eventos/floresta_passagem1.tres" id="ev_floresta_passagem1"]
 [ext_resource type="Resource" uid="uid://p5edxojtjva3" path="res://dados/eventos/floresta_passagem2.tres" id="ev_floresta_passagem2"]

@@ -10,7 +10,7 @@ class_name ReacaoBruxa
 extends Node2D
 
 # ---- ajuste aqui ----
-const FOTO_PATH := "res://assets/game_faces/bruxa_grande.png"
+const FOTO_PATH := "res://assets/faces/bruxa_grande.png"
 ## Posição do retrato (mesmas coordenadas do caldeirão, em $Animações).
 const POSICAO := Vector2(80, 470)
 const ALTURA_FOTO: float = 190.0

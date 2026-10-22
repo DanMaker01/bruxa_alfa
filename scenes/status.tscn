@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://c2hpmhdnt43qb"]
 
-[ext_resource type="Texture2D" uid="uid://dt6jl3hluwkhv" path="res://assets/game_ui/bola.png" id="1_puj0d"]
+[ext_resource type="Texture2D" uid="uid://dt6jl3hluwkhv" path="res://assets/ui/bola.png" id="1_puj0d"]
 [ext_resource type="Script" uid="uid://dpjyhwxdux3ny" path="res://src/ui/status.gd" id="1_u3ihd"]
-[ext_resource type="Texture2D" uid="uid://cr1ab2huesgjk" path="res://assets/game_ui/pentagrama.png" id="2_rvgb4"]
+[ext_resource type="Texture2D" uid="uid://cr1ab2huesgjk" path="res://assets/ui/pentagrama.png" id="2_rvgb4"]
 
 [node name="Status" type="Control" unique_id=1781711192]
 z_index = 20
