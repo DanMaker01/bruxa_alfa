@@ -19,18 +19,26 @@ signal _nome_definido
 const ICONE_POCAO := "res://assets/game_caldeirao/pocao.png"
 const ALFA_FUNDO: float = 0.85
 const TAM_POCAO := Vector2(160, 160)
-# Layout (640x960), de cima para baixo:
-#   título (largura toda) | poção à esquerda + pentágono à direita | grade embaixo da poção
-#   | ingredientes (largura toda): nome, barra de aproveitamento e tags do que errou | dica
+# Layout (640x960) em 2 colunas:
+#   título (largura toda)
+#   esquerda: curva T(t) e ingredientes (compactos), lista rolável | dica embaixo
+#   direita:  poção, pentágono O-C-E-A-N, grade da matriz
+# (layout antigo, 1 coluna: TITULO 20,30,600,70 · PENTAGONO 220,105,400,350 ·
+#  GRADE 40,310,150,150 · INGREDIENTES 30,490,580,400 · POCAO_ESQUERDA_X 30)
 const CENTRO_POCAO := Vector2(320, 220)       # onde a poção surge
-const POCAO_ESQUERDA_X: float = 30.0          # para onde ela desliza (posição x)
-const TITULO_RECT := Rect2(20, 30, 600, 70)
-const PENTAGONO_RECT := Rect2(220, 105, 400, 350)
-const GRADE_RECT := Rect2(40, 310, 150, 150)
-const INGREDIENTES_RECT := Rect2(30, 490, 580, 400)
+const POCAO_ESQUERDA_X: float = 431.0         # para onde ela desliza (posição x; agora à direita)
+const TITULO_RECT := Rect2(20, 25, 600, 60)
+const PENTAGONO_RECT := Rect2(388, 305, 244, 225)
+const GRADE_RECT := Rect2(436, 545, 150, 150)
+const INGREDIENTES_RECT := Rect2(12, 100, 362, 790)
+## Ingredientes compactos (coluna da esquerda).
+const FONTE_NOME: int = 17
+const LARGURA_BARRA: float = 110.0
 ## Para onde a poção voa ao sair (fallback, se a carta do inventário não for achada).
 const DESTINO_INVENTARIO := Vector2(192, 800)
 const NOME_DESCONHECIDO := "Poção desconhecida"
+## Poção que não muda nada (matriz identidade, ou sem ingredientes): sempre este nome.
+const NOME_AGUA := "Água de Caldeirão"
 const FAIXA_NOME := Rect2(0, 680, 640, 230)  # faixa escura onde aparece a pergunta do nome
 const BRILHOS: int = 28
 ## z_index absoluto da janela (acima da CenaPreparo, do Fade e das notificações).
@@ -176,8 +184,9 @@ func _construir() -> void:
 	# separador fininho acima dos ingredientes
 	var linha := ColorRect.new()
 	linha.color = Color(1, 1, 1, 0.15)
-	linha.position = Vector2(INGREDIENTES_RECT.position.x, INGREDIENTES_RECT.position.y - 14)
-	linha.size = Vector2(INGREDIENTES_RECT.size.x, 2)
+	# separador vertical entre as colunas
+	linha.position = Vector2(INGREDIENTES_RECT.end.x + 6, INGREDIENTES_RECT.position.y)
+	linha.size = Vector2(2, INGREDIENTES_RECT.size.y)
 	_painel.add_child(linha)
 	# lista rolável: cabem quantos ingredientes houver (arrastar para ver o resto)
 	_lista = ListaRolavel.new()
@@ -187,7 +196,7 @@ func _construir() -> void:
 	_ingredientes = VBoxContainer.new()
 	_ingredientes.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_ingredientes.custom_minimum_size = Vector2(INGREDIENTES_RECT.size.x - 8.0, 0)
-	_ingredientes.add_theme_constant_override("separation", 14)
+	_ingredientes.add_theme_constant_override("separation", 5)
 	_lista.add_child(_ingredientes)
 	add_child(_painel)
 
@@ -243,7 +252,9 @@ func abrir(resultado: Dictionary) -> void:
 	var achada := CatalogoPocoes.procurar(A)
 	var nome_unico := CalculadoraPocao.nome_item_unico(_res.get("diagnosticos", []))
 	var pedir_nome: bool = false
-	if achada["perto"]:
+	if CatalogoPocoes.distancia(A, CalculadoraPocao.identidade()) <= 0.0001:
+		_definir_nome(NOME_AGUA)
+	elif achada["perto"]:
 		_definir_nome(achada["nome"])
 	elif nome_unico != "":
 		_definir_nome(nome_unico)   # um item só: nome automático, não pergunta
@@ -356,6 +367,7 @@ func _preencher_parametros(_A: Array) -> void:
 	_ingredientes.add_child(cab)
 	_linhas_tempo.clear()
 	_curva = LinhaTempo.new()
+	_curva.compacto = true
 	_curva.configurar_principal(_res.get("historico_T", []), float(_res.get("t_final", 1.0)), _inicio_receita())
 	_curva.z_index = 1   # as áreas saem de trás dela
 	_curva.esconder()
@@ -372,33 +384,34 @@ func _preencher_parametros(_A: Array) -> void:
 func _linha_ingrediente(d: Dictionary) -> Control:
 	var a: float = clampf(float(d.get("a", 0.0)), 0.0, 1.0)
 	var linha := VBoxContainer.new()
-	linha.add_theme_constant_override("separation", 4)
+	linha.add_theme_constant_override("separation", 1)
 	var topo := HBoxContainer.new()
-	topo.add_theme_constant_override("separation", 12)
-	var nome := _label(22, HORIZONTAL_ALIGNMENT_LEFT)
+	topo.add_theme_constant_override("separation", 8)
+	var nome := _label(FONTE_NOME, HORIZONTAL_ALIGNMENT_LEFT)
 	nome.text = str(d.get("nome_exibicao", d.get("nome", "?")))
-	nome.custom_minimum_size = Vector2(250, 0)
+	nome.custom_minimum_size = Vector2(0, 0)
+	nome.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	nome.clip_text = true
 	topo.add_child(nome)
 	# barra
 	var fundo_barra := ColorRect.new()
 	fundo_barra.color = Color(1, 1, 1, 0.12)
-	fundo_barra.custom_minimum_size = Vector2(200, 14)
+	fundo_barra.custom_minimum_size = Vector2(LARGURA_BARRA, 10)
 	fundo_barra.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	var cheio := ColorRect.new()
 	cheio.color = _cor_aproveitamento(a)
-	cheio.size = Vector2(200.0 * a, 14)
+	cheio.size = Vector2(LARGURA_BARRA * a, 10)
 	fundo_barra.add_child(cheio)
 	topo.add_child(fundo_barra)
-	var pct := _label(20, HORIZONTAL_ALIGNMENT_RIGHT)
+	var pct := _label(FONTE_NOME - 2, HORIZONTAL_ALIGNMENT_RIGHT)
 	pct.text = "%d%%" % roundi(100.0 * a)
-	pct.custom_minimum_size = Vector2(70, 0)
+	pct.custom_minimum_size = Vector2(52, 0)
 	topo.add_child(pct)
 	linha.add_child(topo)
 	# tags
 	var tags := HFlowContainer.new()
-	tags.add_theme_constant_override("h_separation", 6)
-	tags.add_theme_constant_override("v_separation", 4)
+	tags.add_theme_constant_override("h_separation", 4)
+	tags.add_theme_constant_override("v_separation", 2)
 	var problemas: Array = d.get("problemas", [])
 	if problemas.is_empty():
 		tags.add_child(_tag("no ponto ✓", Color(0.85, 0.7, 0.25)))
@@ -410,7 +423,12 @@ func _linha_ingrediente(d: Dictionary) -> Control:
 	linha.add_child(tags)
 	# quando entrou e a temperatura do caldo ao longo do preparo
 	var lt := LinhaTempo.new()
+	lt.compacto = true
+	lt.numero = _linhas_tempo.size() + 1
 	lt.configurar(_res.get("historico_T", []), float(d.get("t0", 0.0)), float(_res.get("t_final", 1.0)), _inicio_receita())
+	if _curva:
+		_curva.adicionar_marca(float(d.get("t0", 0.0)), lt.numero)
+	nome.text = "%d. %s" % [lt.numero, nome.text]
 	linha.add_child(lt)
 	lt.esconder()
 	topo.modulate.a = 0.0
@@ -459,13 +477,13 @@ func _tag(texto: String, cor: Color) -> Control:
 	var st := StyleBoxFlat.new()
 	st.bg_color = Color(cor, 0.85)
 	st.set_corner_radius_all(10)
-	st.content_margin_left = 10
-	st.content_margin_right = 10
-	st.content_margin_top = 2
-	st.content_margin_bottom = 2
+	st.content_margin_left = 7
+	st.content_margin_right = 7
+	st.content_margin_top = 0
+	st.content_margin_bottom = 0
 	p.add_theme_stylebox_override("panel", st)
 	p.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var l := _label(16, HORIZONTAL_ALIGNMENT_CENTER)
+	var l := _label(13, HORIZONTAL_ALIGNMENT_CENTER)
 	l.text = texto
 	l.add_theme_color_override("font_color", Color.WHITE)
 	p.add_child(l)
@@ -504,14 +522,14 @@ func _estourar_brilhos(centro: Vector2) -> void:
 func _input(event: InputEvent) -> void:
 	if not visible or _estado != Estado.PRONTA:
 		return
-	var toque: bool = (event is InputEventMouseButton and event.pressed) or (event is InputEventScreenTouch and event.pressed)
+	# fecha ao SOLTAR o toque, em qualquer lugar. Se arrastou a lista de ingredientes,
+	# a ListaRolavel já marcou o evento como tratado e ele não chega aqui.
+	var toque: bool = (event is InputEventMouseButton and not event.pressed and event.button_index == MOUSE_BUTTON_LEFT) \
+		or (event is InputEventScreenTouch and not event.pressed)
 	if toque:
 		# toque na grade mostra o valor da célula (não fecha)
 		var pos: Vector2 = event.position
 		if _grade and _grade.get_global_rect().has_point(pos):
-			return
-		# na lista de ingredientes o toque é para arrastar/rolar
-		if _lista and _lista.get_global_rect().has_point(pos):
 			return
 		get_viewport().set_input_as_handled()
 		_fechar()

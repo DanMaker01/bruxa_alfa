@@ -16,7 +16,7 @@ tempo = 0.2
 [sub_resource type="Resource" id="Resource_hgypo"]
 script = ExtResource("4_p6plo")
 mapa = "res://mapas/mapa_floresta.tscn"
-posicao = Vector2(4185, 505)
+posicao = Vector2(5185, 505)
 direcao = 2
 
 [sub_resource type="Resource" id="Resource_twlv8"]

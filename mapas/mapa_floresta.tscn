@@ -13,7 +13,7 @@
 [node name="MapaFloresta" type="Node2D" unique_id=1629322827]
 script = ExtResource("1_fs1tk")
 bgm = "res://audio/bgm/floresta.mp3"
-metadata/_edit_vertical_guides_ = [4185.0]
+metadata/_edit_vertical_guides_ = [5185.0]
 
 [node name="Eventos" type="Parallax2D" parent="." unique_id=1256108855]
 z_index = 1
@@ -29,15 +29,15 @@ script = ExtResource("3_0h868")
 evento = ExtResource("ev_floresta_passagem2")
 
 [node name="Passagem3" type="CharacterBody2D" parent="Eventos" unique_id=1985447023]
-position = Vector2(4185, 534)
+position = Vector2(5185, 534)
 script = ExtResource("3_0h868")
 evento = ExtResource("ev_floresta_passagem_bruxa_out")
 
 [node name="AreaErva" type="Node2D" parent="Eventos" unique_id=1893270734]
-position = Vector2(1832, 582)
+position = Vector2(2490, 582)
 script = ExtResource("area_spawn")
 evento = ExtResource("ev_spawn_erva")
-largura = 3499.999999999888
+largura = 4820.0
 
 [node name="Meio" type="Parallax2D" parent="." unique_id=1765584545]
 
@@ -46,7 +46,7 @@ texture = ExtResource("1_caki5")
 centered = false
 
 [node name="Sprite2D2" type="Sprite2D" parent="Meio" unique_id=9624765]
-position = Vector2(4144, 544)
+position = Vector2(5144, 544)
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("4_v0cwm")
 centered = false

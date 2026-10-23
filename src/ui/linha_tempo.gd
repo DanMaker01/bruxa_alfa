@@ -23,6 +23,15 @@ const COR_FUNDO := Color(1, 1, 1, 0.06)
 const LARGURA_TEXTO: float = 190.0
 
 var principal: bool = false
+## Número do ingrediente (ordem de entrada). Aparece na bolinha da entrada e, na curva
+## principal, nas marcas de cada ingrediente: liga a curva à linha do ingrediente.
+var numero: int = 0
+var _marcas: Array = []   # principal: [{"t", "T", "cor", "n"}]
+## Compacto: mais baixo e sem coluna de texto à direita (o texto fica pequeno dentro do gráfico).
+var compacto: bool = false
+const ALTURA_COMPACTO: float = 20.0
+const ALTURA_PRINCIPAL_COMPACTO: float = 60.0
+const FONTE_COMPACTO: int = 12
 var _hist: Array = []
 var _t0: float = 0.0
 var _tf: float = 1.0
@@ -45,13 +54,13 @@ func configurar(historico: Array, t0: float, tf: float, t_inicio: float = 0.0) -
 	_tf = maxf(tf, t_inicio + 0.001)
 	_T_entrada = _T_em(t0)
 	_cor_entrada = cor_da_temperatura(_T_entrada)
-	custom_minimum_size = Vector2(0, ALTURA)
+	custom_minimum_size = Vector2(0, ALTURA_COMPACTO if compacto else ALTURA)
 	queue_redraw()
 
 func configurar_principal(historico: Array, tf: float, t_inicio: float) -> void:
 	principal = true
 	configurar(historico, t_inicio, tf, t_inicio)
-	custom_minimum_size = Vector2(0, ALTURA_PRINCIPAL)
+	custom_minimum_size = Vector2(0, ALTURA_PRINCIPAL_COMPACTO if compacto else ALTURA_PRINCIPAL)
 
 ## Principal: some e depois se desenha da esquerda para a direita.
 func esconder() -> void:
@@ -73,6 +82,20 @@ func sair_da_principal(p: LinhaTempo, tempo: float) -> Tween:
 	var tw := create_tween()
 	tw.tween_method(func(v): _prog = v; queue_redraw(), 0.0, 1.0, tempo).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
 	return tw
+
+## Curva principal: marca onde o ingrediente n entrou.
+func adicionar_marca(t: float, n: int) -> void:
+	var T := _T_em(t)
+	_marcas.append({"t": t, "T": T, "cor": cor_da_temperatura(T), "n": n})
+	queue_redraw()
+
+## Bolinha com número, na cor da chama daquela temperatura.
+func _marca(p: Vector2, n: int, cor: Color, alfa: float) -> void:
+	draw_circle(p, 8.5, Color(0, 0, 0, 0.7 * alfa))
+	draw_circle(p, 7.0, Color(cor, alfa))
+	if n > 0:
+		var fonte := get_theme_default_font()
+		draw_string(fonte, p + Vector2(-7.0, 4.0), str(n), HORIZONTAL_ALIGNMENT_CENTER, 14.0, 11, Color(0.05, 0.05, 0.08, alfa))
 
 func _T_em(t: float) -> float:
 	var melhor := T_MIN
@@ -96,7 +119,7 @@ func _ponto(t: float, T: float, w: float, h: float, y_topo: float) -> Vector2:
 	return Vector2(w * (t - _ti) / (_tf - _ti), y_topo + h - h * clampf((T - T_MIN) / (T_MAX - T_MIN), 0.0, 1.0))
 
 func _draw() -> void:
-	var w: float = size.x - LARGURA_TEXTO
+	var w: float = size.x - (0.0 if compacto else LARGURA_TEXTO)
 	if w <= 10.0 or _hist.is_empty():
 		return
 	if principal:
@@ -121,8 +144,15 @@ func _desenhar_principal(w: float) -> void:
 	if pts.size() >= 2:
 		draw_polyline(pts, COR_PRINCIPAL, 3.0, true)
 		draw_circle(pts[-1], 4.0, COR_PRINCIPAL)
+	for m in _marcas:
+		if float(m["t"]) <= t_lim:
+			_marca(_ponto(float(m["t"]), float(m["T"]), w, h, 0), int(m["n"]), m["cor"], 1.0)
 	var fonte := get_theme_default_font()
 	var a: float = clampf(_revelado * 2.0, 0.0, 1.0)
+	if compacto:
+		draw_string(fonte, Vector2(4, 13), "temperatura do caldo · %d s" % roundi(_tf - _ti), HORIZONTAL_ALIGNMENT_LEFT, w - 8.0, FONTE_COMPACTO, Color(1, 1, 1, 0.6 * a))
+		draw_string(fonte, Vector2(w - 44.0, y100 - 3.0), "100 °C", HORIZONTAL_ALIGNMENT_LEFT, 44.0, FONTE_COMPACTO - 1, Color(1, 1, 1, 0.4 * a))
+		return
 	draw_string(fonte, Vector2(w + 10.0, 22.0), "temperatura do caldo", HORIZONTAL_ALIGNMENT_LEFT, LARGURA_TEXTO - 10.0, 16, Color(1, 1, 1, 0.75 * a))
 	draw_string(fonte, Vector2(w + 10.0, y100 + 5.0), "100 °C", HORIZONTAL_ALIGNMENT_LEFT, LARGURA_TEXTO - 10.0, 14, Color(1, 1, 1, 0.45 * a))
 	draw_string(fonte, Vector2(w + 10.0, h - 4.0), "%d s" % roundi(_tf - _ti), HORIZONTAL_ALIGNMENT_LEFT, LARGURA_TEXTO - 10.0, 14, Color(1, 1, 1, 0.45 * a))
@@ -158,8 +188,13 @@ func _desenhar_ingrediente(w: float) -> void:
 	var y100: float = _ponto(0, 100.0, w, h, 0).y
 	draw_dashed_line(Vector2(0, y100), Vector2(w, y100), Color(1, 1, 1, 0.15 * a), 1.0, 4.0)
 	var e := _ponto(_t0, _T_entrada, w, h, 0)
-	draw_circle(e, 6.0, Color(0, 0, 0, 0.6 * a))
-	draw_circle(e, 4.5, Color(_cor_entrada, a))
+	if numero > 0:
+		_marca(e, numero, _cor_entrada, a)
+	else:
+		draw_circle(e, 6.0, Color(0, 0, 0, 0.6 * a))
+		draw_circle(e, 4.5, Color(_cor_entrada, a))
 	var fonte := get_theme_default_font()
 	var txt := "entrou aos %d s · %d °C" % [roundi(_t0 - _ti), roundi(_T_entrada)]
+	if compacto:
+		return   # compacto: sem texto (a bolinha colorida já mostra quando e quão quente entrou)
 	draw_string(fonte, Vector2(w + 10.0, h * 0.5 + 6.0), txt, HORIZONTAL_ALIGNMENT_LEFT, LARGURA_TEXTO - 10.0, 16, Color(1, 1, 1, 0.75 * a))

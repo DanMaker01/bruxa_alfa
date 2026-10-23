@@ -60,7 +60,11 @@ var feedback: FeedbackPreparo
 var segurar_fogo: BotaoSegurar
 var segurar_pocao: BotaoSegurar
 var reacao: ReacaoBruxa
+## Os ícones dos ingredientes dentro do caldeirão ficam mais para baixo (y do nó IconesCaldeirao).
+const ICONES_Y: float = 40
 var _avisou_apagando: bool = false
+## O fogo já esteve forte desde que acendeu? (recém-aceso, ainda fraco, não é "apagando")
+var _fogo_ja_forte: bool = false
 var janela_resultado: JanelaResultado
 var som: SomCaldeirao
 
@@ -132,7 +136,11 @@ func _process(delta: float) -> void:
 		indicadores_label.text = "\n".join(indicadores.get_linhas_ui(sistema))
 	visual.atualizar(sistema, delta, _perda_media(), _punindo_agora)
 	# fogo quase apagando: a bruxa avisa (uma vez a cada vez que chega perto)
-	var quase := VisualCaldeirao.quase_apagando(sistema)
+	if not sistema.fogo_ligado:
+		_fogo_ja_forte = false
+	elif sistema.F >= SistemaTermico.F_LIMIT_MIN + VisualCaldeirao.MARGEM_APAGAR:
+		_fogo_ja_forte = true
+	var quase := VisualCaldeirao.quase_apagando(sistema) and _fogo_ja_forte
 	if quase and not _avisou_apagando:
 		reacao.avisar("apagando")
 	_avisou_apagando = quase
@@ -179,6 +187,7 @@ func _criar_componentes() -> void:
 	icones.name = "IconesCaldeirao"
 	icones.caldeirao = caldeirao
 	icones.z_index = 5   # na frente do caldeirão, atrás das bolhas
+	icones.position.y = ICONES_Y
 	$Animações.add_child(icones)
 
 	reacao = ReacaoBruxa.new()

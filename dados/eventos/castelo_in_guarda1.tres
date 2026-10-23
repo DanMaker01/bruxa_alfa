@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://bkra1awlqcqcl"]
+
+[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="1_x"]
+[ext_resource type="SpriteFrames" uid="uid://cyls7xjrwn5q6" path="res://animacoes/guarda01.tres" id="2_x"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="3_x"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="4_wg811"]
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="4_x"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="5_x"]
+
+[sub_resource type="Resource" id="R_1"]
+script = ExtResource("1_x")
+texto = "[GUARDA;guarda1;100] O Rei não gosta de esperar."
+
+[sub_resource type="Resource" id="R_2"]
+script = ExtResource("4_x")
+sprite_frames = ExtResource("2_x")
+colisao_scale = Vector2(9, 20.25)
+area_pos = Vector2(0, -10)
+area_scale = Vector2(16, 20.25)
+comandos = Array[ExtResource("3_x")]([SubResource("R_1")])
+
+[resource]
+script = ExtResource("5_x")
+id = "castelo_in_guarda1"
+paginas = Array[ExtResource("4_x")]([SubResource("R_2")])

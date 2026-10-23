@@ -1,65 +1,137 @@
 [gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://bj42mmgkqvxl8"]
 
-[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="1_bxe3x"]
-[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_pipfk"]
-[ext_resource type="Script" uid="uid://dk7m46jhepr5v" path="res://src/dados/comandos/cmd_hud.gd" id="3_fy88y"]
-[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="6_4a26e"]
-[ext_resource type="SpriteFrames" uid="uid://bg8m2ya25ffxc" path="res://animacoes/caldeirao_completo.tres" id="7_4a26e"]
-[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="7_a2amw"]
-[ext_resource type="Script" uid="uid://bqhd785i1urnr" path="res://src/dados/comandos/cmd_preparo.gd" id="8_4j1sn"]
-[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="10_6wmrf"]
-[ext_resource type="Script" uid="uid://cwdgcnn30o052" path="res://src/dados/comandos/cmd_if.gd" id="11_if"]
-[ext_resource type="Script" uid="uid://phmwdet0nd7d" path="res://src/dados/comandos/cmd_end.gd" id="12_end"]
+[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="2_x"]
+[ext_resource type="Script" uid="uid://bqhd785i1urnr" path="res://src/dados/comandos/cmd_preparo.gd" id="3_x"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="4_x"]
+[ext_resource type="Script" uid="uid://cwdgcnn30o052" path="res://src/dados/comandos/cmd_if.gd" id="5_x"]
+[ext_resource type="Script" uid="uid://bercma7w4moqu" path="res://src/dados/comandos/cmd_mudar_var.gd" id="6_x"]
+[ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="7_x"]
+[ext_resource type="Script" uid="uid://b2vy54pculhyg" path="res://src/dados/comandos/cmd_else.gd" id="8_x"]
+[ext_resource type="Script" uid="uid://phmwdet0nd7d" path="res://src/dados/comandos/cmd_end.gd" id="9_x"]
+[ext_resource type="SpriteFrames" uid="uid://bg8m2ya25ffxc" path="res://animacoes/caldeirao_completo.tres" id="10_x"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="11_x"]
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="12_x"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="13_x"]
 
-[sub_resource type="Resource" id="Resource_jjusl"]
-script = ExtResource("3_fy88y")
-mostrar = false
-
-[sub_resource type="Resource" id="Resource_a3djt"]
-script = ExtResource("7_a2amw")
+[sub_resource type="Resource" id="R_2"]
+script = ExtResource("2_x")
 texto = "[BRUXA;bruxa_grande;0] Vamos ver o que sai deste caldeirão."
 
-[sub_resource type="Resource" id="Resource_u2v5q"]
-script = ExtResource("8_4j1sn")
+[sub_resource type="Resource" id="R_3"]
+script = ExtResource("3_x")
 
-[sub_resource type="Resource" id="Resource_nv25v"]
-script = ExtResource("3_fy88y")
-
-[sub_resource type="Resource" id="Resource_c_pocao"]
-script = ExtResource("6_4a26e")
+[sub_resource type="Resource" id="R_5"]
+script = ExtResource("4_x")
 variavel = "missao01_pocao_feita"
 valor = 1.0
 
-[sub_resource type="Resource" id="Resource_if_pocao"]
-script = ExtResource("11_if")
-condicao = SubResource("Resource_c_pocao")
+[sub_resource type="Resource" id="R_6"]
+script = ExtResource("5_x")
+condicao = SubResource("R_5")
 
-[sub_resource type="Resource" id="Resource_c_guarda"]
-script = ExtResource("6_4a26e")
-variavel = "missao01_passou_guarda"
+[sub_resource type="Resource" id="R_7"]
+script = ExtResource("4_x")
+variavel = "missao01_comentou_pocao"
 
-[sub_resource type="Resource" id="Resource_if_guarda"]
-script = ExtResource("11_if")
-condicao = SubResource("Resource_c_guarda")
+[sub_resource type="Resource" id="R_8"]
+script = ExtResource("5_x")
+condicao = SubResource("R_7")
 
-[sub_resource type="Resource" id="Resource_msg_guarda"]
-script = ExtResource("7_a2amw")
-texto = "[BRUXA;bruxa_grande;0] Pronto. Agora é só dizer aos guardas que levo uma poção para a realeza."
+[sub_resource type="Resource" id="R_9"]
+script = ExtResource("6_x")
+variavel = "missao01_comentou_pocao"
+valor = 1.0
 
-[sub_resource type="Resource" id="Resource_end1"]
-script = ExtResource("12_end")
+[sub_resource type="Resource" id="R_10"]
+script = ExtResource("7_x")
+segundos = 0.5
 
-[sub_resource type="Resource" id="Resource_end2"]
-script = ExtResource("12_end")
+[sub_resource type="Resource" id="R_11"]
+script = ExtResource("4_x")
+variavel = "missao01_pocao_erro"
+operador = 5
+valor = 0.25
 
-[sub_resource type="Resource" id="Resource_texnt"]
-script = ExtResource("1_bxe3x")
-sprite_frames = ExtResource("7_4a26e")
+[sub_resource type="Resource" id="R_12"]
+script = ExtResource("5_x")
+condicao = SubResource("R_11")
+
+[sub_resource type="Resource" id="R_13"]
+script = ExtResource("2_x")
+texto = "[BRUXA;bruxa_grande;0] Perfeita! Está do jeitinho que eu queria."
+
+[sub_resource type="Resource" id="R_14"]
+script = ExtResource("8_x")
+
+[sub_resource type="Resource" id="R_15"]
+script = ExtResource("4_x")
+variavel = "missao01_pocao_erro"
+operador = 5
+valor = 0.6
+
+[sub_resource type="Resource" id="R_16"]
+script = ExtResource("5_x")
+condicao = SubResource("R_15")
+
+[sub_resource type="Resource" id="R_17"]
+script = ExtResource("2_x")
+texto = "[BRUXA;bruxa_grande;0] Não ficou perfeita... mas deve acalmar a moça."
+
+[sub_resource type="Resource" id="R_18"]
+script = ExtResource("8_x")
+
+[sub_resource type="Resource" id="R_19"]
+script = ExtResource("4_x")
+variavel = "missao01_pocao_erro"
+operador = 5
+valor = 1.0
+
+[sub_resource type="Resource" id="R_20"]
+script = ExtResource("5_x")
+condicao = SubResource("R_19")
+
+[sub_resource type="Resource" id="R_21"]
+script = ExtResource("2_x")
+texto = "[BRUXA;bruxa_grande;0] Hmm. Saiu fraca. Vai servir, ou faço outra?"
+
+[sub_resource type="Resource" id="R_22"]
+script = ExtResource("8_x")
+
+[sub_resource type="Resource" id="R_23"]
+script = ExtResource("2_x")
+texto = "[BRUXA;bruxa_grande;0] Isso não é Calma Profunda nem aqui nem no inferno. Melhor fazer de novo."
+
+[sub_resource type="Resource" id="R_24"]
+script = ExtResource("9_x")
+
+[sub_resource type="Resource" id="R_25"]
+script = ExtResource("9_x")
+
+[sub_resource type="Resource" id="R_26"]
+script = ExtResource("9_x")
+
+[sub_resource type="Resource" id="R_27"]
+script = ExtResource("7_x")
+segundos = 0.3
+
+[sub_resource type="Resource" id="R_28"]
+script = ExtResource("2_x")
+texto = "[BRUXA;bruxa_grande;0] De qualquer jeito, agora os guardas vão me deixar passar até o castelo."
+
+[sub_resource type="Resource" id="R_29"]
+script = ExtResource("9_x")
+
+[sub_resource type="Resource" id="R_30"]
+script = ExtResource("9_x")
+
+[sub_resource type="Resource" id="R_31"]
+script = ExtResource("12_x")
+sprite_frames = ExtResource("10_x")
 area_pos = Vector2(0, -10)
 area_scale = Vector2(9, 36)
-comandos = Array[ExtResource("2_pipfk")]([SubResource("Resource_jjusl"), SubResource("Resource_a3djt"), SubResource("Resource_u2v5q"), SubResource("Resource_nv25v"), SubResource("Resource_if_pocao"), SubResource("Resource_if_guarda"), SubResource("Resource_msg_guarda"), SubResource("Resource_end1"), SubResource("Resource_end2")])
+comandos = Array[ExtResource("11_x")]([SubResource("R_2"), SubResource("R_3"), SubResource("R_6"), SubResource("R_8"), SubResource("R_9"), SubResource("R_10"), SubResource("R_12"), SubResource("R_13"), SubResource("R_14"), SubResource("R_16"), SubResource("R_17"), SubResource("R_18"), SubResource("R_20"), SubResource("R_21"), SubResource("R_22"), SubResource("R_23"), SubResource("R_24"), SubResource("R_25"), SubResource("R_26"), SubResource("R_27"), SubResource("R_28"), SubResource("R_29"), SubResource("R_30")])
 
 [resource]
-script = ExtResource("10_6wmrf")
+script = ExtResource("13_x")
 id = "bruxa_in_caldeirao"
-paginas = Array[ExtResource("1_bxe3x")]([SubResource("Resource_texnt")])
+paginas = Array[ExtResource("12_x")]([SubResource("R_31")])

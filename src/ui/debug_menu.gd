@@ -1,5 +1,6 @@
 # debug_menu.gd
 # Menu de debug (tecla ' ): edita variáveis, personalidades e inventário do GameTemp
+# e roda comandos de evento na hora (aba "Comandos", ver debug_comandos.gd)
 # em tempo de jogo. Construído todo por código; o GameManager cria na primeira vez.
 # Também abre/fecha pelo botão "DBG" no canto (0,0) da tela.
 extends Control
@@ -26,6 +27,7 @@ var _lista_vars: VBoxContainer
 var _lista_pers: VBoxContainer
 var _lista_itens: VBoxContainer
 var _lista_mapa: VBoxContainer
+var _comandos: DebugComandos
 var _seletor_item: OptionButton
 var _qtd_novo: SpinBox
 var _info: PanelContainer      # ficha do item (abre por cima das abas)
@@ -132,6 +134,8 @@ func abrir() -> void:
 func fechar() -> void:
 	if _info:
 		_info.hide()
+	if _comandos:
+		_comandos.fechar_ficha()
 	_janela.hide()
 	get_tree().paused = _pausado_antes
 
@@ -200,6 +204,12 @@ func _montar() -> void:
 	_lista_pers = _criar_aba("Personalidade")
 	_lista_itens = _criar_aba("Itens")
 	_lista_mapa = _criar_aba("Mapa")
+	var scroll_cmd := ScrollContainer.new()
+	scroll_cmd.name = "Comandos"
+	scroll_cmd.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_comandos = DebugComandos.new(self)
+	scroll_cmd.add_child(_comandos)
+	_abas.add_child(scroll_cmd)
 	_montar_info()
 	_ajustar_toque(_janela)
 
@@ -246,6 +256,8 @@ func _atualizar_tudo() -> void:
 	_atualizar_pers()
 	_atualizar_itens()
 	_atualizar_mapa()
+	if _comandos:
+		_comandos.atualizar()
 
 # =============================================================================
 # VARIÁVEIS

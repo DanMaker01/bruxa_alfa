@@ -58,4 +58,4 @@ script = ExtResource("area_spawn")
 evento = ExtResource("ev_spawn_cogumelo")
 quantidade = 1
 largura = 700.0
-cooldown = 10.0
+cooldown = 20.0

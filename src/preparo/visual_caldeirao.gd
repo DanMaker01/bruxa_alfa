@@ -40,11 +40,11 @@ const COR_FAISCA_FIM := Color(1.0, 0.45, 0.1, 0.0)
 const T_TREMOR_INICIO: float = 95.0
 const T_FERVURA: float = 100.0
 ## Acima da fervura ele fica avermelhado até o máximo em T_VERMELHO_MAX.
-const T_VERMELHO_MAX: float = 200.0
+const T_VERMELHO_MAX: float = 165.0
 const TREMOR_LEVE_PX: float = 1.5      # amplitude em 100 °C
 const TREMOR_MAX_PX: float = 3.5       # amplitude em T_VERMELHO_MAX
-const VERMELHO_MAX: float = 0.6        # 0..1: quanto puxa para COR_VERMELHO no máximo
-const COR_VERMELHO := Color(1.0, 0.35, 0.3)
+const VERMELHO_MAX: float = 0.85       # 0..1: quanto puxa para COR_VERMELHO no máximo
+const COR_VERMELHO := Color(1.0, 0.22, 0.15)
 # ---- caldo turvo (visão geral do aproveitamento) ----
 ## Quanto pior o aproveitamento médio, mais turvo: caldeirão mais escuro, bolhas maiores,
 ## mais lentas e escuras, quase sem estrelas. Bom aproveitamento: calmo e brilhante.

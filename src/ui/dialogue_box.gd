@@ -22,9 +22,9 @@ var current_index: int = 0
 ## Pausa extra (em "letras") depois de cada caractere, para o texto respirar.
 const PAUSA_PONTUACAO := {
 	" ": 1.0,
-	",": 3.0,
-	";": 5.0, ":": 5.0,
-	".": 7.0, "!": 7.0, "?": 7.0, "…": 7.0,
+	",": 2.0,
+	";": 3.0, ":": 3.0,
+	".": 3.5, "!": 3.5, "?": 3.5, "…": 4.0,
 }
 var _escrevendo: bool = false
 var _cursor: float = 0.0        # posição do "cursor" em letras (pode ser fracionária)
@@ -170,6 +170,9 @@ func _process(delta: float) -> void:
 	# passou por uma pontuação? para o cursor logo depois dela e pausa
 	for i in range(antes, mini(int(floor(_cursor)), _texto_puro.length())):
 		var c: String = _texto_puro[i]
+		# "..." / "?!": pausa só no último sinal da sequência
+		if PAUSA_PONTUACAO.has(c) and c != " " and i + 1 < _texto_puro.length() and ".!?…".contains(_texto_puro[i + 1]):
+			continue
 		if PAUSA_PONTUACAO.has(c) and i + 1 < _texto_puro.length():
 			_cursor = float(i + 1)
 			_pausa = PAUSA_PONTUACAO[c]

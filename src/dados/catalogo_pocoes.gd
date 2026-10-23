@@ -43,6 +43,17 @@ static func _game_temp():
 	var arvore = Engine.get_main_loop()
 	return arvore.root.get_node_or_null("Main/GameManager/GameTemp") if arvore is SceneTree else null
 
+## Erro relativo de A em relação à poção "nome" do catálogo do jogo:
+## distância(A, ideal) / distância(identidade, ideal). 0 = perfeita; 1 = tão longe quanto água pura.
+## −1 se a poção não existir.
+static func erro_relativo(nome: String, A: Array) -> float:
+	_garantir()
+	for ref in _jogo.pocoes:
+		if ref and ref.nome == nome:
+			var base := distancia(CalculadoraPocao.identidade(), ref.A)
+			return distancia(A, ref.A) / maxf(base, 0.0001)
+	return -1.0
+
 ## Procura a poção conhecida mais perto de A nos dois catálogos.
 ## Devolve {"nome": String ("" se não houver nenhuma), "dist": float, "perto": bool}.
 static func procurar(A: Array) -> Dictionary:

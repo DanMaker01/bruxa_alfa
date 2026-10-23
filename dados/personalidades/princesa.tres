@@ -6,7 +6,7 @@
 script = ExtResource("1_pers")
 id = "princesa"
 abertura = 5.0
-consciencia = 5.0
+consciencia = -2.0
 extroversao = 4.0
 amabilidade = 6.0
 neuroticismo = 8.0

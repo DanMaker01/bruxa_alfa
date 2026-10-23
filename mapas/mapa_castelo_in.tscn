@@ -6,6 +6,8 @@
 [ext_resource type="Script" uid="uid://bjxlt3vqym72w" path="res://src/cena/evento_base.gd" id="4_va2r2"]
 [ext_resource type="Resource" uid="uid://bdmnm2vsgeysq" path="res://dados/eventos/castelo_in_auto.tres" id="ev_auto"]
 [ext_resource type="Resource" uid="uid://btieqyao35670" path="res://dados/eventos/castelo_in_passagem.tres" id="ev_castelo_in_passagem"]
+[ext_resource type="Resource" uid="uid://bkra1awlqcqcl" path="res://dados/eventos/castelo_in_guarda1.tres" id="ev_guarda1"]
+[ext_resource type="Resource" uid="uid://cwoobr8u22n26" path="res://dados/eventos/castelo_in_guarda2.tres" id="ev_guarda2"]
 [ext_resource type="Resource" uid="uid://bv45cvnmq1w5i" path="res://dados/eventos/castelo_in_princesa.tres" id="ev_princesa"]
 [ext_resource type="Resource" uid="uid://5w84tl7j5bbc" path="res://dados/eventos/castelo_in_rei.tres" id="ev_rei"]
 
@@ -59,3 +61,15 @@ z_index = 3
 position = Vector2(32, 160)
 script = ExtResource("4_va2r2")
 evento = ExtResource("ev_auto")
+
+[node name="Guarda1" type="CharacterBody2D" parent="Eventos" unique_id=1118720276]
+z_index = 3
+position = Vector2(288, 544)
+script = ExtResource("4_va2r2")
+evento = ExtResource("ev_guarda1")
+
+[node name="Guarda2" type="CharacterBody2D" parent="Eventos" unique_id=1609237115]
+z_index = 3
+position = Vector2(112, 544)
+script = ExtResource("4_va2r2")
+evento = ExtResource("ev_guarda2")

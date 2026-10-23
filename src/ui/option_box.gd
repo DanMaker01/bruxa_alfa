@@ -180,6 +180,8 @@ func hide_options():
 ## Fonte das opções conforme quantas são (menos opções = botões maiores = letra maior).
 const FONTE_POR_QTD := [34, 30, 26, 22, 20]
 const SEPARACAO: int = 8
+## Menor fonte das opções: abaixo disso o texto é cortado com "...".
+const FONTE_MIN: int = 16
 ## Margem entre a borda da caixa e os botões (0 = botões ocupam a caixa toda).
 var margem: float = 10.0
 ## Margem entre a borda do botão e o texto dele.
@@ -214,6 +216,7 @@ func _create_option_buttons(options_list: Array):
 		lbl.add_theme_font_size_override("font_size", fonte)
 		lbl.add_theme_color_override("font_color", Color.WHITE)
 		btn.add_child(lbl)
+		_caber.call_deferred(lbl, fonte)
 		lbl.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		lbl.offset_left = margem_texto
 		lbl.offset_right = -margem_texto
@@ -228,6 +231,20 @@ func _create_option_buttons(options_list: Array):
 		var tw := btn.create_tween()
 		tw.tween_interval(0.05 * i)
 		tw.tween_property(btn, "modulate:a", 1.0, 0.18)
+
+## Diminui a fonte do texto da opção até caber no botão (no mínimo FONTE_MIN).
+func _caber(lbl: Label, fonte: int) -> void:
+	await get_tree().process_frame   # espera o layout dar tamanho ao botão
+	if not is_instance_valid(lbl) or lbl.size.x <= 1.0:
+		return
+	var f: Font = lbl.get_theme_font("font")
+	var tam := fonte
+	while tam > FONTE_MIN:
+		var alt: float = f.get_multiline_string_size(lbl.text, HORIZONTAL_ALIGNMENT_CENTER, lbl.size.x, tam).y
+		if alt <= lbl.size.y:
+			break
+		tam -= 1
+	lbl.add_theme_font_size_override("font_size", tam)
 
 func _limpar_opcoes() -> void:
 	for child in options_container.get_children():

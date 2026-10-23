@@ -39,63 +39,73 @@ EstradaB
 
 ```
 
+
 [.] v3
-[.] Sprite placeholder de:
-[.]		Guarda1, foto
-[.]		Guarda2, foto
-[?]	balancear itens e preparo. 4 primeiros ingredientes oficiais: erva, cogumelo, flor-de-farra, musgo-do-recato. Baú dá 15 de cada.
+[?]	balancear itens e preparo.
 		Erva + cogumelo (1ª receita): erva m5200 s2000/3000 Tmin50 k.3 Tmax135 k.15 (queima ~140+) t25–90 h.4; cogumelo m1200 s600/900 Tmin100 k.15 Tmax160 k.15 t5–25 h.4/.5. Fogo: K 0.3, CONST_A 30.
 		Receita ideal (~60 s): acende → erva com água morna (~8 s) → cozinha até ~40 s → ~1 clique/s até chama BRANCA (~120 °C) → cogumelo (~48–50 s) → frita ~10 s → termina. Perfeito → Poção da Calma Profunda (só N cai, 0,93).
 		2ª receita (E): Flor-de-farra (E +20%, mas C −5%, A −6% e N +5% de E) em INFUSÃO 75–95 °C (ferver estraga), m2400 (~30 s a 85 °C), t 20–70 s.
 		  Musgo-do-recato (compensa C, A e N) entra POR ÚLTIMO: sem cozimento, t 2–12 s. → Poção da Desenvoltura: só E +20%.
-[ ]	Renomear direito. 
-		  Ícones item_a (flor) / item_b (musgo). Coleta: castelo_out — flor 2 áreas (1 cada, cooldown 50 s), musgo 2 (cooldown 15 s); musgo 1 à direita do guarda da ponte e 1 à esquerda do guarda da estradaB (15 s). Ajustar posições/altura no editor.
+	[ ]		Balancear depo'is: Calma Profunda (talvez ~4 cogumelos + 4 ervas) para baixar bem o N numa poção só; rever o critério N < 4 (8 → 4 é muito). Agora coloquei 8 ervas e 8 cogu, 
+				Aí diminui mais ainda a % de N, deve ser perto de 50%. Tem que balancear tudo junto. Mas confirmo que serão 8 e 8. O teste de personalidade deve
+
+[] diálogo:
+	[.]	Castelo_in: pausa, camera no Rei, fala "pode vir aqui" ou algo assim. Então os guardas acompanham a bruxa até ele. Pausa. Os guardas recuam. Pausa. Aí começa o diálogo com o rei. Em certo momento da fala, a princesa diz que a bruxa é a única que pode ajudar. (feito: guardas castelo_in_guarda1/2 em x 330/260; câmera vai até o rei (848, 505); "Venha até aqui."; guardas vão até x 600/540 com a bruxa (700) e voltam; princesa: "Ela é a única que pode me ajudar.")
+			Finalizar correção de movimento dos guardas.
+[] mapa:
+	[] bruxa_out, mais camadas (v3)
+	[] castelo_in, aumentar corredor (v3)
+	[] ponte, nuvens e parallax (v3)
+[.] Preparo:
+	[.] a escala de fogo deve ser azul(máximo) próximo dos 2000. o vermelho também pode subir um pouco a escala. (CORES_FOGO: vermelho 650, laranja 950, amarelo 1050, branco 1150 ≈ 136 °C, azul claro 1450, azul 2000)
+	[.]		Layout: Anotar o tempo e temperatura no momento que cada item entrou nos itens. quero não só número, mas uma representação visual útil. estava sobrepondo a área do ingrediente. vamos fazer testes visuais
+			Teste 1: cada ingrediente tem um número (ordem de entrada) numa bolinha na cor da chama de quando entrou; a mesma bolinha numerada aparece na curva principal, no ponto de entrada. Nome na lista: "1. Erva".
+	[.]		Nomear as poções de referência no catálogo (PocaoReferencia: nome, descrição, A). Poção da Calma Profunda. Poção #2. Poções proíbidas. 
 
 
-[.] Caldeirão/Preparo:
-[?]		Abafar usa CONST_C = 20 por passo de 0,3 s (CONST_A só para o clique). Calibrar CONST_C.
-[.]		Quase apagando (F < F_LIMIT_MIN + 80): fumaça contínua saindo da lenha e a bruxa avisa ("O fogo tá morrendo!").Quando o fogo inicia dá aviso de perto do F_LIMIT_MIN, mas quando acaba de iniciar não faz sentido avisar isso.
-
-[ ] Cena de poção preparada:
-[.]		Layout: Definir localização das janelas e informações. Tentar fazer em 2 colunas, a poção, pentagram e matriz de um lado, do outro lado a lista de ingredientes.
-[?]			revisar como mostrar os valores fora das diagonais.  (toque na célula da grade: balão "C → N −3%")
-[.]			Anotar o tempo e temperatura no momento que cada item entrou nos itens. quero não só número, mas uma representação visual útil.
-[?]			Gostei do grafico. Mas a receita começa quando o primeiro ingrediente entra. (gráfico vai da entrada do 1º ingrediente ao fim; tempos contados a partir dela)
-[!]			Uma curva só T(t), grande: ela se desenha e fica em foco (o resto apagadinho); depois a área (∫T dt) de cada ingrediente sai de trás dela, um por um, e desce até a linha dele.
-[.]		Nomear as poções de referência no catálogo (PocaoReferencia: nome, descrição, A)
-[?]			As poções nomeadas não devem ficar salvas no user, e sim salvas no GameTemp, valem só para aquela secção. (GameTemp.pocoes_nomeadas)
-
-
-[ ] História / missão: (em ordem)
-[!]		Camponês bate na porta (TOC! TOC! TOC!), opção Deixar entrar / Ignorar. Ele pede ajuda para a irmã que vai casar → Poção da Calma Profunda. Guardas ainda não deixam passar.
-[.]			Corrigir fala: "E uma folha que posso , onde as árvores acabam." (bruxa_in_auto / bruxa_in_passagem). ("depoisé" já corrigido)
-[]		AreaSpawn (src/cena/area_spawn.gd): no máximo N cópias de um EventoData numa faixa; posições e cooldowns salvos no GameTemp (voltar ao mapa = mesmas posições); coletou 1 (self A = 1) → após o cooldown (s) renasce num ponto qualquer da faixa (de preferência longe de onde foi coletado), com efeito de brilho. 
-[.]			A bruxa diz quais & qtos itens tem que pegar e libera controle na primeira missão.
-[.]			Guardas (clique): "Trouxe a poção?" Sim + missao01_pocao_feita = 1 → missao01_passou_guarda = 1 → os dois guardas deixam passar e mudam a fala. Trouxe a poção é muito direto, quero mais diálogo.
-[?]			finalização, entrega poção e resultados possíveis.
-					castelo_in: Rei, Princesa (sprites provisórios: animacoes/rei.tres e princesa.tres) e CenaRei (automático).
-					1ª vez que entra (castelo_conversou = 0): cena automática (castelo_in_auto), a bruxa anda até x 700 (o diálogo só começa quando ela chega), diálogo; poção vai funcionar? sim / talvez / não (desculpa).
-					Todos os caminhos terminam no label "end": castelo_conversou = 1 e destrava a bruxa. Página 2 do castelo_in_auto (castelo_conversou == 1, vazia) impede o loop.
-					Pausas curtas (CmdEsperar 0,3–1 s) depois do movimento, entre blocos de diálogo e depois do efeito da poção.
-					Depois: anda livre no castelo; clicar no rei ou na princesa → o rei fala e volta a tentativa.
-					Sim/talvez → aplicar na princesa? aceitar → abre o inventário, toca no item → "Aplicar poção" (CmdAplicarPocao: personalidade = A · p, item sai, efeito mágico). "Desistir" ou recusar → pode voltar depois.
-					Princesa (dados/personalidades/princesa.tres): O5 C5 E4 A6 N8.
-					missao1_resultado: 0 não entregou · 1 bom (N < 4 e outros traços mudaram ≤ 2) · 2 calma, mas mudou outros traços > 2 · 3 pouco efeito (4 ≤ N ≤ 8) · 4 piorou (N > 8).
-					CmdMedirMudanca guarda em missao01_desvio a maior mudança em O, C, E, A.
-[ ]				Balancear depois: Calma Profunda (talvez ~4 cogumelos + 4 ervas) para baixar bem o N numa poção só; rever o critério N < 4 (8 → 4 é muito).
-[ ]				Reações diferentes da princesa/rei para cada resultado (hoje só "Eu... me sinto diferente." e "Veremos no casamento.").
-[ ]				Ajustar no editor: posição do Rei, Princesa e o X onde a bruxa para (Rei x 848, Princesa x 1008, bruxa para em x 700). Sprites finais do rei e da princesa.
+	[ ] História / missão: (em ordem)
+		[.]		A bruxa diz quais & qtos itens tem que pegar e libera controle na primeira missão. (8 cogumelos e 8 ervas) (falas atualizadas: "Oito cogumelos... E oito ervas..."; Calma Profunda no catálogo agora diag(1,1,1,1,0,5625) = 8 cogumelos; princesa N 8 → 4,5)
+		[.]		finalização, entrega poção e resultados possíveis.
+		[ ]		ajustar personalidade da Princesa (dados/personalidades/princesa.tres): O5 C(-2) E4 A6 N8. (princesa.tres atualizado)
+				missao1_resultado: 
+					0 não entregou: · 
+					1 bom (N < 4 e outros traços mudaram ≤ 2) · 
+					2 calma, mas mudou outros traços > 2 · 
+					3 pouco efeito (4 ≤ N ≤ 8) · 
+					4 piorou (N > 8). 
+					Isso não será assim. Esse seria um teste para ver se N foi bem feito. Teoricamente são 25 combinações entre 5 possibilidades (aumentou muito, aumentou pouco, neutro, diminuiu muito diminuiu pouco) para cada uma dos 5 traços.
+					Também temos que fazer testes pois a depender da poção pode zerar um traço deixando a pessoa estereotipada.
+					CmdMedirMudanca guarda em missao01_desvio a maior mudança em O, C, E, A. (não será assim, talvez o evento tenha que ter várias páginas com condições a partir de como está sua personalidade respectiva.)(pode remover esse comando: o castelo agora usa CmdClassificarPersonalidade; apague src/dados/comandos/cmd_medir_mudanca.gd)
+					Daí Reações diferentes da princesa/rei para cada resultado (hoje só "Eu... me sinto diferente." e "Veremos no casamento.").
+					Feito (base): CmdClassificarPersonalidade compara com princesa.tres e grava missao01_O/C/E/A/N (−2 diminuiu muito, −1 pouco, 0 neutro, +1, +2; r = Δ / max(|ref|, 1): < 0,1 neutro, < 0,4 pouco) e missao01_extremo (traços ≈ 0 ou |v| ≥ 9,5).
+					missao1_resultado hoje: 1 N −2 e nenhum outro ±2 · 2 N −2 mas outro traço ±2 · 3 pouco efeito · 4 N subiu · 5 estereotipada (algum traço extremo). Rascunho das reações feito (castelo_in_auto / rei / princesa): uma fala da princesa e do rei para cada resultado 1–5, e o rei e a princesa têm uma fala própria por resultado depois da entrega. Revisar o texto.
+					1 bom: princesa "já me sinto mais calma"; o rei aceita a contragosto e começa a resmungar; a princesa interrompe, agradece, já pensa no vestido e convida a bruxa para o casamento; o rei aceita (missao01_convite = 1).
+					5 estereotipada: a princesa repete "Casamento. Vestido." e o drama cresce; o rei manda prender a bruxa, ela pede desculpas, não adianta; ela foge por outros cômodos do castelo, chega ao véu, pega um pedaço (missao01_veu = 1) e usa um FEITIÇO de volta para casa (não é o véu que teleporta). Os guardas entram e não tem ninguém. Ela aparece em bruxa_in.
+						Provisório: a fuga é em tela preta, só com os pensamentos da bruxa, até existirem os outros cômodos (castelo_in1, in2...).
+		[ ]		Roteiro: antes dessa cena, mostrar que a bruxa conhece um feitiço (ou tem um item) que leva de volta para casa, SÓ para casa. Senão fica do nada.
+				Acesso ao castelo é livre (sem variável). Só o resultado 5 (fuga) cria problema. Nos outros casos o véu continua lá: ela entra por algum cômodo do castelo e vai buscar (castelo_in1, in2... a criar).
+					A parte 2 da fuga (troca de cenas pelos cômodos) fica para depois.
+				Depois: com resultado 5, o rei manda prender se ela voltar ao castelo (só fala, ainda não prende de verdade).
 ```
 
 ## Terminar até o Cap. 1 (1)
 
 ```
 
+[ ] BETA / DEMO:
+[ ]		Caldeirão 100%
+[ ]		Diálogos 100%
+[ ]		Sprites 100%
+[ ]		Audio 100%
+[ ]		Menus 100%
+
+
+
 [ ] Bugs/Revisão:
 [?]		CmdMoverPlayer liberava o evento antes do movimento começar (diálogo aparecia com a bruxa andando). Agora espera começar (até 0,5 s) e depois terminar.
 [?]		Camera trava quando chega num canto de tela mas o parallax não deve travar, senão dá uma sensação ruim de impacto quando chega perto de um canto de tela.
 			Feito: camera_2d.gd lê limit_left/right e usa borda suave (BORDA_SUAVE 200 px, aproximação exponencial). Vale para todos os mapas.
-			CamadaParallax (src/cena/camada_parallax.gd, Parallax2D): textura, fator (0 céu parado, 1 mapa, >1 frente), loop_x, pan (px/s), deslocamento. Ponte: nuvens (Fundo3) convertidas. Converter as outras camadas/mapas aos poucos.
+			CamadaParallax (src/cena/camada_parallax.gd, Parallax2D): textura, fator (0 céu parado, 1 mapa, >1 frente), loop_x, pan (px/s), deslocamento. Ponte: nuvens (Fundo3) conicavertidas. Converter as outras camadas/mapas aos poucos.
 [?]		Página com várias condições (todas precisam valer): variável, item, personalidade, posição, direção
 [?]		Página reavalia ao ganhar/perder item e ao mudar personalidade
 [?]		Notificação de item nunca aparece (NotificacaoItem sem Label em main.tscn)
@@ -104,6 +114,12 @@ EstradaB
 [ ]		Tutorial do caldeirão na 1ª vez.
 [ ]		Um card depois do outro se ativer os 2. (primeiro inventário depois status). se ativar só um, só aparece ele.
 [ ]		Fazer faces tbm terem seu .tres
+
+[ ]	Representação de poções visual com matriz/grafo.
+[ ]		Mostrar o pentagrama, cada aresta representa um componente. Pensei em relacionar as arestas com a_ij e criar um feedback útil visualmente.
+[ ] 	Na hora da aplicar a poção, inventário, resultado do preparo, sempre mostra o pentagrama e a matriz.
+[ ]		O pentagrama deve ter animações a depender da matriz. Por exemplo, matriz diagonal (ou próxima de diagonal a menos de ruído) só escala, então a animação do pentagram é escalar. Matriz que troca dois componentes deve trocar duas pontas do pentagrama suavemente, como uma permutação ou rotação.
+
 
 [ ]	Escrita/Estilo:
 [ ]		Diálogos devem condizer com a época
@@ -123,9 +139,9 @@ EstradaB
 				Passo do Inspector agora é 0.00001 (item_data.gd). Conferir no editor.
 
 
-[ ] Intro: (Cap. 1)
-[ ]		Melhorar texto: reduzir? etc...
-[ ]		Melhorar representação do texto subindo.
+[?] Intro: (Cap. 1)
+[x]		Melhorar texto: reduzir? etc... (5 legendas curtas, CmdLegenda)
+[x]		Melhorar representação do texto subindo. (intro_fundo sobe; toque pula a intro: CmdPularComToque)
 
 [.] Interprete:
 [?]	    comando if para verificar, além de variaveis; itens ou personalidade (GameTemp)

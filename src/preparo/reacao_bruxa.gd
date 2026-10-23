@@ -13,8 +13,8 @@ extends Node2D
 const FOTO_PATH := "res://assets/faces/bruxa_grande.png"
 ## Posição do retrato (mesmas coordenadas do caldeirão, em $Animações).
 const POSICAO := Vector2(80, 470)
-const ALTURA_FOTO: float = 190.0
-const BALAO_OFFSET := Vector2(0, -210)   # canto inferior esquerdo do balão, relativo ao retrato
+const ALTURA_FOTO: float = 240.0
+const BALAO_OFFSET := Vector2(0, -260)   # canto inferior esquerdo do balão, relativo ao retrato
 const BALAO_DURACAO: float = 2.2          # s na tela
 const INTERVALO_MIN_FALA: float = 2.5     # s entre falas
 const SUAVIZACAO: float = 6.0

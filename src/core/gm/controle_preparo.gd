@@ -8,6 +8,11 @@ var gm   # GameManager
 ## Fade da cena de preparo ao abrir/fechar (s).
 const TEMPO_FADE: float = 0.6
 var _tw_fade: Tween
+## HUD estava ativo antes de abrir o preparo? (volta igual ao fechar)
+var _hud_antes: bool = true
+
+func _hud():
+	return gm.get_node_or_null("/root/Main/CanvasLayer/HUD")
 
 func _cena():
 	var cena = gm.get_node_or_null("/root/Main/CanvasLayer/CenaPreparo")
@@ -19,6 +24,10 @@ func abrir() -> void:
 	var cena = _cena()
 	if not cena:
 		return
+	var hud = _hud()
+	if hud and hud.has_method("set_ativo"):
+		_hud_antes = hud.carta_inventario.ativa
+		hud.set_ativo(false)
 	gm._pause_game_with_reset()
 	_fade(cena, true)
 	if cena.has_method("iniciar"):
@@ -38,6 +47,9 @@ func fechar(resultado: Dictionary = {}) -> void:
 		cena.visible = false
 		cena.modulate.a = 1.0
 	gm._unpause_game_with_reset()
+	var hud = _hud()
+	if hud and hud.has_method("set_ativo"):
+		hud.set_ativo(_hud_antes)
 	# só aplica o resultado se NÃO for cancelamento
 	if not resultado.is_empty() and not resultado.get("cancelado", false):
 		_aplicar_resultado(resultado)
@@ -54,6 +66,10 @@ func _aplicar_resultado(resultado: Dictionary) -> void:
 		# missão 1: qualquer poção feita libera os guardas (ponte e estradaB)
 		if gm.game_temp.get_var("missao01_pocao_feita") != 1.0:
 			gm.game_temp.set_var("missao01_pocao_feita", 1.0)
+		# quão longe ficou da Calma Profunda (a bruxa comenta na 1ª poção): 0 = perfeita, 1 = água
+		var A = resultado.get("A", [])
+		if A is Array and A.size() == 5:
+			gm.game_temp.set_var("missao01_pocao_erro", CatalogoPocoes.erro_relativo("Poção da Calma Profunda", A))
 
 ## Entra/sai com fade (roda com o jogo pausado). Ao sair, esconde no fim.
 func _fade(cena: CanvasItem, entrar: bool) -> void:
