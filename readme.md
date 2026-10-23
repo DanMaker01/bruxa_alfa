@@ -39,17 +39,26 @@ EstradaB
 
 ```
 
-
 [.] v3
 [?] movimento da bruxa tem uma aceleração, mas quando ela se mover por comando pode imprimir velocidade diretamente. isso dá problema quando os guardas vão acompanhar a bruxa, porque eles não têm essa aceleração aí fica descompassado. como resolvo?
 		Feito: CmdMoverPlayer tem "velocidade" (px/s). 0 = normal, com aceleração. > 0 = velocidade fixa, sem aceleração (InputManager.move_to_position). No castelo: bruxa e guardas a 200 px/s.
-[?]	balancear itens e preparo.
-		Erva + cogumelo (1ª receita): erva m5200 s2000/3000 Tmin50 k.3 Tmax135 k.15 (queima ~140+) t25–90 h.4; cogumelo m1200 s600/900 Tmin100 k.15 Tmax160 k.15 t5–25 h.4/.5. Fogo: K 0.3, CONST_A 30.
-		Receita ideal (~60 s): acende → erva com água morna (~8 s) → cozinha até ~40 s → ~1 clique/s até chama BRANCA (~120 °C) → cogumelo (~48–50 s) → frita ~10 s → termina. Perfeito → Poção da Calma Profunda (só N cai, 0,93).
-		2ª receita (E): Flor-de-farra (E +20%, mas C −5%, A −6% e N +5% de E) em INFUSÃO 75–95 °C (ferver estraga), m2400 (~30 s a 85 °C), t 20–70 s.
-		  Musgo-do-recato (compensa C, A e N) entra POR ÚLTIMO: sem cozimento, t 2–12 s. → Poção da Desenvoltura: só E +20%.
-	[ ]		Balancear depo'is: Calma Profunda (talvez ~4 cogumelos + 4 ervas) para baixar bem o N numa poção só; rever o critério N < 4 (8 → 4 é muito). Agora coloquei 8 ervas e 8 cogu, 
-				Aí diminui mais ainda a % de N, deve ser perto de 50%. Tem que balancear tudo junto. Mas confirmo que serão 8 e 8. O teste de personalidade deve
+[?]	balancear itens e preparo:
+		1ª receita: 
+        erva m5200 s2000/3000 Tmin50 k.3 Tmax135 k.15 (queima ~140+) t25–90 h.4; 
+        cogumelo m1200 s600/900 Tmin100 k.15 Tmax160 k.15 t5–25 h.4/.5. Fogo: K 0.3, CONST_A 30.
+		Receita ideal (~60 s): acende → erva com água morna (~8 s) → cozinha até ~40 s → ~1 clique/s até chama BRANCA (~120 °C) → cogumelo (~48–50 s) → frita ~10 s → termina. Perfeito → Poção da Calma Profunda (só N cai).
+	
+        2ª receita: 
+        Flor-de-farra (E +20%, mas C −5%, A −6% e N +5% de E) em INFUSÃO 75–95 °C (ferver estraga), m2400 (~30 s a 85 °C), t 20–70 s.
+		Musgo-do-recato (compensa C, A e N) entra POR ÚLTIMO: sem cozimento, t 2–12 s. → Poção da Desenvoltura: só E +20%.
+
+  
+[ ]	Receitas: 
+    	Calma Profunda 
+        (talvez ~8 cogumelos + 8 ervas) 
+        para baixar bem o N numa poção só; rever o critério N < 4 (8 → 4 é muito). Agora coloquei 8 ervas e 8 cogu
+		diminui N perto de 50%. Tem que balancear tudo junto. 
+
 
 [] diálogo:
 	[.]	Castelo_in: pausa, camera no Rei, fala "pode vir aqui" ou algo assim. Então os guardas acompanham a bruxa até ele. Pausa. Os guardas recuam. Pausa. Aí começa o diálogo com o rei. Em certo momento da fala, a princesa diz que a bruxa é a única que pode ajudar. (feito: guardas castelo_in_guarda1/2 em x 330/260; câmera vai até o rei (848, 505); "Venha até aqui."; guardas vão até x 600/540 com a bruxa (700) e voltam; princesa: "Ela é a única que pode me ajudar.")
@@ -62,6 +71,7 @@ EstradaB
 		4. Efeito: letras aparecem com fade mais lento e uma leve ondulação; vinheta escura nas bordas da tela enquanto ela pensa.
 		Sugestão: a caixa de diálogo detecta "(pensando)" no começo do texto, tira a marca e aplica 1 + 3 + vinheta. Assim os eventos atuais já funcionam sem reescrever.
 
+
 [] mapa:
 	[] bruxa_out, mais camadas (v3)
 	[] castelo_in, aumentar corredor (v3)
@@ -71,9 +81,7 @@ EstradaB
 	[.]		Layout: Anotar o tempo e temperatura no momento que cada item entrou nos itens. quero não só número, mas uma representação visual útil. estava sobrepondo a área do ingrediente. vamos fazer testes visuais
 			Teste 1: cada ingrediente tem um número (ordem de entrada) numa bolinha na cor da chama de quando entrou; a mesma bolinha numerada aparece na curva principal, no ponto de entrada. Nome na lista: "1. Erva".
 	[.]		Nomear as poções de referência no catálogo (PocaoReferencia: nome, descrição, A). Poção da Calma Profunda. Poção #2. Poções proíbidas. 
-	[?] 	Ao colocar item no caldeirão não deve cair nada da temperatura. Faça isso zerando a variável e não removendo-a. (CONST_B = 0)
 	[?]		Parece que a erva e cogu não estão mais compatíveis em Tmin Tmax. está muito difícil antes estava ok. (voltei: erva 50–135, cogumelo 100–160. A erva fica no caldeirão enquanto o cogumelo frita na chama branca ~136 °C, então o Tmax dela tem que chegar perto disso)
-	
 
 	[ ] História / missão: (em ordem)
 		[.]		A bruxa diz quais & qtos itens tem que pegar e libera controle na primeira missão. (8 cogumelos e 8 ervas) (falas atualizadas: "Oito cogumelos... E oito ervas..."; Calma Profunda no catálogo agora diag(1,1,1,1,0,5625) = 8 cogumelos; princesa N 8 → 4,5)
@@ -103,13 +111,9 @@ EstradaB
 		Opções:
 		a) Criado do castelo enviado em segredo: o rei não confia em bruxas, mas a princesa insistiu. Justifica ele saber do caminho e ter medo da floresta (nunca sai do castelo).
 		b) Príncipe (irmão da princesa) disfarçado de camponês: nobre que se perde fácil e tem medo da floresta; o rei não pode saber que ele foi atrás de uma bruxa.
-		c) O noivo é um plebeu, e o camponês é irmão dele: casamento malvisto, e é isso que deixa a princesa nervosa. Dá drama com o rei.
+		c) O noivo é um plebeu, e o camponês é irmão dele: casamento malvisto, e é isso que deixa a princesa nervosa. Drama com o rei.
 		Por enquanto continua CAMPONÊS, com as falas de antes. Ideia guardada: mensageiro do Rei (plebeu que trabalha para o castelo), para o Rei aceitar receber a bruxa.
 		Rei recebe com "Então você é a bruxa que está em minhas terras." (não diz que mandou buscar).
-	[?] 	definir data do casamento 1 dia ou 3 dias?
-		Hoje está inconsistente: o camponês diz "vai se casar amanhã" e a bruxa "Amanhã, antes do casamento", mas no castelo é "daqui a três dias".
-		1 dia: mais urgência, combina com a fala do camponês. 3 dias: dá espaço para mais coisas antes do casamento (outras missões, voltar ao castelo). A intro já usa "três dias" para a casa: talvez evitar repetir.
-		DECIDIDO: o casamento é AMANHÃ. Castelo atualizado ("o casamento é amanhã").
 	[] 	npc tem que se despedir ao sair.
 		Ideia: "Obrigado, senhora. Vou esperar notícias." + anda até a porta + some com fade (ou sai pela porta com o som dela).
 		Ideia: "Vou esperar notícias. Até logo, senhora." + andar até a porta e sumir (fade ou som da porta).
