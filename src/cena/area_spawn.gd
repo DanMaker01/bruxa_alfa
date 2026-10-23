@@ -41,9 +41,11 @@ const TEMPO_APARECER: float = 0.5
 		queue_redraw()
 ## Tempo (s) depois de coletar até nascer um novo.
 @export var cooldown: float = 1.0
-## Distância mínima (px, no eixo x) entre os centros de dois itens, para não se sobreporem.
-## Se a faixa não tiver espaço livre, o item nasce em qualquer lugar (pode sobrepor).
-@export var distancia_min: float = 70.0
+## Espalhamento: 0 = bem espalhados (longe dos que já estão no mapa), 0,5 = aleatório,
+## 1 = bem próximos (perto dos que já estão no mapa).
+@export_range(0.0, 1.0, 0.05) var espalhamento: float = 0.3
+## Quantos pontos aleatórios são sorteados para escolher o melhor.
+const CANDIDATOS: int = 12
 
 var _gt = null
 var _chave: String = ""
@@ -125,40 +127,24 @@ func _renascer(i: int) -> void:
 		no.refresh_event()
 	_efeito_nascer(no)
 
-## Ponto aleatório da faixa sem sobrepor "outras" (distância em x >= distancia_min),
-## sorteado uniformemente entre os trechos livres. Sem trecho livre: qualquer ponto.
+## Ponto da faixa conforme o espalhamento: sorteia CANDIDATOS pontos e escolhe o que
+## fica mais longe (espalhamento 0) ou mais perto (espalhamento 1) dos que já estão no mapa.
 func _ponto_livre(outras: Array) -> Vector2:
-	var a := -largura * 0.5
-	var b := largura * 0.5
-	# trechos livres = faixa menos (x - d, x + d) de cada outra
-	var livres: Array = [Vector2(a, b)]   # Vector2(início, fim)
-	for q in outras:
-		var ini: float = q.x - distancia_min
-		var fim: float = q.x + distancia_min
-		var novos: Array = []
-		for t in livres:
-			if fim <= t.x or ini >= t.y:
-				novos.append(t)
-				continue
-			if ini > t.x:
-				novos.append(Vector2(t.x, ini))
-			if fim < t.y:
-				novos.append(Vector2(fim, t.y))
-		livres = novos
-	var total := 0.0
-	for t in livres:
-		total += t.y - t.x
-	if total <= 0.0:
+	if outras.is_empty():
 		return _ponto_aleatorio()
-	var sorteio := randf() * total
-	var x := b
-	for t in livres:
-		var tam: float = t.y - t.x
-		if sorteio <= tam:
-			x = t.x + sorteio
-			break
-		sorteio -= tam
-	return Vector2(x, randf_range(-variacao_y, variacao_y))
+	var peso: float = 1.0 - 2.0 * espalhamento   # +1 = quer longe, −1 = quer perto, 0 = tanto faz
+	var melhor := _ponto_aleatorio()
+	var melhor_nota := -INF
+	for k in CANDIDATOS:
+		var p := _ponto_aleatorio()
+		var d := INF
+		for q in outras:
+			d = minf(d, absf(p.x - q.x))
+		var nota: float = peso * d + (1.0 - absf(peso)) * randf() * largura   # perto de 0,5 manda o acaso
+		if nota > melhor_nota:
+			melhor_nota = nota
+			melhor = p
+	return melhor
 
 func _ponto_aleatorio() -> Vector2:
 	return Vector2(randf_range(-largura * 0.5, largura * 0.5), randf_range(-variacao_y, variacao_y))

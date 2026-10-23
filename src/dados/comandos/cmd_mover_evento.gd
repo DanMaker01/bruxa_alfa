@@ -12,6 +12,8 @@ const DIRECOES := ["centro", "esq", "dir"]
 @export var direcao: Direcao = Direcao.CENTRO
 ## Se ligado, o evento atual espera o movimento terminar.
 @export var esperar: bool = true
+## Se ligado, ignora o y de "posicao" e mantém a altura atual do evento (anda só na horizontal).
+@export var manter_y: bool = false
 
 func to_dict() -> Dictionary:
 	return {"nome": "move_event", "args": [evento, posicao.x, posicao.y, velocidade, DIRECOES[direcao], esperar]}
@@ -21,13 +23,14 @@ func executar(interp, ev) -> int:
 	if not alvo or not alvo.has_method("move_to"):
 		interp.falhar(ev, self, "evento '" + evento + "' não encontrado no mapa")
 		return AVANCAR
+	var y: float = alvo.global_position.y if manter_y else posicao.y
 	if not esperar:
-		alvo.move_to(posicao.x, posicao.y, velocidade, DIRECOES[direcao], Callable())
+		alvo.move_to(posicao.x, y, velocidade, DIRECOES[direcao], Callable())
 		return AVANCAR
 	# Pausa até o callback. Se o alvo sumir (troca de mapa), o Interpreter detecta e segue.
 	ev.pause("move")
 	ev.move_target_ref = weakref(alvo)
-	alvo.move_to(posicao.x, posicao.y, velocidade, DIRECOES[direcao], func(_ok: bool):
+	alvo.move_to(posicao.x, y, velocidade, DIRECOES[direcao], func(_ok: bool):
 		if not ev.finished and ev.pause_reason == "move":
 			ev.move_target_ref = null
 			ev.resume_and_advance()

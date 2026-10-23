@@ -37,7 +37,7 @@ const CONST_B: float = 10.0	# queda de T quando um ingrediente entra
 ## Medido (K 0,3): segurando sem parar, F cairia até ~320 (caldo ~50 °C); com o limite
 ## em 360 o fogo apaga perto de caldo ~55–60 °C. Soltando, F volta sozinho para F_EQ (800).
 ## A fumaça de "quase apagando" começa em F_LIMIT_MIN + VisualCaldeirao.MARGEM_APAGAR.
-const F_LIMIT_MIN: float = 400.0
+const F_LIMIT_MIN: float = 360.0
 ## Quanto cada passo de abafar (segurando o botão, a cada 0,3 s) tira de F. Menor = controle mais fino.
 const CONST_C: float = 20.0
 

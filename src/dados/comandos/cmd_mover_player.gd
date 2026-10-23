@@ -22,6 +22,9 @@ const DIRECOES := ["", "esq", "dir"]
 @export var direcao_final: DirecaoFinal = DirecaoFinal.MANTER
 ## Se ligado, o evento atual espera a bruxa chegar.
 @export var esperar: bool = true
+## px/s. 0 = normal (acelera como no jogo). > 0 = velocidade fixa, sem aceleração:
+## use a mesma velocidade dos eventos que acompanham a bruxa.
+@export var velocidade: float = 0.0
 
 func to_dict() -> Dictionary:
 	var alvo = x if modo == Modo.PARA_X else (evento if modo == Modo.PARA_EVENTO else deslocamento)
@@ -46,7 +49,7 @@ func executar(interp, ev) -> int:
 			alvo_x = no.global_position.x
 		Modo.DESLOCAR:
 			alvo_x = player.global_position.x + deslocamento
-	im.move_to_position(alvo_x, player.global_position.y)
+	im.move_to_position(alvo_x, player.global_position.y, velocidade)
 	if esperar:
 		ev.pause("move")
 		ev.move_target_ref = weakref(player)

@@ -101,8 +101,12 @@ func _process(delta):
 		
 		# 🔥 ACELERA PROGRESSIVAMENTE (USA DIRETAMENTE O PLAYER)
 		var direction = 1 if dist > 0 else -1
-		var target_vel = direction * player.velocidade_max()
-		player.velocity.x = move_toward(player.velocity.x, target_vel, player.aceleracao() * delta)
+		if _vel_fixa > 0.0:
+			# movimento por comando com velocidade fixa: sem aceleração (acompanha eventos)
+			player.velocity.x = direction * _vel_fixa
+		else:
+			var target_vel = direction * player.velocidade_max()
+			player.velocity.x = move_toward(player.velocity.x, target_vel, player.aceleracao() * delta)
 		
 		# Atualiza direção do sprite
 		if player.has_method("set_movement_direction"):
@@ -152,6 +156,7 @@ func _input(event):
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
 				is_mouse_pressed = true
+				_vel_fixa = 0.0
 				is_dragging = true
 				mouse_position = event.position
 				click_id += 1
@@ -213,15 +218,21 @@ func _stop_here():
 
 # ===== MÉTODOS PÚBLICOS =====
 
+## Velocidade fixa (px/s) do movimento atual por comando; 0 = normal, com aceleração.
+var _vel_fixa: float = 0.0
+
 func move_to(x: float):
+	_vel_fixa = 0.0
 	"""Move o player para uma posição X"""
 	print("[InputManager] Movendo para X: ", x)
 	target_position = Vector2(x, player.global_position.y if player else 0)
 	_start_moving()
 	auto_moving = true
 
-func move_to_position(target_x: float, target_y: float):
-	"""Move o player para uma posição específica (Y é ignorado)"""
+func move_to_position(target_x: float, target_y: float, velocidade: float = 0.0):
+	"""Move o player para uma posição específica (Y é ignorado).
+	velocidade > 0: anda nessa velocidade fixa, sem aceleração (cutscenes com outros eventos)."""
+	_vel_fixa = velocidade
 	print("[InputManager] Movendo para posição: (", target_x, ", ", target_y, ")")
 	var y = player.global_position.y if player else 0
 	target_position = Vector2(target_x, y)
@@ -240,6 +251,7 @@ func move_to_event(event_node: Node2D):
 
 func stop_movement():
 	"""Para o movimento do player com desaceleração suave"""
+	_vel_fixa = 0.0
 	print("[InputManager] Parando movimento (com desaceleração)")
 	is_moving = false
 	auto_moving = false

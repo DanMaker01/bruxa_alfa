@@ -1,25 +1,25 @@
 [gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://5w84tl7j5bbc"]
 
-[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="1_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="1_x"]
 [ext_resource type="SpriteFrames" path="res://animacoes/rei.tres" id="2_x"]
-[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="3_x"]
-[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="4_x"]
-[ext_resource type="Script" uid="uid://u1lexc30s8be" path="res://src/dados/comandos/cmd_player.gd" id="5_x"]
-[ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="6_x"]
-[ext_resource type="Script" uid="uid://btdlgkphiqan1" path="res://src/dados/comandos/cmd_mostrar_opcoes.gd" id="7_x"]
-[ext_resource type="Script" uid="uid://crwb7mjauibuo" path="res://src/dados/comandos/cmd_label.gd" id="8_x"]
-[ext_resource type="Script" uid="uid://b3yty8028fcf2" path="res://src/dados/comandos/cmd_goto.gd" id="9_x"]
-[ext_resource type="Script" uid="uid://ukjmqwt8r7hg" path="res://src/dados/comandos/cmd_aplicar_pocao.gd" id="10_x"]
-[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="11_x"]
-[ext_resource type="Script" uid="uid://cwdgcnn30o052" path="res://src/dados/comandos/cmd_if.gd" id="12_x"]
-[ext_resource type="Script" uid="uid://phmwdet0nd7d" path="res://src/dados/comandos/cmd_end.gd" id="13_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/comando.gd" id="3_x"]
+[ext_resource type="Script" path="res://src/dados/pagina_data.gd" id="4_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_player.gd" id="5_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_esperar.gd" id="6_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_mostrar_opcoes.gd" id="7_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_label.gd" id="8_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_goto.gd" id="9_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_aplicar_pocao.gd" id="10_x"]
+[ext_resource type="Script" path="res://src/dados/condicao.gd" id="11_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_if.gd" id="12_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_end.gd" id="13_x"]
 [ext_resource type="Resource" path="res://dados/personalidades/princesa.tres" id="14_x"]
-[ext_resource type="Script" uid="uid://dqed4jkru1owa" path="res://src/dados/comandos/cmd_classificar_personalidade.gd" id="15_x"]
-[ext_resource type="Script" uid="uid://bercma7w4moqu" path="res://src/dados/comandos/cmd_mudar_var.gd" id="16_x"]
-[ext_resource type="Script" uid="uid://yljfr0vgdw5o" path="res://src/dados/comandos/cmd_tremer_camera.gd" id="17_x"]
-[ext_resource type="Script" uid="uid://7c1614u5xl4b" path="res://src/dados/comandos/cmd_fade.gd" id="18_x"]
-[ext_resource type="Script" uid="uid://bnrknn0lpp5ss" path="res://src/dados/comandos/cmd_teleportar.gd" id="19_x"]
-[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="20_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_classificar_personalidade.gd" id="15_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_mudar_var.gd" id="16_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_tremer_camera.gd" id="17_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_fade.gd" id="18_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_teleportar.gd" id="19_x"]
+[ext_resource type="Script" path="res://src/dados/evento_data.gd" id="20_x"]
 
 [sub_resource type="Resource" id="R_1"]
 script = ExtResource("1_x")
@@ -36,6 +36,7 @@ comandos = Array[ExtResource("3_x")]([SubResource("R_1")])
 
 [sub_resource type="Resource" id="R_3"]
 script = ExtResource("5_x")
+acao = 0
 
 [sub_resource type="Resource" id="R_4"]
 script = ExtResource("1_x")
@@ -169,7 +170,10 @@ evento_alvo = "castelo_in_princesa"
 
 [sub_resource type="Resource" id="R_35"]
 script = ExtResource("11_x")
+tipo = 0
 variavel = "missao01_aplicou"
+operador = 0
+valor = 0.0
 
 [sub_resource type="Resource" id="R_36"]
 script = ExtResource("12_x")
@@ -202,6 +206,7 @@ segundos = 0.5
 script = ExtResource("15_x")
 personalidade = "princesa"
 referencia = ExtResource("14_x")
+prefixo = "missao01"
 
 [sub_resource type="Resource" id="R_44"]
 script = ExtResource("16_x")
@@ -210,6 +215,7 @@ valor = 3.0
 
 [sub_resource type="Resource" id="R_45"]
 script = ExtResource("11_x")
+tipo = 0
 variavel = "missao01_N"
 operador = 5
 valor = -2.0
@@ -225,6 +231,7 @@ valor = 1.0
 
 [sub_resource type="Resource" id="R_48"]
 script = ExtResource("11_x")
+tipo = 0
 variavel = "missao01_O"
 operador = 4
 valor = 2.0
@@ -243,6 +250,7 @@ script = ExtResource("13_x")
 
 [sub_resource type="Resource" id="R_52"]
 script = ExtResource("11_x")
+tipo = 0
 variavel = "missao01_O"
 operador = 5
 valor = -2.0
@@ -261,6 +269,7 @@ script = ExtResource("13_x")
 
 [sub_resource type="Resource" id="R_56"]
 script = ExtResource("11_x")
+tipo = 0
 variavel = "missao01_C"
 operador = 4
 valor = 2.0
@@ -279,6 +288,7 @@ script = ExtResource("13_x")
 
 [sub_resource type="Resource" id="R_60"]
 script = ExtResource("11_x")
+tipo = 0
 variavel = "missao01_C"
 operador = 5
 valor = -2.0
@@ -297,6 +307,7 @@ script = ExtResource("13_x")
 
 [sub_resource type="Resource" id="R_64"]
 script = ExtResource("11_x")
+tipo = 0
 variavel = "missao01_E"
 operador = 4
 valor = 2.0
@@ -315,6 +326,7 @@ script = ExtResource("13_x")
 
 [sub_resource type="Resource" id="R_68"]
 script = ExtResource("11_x")
+tipo = 0
 variavel = "missao01_E"
 operador = 5
 valor = -2.0
@@ -333,6 +345,7 @@ script = ExtResource("13_x")
 
 [sub_resource type="Resource" id="R_72"]
 script = ExtResource("11_x")
+tipo = 0
 variavel = "missao01_A"
 operador = 4
 valor = 2.0
@@ -351,6 +364,7 @@ script = ExtResource("13_x")
 
 [sub_resource type="Resource" id="R_76"]
 script = ExtResource("11_x")
+tipo = 0
 variavel = "missao01_A"
 operador = 5
 valor = -2.0
@@ -372,6 +386,7 @@ script = ExtResource("13_x")
 
 [sub_resource type="Resource" id="R_81"]
 script = ExtResource("11_x")
+tipo = 0
 variavel = "missao01_N"
 operador = 4
 valor = 1.0
@@ -390,6 +405,7 @@ script = ExtResource("13_x")
 
 [sub_resource type="Resource" id="R_85"]
 script = ExtResource("11_x")
+tipo = 0
 variavel = "missao01_extremo"
 operador = 4
 valor = 1.0
@@ -408,7 +424,9 @@ script = ExtResource("13_x")
 
 [sub_resource type="Resource" id="R_89"]
 script = ExtResource("11_x")
+tipo = 0
 variavel = "missao1_resultado"
+operador = 0
 valor = 1.0
 
 [sub_resource type="Resource" id="R_90"]
@@ -501,7 +519,9 @@ script = ExtResource("13_x")
 
 [sub_resource type="Resource" id="R_112"]
 script = ExtResource("11_x")
+tipo = 0
 variavel = "missao1_resultado"
+operador = 0
 valor = 2.0
 
 [sub_resource type="Resource" id="R_113"]
@@ -541,7 +561,9 @@ script = ExtResource("13_x")
 
 [sub_resource type="Resource" id="R_122"]
 script = ExtResource("11_x")
+tipo = 0
 variavel = "missao1_resultado"
+operador = 0
 valor = 3.0
 
 [sub_resource type="Resource" id="R_123"]
@@ -573,7 +595,9 @@ script = ExtResource("13_x")
 
 [sub_resource type="Resource" id="R_130"]
 script = ExtResource("11_x")
+tipo = 0
 variavel = "missao1_resultado"
+operador = 0
 valor = 4.0
 
 [sub_resource type="Resource" id="R_131"]
@@ -597,7 +621,9 @@ script = ExtResource("13_x")
 
 [sub_resource type="Resource" id="R_136"]
 script = ExtResource("11_x")
+tipo = 0
 variavel = "missao1_resultado"
+operador = 0
 valor = 5.0
 
 [sub_resource type="Resource" id="R_137"]
@@ -749,6 +775,7 @@ texto = "[BRUXA;bruxa_grande;0] (Agora, o feitiço de volta para casa.)"
 [sub_resource type="Resource" id="R_173"]
 script = ExtResource("17_x")
 intensidade = 12.0
+duracao = 1.0
 
 [sub_resource type="Resource" id="R_174"]
 script = ExtResource("6_x")
@@ -814,12 +841,17 @@ acao = 1
 
 [sub_resource type="Resource" id="R_189"]
 script = ExtResource("11_x")
+tipo = 0
 variavel = "castelo_conversou"
+operador = 0
 valor = 1.0
 
 [sub_resource type="Resource" id="R_190"]
 script = ExtResource("11_x")
+tipo = 0
 variavel = "missao1_resultado"
+operador = 0
+valor = 0.0
 
 [sub_resource type="Resource" id="R_191"]
 script = ExtResource("4_x")
@@ -833,11 +865,13 @@ comandos = Array[ExtResource("3_x")]([SubResource("R_3"), SubResource("R_4"), Su
 
 [sub_resource type="Resource" id="R_192"]
 script = ExtResource("1_x")
-texto = "[REI;rei;100] O casamento é daqui a três dias. Não se atrase, bruxa."
+texto = "[REI;rei;100] O casamento é amanhã. Não se atrase, bruxa."
 
 [sub_resource type="Resource" id="R_193"]
 script = ExtResource("11_x")
+tipo = 0
 variavel = "missao1_resultado"
+operador = 0
 valor = 1.0
 
 [sub_resource type="Resource" id="R_194"]
@@ -856,7 +890,9 @@ texto = "[REI;rei;100] Minha filha anda estranha desde que você esteve aqui, br
 
 [sub_resource type="Resource" id="R_196"]
 script = ExtResource("11_x")
+tipo = 0
 variavel = "missao1_resultado"
+operador = 0
 valor = 2.0
 
 [sub_resource type="Resource" id="R_197"]
@@ -871,11 +907,13 @@ comandos = Array[ExtResource("3_x")]([SubResource("R_195")])
 
 [sub_resource type="Resource" id="R_198"]
 script = ExtResource("1_x")
-texto = "[REI;rei;100] O casamento é daqui a três dias. Veremos se a sua poção serviu para alguma coisa."
+texto = "[REI;rei;100] O casamento é amanhã. Veremos se a sua poção serviu para alguma coisa."
 
 [sub_resource type="Resource" id="R_199"]
 script = ExtResource("11_x")
+tipo = 0
 variavel = "missao1_resultado"
+operador = 0
 valor = 3.0
 
 [sub_resource type="Resource" id="R_200"]
@@ -894,7 +932,9 @@ texto = "[REI;rei;100] Você de novo? Já não fez estrago bastante?"
 
 [sub_resource type="Resource" id="R_202"]
 script = ExtResource("11_x")
+tipo = 0
 variavel = "missao1_resultado"
+operador = 0
 valor = 4.0
 
 [sub_resource type="Resource" id="R_203"]
@@ -913,7 +953,9 @@ texto = "[REI;rei;100] Guardas! A bruxa voltou! Prendam-na!"
 
 [sub_resource type="Resource" id="R_205"]
 script = ExtResource("11_x")
+tipo = 0
 variavel = "missao1_resultado"
+operador = 0
 valor = 5.0
 
 [sub_resource type="Resource" id="R_206"]
