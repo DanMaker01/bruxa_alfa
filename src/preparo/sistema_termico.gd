@@ -31,7 +31,7 @@ var P_comb: float
 # =============================================================================
 ## Pulso de fogo (clique curto no botão F). Com K = 0,3: ~1 clique/s segura T perto de 120 °C.
 const CONST_A: float = 30.0
-const CONST_B: float = 10.0	# queda de T quando um ingrediente entra
+const CONST_B: float = 0.0	# queda de T quando um ingrediente entra
 ## Segurando o botão de fogo (aceso): tira CONST_C de F a cada 0,3 s ("abafar").
 ## Se F ficar abaixo disto ao abafar, o fogo apaga.
 ## Medido (K 0,3): segurando sem parar, F cairia até ~320 (caldo ~50 °C); com o limite

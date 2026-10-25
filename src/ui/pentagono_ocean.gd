@@ -24,7 +24,6 @@ var _antes: Array = [BASE, BASE, BASE, BASE, BASE]
 var _depois: Array = [BASE, BASE, BASE, BASE, BASE]
 var _prog: float = 0.0   # 0..1, animação de "antes" virando "depois"
 
-
 ## Calcula o "depois" (A · neutro) e anima.
 func mostrar(A: Array, duracao: float = 0.8) -> void:
 	_depois = []

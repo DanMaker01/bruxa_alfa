@@ -9,11 +9,19 @@ const DIRECOES := ["centro", "esq", "dir"]
 @export var posicao: Vector2 = Vector2.ZERO
 @export var direcao: Direcao = Direcao.CENTRO
 
+## O Inspector pode guardar "uid://..." em vez do caminho: converte para res://...
+func _caminho() -> String:
+	if mapa.begins_with("uid://"):
+		var id := ResourceUID.text_to_id(mapa)
+		if ResourceUID.has_id(id):
+			return ResourceUID.get_id_path(id)
+	return mapa
+
 func to_dict() -> Dictionary:
-	return {"nome": "teleportar", "args": [mapa.get_file().get_basename(), posicao.x, posicao.y, DIRECOES[direcao]]}
+	return {"nome": "teleportar", "args": [_caminho().get_file().get_basename(), posicao.x, posicao.y, DIRECOES[direcao]]}
 
 func executar(interp, ev) -> int:
-	var nome_mapa: String = mapa.get_file().get_basename()
+	var nome_mapa: String = _caminho().get_file().get_basename()
 	if nome_mapa == "":
 		interp.falhar(ev, self, "sem mapa")
 		return AVANCAR

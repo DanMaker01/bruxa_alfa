@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dpwuy41rtfp5"
-path="res://.godot/imported/mapa_castelo_in_frente.png-99da2920be445d77684d64278efa8857.ctex"
+uid="uid://b37tbudxq8p2b"
+path="res://.godot/imported/mapa_castelo_in03_frente.png-a222e31f99e55451c717335340cece2f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/mapa/mapa_castelo_in/mapa_castelo_in_frente.png"
-dest_files=["res://.godot/imported/mapa_castelo_in_frente.png-99da2920be445d77684d64278efa8857.ctex"]
+source_file="res://assets/mapa/mapa_castelo_in03/mapa_castelo_in03_frente.png"
+dest_files=["res://.godot/imported/mapa_castelo_in03_frente.png-a222e31f99e55451c717335340cece2f.ctex"]
 
 [params]
 

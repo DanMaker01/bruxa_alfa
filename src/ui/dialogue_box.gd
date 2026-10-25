@@ -49,6 +49,16 @@ const DURACAO_ESCURECER: float = 0.25
 ## z_index absoluto da tela preta: acima do mapa e do HUD, abaixo da foto e da caixa.
 const Z_ESCURECER: int = 150
 var _escurecer: ColorRect
+# ---- pensamentos: feitos pelo CmdEstiloDialogo (itálico, cor apagada, face "_pensando",
+# sem plaquinha do nome, vinheta). Não há mais detecção automática de "(pensando)". ----
+## Grupo usado pelo CmdEstiloDialogo para achar a caixa.
+const GRUPO := "caixa_dialogo"
+# ---- estilo da janela (CmdEstiloDialogo); vazio = padrão ----
+const FONTE_PADRAO: int = 28
+var _estilo: Dictionary = {}
+var _tracejado: Control
+var _vinheta: TextureRect
+var _pensando: bool = false
 var _tw_escurecer: Tween
 
 var _falante_fixo: Falante = null     # veio do comando (vale para todas as mensagens)
@@ -81,6 +91,7 @@ class EfeitoEscrita extends RichTextEffect:
 
 func _ready():
 	process_mode = PROCESS_MODE_ALWAYS
+	add_to_group(GRUPO)
 	visible = false
 	_criar_texto()
 	_setup_ui()
@@ -105,6 +116,11 @@ func _criar_texto():
 	_efeito.largura = largura_fade
 	_efeito.subida = subida_px
 	text_label.install_effect(_efeito)
+	# itálico (CmdEstiloDialogo): a fonte normal inclinada
+	var italico := FontVariation.new()
+	italico.base_font = text_label.get_theme_default_font()
+	italico.variation_transform = Transform2D(Vector2(1, 0), Vector2(0.22, 1), Vector2.ZERO)
+	text_label.add_theme_font_override("italics_font", italico)
 	if _label_original:
 		_label_original.get_parent().add_child(text_label)
 		_label_original.get_parent().move_child(text_label, _label_original.get_index())
@@ -142,9 +158,17 @@ func _show_current_message():
 	if text_label:
 		var fala := _resolver_fala(str(messages[current_index]))
 		_aplicar_falante(fala["falante"], fala["nome"])
-		_texto_puro = fala["texto"]
+		var texto: String = fala["texto"]
+		_texto_puro = texto
+		_aplicar_estilo_fala()
 		# "[" vira "[lb]" para o texto do diálogo nunca ser lido como bbcode
-		text_label.text = "[escrita]" + _texto_puro.replace("[", "[lb]") + "[/escrita]"
+		var corpo := _texto_puro.replace("[", "[lb]")
+		match str(_estilo.get("efeito", "")):
+			"onda": corpo = "[wave amp=18.0 freq=4.0]" + corpo + "[/wave]"
+			"tremor": corpo = "[shake rate=18.0 level=4]" + corpo + "[/shake]"
+		if _estilo.get("italico", false):
+			corpo = "[i]" + corpo + "[/i]"
+		text_label.text = "[escrita]" + corpo + "[/escrita]"
 		_iniciar_escrita()
 
 func _iniciar_escrita() -> void:
@@ -456,10 +480,115 @@ func _criar_escurecer() -> void:
 			_nome_painel.reparent(pai, false)
 	else:
 		add_child(_escurecer)
+	_criar_vinheta()
 	_ajustar_escurecer()
 	get_viewport().size_changed.connect(_ajustar_escurecer)
 	if visible:
 		_fade_escurecer(true)
+
+## Vinheta (bordas escuras) para pensamentos (CmdEstiloDialogo). Fica dentro da tela escura do diálogo.
+func _criar_vinheta() -> void:
+	var g := Gradient.new()
+	g.set_color(0, Color(0, 0, 0, 0))
+	g.set_color(1, Color(0, 0, 0, 1))
+	g.add_point(0.55, Color(0, 0, 0, 0))
+	var tex := GradientTexture2D.new()
+	tex.gradient = g
+	tex.fill = GradientTexture2D.FILL_RADIAL
+	tex.fill_from = Vector2(0.5, 0.5)
+	tex.fill_to = Vector2(1.0, 0.5)
+	tex.width = 256
+	tex.height = 256
+	_vinheta = TextureRect.new()
+	_vinheta.name = "VinhetaPensando"
+	_vinheta.texture = tex
+	_vinheta.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_vinheta.stretch_mode = TextureRect.STRETCH_SCALE
+	_vinheta.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_vinheta.modulate.a = 0.0
+	_escurecer.add_child(_vinheta)
+	_vinheta.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+## Parte do estilo que vale fala a fala (depois de trocar o falante).
+func _aplicar_estilo_fala() -> void:
+	if text_label:
+		text_label.add_theme_color_override("default_color", _estilo.get("cor", Color.WHITE))
+	if _foto and _estilo.get("face_pensando", false):
+		var alt := _foto_pensando(_foto.texture)
+		if alt:
+			_foto.texture = alt
+	if _nome_painel and _estilo.get("esconder_nome", false):
+		_nome_painel.visible = false
+	var v: bool = _estilo.get("vinheta", false)
+	if _vinheta and v != _pensando:
+		_vinheta.create_tween().tween_property(_vinheta, "modulate:a", 1.0 if v else 0.0, 0.35)
+	_pensando = v
+
+## Face "pensando": <foto>_pensando.png ou <primeiro nome>_pensando.png na mesma pasta
+## (ex.: bruxa_grande → bruxa_pensando). null se não existir.
+func _foto_pensando(tex: Texture2D) -> Texture2D:
+	if tex == null or tex.resource_path == "":
+		return null
+	var base := tex.resource_path.get_file().get_basename()
+	if base.ends_with("_pensando"):
+		return null
+	var pasta := tex.resource_path.get_base_dir() + "/"
+	for nome in [base + "_pensando", base.split("_")[0] + "_pensando"]:
+		var c: String = pasta + nome + ".png"
+		if ResourceLoader.exists(c):
+			return load(c)
+	return null
+
+# =============================================================================
+# ESTILO DA JANELA (CmdEstiloDialogo)
+#   tamanho_fonte (0 = padrão) · cor (texto) · italico · efeito ("", "onda", "tremor")
+#   transparencia (1 = opaca) · fundo ("normal", "tracejado", "nenhum")
+#   face_pensando (usa <face>_pensando) · esconder_nome · vinheta
+# Vale para as próximas falas até mudar de novo ou restaurar.
+# =============================================================================
+func definir_estilo(e: Dictionary) -> void:
+	_estilo = e
+	_aplicar_estilo_janela()
+
+func restaurar_estilo() -> void:
+	_estilo = {}
+	_aplicar_estilo_janela()
+
+func _aplicar_estilo_janela() -> void:
+	if text_label:
+		var tam: int = int(_estilo.get("tamanho_fonte", 0))
+		if tam <= 0:
+			tam = FONTE_PADRAO
+		text_label.add_theme_font_size_override("normal_font_size", tam)
+		text_label.add_theme_font_size_override("italics_font_size", tam)
+		text_label.add_theme_color_override("default_color", _estilo.get("cor", Color.WHITE))
+	if not panel:
+		return
+	var fundo: String = str(_estilo.get("fundo", "normal"))
+	var alfa: float = clampf(float(_estilo.get("transparencia", 1.0)), 0.0, 1.0)
+	match fundo:
+		"nenhum":
+			panel.self_modulate.a = 0.0
+		"tracejado":
+			panel.self_modulate.a = alfa * 0.35
+		_:
+			panel.self_modulate.a = alfa
+	if fundo == "tracejado" and _tracejado == null:
+		_tracejado = Control.new()
+		_tracejado.name = "Tracejado"
+		_tracejado.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_tracejado.draw.connect(func():
+			var r := Rect2(Vector2(3, 3), _tracejado.size - Vector2(6, 6))
+			var c := Color(1, 1, 1, 0.8)
+			_tracejado.draw_dashed_line(r.position, Vector2(r.end.x, r.position.y), c, 2.0, 10.0)
+			_tracejado.draw_dashed_line(Vector2(r.end.x, r.position.y), r.end, c, 2.0, 10.0)
+			_tracejado.draw_dashed_line(r.end, Vector2(r.position.x, r.end.y), c, 2.0, 10.0)
+			_tracejado.draw_dashed_line(Vector2(r.position.x, r.end.y), r.position, c, 2.0, 10.0))
+		panel.add_child(_tracejado)
+		_tracejado.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	if _tracejado:
+		_tracejado.visible = fundo == "tracejado"
+		_tracejado.queue_redraw()
 
 func _ajustar_escurecer() -> void:
 	if _escurecer:

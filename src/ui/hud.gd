@@ -73,10 +73,21 @@ func _ready():
 # =============================================================================
 
 ## Ativo = cartas aparecem (verso/abertas). Inativo = somem, menos para o diálogo.
+## Ativando as duas: primeiro o inventário, depois (ATRASO_STATUS s) o status.
+const ATRASO_STATUS: float = 0.25
+var _ativo_token: int = 0
+
 func set_ativo(v: bool) -> void:
+	_ativo_token += 1
 	fundo_hud.visible = v
 	carta_inventario.ativa = v
-	carta_status.ativa = v
+	if not v or carta_status.ativa:
+		carta_status.ativa = v
+		return
+	var meu := _ativo_token
+	await get_tree().create_timer(ATRASO_STATUS, true).timeout
+	if meu == _ativo_token:
+		carta_status.ativa = true
 
 ## Põe a DialogBox e a OptionBox (de main.tscn) dentro das cartas, como faces.
 ## Espera um frame: a DialogBox cria a tela escura no pai original antes de mudar de lugar.

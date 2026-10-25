@@ -1,32 +1,32 @@
 [gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://bdmnm2vsgeysq"]
 
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_player.gd" id="1_x"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_esperar.gd" id="2_x"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_mover_camera.gd" id="3_x"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="4_x"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_resetar_camera.gd" id="5_x"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_mover_evento.gd" id="6_x"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_mover_player.gd" id="7_x"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_mostrar_opcoes.gd" id="8_x"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_label.gd" id="9_x"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_goto.gd" id="10_x"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_aplicar_pocao.gd" id="11_x"]
-[ext_resource type="Script" path="res://src/dados/condicao.gd" id="12_x"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_if.gd" id="13_x"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_end.gd" id="14_x"]
+[ext_resource type="Script" uid="uid://u1lexc30s8be" path="res://src/dados/comandos/cmd_player.gd" id="1_x"]
+[ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="2_x"]
+[ext_resource type="Script" uid="uid://bcx1mthgrhnun" path="res://src/dados/comandos/cmd_mover_camera.gd" id="3_x"]
+[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="4_x"]
+[ext_resource type="Script" uid="uid://7rb2hsa5dvty" path="res://src/dados/comandos/cmd_resetar_camera.gd" id="5_x"]
+[ext_resource type="Script" uid="uid://ba7m6ef3neoh0" path="res://src/dados/comandos/cmd_mover_evento.gd" id="6_x"]
+[ext_resource type="Script" uid="uid://dh3fhyp6vfrt3" path="res://src/dados/comandos/cmd_mover_player.gd" id="7_x"]
+[ext_resource type="Script" uid="uid://btdlgkphiqan1" path="res://src/dados/comandos/cmd_mostrar_opcoes.gd" id="8_x"]
+[ext_resource type="Script" uid="uid://crwb7mjauibuo" path="res://src/dados/comandos/cmd_label.gd" id="9_x"]
+[ext_resource type="Script" uid="uid://b3yty8028fcf2" path="res://src/dados/comandos/cmd_goto.gd" id="10_x"]
+[ext_resource type="Script" uid="uid://ukjmqwt8r7hg" path="res://src/dados/comandos/cmd_aplicar_pocao.gd" id="11_x"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="12_x"]
+[ext_resource type="Script" uid="uid://cwdgcnn30o052" path="res://src/dados/comandos/cmd_if.gd" id="13_x"]
+[ext_resource type="Script" uid="uid://phmwdet0nd7d" path="res://src/dados/comandos/cmd_end.gd" id="14_x"]
 [ext_resource type="Resource" path="res://dados/personalidades/princesa.tres" id="15_x"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_classificar_personalidade.gd" id="16_x"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_mudar_var.gd" id="17_x"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_tremer_camera.gd" id="18_x"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_fade.gd" id="19_x"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_teleportar.gd" id="20_x"]
-[ext_resource type="Script" path="res://src/dados/comandos/comando.gd" id="21_x"]
-[ext_resource type="Script" path="res://src/dados/pagina_data.gd" id="22_x"]
-[ext_resource type="Script" path="res://src/dados/evento_data.gd" id="23_x"]
+[ext_resource type="Script" uid="uid://dqed4jkru1owa" path="res://src/dados/comandos/cmd_classificar_personalidade.gd" id="16_x"]
+[ext_resource type="Script" uid="uid://bercma7w4moqu" path="res://src/dados/comandos/cmd_mudar_var.gd" id="17_x"]
+[ext_resource type="Script" uid="uid://yljfr0vgdw5o" path="res://src/dados/comandos/cmd_tremer_camera.gd" id="18_x"]
+[ext_resource type="Script" uid="uid://7c1614u5xl4b" path="res://src/dados/comandos/cmd_fade.gd" id="19_x"]
+[ext_resource type="Script" uid="uid://22r70lmcscvw" path="res://src/dados/comandos/cmd_estilo_dialogo.gd" id="20_x"]
+[ext_resource type="Script" uid="uid://bnrknn0lpp5ss" path="res://src/dados/comandos/cmd_teleportar.gd" id="21_x"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="22_x"]
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="23_x"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="24_x"]
 
 [sub_resource type="Resource" id="R_1"]
 script = ExtResource("1_x")
-acao = 0
 
 [sub_resource type="Resource" id="R_2"]
 script = ExtResource("2_x")
@@ -59,18 +59,18 @@ segundos = 0.9
 
 [sub_resource type="Resource" id="R_9"]
 script = ExtResource("6_x")
-evento = "castelo_in_guarda1"
-posicao = Vector2(610, 464)
-velocidade = 200.0
+evento = "castelo_in01_guarda1"
+posicao = Vector2(640, 464)
+velocidade = 121.0
 direcao = 2
 esperar = false
 manter_y = true
 
 [sub_resource type="Resource" id="R_10"]
 script = ExtResource("6_x")
-evento = "castelo_in_guarda2"
-posicao = Vector2(434, 464)
-velocidade = 200.0
+evento = "castelo_in01_guarda2"
+posicao = Vector2(464, 464)
+velocidade = 121.0
 direcao = 2
 esperar = false
 manter_y = true
@@ -87,7 +87,7 @@ segundos = 0.4
 
 [sub_resource type="Resource" id="R_13"]
 script = ExtResource("6_x")
-evento = "castelo_in_guarda1"
+evento = "castelo_in01_guarda1"
 posicao = Vector2(288, 464)
 velocidade = 200.0
 direcao = 1
@@ -96,11 +96,10 @@ manter_y = true
 
 [sub_resource type="Resource" id="R_14"]
 script = ExtResource("6_x")
-evento = "castelo_in_guarda2"
+evento = "castelo_in01_guarda2"
 posicao = Vector2(112, 464)
 velocidade = 200.0
 direcao = 1
-esperar = true
 manter_y = true
 
 [sub_resource type="Resource" id="R_15"]
@@ -259,14 +258,11 @@ segundos = 0.5
 script = ExtResource("11_x")
 personalidade = "princesa"
 variavel = "missao01_aplicou"
-evento_alvo = "castelo_in_princesa"
+evento_alvo = "castelo_in01_princesa"
 
 [sub_resource type="Resource" id="R_53"]
 script = ExtResource("12_x")
-tipo = 0
 variavel = "missao01_aplicou"
-operador = 0
-valor = 0.0
 
 [sub_resource type="Resource" id="R_54"]
 script = ExtResource("13_x")
@@ -299,7 +295,6 @@ segundos = 0.5
 script = ExtResource("16_x")
 personalidade = "princesa"
 referencia = ExtResource("15_x")
-prefixo = "missao01"
 
 [sub_resource type="Resource" id="R_62"]
 script = ExtResource("17_x")
@@ -308,7 +303,6 @@ valor = 3.0
 
 [sub_resource type="Resource" id="R_63"]
 script = ExtResource("12_x")
-tipo = 0
 variavel = "missao01_N"
 operador = 5
 valor = -2.0
@@ -324,7 +318,6 @@ valor = 1.0
 
 [sub_resource type="Resource" id="R_66"]
 script = ExtResource("12_x")
-tipo = 0
 variavel = "missao01_O"
 operador = 4
 valor = 2.0
@@ -343,7 +336,6 @@ script = ExtResource("14_x")
 
 [sub_resource type="Resource" id="R_70"]
 script = ExtResource("12_x")
-tipo = 0
 variavel = "missao01_O"
 operador = 5
 valor = -2.0
@@ -362,7 +354,6 @@ script = ExtResource("14_x")
 
 [sub_resource type="Resource" id="R_74"]
 script = ExtResource("12_x")
-tipo = 0
 variavel = "missao01_C"
 operador = 4
 valor = 2.0
@@ -381,7 +372,6 @@ script = ExtResource("14_x")
 
 [sub_resource type="Resource" id="R_78"]
 script = ExtResource("12_x")
-tipo = 0
 variavel = "missao01_C"
 operador = 5
 valor = -2.0
@@ -400,7 +390,6 @@ script = ExtResource("14_x")
 
 [sub_resource type="Resource" id="R_82"]
 script = ExtResource("12_x")
-tipo = 0
 variavel = "missao01_E"
 operador = 4
 valor = 2.0
@@ -419,7 +408,6 @@ script = ExtResource("14_x")
 
 [sub_resource type="Resource" id="R_86"]
 script = ExtResource("12_x")
-tipo = 0
 variavel = "missao01_E"
 operador = 5
 valor = -2.0
@@ -438,7 +426,6 @@ script = ExtResource("14_x")
 
 [sub_resource type="Resource" id="R_90"]
 script = ExtResource("12_x")
-tipo = 0
 variavel = "missao01_A"
 operador = 4
 valor = 2.0
@@ -457,7 +444,6 @@ script = ExtResource("14_x")
 
 [sub_resource type="Resource" id="R_94"]
 script = ExtResource("12_x")
-tipo = 0
 variavel = "missao01_A"
 operador = 5
 valor = -2.0
@@ -479,7 +465,6 @@ script = ExtResource("14_x")
 
 [sub_resource type="Resource" id="R_99"]
 script = ExtResource("12_x")
-tipo = 0
 variavel = "missao01_N"
 operador = 4
 valor = 1.0
@@ -498,7 +483,6 @@ script = ExtResource("14_x")
 
 [sub_resource type="Resource" id="R_103"]
 script = ExtResource("12_x")
-tipo = 0
 variavel = "missao01_extremo"
 operador = 4
 valor = 1.0
@@ -517,9 +501,7 @@ script = ExtResource("14_x")
 
 [sub_resource type="Resource" id="R_107"]
 script = ExtResource("12_x")
-tipo = 0
 variavel = "missao1_resultado"
-operador = 0
 valor = 1.0
 
 [sub_resource type="Resource" id="R_108"]
@@ -612,9 +594,7 @@ script = ExtResource("14_x")
 
 [sub_resource type="Resource" id="R_130"]
 script = ExtResource("12_x")
-tipo = 0
 variavel = "missao1_resultado"
-operador = 0
 valor = 2.0
 
 [sub_resource type="Resource" id="R_131"]
@@ -654,9 +634,7 @@ script = ExtResource("14_x")
 
 [sub_resource type="Resource" id="R_140"]
 script = ExtResource("12_x")
-tipo = 0
 variavel = "missao1_resultado"
-operador = 0
 valor = 3.0
 
 [sub_resource type="Resource" id="R_141"]
@@ -688,9 +666,7 @@ script = ExtResource("14_x")
 
 [sub_resource type="Resource" id="R_148"]
 script = ExtResource("12_x")
-tipo = 0
 variavel = "missao1_resultado"
-operador = 0
 valor = 4.0
 
 [sub_resource type="Resource" id="R_149"]
@@ -714,9 +690,7 @@ script = ExtResource("14_x")
 
 [sub_resource type="Resource" id="R_154"]
 script = ExtResource("12_x")
-tipo = 0
 variavel = "missao1_resultado"
-operador = 0
 valor = 5.0
 
 [sub_resource type="Resource" id="R_155"]
@@ -833,150 +807,162 @@ script = ExtResource("2_x")
 segundos = 0.4
 
 [sub_resource type="Resource" id="R_183"]
-script = ExtResource("4_x")
-texto = "[BRUXA;bruxa_grande;0] (Corredor... outra porta... o véu tem que estar por aqui.)"
+script = ExtResource("20_x")
+cor_texto = Color(0.8, 0.76, 0.9, 1)
+italico = true
+face_pensando = true
+esconder_nome = true
+vinheta = true
 
 [sub_resource type="Resource" id="R_184"]
+script = ExtResource("4_x")
+texto = "[BRUXA;bruxa_grande;0] Corredor... outra porta... o véu tem que estar por aqui."
+
+[sub_resource type="Resource" id="R_185"]
 script = ExtResource("2_x")
 segundos = 0.6
 
-[sub_resource type="Resource" id="R_185"]
-script = ExtResource("4_x")
-texto = "[BRUXA;bruxa_grande;0] (Ali está. O véu.)"
-
 [sub_resource type="Resource" id="R_186"]
+script = ExtResource("4_x")
+texto = "[BRUXA;bruxa_grande;0] Ali está. O véu."
+
+[sub_resource type="Resource" id="R_187"]
 script = ExtResource("2_x")
 segundos = 0.3
 
-[sub_resource type="Resource" id="R_187"]
-script = ExtResource("4_x")
-texto = "[BRUXA;bruxa_grande;0] (Só um pedaço...)"
-
 [sub_resource type="Resource" id="R_188"]
+script = ExtResource("4_x")
+texto = "[BRUXA;bruxa_grande;0] Só um pedaço..."
+
+[sub_resource type="Resource" id="R_189"]
+script = ExtResource("20_x")
+restaurar = true
+
+[sub_resource type="Resource" id="R_190"]
 script = ExtResource("17_x")
 variavel = "missao01_veu"
 valor = 1.0
 
-[sub_resource type="Resource" id="R_189"]
+[sub_resource type="Resource" id="R_191"]
 script = ExtResource("2_x")
 segundos = 0.4
 
-[sub_resource type="Resource" id="R_190"]
-script = ExtResource("4_x")
-texto = "[BRUXA;bruxa_grande;0] (Agora, o feitiço de volta para casa.)"
-
-[sub_resource type="Resource" id="R_191"]
-script = ExtResource("18_x")
-intensidade = 12.0
-duracao = 1.0
-
 [sub_resource type="Resource" id="R_192"]
-script = ExtResource("2_x")
-segundos = 0.8
+script = ExtResource("20_x")
+cor_texto = Color(0.8, 0.76, 0.9, 1)
+italico = true
+face_pensando = true
+esconder_nome = true
+vinheta = true
 
 [sub_resource type="Resource" id="R_193"]
 script = ExtResource("4_x")
-texto = "[GUARDA;guarda1;100] Por aqui! Ela entrou aqui!"
+texto = "[BRUXA;bruxa_grande;0] Agora, o feitiço de volta para casa."
 
 [sub_resource type="Resource" id="R_194"]
+script = ExtResource("20_x")
+restaurar = true
+
+[sub_resource type="Resource" id="R_195"]
+script = ExtResource("18_x")
+intensidade = 12.0
+
+[sub_resource type="Resource" id="R_196"]
+script = ExtResource("2_x")
+segundos = 0.8
+
+[sub_resource type="Resource" id="R_197"]
+script = ExtResource("4_x")
+texto = "[GUARDA;guarda1;100] Por aqui! Ela entrou aqui!"
+
+[sub_resource type="Resource" id="R_198"]
 script = ExtResource("2_x")
 segundos = 0.4
 
-[sub_resource type="Resource" id="R_195"]
+[sub_resource type="Resource" id="R_199"]
 script = ExtResource("4_x")
 texto = "[GUARDA;guarda1;100] ...Não tem ninguém."
 
-[sub_resource type="Resource" id="R_196"]
-script = ExtResource("20_x")
+[sub_resource type="Resource" id="R_200"]
+script = ExtResource("21_x")
 mapa = "res://mapas/mapa_bruxa_in.tscn"
 posicao = Vector2(240, 450)
 direcao = 2
 
-[sub_resource type="Resource" id="R_197"]
+[sub_resource type="Resource" id="R_201"]
 script = ExtResource("2_x")
 segundos = 0.4
 
-[sub_resource type="Resource" id="R_198"]
+[sub_resource type="Resource" id="R_202"]
 script = ExtResource("19_x")
 tipo = 1
 tempo = 0.8
 
-[sub_resource type="Resource" id="R_199"]
+[sub_resource type="Resource" id="R_203"]
 script = ExtResource("2_x")
 segundos = 0.5
 
-[sub_resource type="Resource" id="R_200"]
+[sub_resource type="Resource" id="R_204"]
 script = ExtResource("4_x")
 texto = "[BRUXA;bruxa_grande;0] ...Por pouco."
 
-[sub_resource type="Resource" id="R_201"]
+[sub_resource type="Resource" id="R_205"]
 script = ExtResource("2_x")
 segundos = 0.3
 
-[sub_resource type="Resource" id="R_202"]
+[sub_resource type="Resource" id="R_206"]
 script = ExtResource("4_x")
 texto = "[BRUXA;bruxa_grande;0] Mas agora tenho um pedaço do véu."
 
-[sub_resource type="Resource" id="R_203"]
+[sub_resource type="Resource" id="R_207"]
 script = ExtResource("14_x")
 
-[sub_resource type="Resource" id="R_204"]
+[sub_resource type="Resource" id="R_208"]
 script = ExtResource("9_x")
 nome = "end"
 
-[sub_resource type="Resource" id="R_205"]
+[sub_resource type="Resource" id="R_209"]
 script = ExtResource("2_x")
 segundos = 0.5
 
-[sub_resource type="Resource" id="R_206"]
+[sub_resource type="Resource" id="R_210"]
 script = ExtResource("17_x")
 variavel = "castelo_conversou"
 valor = 1.0
 
-[sub_resource type="Resource" id="R_207"]
+[sub_resource type="Resource" id="R_211"]
 script = ExtResource("1_x")
 acao = 1
 
-[sub_resource type="Resource" id="R_208"]
-script = ExtResource("12_x")
-tipo = 0
-variavel = "missao01_passou_guarda"
-operador = 0
-valor = 1.0
-
-[sub_resource type="Resource" id="R_209"]
-script = ExtResource("12_x")
-tipo = 0
-variavel = "missao1_resultado"
-operador = 0
-valor = 0.0
-
-[sub_resource type="Resource" id="R_210"]
-script = ExtResource("12_x")
-tipo = 0
-variavel = "castelo_conversou"
-operador = 0
-valor = 0.0
-
-[sub_resource type="Resource" id="R_211"]
-script = ExtResource("22_x")
-condicoes = Array[ExtResource("12_x")]([SubResource("R_208"), SubResource("R_209"), SubResource("R_210")])
-gatilho = 2
-comandos = Array[ExtResource("21_x")]([SubResource("R_1"), SubResource("R_2"), SubResource("R_3"), SubResource("R_4"), SubResource("R_5"), SubResource("R_6"), SubResource("R_7"), SubResource("R_8"), SubResource("R_9"), SubResource("R_10"), SubResource("R_11"), SubResource("R_12"), SubResource("R_13"), SubResource("R_14"), SubResource("R_15"), SubResource("R_16"), SubResource("R_17"), SubResource("R_18"), SubResource("R_19"), SubResource("R_20"), SubResource("R_21"), SubResource("R_22"), SubResource("R_23"), SubResource("R_24"), SubResource("R_25"), SubResource("R_26"), SubResource("R_27"), SubResource("R_28"), SubResource("R_29"), SubResource("R_30"), SubResource("R_31"), SubResource("R_32"), SubResource("R_33"), SubResource("R_34"), SubResource("R_35"), SubResource("R_36"), SubResource("R_37"), SubResource("R_38"), SubResource("R_39"), SubResource("R_40"), SubResource("R_41"), SubResource("R_42"), SubResource("R_43"), SubResource("R_44"), SubResource("R_45"), SubResource("R_46"), SubResource("R_47"), SubResource("R_48"), SubResource("R_49"), SubResource("R_50"), SubResource("R_51"), SubResource("R_52"), SubResource("R_54"), SubResource("R_55"), SubResource("R_56"), SubResource("R_57"), SubResource("R_58"), SubResource("R_59"), SubResource("R_60"), SubResource("R_61"), SubResource("R_62"), SubResource("R_64"), SubResource("R_65"), SubResource("R_67"), SubResource("R_68"), SubResource("R_69"), SubResource("R_71"), SubResource("R_72"), SubResource("R_73"), SubResource("R_75"), SubResource("R_76"), SubResource("R_77"), SubResource("R_79"), SubResource("R_80"), SubResource("R_81"), SubResource("R_83"), SubResource("R_84"), SubResource("R_85"), SubResource("R_87"), SubResource("R_88"), SubResource("R_89"), SubResource("R_91"), SubResource("R_92"), SubResource("R_93"), SubResource("R_95"), SubResource("R_96"), SubResource("R_97"), SubResource("R_98"), SubResource("R_100"), SubResource("R_101"), SubResource("R_102"), SubResource("R_104"), SubResource("R_105"), SubResource("R_106"), SubResource("R_108"), SubResource("R_109"), SubResource("R_110"), SubResource("R_111"), SubResource("R_112"), SubResource("R_113"), SubResource("R_114"), SubResource("R_115"), SubResource("R_116"), SubResource("R_117"), SubResource("R_118"), SubResource("R_119"), SubResource("R_120"), SubResource("R_121"), SubResource("R_122"), SubResource("R_123"), SubResource("R_124"), SubResource("R_125"), SubResource("R_126"), SubResource("R_127"), SubResource("R_128"), SubResource("R_129"), SubResource("R_131"), SubResource("R_132"), SubResource("R_133"), SubResource("R_134"), SubResource("R_135"), SubResource("R_136"), SubResource("R_137"), SubResource("R_138"), SubResource("R_139"), SubResource("R_141"), SubResource("R_142"), SubResource("R_143"), SubResource("R_144"), SubResource("R_145"), SubResource("R_146"), SubResource("R_147"), SubResource("R_149"), SubResource("R_150"), SubResource("R_151"), SubResource("R_152"), SubResource("R_153"), SubResource("R_155"), SubResource("R_156"), SubResource("R_157"), SubResource("R_158"), SubResource("R_159"), SubResource("R_160"), SubResource("R_161"), SubResource("R_162"), SubResource("R_163"), SubResource("R_164"), SubResource("R_165"), SubResource("R_166"), SubResource("R_167"), SubResource("R_168"), SubResource("R_169"), SubResource("R_170"), SubResource("R_171"), SubResource("R_172"), SubResource("R_173"), SubResource("R_174"), SubResource("R_175"), SubResource("R_176"), SubResource("R_177"), SubResource("R_178"), SubResource("R_179"), SubResource("R_180"), SubResource("R_181"), SubResource("R_182"), SubResource("R_183"), SubResource("R_184"), SubResource("R_185"), SubResource("R_186"), SubResource("R_187"), SubResource("R_188"), SubResource("R_189"), SubResource("R_190"), SubResource("R_191"), SubResource("R_192"), SubResource("R_193"), SubResource("R_194"), SubResource("R_195"), SubResource("R_196"), SubResource("R_197"), SubResource("R_198"), SubResource("R_199"), SubResource("R_200"), SubResource("R_201"), SubResource("R_202"), SubResource("R_203"), SubResource("R_204"), SubResource("R_205"), SubResource("R_206"), SubResource("R_207")])
-
 [sub_resource type="Resource" id="R_212"]
 script = ExtResource("12_x")
-tipo = 0
-variavel = "castelo_conversou"
-operador = 0
+variavel = "missao01_passou_guarda"
 valor = 1.0
 
 [sub_resource type="Resource" id="R_213"]
-script = ExtResource("22_x")
-condicoes = Array[ExtResource("12_x")]([SubResource("R_212")])
-comandos = Array[ExtResource("21_x")]([])
+script = ExtResource("12_x")
+variavel = "missao1_resultado"
+
+[sub_resource type="Resource" id="R_214"]
+script = ExtResource("12_x")
+variavel = "castelo_conversou"
+
+[sub_resource type="Resource" id="R_215"]
+script = ExtResource("23_x")
+condicoes = Array[ExtResource("12_x")]([SubResource("R_212"), SubResource("R_213"), SubResource("R_214")])
+gatilho = 2
+comandos = Array[ExtResource("22_x")]([SubResource("R_1"), SubResource("R_2"), SubResource("R_3"), SubResource("R_4"), SubResource("R_5"), SubResource("R_6"), SubResource("R_7"), SubResource("R_8"), SubResource("R_9"), SubResource("R_10"), SubResource("R_11"), SubResource("R_12"), SubResource("R_13"), SubResource("R_14"), SubResource("R_15"), SubResource("R_16"), SubResource("R_17"), SubResource("R_18"), SubResource("R_19"), SubResource("R_20"), SubResource("R_21"), SubResource("R_22"), SubResource("R_23"), SubResource("R_24"), SubResource("R_25"), SubResource("R_26"), SubResource("R_27"), SubResource("R_28"), SubResource("R_29"), SubResource("R_30"), SubResource("R_31"), SubResource("R_32"), SubResource("R_33"), SubResource("R_34"), SubResource("R_35"), SubResource("R_36"), SubResource("R_37"), SubResource("R_38"), SubResource("R_39"), SubResource("R_40"), SubResource("R_41"), SubResource("R_42"), SubResource("R_43"), SubResource("R_44"), SubResource("R_45"), SubResource("R_46"), SubResource("R_47"), SubResource("R_48"), SubResource("R_49"), SubResource("R_50"), SubResource("R_51"), SubResource("R_52"), SubResource("R_54"), SubResource("R_55"), SubResource("R_56"), SubResource("R_57"), SubResource("R_58"), SubResource("R_59"), SubResource("R_60"), SubResource("R_61"), SubResource("R_62"), SubResource("R_64"), SubResource("R_65"), SubResource("R_67"), SubResource("R_68"), SubResource("R_69"), SubResource("R_71"), SubResource("R_72"), SubResource("R_73"), SubResource("R_75"), SubResource("R_76"), SubResource("R_77"), SubResource("R_79"), SubResource("R_80"), SubResource("R_81"), SubResource("R_83"), SubResource("R_84"), SubResource("R_85"), SubResource("R_87"), SubResource("R_88"), SubResource("R_89"), SubResource("R_91"), SubResource("R_92"), SubResource("R_93"), SubResource("R_95"), SubResource("R_96"), SubResource("R_97"), SubResource("R_98"), SubResource("R_100"), SubResource("R_101"), SubResource("R_102"), SubResource("R_104"), SubResource("R_105"), SubResource("R_106"), SubResource("R_108"), SubResource("R_109"), SubResource("R_110"), SubResource("R_111"), SubResource("R_112"), SubResource("R_113"), SubResource("R_114"), SubResource("R_115"), SubResource("R_116"), SubResource("R_117"), SubResource("R_118"), SubResource("R_119"), SubResource("R_120"), SubResource("R_121"), SubResource("R_122"), SubResource("R_123"), SubResource("R_124"), SubResource("R_125"), SubResource("R_126"), SubResource("R_127"), SubResource("R_128"), SubResource("R_129"), SubResource("R_131"), SubResource("R_132"), SubResource("R_133"), SubResource("R_134"), SubResource("R_135"), SubResource("R_136"), SubResource("R_137"), SubResource("R_138"), SubResource("R_139"), SubResource("R_141"), SubResource("R_142"), SubResource("R_143"), SubResource("R_144"), SubResource("R_145"), SubResource("R_146"), SubResource("R_147"), SubResource("R_149"), SubResource("R_150"), SubResource("R_151"), SubResource("R_152"), SubResource("R_153"), SubResource("R_155"), SubResource("R_156"), SubResource("R_157"), SubResource("R_158"), SubResource("R_159"), SubResource("R_160"), SubResource("R_161"), SubResource("R_162"), SubResource("R_163"), SubResource("R_164"), SubResource("R_165"), SubResource("R_166"), SubResource("R_167"), SubResource("R_168"), SubResource("R_169"), SubResource("R_170"), SubResource("R_171"), SubResource("R_172"), SubResource("R_173"), SubResource("R_174"), SubResource("R_175"), SubResource("R_176"), SubResource("R_177"), SubResource("R_178"), SubResource("R_179"), SubResource("R_180"), SubResource("R_181"), SubResource("R_182"), SubResource("R_183"), SubResource("R_184"), SubResource("R_185"), SubResource("R_186"), SubResource("R_187"), SubResource("R_188"), SubResource("R_189"), SubResource("R_190"), SubResource("R_191"), SubResource("R_192"), SubResource("R_193"), SubResource("R_194"), SubResource("R_195"), SubResource("R_196"), SubResource("R_197"), SubResource("R_198"), SubResource("R_199"), SubResource("R_200"), SubResource("R_201"), SubResource("R_202"), SubResource("R_203"), SubResource("R_204"), SubResource("R_205"), SubResource("R_206"), SubResource("R_207"), SubResource("R_208"), SubResource("R_209"), SubResource("R_210"), SubResource("R_211")])
+
+[sub_resource type="Resource" id="R_216"]
+script = ExtResource("12_x")
+variavel = "castelo_conversou"
+valor = 1.0
+
+[sub_resource type="Resource" id="R_217"]
+script = ExtResource("23_x")
+condicoes = Array[ExtResource("12_x")]([SubResource("R_216")])
 
 [resource]
-script = ExtResource("23_x")
-id = "castelo_in_auto"
-paginas = Array[ExtResource("22_x")]([SubResource("R_211"), SubResource("R_213")])
+script = ExtResource("24_x")
+id = "castelo_in01_auto"
+paginas = Array[ExtResource("23_x")]([SubResource("R_215"), SubResource("R_217")])
