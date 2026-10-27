@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://dqvy8oskic8nn"]
+
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="1_u4km5"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_aj1y2"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="3_jdqy0"]
+[ext_resource type="SpriteFrames" uid="uid://cyls7xjrwn5q6" path="res://animacoes/guarda01.tres" id="4_noton"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="5_4eyyu"]
+
+[sub_resource type="Resource" id="Resource_3haw3"]
+script = ExtResource("1_u4km5")
+metadata/_custom_type_script = "uid://gdfc3xl4mcr4"
+
+[sub_resource type="Resource" id="Resource_8xqd3"]
+script = ExtResource("3_jdqy0")
+variavel = "missao01_guardas_perseguem"
+valor = 1.0
+metadata/_custom_type_script = "uid://baglqudsvyyrb"
+
+[sub_resource type="Resource" id="R_2"]
+script = ExtResource("1_u4km5")
+condicoes = Array[ExtResource("3_jdqy0")]([SubResource("Resource_8xqd3")])
+sprite_frames = ExtResource("4_noton")
+colisao_scale = Vector2(9, 20.25)
+area_pos = Vector2(0, -10)
+area_scale = Vector2(16, 20.25)
+
+[resource]
+script = ExtResource("5_4eyyu")
+id = "castelo_in03_guarda1"
+paginas = Array[ExtResource("1_u4km5")]([SubResource("Resource_3haw3"), SubResource("R_2")])

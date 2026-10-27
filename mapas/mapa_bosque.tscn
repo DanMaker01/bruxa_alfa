@@ -14,19 +14,20 @@
 script = ExtResource("1_7tbou")
 metadata/_edit_vertical_guides_ = [2358.0, 2028.0, -56.0]
 
-[node name="Fundo" type="Parallax2D" parent="." unique_id=647674415]
-scroll_scale = Vector2(0.9, 0)
+[node name="Meio" type="Parallax2D" parent="." unique_id=647674415]
+z_index = -1
+scroll_scale = Vector2(1, 0)
 
-[node name="Sprite2D" type="Sprite2D" parent="Fundo" unique_id=145479066]
-scale = Vector2(0.872, 1)
+[node name="Sprite2D" type="Sprite2D" parent="Meio" unique_id=145479066]
 texture = ExtResource("1_lucx4")
 centered = false
 
-[node name="Meio" type="Parallax2D" parent="." unique_id=1011851333]
+[node name="Frente" type="Parallax2D" parent="." unique_id=1011851333]
 z_index = 5
-scroll_scale = Vector2(1, 0)
+scroll_scale = Vector2(1.1, 0)
 
-[node name="Sprite2D" type="Sprite2D" parent="Meio" unique_id=1731043530]
+[node name="Sprite2D" type="Sprite2D" parent="Frente" unique_id=1731043530]
+scale = Vector2(1.07, 1)
 texture = ExtResource("2_be1d2")
 centered = false
 
@@ -41,7 +42,7 @@ evento = ExtResource("ev_bos_goblin")
 
 [node name="Passagem2" type="CharacterBody2D" parent="Eventos" unique_id=1043341573]
 z_index = 3
-position = Vector2(1984, 512)
+position = Vector2(1952, 512)
 script = ExtResource("3_ofmjg")
 evento = ExtResource("ev_bosque_passagem2")
 

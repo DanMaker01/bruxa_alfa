@@ -17,6 +17,7 @@ var trocando: bool = false
 var _troca_id: int = 0   # cada troca tem um id; só a mais recente encerra a carência
 
 
+## mapa: caminho completo (res://... ou uid://...) ou só o nome do arquivo em res://mapas/.
 func teleportar(mapa: String, x: float, y: float, direcao: String = "centro") -> void:
 	print("[Teleporte] 📍 ", mapa, " (", x, ", ", y, ") ", direcao)
 	em_andamento = true
@@ -38,7 +39,7 @@ func teleportar(mapa: String, x: float, y: float, direcao: String = "centro") ->
 
 	# 2. carrega o mapa novo
 	var mundo = gm.get_node_or_null("/root/Main/Mundo")
-	var path := "res://mapas/" + mapa + ".tscn"
+	var path := mapa if (mapa.begins_with("res://") or mapa.begins_with("uid://")) else "res://mapas/" + mapa + ".tscn"
 	if not mundo or not ResourceLoader.exists(path):
 		push_warning("[Teleporte] mapa não encontrado: " + path)
 		gm._show_notification("Mapa não encontrado: " + mapa)

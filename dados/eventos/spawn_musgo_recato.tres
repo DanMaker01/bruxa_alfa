@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="3_msg"]
 [ext_resource type="Resource" path="res://dados/itens/musgo_recato.tres" id="4_cogu"]
 [ext_resource type="Script" uid="uid://bg82uh5klkyf6" path="res://src/dados/comandos/cmd_item.gd" id="5_item"]
-[ext_resource type="Script" uid="uid://bkq6tqfqx1531" path="res://src/dados/comandos/cmd_self_var.gd" id="6_self"]
+[ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="6_self"]
 [ext_resource type="SpriteFrames" uid="uid://cni8h54vvqrak" path="res://animacoes/musgo_recato.tres" id="7_anim"]
 [ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="8_cond"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="9_ev"]
@@ -20,6 +20,8 @@ item = ExtResource("4_cogu")
 
 [sub_resource type="Resource" id="Resource_self"]
 script = ExtResource("6_self")
+escopo = 1
+valor = 1.0
 
 [sub_resource type="Resource" id="Resource_pag0"]
 script = ExtResource("1_pag")

@@ -6,8 +6,9 @@
 [ext_resource type="Script" uid="uid://bjxlt3vqym72w" path="res://src/cena/evento_base.gd" id="4_k6yps"]
 [ext_resource type="Resource" uid="uid://behjjv2c3jpx8" path="res://dados/eventos/castelo_in02_passagem_in01.tres" id="5_hrmiq"]
 [ext_resource type="Resource" uid="uid://c74xnau5o50" path="res://dados/eventos/castelo_in02_passagem_in03.tres" id="6_p03"]
-[ext_resource type="Resource" uid="uid://bhjk0spp1toq8" path="res://dados/eventos/castelo_in02_guarda.tres" id="7_17jra"]
+[ext_resource type="Resource" uid="uid://bhjk0spp1toq8" path="res://dados/eventos/castelo_in02_guarda1.tres" id="7_17jra"]
 [ext_resource type="Resource" uid="uid://cxqbpdxxrryu5" path="res://dados/eventos/castelo_in02_auto.tres" id="8_g6u4j"]
+[ext_resource type="Resource" uid="uid://cuhntnqujv0xl" path="res://dados/eventos/castelo_in02_guarda2.tres" id="9_hpoha"]
 
 [node name="CasteloIn02" type="Node2D" unique_id=231347479]
 script = ExtResource("1_hdttk")
@@ -15,7 +16,7 @@ metadata/_edit_vertical_guides_ = [2358.0, 2028.0, -56.0]
 
 [node name="Frente+" type="Parallax2D" parent="." unique_id=647674415]
 z_index = 10
-scroll_scale = Vector2(0.8, 0)
+scroll_scale = Vector2(0.9, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="Frente+" unique_id=145479066]
 z_index = 2
@@ -51,7 +52,7 @@ evento = ExtResource("6_p03")
 
 [node name="Guarda1" type="CharacterBody2D" parent="Eventos" unique_id=1118720276]
 z_index = 3
-position = Vector2(192, 544)
+position = Vector2(112, 544)
 script = ExtResource("4_k6yps")
 evento = ExtResource("7_17jra")
 
@@ -63,6 +64,6 @@ evento = ExtResource("8_g6u4j")
 
 [node name="Guarda2" type="CharacterBody2D" parent="Eventos" unique_id=1609237115]
 z_index = 3
-position = Vector2(112, 544)
+position = Vector2(240, 544)
 script = ExtResource("4_k6yps")
-evento = ExtResource("7_17jra")
+evento = ExtResource("9_hpoha")

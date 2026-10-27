@@ -17,7 +17,6 @@ texto = "[REI;rei;100] Quem deixou essa bruxa entrar?"
 
 [sub_resource type="Resource" id="R_2"]
 script = ExtResource("4_x")
-passavel = false
 sprite_frames = ExtResource("2_x")
 colisao_scale = Vector2(9, 20.25)
 area_pos = Vector2(0, -10)
@@ -58,12 +57,11 @@ valor = 1.0
 
 [sub_resource type="Resource" id="R_194"]
 script = ExtResource("11_x")
-variavel = "missao1_resultado"
+variavel = "missao01_resultado"
 
 [sub_resource type="Resource" id="R_195"]
 script = ExtResource("4_x")
 condicoes = Array[ExtResource("11_x")]([SubResource("R_193"), SubResource("R_194")])
-passavel = false
 sprite_frames = ExtResource("2_x")
 colisao_scale = Vector2(9, 20.25)
 area_pos = Vector2(0, -10)
@@ -76,13 +74,12 @@ texto = "[REI;rei;100] O casamento é amanhã. Não se atrase, bruxa."
 
 [sub_resource type="Resource" id="R_197"]
 script = ExtResource("11_x")
-variavel = "missao1_resultado"
+variavel = "missao01_resultado"
 valor = 1.0
 
 [sub_resource type="Resource" id="R_198"]
 script = ExtResource("4_x")
 condicoes = Array[ExtResource("11_x")]([SubResource("R_197")])
-passavel = false
 sprite_frames = ExtResource("2_x")
 colisao_scale = Vector2(9, 20.25)
 area_pos = Vector2(0, -10)
@@ -95,56 +92,17 @@ texto = "[REI;rei;100] Minha filha anda estranha desde que você esteve aqui, br
 
 [sub_resource type="Resource" id="R_200"]
 script = ExtResource("11_x")
-variavel = "missao1_resultado"
+variavel = "missao01_resultado"
 valor = 2.0
 
 [sub_resource type="Resource" id="R_201"]
 script = ExtResource("4_x")
 condicoes = Array[ExtResource("11_x")]([SubResource("R_200")])
-passavel = false
 sprite_frames = ExtResource("2_x")
 colisao_scale = Vector2(9, 20.25)
 area_pos = Vector2(0, -10)
 area_scale = Vector2(16, 20.25)
 comandos = Array[ExtResource("3_x")]([SubResource("R_199")])
-
-[sub_resource type="Resource" id="R_202"]
-script = ExtResource("1_x")
-texto = "[REI;rei;100] O casamento é amanhã. Veremos se a sua poção serviu para alguma coisa."
-
-[sub_resource type="Resource" id="R_203"]
-script = ExtResource("11_x")
-variavel = "missao1_resultado"
-valor = 3.0
-
-[sub_resource type="Resource" id="R_204"]
-script = ExtResource("4_x")
-condicoes = Array[ExtResource("11_x")]([SubResource("R_203")])
-passavel = false
-sprite_frames = ExtResource("2_x")
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
-comandos = Array[ExtResource("3_x")]([SubResource("R_202")])
-
-[sub_resource type="Resource" id="R_205"]
-script = ExtResource("1_x")
-texto = "[REI;rei;100] Você de novo? Já não fez estrago bastante?"
-
-[sub_resource type="Resource" id="R_206"]
-script = ExtResource("11_x")
-variavel = "missao1_resultado"
-valor = 4.0
-
-[sub_resource type="Resource" id="R_207"]
-script = ExtResource("4_x")
-condicoes = Array[ExtResource("11_x")]([SubResource("R_206")])
-passavel = false
-sprite_frames = ExtResource("2_x")
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
-comandos = Array[ExtResource("3_x")]([SubResource("R_205")])
 
 [sub_resource type="Resource" id="R_208"]
 script = ExtResource("1_x")
@@ -152,13 +110,13 @@ texto = "[REI;rei;100] Guardas! A bruxa voltou! Prendam-na!"
 
 [sub_resource type="Resource" id="R_209"]
 script = ExtResource("11_x")
-variavel = "missao1_resultado"
-valor = 5.0
+variavel = "missao01_resultado"
+operador = 4
+valor = 3.0
 
 [sub_resource type="Resource" id="R_210"]
 script = ExtResource("4_x")
 condicoes = Array[ExtResource("11_x")]([SubResource("R_209")])
-passavel = false
 sprite_frames = ExtResource("2_x")
 colisao_scale = Vector2(9, 20.25)
 area_pos = Vector2(0, -10)
@@ -168,4 +126,4 @@ comandos = Array[ExtResource("3_x")]([SubResource("R_208")])
 [resource]
 script = ExtResource("21_x")
 id = "castelo_in01_rei"
-paginas = Array[ExtResource("4_x")]([SubResource("R_2"), SubResource("R_195"), SubResource("R_198"), SubResource("R_201"), SubResource("R_204"), SubResource("R_207"), SubResource("R_210")])
+paginas = Array[ExtResource("4_x")]([SubResource("R_2"), SubResource("R_195"), SubResource("R_198"), SubResource("R_201"), SubResource("R_210")])

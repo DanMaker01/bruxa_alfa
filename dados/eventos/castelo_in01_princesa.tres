@@ -17,7 +17,6 @@ texto = "[PRINCESA;princesa;100] Desculpe... não consigo pensar em nada além d
 
 [sub_resource type="Resource" id="R_2"]
 script = ExtResource("4_x")
-passavel = false
 sprite_frames = ExtResource("2_x")
 colisao_scale = Vector2(9, 20.25)
 area_pos = Vector2(0, -10)
@@ -66,12 +65,11 @@ valor = 1.0
 
 [sub_resource type="Resource" id="R_196"]
 script = ExtResource("11_x")
-variavel = "missao1_resultado"
+variavel = "missao01_resultado"
 
 [sub_resource type="Resource" id="R_197"]
 script = ExtResource("4_x")
 condicoes = Array[ExtResource("11_x")]([SubResource("R_195"), SubResource("R_196")])
-passavel = false
 sprite_frames = ExtResource("2_x")
 colisao_scale = Vector2(9, 20.25)
 area_pos = Vector2(0, -10)
@@ -84,13 +82,12 @@ texto = "[PRINCESA;princesa;100] O azul ou o branco com fitas? Ah, a senhora vem
 
 [sub_resource type="Resource" id="R_199"]
 script = ExtResource("11_x")
-variavel = "missao1_resultado"
+variavel = "missao01_resultado"
 valor = 1.0
 
 [sub_resource type="Resource" id="R_200"]
 script = ExtResource("4_x")
 condicoes = Array[ExtResource("11_x")]([SubResource("R_199")])
-passavel = false
 sprite_frames = ExtResource("2_x")
 colisao_scale = Vector2(9, 20.25)
 area_pos = Vector2(0, -10)
@@ -103,56 +100,17 @@ texto = "[PRINCESA;princesa;100] Senhora bruxa... eu sou eu mesma? Às vezes nã
 
 [sub_resource type="Resource" id="R_202"]
 script = ExtResource("11_x")
-variavel = "missao1_resultado"
+variavel = "missao01_resultado"
 valor = 2.0
 
 [sub_resource type="Resource" id="R_203"]
 script = ExtResource("4_x")
 condicoes = Array[ExtResource("11_x")]([SubResource("R_202")])
-passavel = false
 sprite_frames = ExtResource("2_x")
 colisao_scale = Vector2(9, 20.25)
 area_pos = Vector2(0, -10)
 area_scale = Vector2(16, 20.25)
 comandos = Array[ExtResource("3_x")]([SubResource("R_201")])
-
-[sub_resource type="Resource" id="R_204"]
-script = ExtResource("1_x")
-texto = "[PRINCESA;princesa;100] Ainda não consigo dormir..."
-
-[sub_resource type="Resource" id="R_205"]
-script = ExtResource("11_x")
-variavel = "missao1_resultado"
-valor = 3.0
-
-[sub_resource type="Resource" id="R_206"]
-script = ExtResource("4_x")
-condicoes = Array[ExtResource("11_x")]([SubResource("R_205")])
-passavel = false
-sprite_frames = ExtResource("2_x")
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
-comandos = Array[ExtResource("3_x")]([SubResource("R_204")])
-
-[sub_resource type="Resource" id="R_207"]
-script = ExtResource("1_x")
-texto = "[PRINCESA;princesa;100] Por favor, me deixe em paz."
-
-[sub_resource type="Resource" id="R_208"]
-script = ExtResource("11_x")
-variavel = "missao1_resultado"
-valor = 4.0
-
-[sub_resource type="Resource" id="R_209"]
-script = ExtResource("4_x")
-condicoes = Array[ExtResource("11_x")]([SubResource("R_208")])
-passavel = false
-sprite_frames = ExtResource("2_x")
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
-comandos = Array[ExtResource("3_x")]([SubResource("R_207")])
 
 [sub_resource type="Resource" id="R_210"]
 script = ExtResource("1_x")
@@ -160,13 +118,13 @@ texto = "[PRINCESA;princesa;100] Casamento. Vestido. Casamento."
 
 [sub_resource type="Resource" id="R_211"]
 script = ExtResource("11_x")
-variavel = "missao1_resultado"
-valor = 5.0
+variavel = "missao01_resultado"
+operador = 4
+valor = 3.0
 
 [sub_resource type="Resource" id="R_212"]
 script = ExtResource("4_x")
 condicoes = Array[ExtResource("11_x")]([SubResource("R_211")])
-passavel = false
 sprite_frames = ExtResource("2_x")
 colisao_scale = Vector2(9, 20.25)
 area_pos = Vector2(0, -10)
@@ -176,4 +134,4 @@ comandos = Array[ExtResource("3_x")]([SubResource("R_210")])
 [resource]
 script = ExtResource("21_x")
 id = "castelo_in01_princesa"
-paginas = Array[ExtResource("4_x")]([SubResource("R_2"), SubResource("R_197"), SubResource("R_200"), SubResource("R_203"), SubResource("R_206"), SubResource("R_209"), SubResource("R_212")])
+paginas = Array[ExtResource("4_x")]([SubResource("R_2"), SubResource("R_197"), SubResource("R_200"), SubResource("R_203"), SubResource("R_212")])

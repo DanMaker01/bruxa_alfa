@@ -4,13 +4,14 @@
 [ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_k8rtx"]
 [ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="3_e6ii4"]
 [ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="4_2fbjl"]
-[ext_resource type="Script" uid="uid://dh3fhyp6vfrt3" path="res://src/dados/comandos/cmd_mover_player.gd" id="5_5m6an"]
+[ext_resource type="Script" uid="uid://dp3mfol3wf88y" path="res://src/dados/comandos/cmd_mover.gd" id="5_5m6an"]
 [ext_resource type="Script" uid="uid://u1lexc30s8be" path="res://src/dados/comandos/cmd_player.gd" id="6_8quck"]
-[ext_resource type="Script" uid="uid://bcx1mthgrhnun" path="res://src/dados/comandos/cmd_mover_camera.gd" id="7_fwwpb"]
-[ext_resource type="Script" uid="uid://bercma7w4moqu" path="res://src/dados/comandos/cmd_mudar_var.gd" id="8_5e07p"]
+[ext_resource type="Script" uid="uid://ugvh8ya5s1gp" path="res://src/dados/comandos/cmd_camera.gd" id="7_fwwpb"]
+[ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="8_5e07p"]
 [ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="9_3y4na"]
-[ext_resource type="Script" uid="uid://ba7m6ef3neoh0" path="res://src/dados/comandos/cmd_mover_evento.gd" id="10_6qia0"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="11_jn3au"]
+[ext_resource type="Script" uid="uid://7c1614u5xl4b" path="res://src/dados/comandos/cmd_fade.gd" id="11_k8rtx"]
+[ext_resource type="Script" uid="uid://bnrknn0lpp5ss" path="res://src/dados/comandos/cmd_teleportar.gd" id="12_e6ii4"]
 
 [sub_resource type="Resource" id="Resource_eqdgj"]
 script = ExtResource("1_bqod1")
@@ -22,9 +23,8 @@ metadata/_custom_type_script = "uid://dkw5y5gsrn515"
 
 [sub_resource type="Resource" id="Resource_sjcg8"]
 script = ExtResource("5_5m6an")
-modo = 1
-evento = "castelo_in02_passagem_in03"
-metadata/_custom_type_script = "uid://dh3fhyp6vfrt3"
+destino = 1
+ate_evento = "castelo_in02_passagem_in03"
 
 [sub_resource type="Resource" id="Resource_u0jxn"]
 script = ExtResource("6_8quck")
@@ -38,47 +38,91 @@ metadata/_custom_type_script = "uid://dkw5y5gsrn515"
 [sub_resource type="Resource" id="Resource_1jjtf"]
 script = ExtResource("7_fwwpb")
 posicao = Vector2(320, 0)
-tempo = 1.999999999999936
-metadata/_custom_type_script = "uid://bcx1mthgrhnun"
+tempo = 1.0
 
 [sub_resource type="Resource" id="Resource_hko5r"]
 script = ExtResource("4_2fbjl")
-segundos = 2.1999999999999296
+segundos = 2.2
 metadata/_custom_type_script = "uid://dkw5y5gsrn515"
 
 [sub_resource type="Resource" id="Resource_g3dnw"]
 script = ExtResource("8_5e07p")
 variavel = "missao01_guardas_perseguem"
-valor = 0.999999999999968
-metadata/_custom_type_script = "uid://bercma7w4moqu"
+valor = 1.0
 
 [sub_resource type="Resource" id="Resource_c5goq"]
 script = ExtResource("9_3y4na")
 texto = "Atrás dela!!"
 metadata/_custom_type_script = "uid://8liac65hmnnq"
 
-[sub_resource type="Resource" id="Resource_ujoxq"]
-script = ExtResource("10_6qia0")
+[sub_resource type="Resource" id="Resource_k8rtx"]
+script = ExtResource("5_5m6an")
+alvo = 1
 evento = "castelo_in02_guarda1"
-posicao = Vector2(1000, 0)
-manter_y = true
-metadata/_custom_type_script = "uid://ba7m6ef3neoh0"
+x = 1000
+velocidade = 200.0
+esperar = false
+
+[sub_resource type="Resource" id="Resource_ujoxq"]
+script = ExtResource("5_5m6an")
+alvo = 1
+evento = "castelo_in02_guarda2"
+x = 1128
+velocidade = 200.0
+esperar = false
 
 [sub_resource type="Resource" id="Resource_cth0m"]
 script = ExtResource("4_2fbjl")
+segundos = 2.0
 metadata/_custom_type_script = "uid://dkw5y5gsrn515"
+
+[sub_resource type="Resource" id="Resource_e6ii4"]
+script = ExtResource("11_k8rtx")
+tempo = 0.7
+metadata/_custom_type_script = "uid://7c1614u5xl4b"
+
+[sub_resource type="Resource" id="Resource_2fbjl"]
+script = ExtResource("4_2fbjl")
+metadata/_custom_type_script = "uid://dkw5y5gsrn515"
+
+[sub_resource type="Resource" id="Resource_5m6an"]
+script = ExtResource("6_8quck")
+acao = 2
+metadata/_custom_type_script = "uid://u1lexc30s8be"
+
+[sub_resource type="Resource" id="Resource_5e07p"]
+script = ExtResource("8_5e07p")
+variavel = "missao01_guardas_perseguem"
+
+[sub_resource type="Resource" id="Resource_8quck"]
+script = ExtResource("12_e6ii4")
+mapa = "mapa_castelo_in03"
+posicao = Vector2(1128, 400)
+direcao = 1
+metadata/_custom_type_script = "uid://bnrknn0lpp5ss"
+
+[sub_resource type="Resource" id="Resource_fwwpb"]
+script = ExtResource("11_k8rtx")
+tipo = 1
+tempo = 0.7
+metadata/_custom_type_script = "uid://7c1614u5xl4b"
 
 [sub_resource type="Resource" id="Resource_y53hh"]
 script = ExtResource("3_e6ii4")
-variavel = "missao1_resultado"
-valor = 4.99999999999984
+variavel = "missao01_resultado"
+operador = 4
+valor = 3.0
 metadata/_custom_type_script = "uid://baglqudsvyyrb"
+
+[sub_resource type="Resource" id="R_veu0"]
+script = ExtResource("3_e6ii4")
+variavel = "missao01_veu"
 
 [sub_resource type="Resource" id="Resource_e36sc"]
 script = ExtResource("1_bqod1")
-condicoes = Array[ExtResource("3_e6ii4")]([SubResource("Resource_y53hh")])
+condicoes = Array[ExtResource("3_e6ii4")]([SubResource("Resource_y53hh"), SubResource("R_veu0")])
 gatilho = 2
-comandos = Array[ExtResource("2_k8rtx")]([SubResource("Resource_fenex"), SubResource("Resource_sjcg8"), SubResource("Resource_u0jxn"), SubResource("Resource_trixx"), SubResource("Resource_1jjtf"), SubResource("Resource_hko5r"), SubResource("Resource_g3dnw"), SubResource("Resource_c5goq"), SubResource("Resource_ujoxq"), SubResource("Resource_cth0m")])
+comandos = Array[ExtResource("2_k8rtx")]([SubResource("Resource_fenex"), SubResource("Resource_sjcg8"), SubResource("Resource_u0jxn"), SubResource("Resource_trixx"), SubResource("Resource_1jjtf"), SubResource("Resource_hko5r"), SubResource("Resource_g3dnw"), SubResource("Resource_c5goq"), SubResource("Resource_k8rtx"), SubResource("Resource_ujoxq"), SubResource("Resource_cth0m"), SubResource("Resource_e6ii4"), SubResource("Resource_2fbjl"), SubResource("Resource_5m6an"), SubResource("Resource_5e07p"), SubResource("Resource_8quck"), SubResource("Resource_fwwpb")])
 metadata/_custom_type_script = "uid://gdfc3xl4mcr4"
 
 [resource]

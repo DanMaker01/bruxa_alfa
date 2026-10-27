@@ -9,16 +9,16 @@
 [ext_resource type="Script" uid="uid://btdlgkphiqan1" path="res://src/dados/comandos/cmd_mostrar_opcoes.gd" id="7_ydlvu"]
 [ext_resource type="Script" uid="uid://crwb7mjauibuo" path="res://src/dados/comandos/cmd_label.gd" id="8_lbud3"]
 [ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="9_knu6e"]
-[ext_resource type="Script" uid="uid://bercma7w4moqu" path="res://src/dados/comandos/cmd_mudar_var.gd" id="10_2o2br"]
+[ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="10_2o2br"]
 [ext_resource type="Script" uid="uid://bm6rsgpqii0pt" path="res://src/dados/comandos/cmd_som.gd" id="11_doc50"]
-[ext_resource type="Script" uid="uid://ba7m6ef3neoh0" path="res://src/dados/comandos/cmd_mover_evento.gd" id="12_xyq1o"]
+[ext_resource type="Script" uid="uid://dp3mfol3wf88y" path="res://src/dados/comandos/cmd_mover.gd" id="12_xyq1o"]
 [ext_resource type="Script" uid="uid://u1lexc30s8be" path="res://src/dados/comandos/cmd_player.gd" id="13_mgd5l"]
 [ext_resource type="Script" uid="uid://b3yty8028fcf2" path="res://src/dados/comandos/cmd_goto.gd" id="14_5mnen"]
 [ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="15_epkn7"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="16_8canf"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_chamar_evento.gd" id="92_chamar"]
-[ext_resource type="Resource" path="res://dados/eventos/pensamento_inicio.tres" id="93_pensa_ini"]
-[ext_resource type="Resource" path="res://dados/eventos/pensamento_fim.tres" id="94_pensa_fim"]
+[ext_resource type="Script" uid="uid://dvii04cb4qtqa" path="res://src/dados/comandos/cmd_chamar_evento.gd" id="92_chamar"]
+[ext_resource type="Resource" uid="uid://chrkm8ylgh7e1" path="res://dados/eventos/pensamento_inicio.tres" id="93_pensa_ini"]
+[ext_resource type="Resource" uid="uid://b0vf54xwaodp7" path="res://dados/eventos/pensamento_fim.tres" id="94_pensa_fim"]
 
 [sub_resource type="Resource" id="Resource_m8ghe"]
 script = ExtResource("3_wbov3")
@@ -100,8 +100,11 @@ segundos = 1.5
 
 [sub_resource type="Resource" id="Resource_5yxed"]
 script = ExtResource("12_xyq1o")
+alvo = 1
 evento = "bruxa_in_npc"
-posicao = Vector2(1080, 464)
+x = 1080
+y = 464
+manter_y = false
 velocidade = 150.0
 direcao = 1
 esperar = false
@@ -215,8 +218,11 @@ script = ExtResource("5_0jff4")
 
 [sub_resource type="Resource" id="Resource_ypnfl"]
 script = ExtResource("12_xyq1o")
+alvo = 1
 evento = "bruxa_in_npc"
-posicao = Vector2(944, 464)
+x = 944
+y = 464
+manter_y = false
 velocidade = 150.0
 direcao = 2
 esperar = false

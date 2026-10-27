@@ -75,6 +75,9 @@ func _input(event: InputEvent) -> void:
 	if not is_visible_in_tree():
 		_apertado = false
 		return
+	# janela por cima (caldeirão, menu de debug, popup do item): o toque não é desta lista
+	if event is InputEventMouseButton and event.pressed and UiModal.bloqueia(self):
+		return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			if get_global_rect().has_point(event.position):

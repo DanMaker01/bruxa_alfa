@@ -12,7 +12,7 @@ script = ExtResource("1_160eo")
 metadata/_edit_vertical_guides_ = [2358.0, 2028.0, -56.0]
 
 [node name="Frente+" type="Parallax2D" parent="." unique_id=647674415]
-scroll_scale = Vector2(0.8, 0)
+scroll_scale = Vector2(0.9, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="Frente+" unique_id=145479066]
 z_index = 2

@@ -24,6 +24,6 @@ z_index = 1
 
 [node name="historia" type="CharacterBody2D" parent="Eventos" unique_id=2062644373]
 z_index = 3
-position = Vector2(320, 2368)
+position = Vector2(304, 2704)
 script = ExtResource("4_1fcl5")
 evento = ExtResource("ev_intro_historia")

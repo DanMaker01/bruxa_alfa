@@ -61,6 +61,11 @@ func _ready():
 	visible = true
 	set_ativo(comecar_ativo)
 	_montar_dialogo()
+	# menus que cobrem a tela: enquanto abertos, as cartas não recebem toques
+	for nome in ["PauseMenu", "MenuPrincipal"]:
+		var m = get_parent().get_node_or_null(nome)
+		if m:
+			m.add_to_group(UiModal.GRUPO)
 	_find_dependencies()
 	_connect_signals()
 	_create_popup()

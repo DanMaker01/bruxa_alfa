@@ -100,6 +100,7 @@ const BLOCO_DESCARTE: int = 1_000
 # =============================================================================
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	add_to_group(UiModal.GRUPO)   # aberta: as cartas do HUD não recebem toques
 	sistema = SistemaTermico.new()
 	indicadores = Indicadores.new()
 	_buscar_dependencias()

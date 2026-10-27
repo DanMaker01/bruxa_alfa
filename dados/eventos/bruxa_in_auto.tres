@@ -6,25 +6,101 @@
 [ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="4_xme6w"]
 [ext_resource type="Script" uid="uid://bm6rsgpqii0pt" path="res://src/dados/comandos/cmd_som.gd" id="5_gomjd"]
 [ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="6_kgd5i"]
-[ext_resource type="Script" uid="uid://bcx1mthgrhnun" path="res://src/dados/comandos/cmd_mover_camera.gd" id="7_js0ta"]
-[ext_resource type="Script" uid="uid://7rb2hsa5dvty" path="res://src/dados/comandos/cmd_resetar_camera.gd" id="8_fxvs5"]
+[ext_resource type="Script" uid="uid://ugvh8ya5s1gp" path="res://src/dados/comandos/cmd_camera.gd" id="7_js0ta"]
 [ext_resource type="Script" uid="uid://btdlgkphiqan1" path="res://src/dados/comandos/cmd_mostrar_opcoes.gd" id="9_xn8wu"]
 [ext_resource type="Script" uid="uid://crwb7mjauibuo" path="res://src/dados/comandos/cmd_label.gd" id="10_5mle4"]
-[ext_resource type="Script" uid="uid://bercma7w4moqu" path="res://src/dados/comandos/cmd_mudar_var.gd" id="11_np2s2"]
-[ext_resource type="Script" uid="uid://ba7m6ef3neoh0" path="res://src/dados/comandos/cmd_mover_evento.gd" id="12_wx0yx"]
+[ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="11_np2s2"]
+[ext_resource type="Script" uid="uid://dp3mfol3wf88y" path="res://src/dados/comandos/cmd_mover.gd" id="12_wx0yx"]
 [ext_resource type="Script" uid="uid://b3yty8028fcf2" path="res://src/dados/comandos/cmd_goto.gd" id="13_wmm05"]
 [ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="14_jlf5g"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="15_t7kas"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_chamar_evento.gd" id="92_chamar"]
-[ext_resource type="Resource" path="res://dados/eventos/pensamento_inicio.tres" id="93_pensa_ini"]
-[ext_resource type="Resource" path="res://dados/eventos/pensamento_fim.tres" id="94_pensa_fim"]
+[ext_resource type="Script" uid="uid://7c1614u5xl4b" path="res://src/dados/comandos/cmd_fade.gd" id="20_fade"]
+[ext_resource type="Script" uid="uid://b4qulgg7vsh20" path="res://src/dados/comandos/cmd_balao.gd" id="21_balao"]
+[ext_resource type="Script" uid="uid://dvii04cb4qtqa" path="res://src/dados/comandos/cmd_chamar_evento.gd" id="92_chamar"]
+[ext_resource type="Resource" uid="uid://chrkm8ylgh7e1" path="res://dados/eventos/pensamento_inicio.tres" id="93_pensa_ini"]
+[ext_resource type="Resource" uid="uid://b0vf54xwaodp7" path="res://dados/eventos/pensamento_fim.tres" id="94_pensa_fim"]
 
 [sub_resource type="Resource" id="Resource_73mqy"]
 script = ExtResource("3_gtb0y")
 
+[sub_resource type="Resource" id="A_cam0"]
+script = ExtResource("7_js0ta")
+posicao = Vector2(900, 480)
+
+[sub_resource type="Resource" id="A_fin"]
+script = ExtResource("20_fade")
+tipo = 1
+tempo = 1.5
+
+[sub_resource type="Resource" id="A_cam1"]
+script = ExtResource("7_js0ta")
+posicao = Vector2(330, 480)
+tempo = 5.0
+
+[sub_resource type="Resource" id="A_e1"]
+script = ExtResource("4_xme6w")
+segundos = 5.0
+
+[sub_resource type="Resource" id="A_camv"]
+script = ExtResource("7_js0ta")
+acao = 1
+tempo = 0.6
+
+[sub_resource type="Resource" id="A_e2"]
+script = ExtResource("4_xme6w")
+segundos = 0.8
+
+[sub_resource type="Resource" id="A_mv1"]
+script = ExtResource("12_wx0yx")
+destino = 2
+deslocamento = -50.0
+direcao = 1
+
+[sub_resource type="Resource" id="A_bal1"]
+script = ExtResource("21_balao")
+emocao = 5
+
+[sub_resource type="Resource" id="A_e3"]
+script = ExtResource("4_xme6w")
+segundos = 0.6
+
+[sub_resource type="Resource" id="A_mv2"]
+script = ExtResource("12_wx0yx")
+destino = 2
+deslocamento = 110.0
+direcao = 2
+
+[sub_resource type="Resource" id="A_e4"]
+script = ExtResource("4_xme6w")
+segundos = 0.5
+
+[sub_resource type="Resource" id="A_bal2"]
+script = ExtResource("21_balao")
+emocao = 2
+
+[sub_resource type="Resource" id="A_m1"]
+script = ExtResource("6_kgd5i")
+texto = "[BRUXA;bruxa_grande;0] Hmm... Poção de Pó de Retorno Concentrada."
+
+[sub_resource type="Resource" id="A_m2"]
+script = ExtResource("6_kgd5i")
+texto = "[BRUXA;bruxa_grande;0] Uma pitada e eu volto para casa, de onde eu estiver."
+
+[sub_resource type="Resource" id="A_m3"]
+script = ExtResource("6_kgd5i")
+texto = "[BRUXA;bruxa_grande;0] Ficou perfeita. Acho que é a melhor coisa que eu já fiz nesse caldeirão."
+
+[sub_resource type="Resource" id="A_bal3"]
+script = ExtResource("21_balao")
+emocao = 3
+
+[sub_resource type="Resource" id="A_m4"]
+script = ExtResource("6_kgd5i")
+texto = "[BRUXA;bruxa_grande;0] Vou guardar essa no bolso. Nunca se sabe."
+
 [sub_resource type="Resource" id="Resource_5asad"]
 script = ExtResource("4_xme6w")
-segundos = 2.999999999999904
+segundos = 1.5
 
 [sub_resource type="Resource" id="Resource_0kgrr"]
 script = ExtResource("5_gomjd")
@@ -156,7 +232,8 @@ script = ExtResource("4_xme6w")
 segundos = 0.5
 
 [sub_resource type="Resource" id="Resource_5scxx"]
-script = ExtResource("8_fxvs5")
+script = ExtResource("7_js0ta")
+acao = 1
 tempo = 1.0
 
 [sub_resource type="Resource" id="Resource_wduen"]
@@ -233,14 +310,18 @@ segundos = 0.7
 
 [sub_resource type="Resource" id="Resource_3opxw"]
 script = ExtResource("12_wx0yx")
+alvo = 1
 evento = "bruxa_in_npc"
-posicao = Vector2(544, 464)
+x = 544
+y = 464
+manter_y = false
 velocidade = 150.0
 direcao = 1
 esperar = false
 
 [sub_resource type="Resource" id="Resource_j0oay"]
-script = ExtResource("8_fxvs5")
+script = ExtResource("7_js0ta")
+acao = 1
 tempo = 4.0
 
 [sub_resource type="Resource" id="Resource_m45oa"]
@@ -366,8 +447,11 @@ script = ExtResource("4_xme6w")
 
 [sub_resource type="Resource" id="Resource_b5bcm"]
 script = ExtResource("12_wx0yx")
+alvo = 1
 evento = "bruxa_in_npc"
-posicao = Vector2(944, 464)
+x = 944
+y = 464
+manter_y = false
 velocidade = 150.0
 direcao = 2
 esperar = false
@@ -413,7 +497,8 @@ segundos = 0.2
 script = ExtResource("4_xme6w")
 
 [sub_resource type="Resource" id="Resource_kj00y"]
-script = ExtResource("8_fxvs5")
+script = ExtResource("7_js0ta")
+acao = 1
 tempo = 1.0
 
 [sub_resource type="Resource" id="Resource_quhje"]
@@ -485,7 +570,7 @@ nome = "fim"
 [sub_resource type="Resource" id="Resource_jh0eb"]
 script = ExtResource("1_c04db")
 gatilho = 2
-comandos = Array[ExtResource("2_optqh")]([SubResource("Resource_73mqy"), SubResource("Resource_5asad"), SubResource("Resource_0kgrr"), SubResource("Resource_o7nlj"), SubResource("Resource_kg7wh"), SubResource("Resource_fs43n"), SubResource("Resource_1noqm"), SubResource("Resource_dvbhk"), SubResource("Resource_go3bc"), SubResource("Resource_45lbe"), SubResource("Resource_uijtt"), SubResource("Resource_7g4fa"), SubResource("Resource_glly0"), SubResource("Resource_jkh3a"), SubResource("Resource_p3lq3"), SubResource("Resource_iprbv"), SubResource("Resource_2bbq4"), SubResource("Resource_jye12"), SubResource("Resource_7olg0"), SubResource("Resource_3xlgm"), SubResource("Resource_gar4i"), SubResource("Resource_h5k3h"), SubResource("Resource_1csho"), SubResource("Resource_aa4hk"), SubResource("Resource_4nvo0"), SubResource("Resource_h2c3j"), SubResource("Resource_ftfcc"), SubResource("Resource_8msh3"), SubResource("Resource_v5fb7"), SubResource("Resource_ffo14"), SubResource("Resource_3ft7v"), SubResource("Resource_msusd"), SubResource("Resource_c5yhq"), SubResource("Resource_28dil"), SubResource("Resource_5scxx"), SubResource("Resource_wduen"), SubResource("Resource_ovkkp"), SubResource("Resource_7fjw0"), SubResource("Resource_7p7qa"), SubResource("Resource_aqp7k"), SubResource("Resource_rj6aj"), SubResource("Resource_lili8"), SubResource("Resource_3g0ce"), SubResource("Resource_mhvxu"), SubResource("Resource_6inrx"), SubResource("Resource_ae7rc"), SubResource("Resource_aa8rj"), SubResource("Resource_31pmp"), SubResource("Resource_1opvw"), SubResource("Resource_a7ju0"), SubResource("Resource_bifeq"), SubResource("Resource_wjf6o"), SubResource("Resource_3opxw"), SubResource("Resource_j0oay"), SubResource("Resource_m45oa"), SubResource("Resource_3bqtm"), SubResource("Resource_dxax8"), SubResource("Resource_aj5ti"), SubResource("R_irma_brux_0"), SubResource("R_irma_brux_1"), SubResource("R_irma_brux_2"), SubResource("Resource_cjxqi"), SubResource("Resource_uh1o3"), SubResource("Resource_knokq"), SubResource("R_estilo_pensa"), SubResource("Resource_67ysa"), SubResource("Resource_rbw8v"), SubResource("R_estilo_volta"), SubResource("Resource_s0kd1"), SubResource("Resource_rgmyk"), SubResource("Resource_7fgmm"), SubResource("Resource_3fdd6"), SubResource("Resource_c04db"), SubResource("Resource_ajdrk"), SubResource("Resource_1dger"), SubResource("Resource_3cm0n"), SubResource("Resource_e4tah"), SubResource("Resource_4ohjl"), SubResource("Resource_lym1c"), SubResource("Resource_5iktt"), SubResource("Resource_l8py2"), SubResource("Resource_avisoguarda"), SubResource("Resource_optqh"), SubResource("Resource_wlxkp"), SubResource("Resource_b5bcm"), SubResource("Resource_6ctfg"), SubResource("Resource_tefxn"), SubResource("Resource_yja8x"), SubResource("Resource_vkiss"), SubResource("Resource_ggtyw"), SubResource("Resource_1eqwh"), SubResource("Resource_rmpw7"), SubResource("Resource_ifmlr"), SubResource("Resource_puxdq"), SubResource("Resource_8jf04"), SubResource("Resource_kj00y"), SubResource("Resource_quhje"), SubResource("R_estilo_pensa"), SubResource("R_desconfia_brux_0"), SubResource("R_desconfia_brux_1"), SubResource("R_desconfia_brux_2"), SubResource("Resource_fkp8f"), SubResource("R_estilo_volta"), SubResource("Resource_3miql"), SubResource("Resource_r2kvu"), SubResource("Resource_4jqi4"), SubResource("Resource_uqwpp"), SubResource("Resource_ffkj5"), SubResource("Resource_ai35c"), SubResource("Resource_ux7ap"), SubResource("Resource_lkqac"), SubResource("Resource_ohnie"), SubResource("Resource_pmmvm"), SubResource("Resource_wax0t")])
+comandos = Array[ExtResource("2_optqh")]([SubResource("Resource_73mqy"), SubResource("A_cam0"), SubResource("A_fin"), SubResource("A_cam1"), SubResource("A_e1"), SubResource("A_camv"), SubResource("A_e2"), SubResource("A_mv1"), SubResource("A_bal1"), SubResource("A_e3"), SubResource("A_mv2"), SubResource("A_e4"), SubResource("A_bal2"), SubResource("A_m1"), SubResource("A_m2"), SubResource("A_m3"), SubResource("A_bal3"), SubResource("A_m4"), SubResource("Resource_5asad"), SubResource("Resource_0kgrr"), SubResource("Resource_o7nlj"), SubResource("Resource_kg7wh"), SubResource("Resource_fs43n"), SubResource("Resource_1noqm"), SubResource("Resource_dvbhk"), SubResource("Resource_go3bc"), SubResource("Resource_45lbe"), SubResource("Resource_uijtt"), SubResource("Resource_7g4fa"), SubResource("Resource_glly0"), SubResource("Resource_jkh3a"), SubResource("Resource_p3lq3"), SubResource("Resource_iprbv"), SubResource("Resource_2bbq4"), SubResource("Resource_jye12"), SubResource("Resource_7olg0"), SubResource("Resource_3xlgm"), SubResource("Resource_gar4i"), SubResource("Resource_h5k3h"), SubResource("Resource_1csho"), SubResource("Resource_aa4hk"), SubResource("Resource_4nvo0"), SubResource("Resource_h2c3j"), SubResource("Resource_ftfcc"), SubResource("Resource_8msh3"), SubResource("Resource_v5fb7"), SubResource("Resource_ffo14"), SubResource("Resource_3ft7v"), SubResource("Resource_msusd"), SubResource("Resource_c5yhq"), SubResource("Resource_28dil"), SubResource("Resource_5scxx"), SubResource("Resource_wduen"), SubResource("Resource_ovkkp"), SubResource("Resource_7fjw0"), SubResource("Resource_7p7qa"), SubResource("Resource_aqp7k"), SubResource("Resource_rj6aj"), SubResource("Resource_lili8"), SubResource("Resource_3g0ce"), SubResource("Resource_mhvxu"), SubResource("Resource_6inrx"), SubResource("Resource_ae7rc"), SubResource("Resource_aa8rj"), SubResource("Resource_31pmp"), SubResource("Resource_1opvw"), SubResource("Resource_a7ju0"), SubResource("Resource_bifeq"), SubResource("Resource_wjf6o"), SubResource("Resource_3opxw"), SubResource("Resource_j0oay"), SubResource("Resource_m45oa"), SubResource("Resource_3bqtm"), SubResource("Resource_dxax8"), SubResource("Resource_aj5ti"), SubResource("R_irma_brux_0"), SubResource("R_irma_brux_1"), SubResource("R_irma_brux_2"), SubResource("Resource_cjxqi"), SubResource("Resource_uh1o3"), SubResource("Resource_knokq"), SubResource("R_estilo_pensa"), SubResource("Resource_67ysa"), SubResource("Resource_rbw8v"), SubResource("R_estilo_volta"), SubResource("Resource_s0kd1"), SubResource("Resource_rgmyk"), SubResource("Resource_7fgmm"), SubResource("Resource_3fdd6"), SubResource("Resource_c04db"), SubResource("Resource_ajdrk"), SubResource("Resource_1dger"), SubResource("Resource_3cm0n"), SubResource("Resource_e4tah"), SubResource("Resource_4ohjl"), SubResource("Resource_lym1c"), SubResource("Resource_5iktt"), SubResource("Resource_l8py2"), SubResource("Resource_avisoguarda"), SubResource("Resource_optqh"), SubResource("Resource_wlxkp"), SubResource("Resource_b5bcm"), SubResource("Resource_6ctfg"), SubResource("Resource_tefxn"), SubResource("Resource_yja8x"), SubResource("Resource_vkiss"), SubResource("Resource_ggtyw"), SubResource("Resource_1eqwh"), SubResource("Resource_rmpw7"), SubResource("Resource_ifmlr"), SubResource("Resource_puxdq"), SubResource("Resource_8jf04"), SubResource("Resource_kj00y"), SubResource("Resource_quhje"), SubResource("R_estilo_pensa"), SubResource("R_desconfia_brux_0"), SubResource("R_desconfia_brux_1"), SubResource("R_desconfia_brux_2"), SubResource("Resource_fkp8f"), SubResource("R_estilo_volta"), SubResource("Resource_3miql"), SubResource("Resource_r2kvu"), SubResource("Resource_4jqi4"), SubResource("Resource_uqwpp"), SubResource("Resource_ffkj5"), SubResource("Resource_ai35c"), SubResource("Resource_ux7ap"), SubResource("Resource_lkqac"), SubResource("Resource_ohnie"), SubResource("Resource_pmmvm"), SubResource("Resource_wax0t")])
 
 [sub_resource type="Resource" id="Resource_rea3u"]
 script = ExtResource("4_xme6w")

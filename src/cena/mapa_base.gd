@@ -59,6 +59,7 @@ func _ready():
 	interpeter = game_manager.get_node("Interpeter") if game_manager else null
 	_calc_limits()
 	_apply_limits()
+	_preparar_parallax()
 	_connect_events()
 	call_deferred("_tocar_bgm")   # deferred: o AudioManager pode ainda não estar pronto
 	
@@ -151,3 +152,77 @@ func _on_event_triggered(evento: EventoData, origem: Node = null):
 	elif interpeter and interpeter.has_method("trigger_event"):
 		interpeter.trigger_event(evento, origem)
 	map_event_triggered.emit(evento.id)
+
+
+# ===== PARALLAX NA BORDA =====
+# Quando a câmera para na borda do mapa, as camadas com fator diferente de 1
+# (fundo 0.2, frente 1.1...) continuam andando como se a câmera ainda seguisse a bruxa.
+# As camadas com fator 1 (Meio, Eventos) param junto com a câmera.
+# Também nunca deixa aparecer a ponta de uma imagem: o deslocamento é limitado ao
+# tamanho dela (camadas com repetição/loop não têm limite).
+# Na tela: x = x_local + scroll_offset.x - fator * (borda esquerda da câmera).
+const PARALLAX_SUAVE := 4.0   # igual ao position_smoothing_speed da câmera
+var _camadas: Array = []
+var _centro_virtual: float = NAN
+
+func _preparar_parallax() -> void:
+	_camadas.clear()
+	_centro_virtual = NAN
+	for c in get_children():
+		if c is Parallax2D and not is_equal_approx(c.scroll_scale.x, 1.0):
+			var ext := _extensao_x(c)
+			_camadas.append({"no": c, "base": c.scroll_offset.x, "esq": ext.x, "dir": ext.y,
+				"loop": c.repeat_size.x > 0.0})
+
+## Menor e maior x (no espaço da camada) das imagens dentro dela.
+func _extensao_x(camada: Node) -> Vector2:
+	var r := Vector2(INF, -INF)
+	var pilha: Array = camada.get_children(true)
+	while not pilha.is_empty():
+		var n = pilha.pop_back()
+		pilha.append_array(n.get_children(true))
+		if not (n is Sprite2D) or n.texture == null:
+			continue
+		var xf := Transform2D.IDENTITY
+		var p: Node = n
+		while p != camada:
+			xf = p.transform * xf
+			p = p.get_parent()
+		var ret: Rect2 = n.get_rect()
+		for canto in [ret.position, ret.end, Vector2(ret.position.x, ret.end.y), Vector2(ret.end.x, ret.position.y)]:
+			var x: float = (xf * canto).x
+			r.x = minf(r.x, x)
+			r.y = maxf(r.y, x)
+	return r
+
+func _process(delta: float) -> void:
+	if _camadas.is_empty():
+		return
+	var cam := get_viewport().get_camera_2d()
+	var player = get_node_or_null("/root/Main/Mundo/Player")
+	if cam == null or player == null:
+		return
+	var px: float = player.global_position.x
+	var k := 1.0 - exp(-PARALLAX_SUAVE * delta)
+	if is_nan(_centro_virtual):   # primeiro quadro no mapa: sem deslizar
+		_centro_virtual = px
+		k = 1.0
+	else:
+		_centro_virtual = lerpf(_centro_virtual, px, k)
+	var centro: float = cam.get_screen_center_position().x
+	var largura: float = get_viewport_rect().size.x / cam.zoom.x
+	var cam_esq: float = centro - largura * 0.5
+	# quanto a bruxa "passou" do ponto onde a câmera parou (0 no meio do mapa e em cenas)
+	var diff: float = _centro_virtual - centro if cam.get("is_following_player") else 0.0
+	for c in _camadas:
+		var no: Parallax2D = c.no
+		if not is_instance_valid(no):
+			continue
+		var f: float = no.scroll_scale.x
+		var alvo: float = c.base - f * diff
+		if not c.loop and is_finite(c.esq):
+			var lo: float = largura - c.dir + f * cam_esq   # borda direita da imagem fora da tela
+			var hi: float = -c.esq + f * cam_esq            # borda esquerda da imagem fora da tela
+			if lo <= hi:
+				alvo = clampf(alvo, lo, hi)
+		no.scroll_offset.x = lerpf(no.scroll_offset.x, alvo, k)

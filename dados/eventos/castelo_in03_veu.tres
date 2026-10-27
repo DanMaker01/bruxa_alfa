@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://bk6hgyyb0j788"]
+
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="1_djp1k"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_ph5fu"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="3_g6eiw"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="12_xpbed"]
+
+[sub_resource type="Resource" id="P_veu"]
+script = ExtResource("1_djp1k")
+
+[resource]
+script = ExtResource("12_xpbed")
+id = "castelo_in03_veu"
+paginas = Array[ExtResource("1_djp1k")]([SubResource("P_veu")])

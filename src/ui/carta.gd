@@ -203,7 +203,9 @@ func _fim_virar() -> void:
 # TOQUES: qualquer toque/arraste na carta conta como interação
 # =============================================================================
 func _input(event: InputEvent) -> void:
-	if not visible or _atual == NADA or _atual == face_prioridade:
+	if not is_visible_in_tree() or _atual == NADA or _atual == face_prioridade:
+		return
+	if UiModal.bloqueia(self):   # caldeirão, menu de debug, popup... por cima
 		return
 	var pos: Vector2
 	if event is InputEventMouseButton and event.pressed:

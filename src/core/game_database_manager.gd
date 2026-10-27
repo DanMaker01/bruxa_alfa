@@ -6,11 +6,14 @@
 extends Node
 
 const BANCO_PATH = "res://dados/banco.tres"
+## Uma variável por arquivo (VariavelData). Todas as .tres desta pasta (e subpastas) entram.
+const PASTA_VARIAVEIS = "res://dados/variaveis/"
 
 var banco: BancoDados = null
 var itens: Dictionary = {}            # id -> ItemData
 var personalidades: Dictionary = {}   # id -> PersonalidadeData
 var variaveis_iniciais: Dictionary = {}
+var variaveis_descricao: Dictionary = {}   # nome -> descrição (VariavelData.descricao)
 
 signal loaded
 signal load_error(error)
@@ -48,10 +51,33 @@ func _load():
 	for v in banco.variaveis:
 		if v and v.nome != "":
 			variaveis_iniciais[v.nome] = v.valor_inicial()
+	_carregar_variaveis(PASTA_VARIAVEIS)
 
 	print("[DatabaseManager] Carregado: ", itens.size(), " itens, ", personalidades.size(),
 		" personalidades, ", variaveis_iniciais.size(), " variáveis")
 	loaded.emit()
+
+func _carregar_variaveis(pasta: String) -> void:
+	var dir := DirAccess.open(pasta)
+	if dir == null:
+		return
+	for sub in dir.get_directories():
+		_carregar_variaveis(pasta.path_join(sub))
+	for arq in dir.get_files():
+		var nome := arq.trim_suffix(".remap")   # no jogo exportado os .tres viram .tres.remap
+		if not nome.ends_with(".tres"):
+			continue
+		var v = load(pasta.path_join(nome))
+		if v is VariavelData and v.nome != "":
+			if variaveis_iniciais.has(v.nome):
+				push_warning("[DatabaseManager] Variável repetida: " + v.nome)
+			variaveis_iniciais[v.nome] = v.valor_inicial()
+			if v.get("descricao"):
+				variaveis_descricao[v.nome] = v.descricao
+
+## Descrição da variável (vazio se não tiver).
+func get_var_descricao(nome: String) -> String:
+	return str(variaveis_descricao.get(nome, ""))
 
 # ===== CONSULTAS =====
 

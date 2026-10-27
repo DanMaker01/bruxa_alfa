@@ -41,33 +41,37 @@ EstradaB
 
 [.] v3
 [] 2ª receita:  - desenvoltura
+	Ajustado: musgo t_max 12 → 35 (aguenta os ~30 s finais); flor m 2400 → 5000, s−/s+ 900/1400 → 1900/2900 (Q de 60 s a ~85 °C ≈ 5100). Juntos dão diag(1,1,1.4,1,1) se o musgo entra depois.
 	balanceat tempo, u,s-,s+, Tmin,Tmax,tmin,tmax, etc de cada item. infusao
 [] mapa:
-	[] bruxa_out, mais camadas (v3)
-	[] ponte, nuvens e parallax (v3)
-[.]	Database: Nomear as poções de referência no catálogo (PocaoReferencia: nome, descrição, A). Poção da Calma Profunda. Poção #2. Poções proíbidas. 
-		Poção #2 = Poção da Desenvoltura (definir bem antes do Cap. 1; só usada no Cap. X).
-		Poções proibidas: as que têm algum autovalor 0 (2^5 − 1 = 31 combinações de traços zerados). Ainda sem nome. (feito: 31 no catálogo como "Poção Proibida (sem O, C...)", nomes provisórios)
-		Poção de Pó de Retorno Concentrada no catálogo, com efeito (teleporte para bruxa_in). Pó: diag(0.97,1,1,1,1.03), cozimento leniente (m 3000, T 60–170, t 10–150, folgas 0,4/0,6).
-		Nome: poção de um item só agora usa "Poção de [item] [qualidade]" antes de procurar no catálogo (senão um pó mal cozido virava "Concentrada").
+	[] bruxa_out, mais camadas
+[.]Database (nomes das proibidas ficam para o Cap. 2): Nomear as poções de referência no catálogo (PocaoReferencia: nome, descrição, A). Poção da Calma Profunda. Poção #2. Poções proíbidas. 
+	Poção #2 = Poção da Desenvoltura (definir bem antes do Cap. 1; só usada no Cap. X).
+	Poções proibidas: as que têm algum autovalor 0 (2^5 − 1 = 31 combinações de traços zerados). Ainda sem nome. (feito: 31 no catálogo como "Poção Proibida (sem O, C...)", nomes provisórios)
+	Poção de Pó de Retorno Concentrada no catálogo, com efeito (teleporte para bruxa_in). Pó: diag(0.97,1,1,1,1.03), cozimento leniente (m 3000, T 60–170, t 10–150, folgas 0,4/0,6).
+	Nome: poção de um item só agora usa "Poção de [item] [qualidade]" antes de procurar no catálogo (senão um pó mal cozido virava "Concentrada").
+[?] Parallax revisado (fundo 0.2, meio 1.0, frente 1.1; mapa_base acha os limites pela camada "Meio"):
+		bosque: Fundo (chão) virou Meio 1.0; Meio (árvores na frente) virou Frente 1.1.
+		bruxa_out: Fundo 0.2; casa foi para Meio; Frente2 removida.
+		castelo_in03: Fundo 0.2, Frente 1.1. castelo_out: Fundo 0.2, Frente2 virou Frente 1.1.
+		cidadeA, estradaA, estradaB: Fundo 0.2.
+		ponte: Fundo4 céu (z -20), Fundo3 nuvens longe (z -15, pan -6), Fundo2 montanha (z -10), Fundo nuvens (z -5, pan -12) todos 0.2; Meio/Meio2/Meio3 penhasco e ponte 1.0; Frente nuvens perto (z 10, fator 1.1, pan -40, alto da tela).
+		Interiores (bruxa_in, castelo_in01/02, cidadeA_in01-03): a camada "Frente+" (0.8) tem a moldura escura *_fundo.png na frente. Decidido: fica 0.8.
+	3 pouco efeito: "Era só isso? Água colorida?" → "Você zombou de mim e da minha filha, bruxa?!" → fuga.
+	4 piorou: "Você piorou tudo!" → fuga.
+	5 estereotipada: igual antes → fuga.
+	A fuga (guardas chamados, fade, castelo_in02) virou o evento fuga_castelo.tres, chamado pelos três.
+	Condições trocadas de "== 5" para ">= 3": castelo_in02_auto, castelo_in03_auto, guardas da ponte e da estradaB, última página do rei e da princesa (as páginas de 3 e 4 ficaram sem uso).
+	1 e 2 continuam sem fuga (1 convite; 2 "Veremos no casamento. Saia.").
+[?]Câmera nas bordas (simplificado):
+	Câmera: usa os limites nativos do Camera2D (limit_left/right do mapa_base) + position_smoothing (4) + limit_smoothed. Saiu a borda suave própria (_x_suave, BORDA_SUAVE, troca de limites).
+	Parallax: mapa_base.gd (seção PARALLAX NA BORDA) faz toda camada com fator ≠ 1 continuar andando quando a câmera para na borda, como se ainda seguisse a bruxa. Fator 1 (Meio, Eventos) para junto. Automático em todos os mapas.
+	A camada nunca mostra a ponta da imagem: o deslocamento é limitado ao tamanho dela (camadas com loop não têm limite). Isso também tapa os buracos de 64 px (castelo_in03 Frente) e 24 px (bosque Frente) na borda direita.
+	Mover câmera (comando) agora parte de onde a tela está e para no limite, sem "tempo morto" no começo do pan.
+	CamadaParallax: saiu continuar_na_borda/suavidade (agora é automático).
 
 [ ] História / missão: (em ordem)
-	[ ]	missao1_resultado hoje: 
-			1 N −2 e nenhum outro ±2 · 
-			2 N −2 mas outro traço ±2 · 
-			3 pouco efeito · 
-			4 N subiu · 
-			5 estereotipada (algum traço extremo). 
-			Rascunho das reações feito (castelo_in_auto): uma fala da princesa e do rei para cada resultado 1–5, e o rei e a princesa têm uma fala própria por resultado depois da entrega. Revisar o texto. Essa fala própria é um if nos comandos? vou fazer uma reação para cada um dos resulados.
-			1 bom: princesa "já me sinto mais calma"; o rei aceita a contragosto e começa a resmungar; a princesa interrompe, agradece, já pensa no vestido e convida a bruxa para o casamento; o rei aceita (missao01_convite = 1).
-			5 estereotipada: a princesa repete "Casamento. Vestido." e o drama cresce; o rei manda prender a bruxa, ela pede desculpas, não adianta; ela foge por outros cômodos do castelo, chega ao véu, pega um pedaço (missao01_veu = 1) e usa um item de volta para casa (não é o véu que teleporta). Os guardas entram e não tem ninguém. Ela aparece em bruxa_in.
-				Mapas a criar: castelo_in03 (aberto, vista do pátio superior; o véu fica visível ali e dá para pegar um pedaço).
-	[ ]	Roteiro: antes dessa cena, mostrar que a bruxa  tem um item que leva de volta para casa. Senão fica do nada. No contexto inicial da primeira cena ela já vai falar, quando tiver arrumando o inventário. 
-		(você: evento de início em bruxa_in, ela olha o inventário e comenta da poção de retorno)
-			Decidido: Poção de Pó de Retorno Concentrada. O "Pó de Retorno" (dados/itens/po_retorno.tres) é ingrediente comum, sem efeito; bem cozido vira a poção concentrada, que leva para bruxa_in.
-			Só o resultado 5 (fuga) cria problema. Nos outros casos o véu continua lá e você só pega no castelo_in03.
-			Depois: com resultado 5, o rei manda prender se ela voltar ao castelo (só fala, ainda não prende de verdade).
-
+	[ ]	Verificação de diálogos e de todos os caminhos possíveis do Cap. 1 (resultados 1 a 5, com e sem poção no bolso, voltar à ponte/estradaB depois da fuga, véu pego ou não).
 
 ```
 
@@ -85,26 +89,15 @@ EstradaB
 
 
 [ ] Bugs/Revisão:
-[?]		CmdMoverPlayer liberava o evento antes do movimento começar (diálogo aparecia com a bruxa andando). Agora espera começar (até 0,5 s) e depois terminar.
-[?]		Camera trava quando chega num canto de tela mas o parallax não deve travar, senão dá uma sensação ruim de impacto quando chega perto de um canto de tela.
-			Feito: camera_2d.gd lê limit_left/right e usa borda suave (BORDA_SUAVE 200 px, aproximação exponencial). Vale para todos os mapas.
-			CamadaParallax (src/cena/camada_parallax.gd, Parallax2D): textura, fator (0 céu parado, 1 mapa, >1 frente), loop_x, pan (px/s), deslocamento. Ponte: nuvens (Fundo3) conicavertidas. Converter as outras camadas/mapas aos poucos.
-[?]		Página com várias condições (todas precisam valer): variável, item, personalidade, posição, direção
-[?]		Página reavalia ao ganhar/perder item e ao mudar personalidade
-[?]		Notificação de item nunca aparece (NotificacaoItem sem Label em main.tscn)
-			Label já existe; agora o painel começa escondido e uma notificação nova não é mais apagada pelo timer da anterior.
-[?]		Segurar o botão de poção para sair agora é 0,7 s (TEMPO_LONGO)
 [ ]		Tutorial do caldeirão na 1ª vez.
-[ ]		Um card depois do outro se ativer os 2. (primeiro inventário depois status). se ativar só um, só aparece ele.
 [ ]		Fazer faces tbm terem seu .tres
-[?]		Dispersão/aglomeração do Spawn (AreaSpawn: distancia_min removida; "espalhamento" 0 = bem espalhados, 0,5 = aleatório, 1 = bem próximos. Sorteia 12 pontos e escolhe o mais longe/perto dos que já estão no mapa)
 [ ]		Variações no flip card. (depois) Sorteadas: normal = 1 flip diagonal; variações no mesmo tempo: 5 flips com velocidade decrescente; flip mudando a dimensão horizontal, com 1 ou 5 flips.
 
 
 [ ]	Representação de poções visual com matriz/grafo. (feito, versão simples: no pentágono cada ponta sai do traço que mais contribui e gira até a sua; diagonal = só escala com um pulo)
-[ ]		Mostrar o pentagrama, cada aresta representa um componente. Pensei em relacionar as arestas com a_ij e criar um feedback útil visualmente.
-[ ] 	Na hora da aplicar a poção, inventário, resultado do preparo, sempre mostra o pentagrama e a matriz.
-[ ]		O pentagrama deve ter animações a depender da matriz. Por exemplo, matriz diagonal (ou próxima de diagonal a menos de ruído) só escala, então a animação do pentagram é escalar. Matriz que troca dois componentes deve trocar duas pontas do pentagrama suavemente, como uma permutação ou rotação.
+[ ]		(Cap. 2) Mostrar o pentagrama, cada aresta representa um componente. Pensei em relacionar as arestas com a_ij e criar um feedback útil visualmente.
+[x] 	Na hora da aplicar a poção, inventário, resultado do preparo, sempre mostra o pentagrama e a matriz.
+[ ]		(Cap. 2) O pentagrama deve ter animações a depender da matriz. Por exemplo, matriz diagonal (ou próxima de diagonal a menos de ruído) só escala, então a animação do pentagram é escalar. Matriz que troca dois componentes deve trocar duas pontas do pentagrama suavemente, como uma permutação ou rotação.
 
 
 [ ]	Escrita/Estilo:
@@ -125,33 +118,14 @@ EstradaB
 				Passo do Inspector agora é 0.00001 (item_data.gd). Conferir no editor.
 
 
-[?] Intro: (Cap. 1)
-[x]		Melhorar texto: reduzir? etc... (5 legendas curtas, CmdLegenda)
-[x]		Melhorar representação do texto subindo. (intro_fundo sobe; toque pula a intro: CmdPularComToque)
-
-[.] Interprete:
-[?]	    comando if para verificar, além de variaveis; itens ou personalidade (GameTemp)
-				Feito: Condicao.tipo = variável, item, personalidade, posição X/Y da bruxa, direção da bruxa (vale p/ if, while e páginas)
-[?]     comando mudar direção player (CmdDirecaoPlayer: esq, dir, inverter, para evento)
-[?]	    comando mover player (CmdMoverPlayer: para X, para evento, deslocar; esperar; direção final)
-[?]     comando deixar evento passavel ou ativar/desativar colisão do player (CmdEventoPassavel)
-[?]			colisão do player: CmdPlayerPassavel
-[?]     comando mudar direção evento (CmdDirecaoEvento: centro, esq, dir, inverter, para o player; diferente de trocar animação)
-
-
 
 [ ]	Caldeirão:
-[x]		Ajustes mínimos: cor, shake, efeitos, aparar para a versão final. (vapor acima de 100 °C, baforada de fumaça ao abafar)
-[?]		Labaredas (faíscas laranja subindo) ao abanar o fogo.
+[.]		Labaredas (faíscas laranja subindo) ao abanar o fogo.
 [ ]		Tutorial(leve) na primeira vez. (DEPOIS DO CAP. 1)
 
 [ ] Mapa:
-[?]	Só 1 cogumelo no bosque a cada 10seg. na estradaA tem 5 cogumelos com delay de 2seg.
-[?]     Spawn de itens: existem as áreas de spawn, que invocam um tipo de evento, limitados por qtd de invocações no mapa.  
 [.]         Remover todos eventos placeholders de item dos mapas
 				Removidos os 6 cogumelos de teste (teste_magia) de bruxa_out e castelo_out. Fica só o da história (estradaA). teste_magia.tres sem uso.
-[?]         Adicionar o floresta_erva oficial (AreaErva na floresta)
-[?]         Adicionar o bosque_cogumelo oficial (AreaCogumelo no bosque, x≈1000–1700, y=580: ajustar no editor)
 [.]     Resolver problema de área de colisão, verificar cada evento, posição, etc.
 [?]		Quando chego perto de uma borda o paralax age parando bruscamente, quero que ele não fique limitado à tela, talvez tenho que mudar o tamanho dos cenários? (câmera com borda suave; CamadaParallax na ponte)
 [.]		Padronizar parallaxes em cada mapa: ...,Fundo2,Fundo,Meio,Frente,Frente2... (meio é onde ficam os eventos também)
@@ -172,19 +146,9 @@ EstradaB
 		Foto e nome do falante ficam fora da carta (CanvasLayer): não giram, fade só quando mudam.
 		Ajustar: tempo_aberta, tempo_virar, angulo_diagonal (Inspector da carta).
 		Verso provisório: pentagrama desenhado (src/ui/pentagrama_verso.gd, gira devagar; cor/espessura/raio/giro no Inspector). Trocar pela arte quando existir.
-[?]     Separar o Inventário do HUD. O HUD deve fazer o esquema de carta que vira ao clicar em um de seus componentes (inventário ou status), pensar como vai ser a dinâmica da carta girando, ativação, desativação, etc. Um clique em cima para mostrar, e se ficar alguns segundos sem interação ele desvira.
-[?]		Animar o inventário e o status como um card que gira/abre ou algo assim. 
-[?]		Fazer uma animação de carta virando para os diálogos, opções, inventário e status. 
-[?]		Diminuir o botão de avançar diálogo em todas as laterais, pouca coisa.
-[?]		Mostrar o pentagrama por cima dos Cards, talvez é problema de zindex.
-[?]		No diálogo a tela deve escurecer um pouco mais.
-[?]		No avançar diálogo o cursor triangular deve ficar com movimento y=sin((2pi/L)*x)
 
 
 
-[ ]	Arte Visual
-[?]     como fazer imagem ficar fazendo pan infinito? usar nas núvens
-			Feito: src/cena/nuvens_movendo.gd num TextureRect em modo Tile (velocidade px/s). Aplicado nas nuvens da ponte (Fundo3).
 [ ]     Fazer sprite:
 [ ]         mapa floresta de 6000px (talvez diminua), com paralax, provisório.
 [ ]         inventário e status de costas (card que gira)
@@ -217,11 +181,6 @@ EstradaB
 
 [ ]	Estudar se vale:
 [ ]		- Definir posição dos eventos no mapa, tudo por código
-
-
-[ ]	Status: ()
-[?]		popup do nome da característica quando hover ou click. ou algo legal. (status.gd: toque no ícone → balão com nome e valor por 1,5 s)
-[?]		Animação de aparição. (como se virasse uma carta, etc)  (o status já vira como carta)
 
 
 [ ]	Menu Principal e Pausa (DEPOIS DO CAP. 1)

@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="1_x"]
 [ext_resource type="Script" uid="uid://cwdgcnn30o052" path="res://src/dados/comandos/cmd_if.gd" id="2_x"]
 [ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="3_x"]
-[ext_resource type="Script" uid="uid://bercma7w4moqu" path="res://src/dados/comandos/cmd_mudar_var.gd" id="4_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_variavel.gd" id="4_x"]
 [ext_resource type="Script" uid="uid://b2vy54pculhyg" path="res://src/dados/comandos/cmd_else.gd" id="5_x"]
 [ext_resource type="Script" uid="uid://phmwdet0nd7d" path="res://src/dados/comandos/cmd_end.gd" id="6_x"]
 [ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="7_x"]
@@ -14,6 +14,10 @@
 [ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="12_x"]
 [ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="13_x"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="14_x"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_mover.gd" id="20_mover"]
+[ext_resource type="Script" uid="uid://u1lexc30s8be" path="res://src/dados/comandos/cmd_player.gd" id="21_player"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_chamar_evento.gd" id="22_chamar"]
+[ext_resource type="Resource" path="res://dados/eventos/estradaB_passagem2.tres" id="23_passagem"]
 
 [sub_resource type="Resource" id="R_1"]
 script = ExtResource("1_x")
@@ -169,7 +173,7 @@ texto = "[GUARDA;guarda2;100] Soube que esteve com a princesa. Pode passar, senh
 
 [sub_resource type="Resource" id="R_36"]
 script = ExtResource("1_x")
-variavel = "missao1_resultado"
+variavel = "missao01_resultado"
 operador = 4
 valor = 1.0
 
@@ -182,7 +186,53 @@ area_pos = Vector2(0, -10)
 area_scale = Vector2(16, 20.25)
 comandos = Array[ExtResource("12_x")]([SubResource("R_35")])
 
+[sub_resource type="Resource" id="F_cond"]
+script = ExtResource("1_x")
+variavel = "missao01_resultado"
+operador = 4
+valor = 3.0
+
+[sub_resource type="Resource" id="F_trava"]
+script = ExtResource("21_player")
+
+[sub_resource type="Resource" id="F_m1"]
+script = ExtResource("3_x")
+texto = "[GUARDA;guarda2;100] Alto! É a bruxa que enfeitiçou a princesa!"
+
+[sub_resource type="Resource" id="F_m2"]
+script = ExtResource("3_x")
+texto = "[GUARDA;guarda2;100] Guardas! Prendam-na!"
+
+[sub_resource type="Resource" id="F_m3"]
+script = ExtResource("3_x")
+texto = "[BRUXA;bruxa_grande;0] Melhor voltar outra hora!"
+
+[sub_resource type="Resource" id="F_corre"]
+script = ExtResource("20_mover")
+direcao = 2
+x = 1860.0
+velocidade = 360.0
+
+[sub_resource type="Resource" id="F_passa"]
+script = ExtResource("22_chamar")
+evento = ExtResource("23_passagem")
+
+[sub_resource type="Resource" id="F_solta"]
+script = ExtResource("21_player")
+acao = 1
+
+[sub_resource type="Resource" id="F_pag"]
+script = ExtResource("13_x")
+condicoes = Array[ExtResource("1_x")]([SubResource("F_cond")])
+gatilho = 1
+passavel = false
+sprite_frames = ExtResource("11_x")
+colisao_scale = Vector2(9, 20.25)
+area_pos = Vector2(0, -10)
+area_scale = Vector2(16, 20.25)
+comandos = Array[ExtResource("12_x")]([SubResource("F_trava"), SubResource("F_m1"), SubResource("F_m2"), SubResource("F_m3"), SubResource("F_corre"), SubResource("F_passa"), SubResource("F_solta")])
+
 [resource]
 script = ExtResource("14_x")
 id = "estradaB_guarda"
-paginas = Array[ExtResource("13_x")]([SubResource("R_31"), SubResource("R_34"), SubResource("R_37")])
+paginas = Array[ExtResource("13_x")]([SubResource("R_31"), SubResource("R_34"), SubResource("R_37"), SubResource("F_pag")])

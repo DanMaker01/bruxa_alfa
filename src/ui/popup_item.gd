@@ -35,6 +35,7 @@ var _grade: GradeMatriz
 
 func _ready():
     process_mode = PROCESS_MODE_ALWAYS
+    add_to_group(UiModal.GRUPO)   # aberto: a lista do inventário embaixo não recebe o toque
     _setup_ui()
     
     if close_button:

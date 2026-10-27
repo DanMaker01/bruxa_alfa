@@ -6,9 +6,7 @@
 #   loop_x       repete na horizontal sem fim (nunca aparece a borda da imagem)
 #   pan          velocidade própria em px/s (nuvens, névoa); negativo = para a esquerda
 #   deslocamento posição da imagem dentro da camada
-#   continuar_na_borda  quando a câmera para na borda do mapa, a camada continua andando
-#                como se a câmera seguisse a bruxa (suave). A imagem precisa ser mais
-#                larga que a tela (ou usar loop_x) para não aparecer a borda dela.
+#   Na borda do mapa ela continua andando sozinha (mapa_base.gd, seção PARALLAX NA BORDA).
 @tool
 class_name CamadaParallax
 extends Parallax2D
@@ -34,24 +32,7 @@ extends Parallax2D
 		deslocamento = v
 		_montar()
 
-@export var continuar_na_borda: bool = false
-## Quão rápido o deslocamento extra acompanha (maior = mais colado na bruxa).
-@export var suavidade: float = 4.0
-
 var _sprite: Sprite2D
-var _extra: float = 0.0
-
-func _process(delta: float) -> void:
-	if Engine.is_editor_hint() or not continuar_na_borda:
-		return
-	var cam := get_viewport().get_camera_2d()
-	var player = get_node_or_null("/root/Main/Mundo/Player")
-	if cam == null or player == null:
-		return
-	# quanto a bruxa está "à frente" do centro da câmera (≠ 0 só quando a câmera travou)
-	var diff: float = player.global_position.x - cam.get_screen_center_position().x
-	_extra = lerpf(_extra, -diff * fator, clampf(delta * suavidade, 0.0, 1.0))
-	scroll_offset.x = _extra
 
 func _ready() -> void:
 	_montar()

@@ -1,25 +1,25 @@
 [gd_scene format=3 uid="uid://b4h4pi1dkmkti"]
 
 [ext_resource type="Script" uid="uid://dsxujjugldv23" path="res://src/cena/mapa_base.gd" id="1_argp8"]
-[ext_resource type="Texture2D" uid="uid://bmlcxcv7j0olh" path="res://assets/mapa/mapa_castelo_in03/mapa_castelo_in03_fundo.png" id="2_argp8"]
+[ext_resource type="Texture2D" uid="uid://derqr87i431h7" path="res://assets/mapa/mapa_castelo_in03/mapa_castelo_in03_fundo.png" id="2_argp8"]
 [ext_resource type="Texture2D" uid="uid://b37tbudxq8p2b" path="res://assets/mapa/mapa_castelo_in03/mapa_castelo_in03_frente.png" id="3_4rfe4"]
 [ext_resource type="Script" uid="uid://bjxlt3vqym72w" path="res://src/cena/evento_base.gd" id="4_6m4ys"]
+[ext_resource type="Texture2D" uid="uid://cxqnexjkvd41o" path="res://assets/mapa/mapa_castelo_in03/mapa_castelo_in03_frente2.png" id="4_argp8"]
 [ext_resource type="Resource" uid="uid://wbuvgqs83iq1" path="res://dados/eventos/castelo_in03_passagem.tres" id="5_fjoa0"]
-[ext_resource type="Resource" uid="uid://bkra1awlqcqcl" path="res://dados/eventos/castelo_in01_guarda1.tres" id="7_0urnq"]
-[ext_resource type="Resource" uid="uid://cwoobr8u22n26" path="res://dados/eventos/castelo_in01_guarda2.tres" id="8_s22wv"]
+[ext_resource type="Resource" uid="uid://bk6hgyyb0j788" path="res://dados/eventos/castelo_in03_veu.tres" id="8_4rfe4"]
+[ext_resource type="Resource" uid="uid://bnivfg52vrgeb" path="res://dados/eventos/castelo_in03_auto.tres" id="ev_auto"]
+[ext_resource type="Resource" uid="uid://dqvy8oskic8nn" path="res://dados/eventos/castelo_in03_guarda1.tres" id="ev_g1"]
+[ext_resource type="Resource" uid="uid://cp7edbwe2kmbs" path="res://dados/eventos/castelo_in03_guarda2.tres" id="ev_g2"]
 
 [node name="CasteloIn03" type="Node2D" unique_id=231347479]
 script = ExtResource("1_argp8")
 metadata/_edit_vertical_guides_ = [2358.0, 2028.0, -56.0]
 
-[node name="Frente+" type="Parallax2D" parent="." unique_id=647674415]
-z_index = 10
-scroll_scale = Vector2(0.8, 0)
+[node name="Fundo" type="Parallax2D" parent="." unique_id=647674415]
+z_index = -10
+scroll_scale = Vector2(0.2, 0)
 
-[node name="Sprite2D" type="Sprite2D" parent="Frente+" unique_id=145479066]
-z_index = 2
-position = Vector2(-64, 0)
-scale = Vector2(1.1781818, 1)
+[node name="Sprite2D" type="Sprite2D" parent="Fundo" unique_id=1521454132]
 texture = ExtResource("2_argp8")
 centered = false
 
@@ -28,9 +28,18 @@ z_index = 5
 scroll_scale = Vector2(1, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="Meio" unique_id=1731043530]
-modulate = Color(0.8132137, 0.13875175, 0.50924534, 1)
 z_index = -4
 texture = ExtResource("3_4rfe4")
+centered = false
+
+[node name="Frente" type="Parallax2D" parent="." unique_id=295467147]
+z_index = 10
+scroll_scale = Vector2(1.1, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Frente" unique_id=353949888]
+z_index = -4
+scale = Vector2(1.051, 1)
+texture = ExtResource("4_argp8")
 centered = false
 
 [node name="Eventos" type="Parallax2D" parent="." unique_id=1673461017]
@@ -42,15 +51,26 @@ position = Vector2(1168, 464)
 script = ExtResource("4_6m4ys")
 evento = ExtResource("5_fjoa0")
 
+[node name="Auto" type="CharacterBody2D" parent="Eventos" unique_id=1026644220]
+z_index = 3
+position = Vector2(1168, 464)
+script = ExtResource("4_6m4ys")
+evento = ExtResource("ev_auto")
 
 [node name="Guarda1" type="CharacterBody2D" parent="Eventos" unique_id=1118720276]
 z_index = 3
-position = Vector2(1200, 464)
+position = Vector2(1216, 464)
 script = ExtResource("4_6m4ys")
-evento = ExtResource("7_0urnq")
+evento = ExtResource("ev_g1")
+
+[node name="Véu" type="CharacterBody2D" parent="Eventos" unique_id=1525510335]
+z_index = 3
+position = Vector2(304, 432)
+script = ExtResource("4_6m4ys")
+evento = ExtResource("8_4rfe4")
 
 [node name="Guarda2" type="CharacterBody2D" parent="Eventos" unique_id=1609237115]
 z_index = 3
-position = Vector2(1232, 464)
+position = Vector2(1168, 464)
 script = ExtResource("4_6m4ys")
-evento = ExtResource("8_s22wv")
+evento = ExtResource("ev_g2")

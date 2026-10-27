@@ -6,4 +6,5 @@ extends Resource
 
 @export var itens: Array[ItemData] = []
 @export var personalidades: Array[PersonalidadeData] = []
+## Cada variável é um .tres em res://dados/variaveis/ (entram sozinhas, não precisa listar aqui).
 @export var variaveis: Array[VariavelData] = []

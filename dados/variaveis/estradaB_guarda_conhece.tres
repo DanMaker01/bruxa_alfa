@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="VariavelData" format=3]
+
+[ext_resource type="Script" uid="uid://cgrx3adgd06tf" path="res://src/dados/variavel_data.gd" id="1_var"]
+
+[resource]
+script = ExtResource("1_var")
+nome = "estradaB_guarda_conhece"

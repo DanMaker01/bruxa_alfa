@@ -7,13 +7,11 @@
 [ext_resource type="Script" path="res://src/dados/comandos/cmd_label.gd" id="5_hutgf"]
 [ext_resource type="Resource" path="res://dados/itens/maca.tres" id="6_4ar06"]
 [ext_resource type="Script" path="res://src/dados/comandos/cmd_item.gd" id="7_4rhsc"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_mudar_var.gd" id="8_tpxdf"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_variavel.gd" id="8_tpxdf"]
 [ext_resource type="Script" path="res://src/dados/comandos/cmd_goto.gd" id="9_2plsw"]
 [ext_resource type="Script" path="res://src/dados/comandos/cmd_player.gd" id="10_bkhln"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_tremer_camera.gd" id="11_dnrbo"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_camera.gd" id="11_dnrbo"]
 [ext_resource type="Script" path="res://src/dados/comandos/cmd_esperar.gd" id="12_87qhk"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_mover_camera.gd" id="13_1b1ri"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_resetar_camera.gd" id="14_db83f"]
 [ext_resource type="SpriteFrames" path="res://animacoes/maca.tres" id="15_rpce6"]
 [ext_resource type="Script" path="res://src/dados/condicao.gd" id="16_pdo0j"]
 [ext_resource type="Script" path="res://src/dados/evento_data.gd" id="17_rx4aw"]
@@ -74,6 +72,7 @@ script = ExtResource("10_bkhln")
 
 [sub_resource type="Resource" id="Resource_gf0m4"]
 script = ExtResource("11_dnrbo")
+acao = 2
 duracao = 2.0
 
 [sub_resource type="Resource" id="Resource_h3cie"]
@@ -84,7 +83,7 @@ segundos = 2.0
 script = ExtResource("12_87qhk")
 
 [sub_resource type="Resource" id="Resource_8j8v4"]
-script = ExtResource("13_1b1ri")
+script = ExtResource("11_dnrbo")
 posicao = Vector2(1000, 500)
 tempo = 1.0
 
@@ -95,7 +94,8 @@ script = ExtResource("12_87qhk")
 script = ExtResource("12_87qhk")
 
 [sub_resource type="Resource" id="Resource_pmxen"]
-script = ExtResource("14_db83f")
+script = ExtResource("11_dnrbo")
+acao = 1
 tempo = 1.0
 
 [sub_resource type="Resource" id="Resource_iv8np"]

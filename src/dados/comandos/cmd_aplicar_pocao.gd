@@ -70,47 +70,4 @@ static func aplicar_matriz(interp, gt, personalidade: String, A: Array) -> void:
 
 ## Clarão + brilhos subindo no alvo (evento ou bruxa) + câmera tremendo um pouco.
 static func efeito_magico(interp, alvo) -> void:
-	var tree: SceneTree = interp.get_tree()
-	if alvo is Node2D:
-		var p := CPUParticles2D.new()
-		p.one_shot = true
-		p.explosiveness = 0.6
-		p.amount = 40
-		p.lifetime = 1.4
-		p.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
-		p.emission_rect_extents = Vector2(40, 60)
-		p.direction = Vector2.UP
-		p.spread = 40.0
-		p.initial_velocity_min = 30.0
-		p.initial_velocity_max = 90.0
-		p.gravity = Vector2(0, -30)
-		p.scale_amount_min = 3.0
-		p.scale_amount_max = 7.0
-		var rampa := Gradient.new()
-		rampa.set_color(0, Color.WHITE)
-		rampa.set_color(1, Color(COR_BRILHO, 0.0))
-		rampa.add_point(0.3, COR_BRILHO)
-		p.color_ramp = rampa
-		p.z_index = 20
-		alvo.add_child(p)
-		p.position = Vector2(0, -80)
-		p.emitting = true
-		tree.create_timer(p.lifetime + 0.3).timeout.connect(p.queue_free)
-	var cam = interp.get_camera()
-	if cam and cam.has_method("tremer_camera"):
-		cam.tremer_camera(4.0, 0.05, 0.6)
-	# clarão
-	var camada := CanvasLayer.new()
-	camada.layer = 15
-	tree.root.add_child(camada)
-	var flash := ColorRect.new()
-	flash.color = Color(COR_BRILHO, 0.0)
-	flash.size = tree.root.get_visible_rect().size
-	flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	camada.add_child(flash)
-	var tw := camada.create_tween()
-	tw.tween_property(flash, "color:a", 0.7, 0.15)
-	tw.tween_property(flash, "color:a", 0.0, 0.8)
-	await tw.finished
-	camada.queue_free()
-	await tree.create_timer(0.6).timeout
+	await CmdMostrarEfeito.mostrar(interp, alvo, CmdMostrarEfeito.Tipo.MAGICO, COR_BRILHO)

@@ -34,6 +34,10 @@ var _info: PanelContainer      # ficha do item (abre por cima das abas)
 var _info_conteudo: VBoxContainer
 var _pausado_antes: bool = false
 var _janela: Control        # fundo + painel (o que abre/fecha)
+var _titulo: Label
+var _filtro_vars: String = ""
+var _so_alteradas: bool = false
+static var _ultima_aba: int = 0   # reabre na aba onde parou
 var _botao: Button          # botão fixo no canto (0,0)
 
 
@@ -128,8 +132,25 @@ func abrir() -> void:
 	_pausado_antes = get_tree().paused
 	get_tree().paused = true
 	_atualizar_tudo()
+	_atualizar_titulo()
+	_abas.current_tab = clampi(_ultima_aba, 0, _abas.get_tab_count() - 1)
 	_janela.show()
 	_conectar_sinais()
+
+## Título com o mapa atual e a posição da bruxa.
+func _atualizar_titulo() -> void:
+	var mapa := "?"
+	var pos := ""
+	if ferramentas:
+		var m = ferramentas.mundo()
+		if m:
+			for c in m.get_children():
+				if c.name != "Player" and c.scene_file_path != "":
+					mapa = c.scene_file_path.get_file().get_basename()
+		var p = ferramentas.gm.get_player() if ferramentas.gm else null
+		if p:
+			pos = "   x %d  y %d" % [int(p.global_position.x), int(p.global_position.y)]
+	_titulo.text = "DEBUG   %s%s" % [mapa, pos]
 
 func fechar() -> void:
 	if _info:
@@ -156,6 +177,7 @@ func _montar() -> void:
 	_janela.name = "Janela"
 	_janela.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_janela.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_janela.add_to_group(UiModal.GRUPO)   # aberto: as cartas do HUD não recebem toques
 	add_child(_janela)
 
 	var fundo := ColorRect.new()
@@ -185,7 +207,10 @@ func _montar() -> void:
 
 	var topo := HBoxContainer.new()
 	var titulo := Label.new()
-	titulo.text = "DEBUG  ( ' fecha )"
+	_titulo = titulo
+	titulo.text = "DEBUG"
+	titulo.tooltip_text = "tecla ' abre/fecha"
+	titulo.clip_text = true
 	titulo.add_theme_font_size_override("font_size", FONTE + 4)
 	titulo.add_theme_color_override("font_color", Color(1.0, 0.8, 0.3))
 	titulo.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -198,6 +223,7 @@ func _montar() -> void:
 
 	_abas = TabContainer.new()
 	_abas.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_abas.tab_changed.connect(func(i: int): _ultima_aba = i)
 	col.add_child(_abas)
 
 	_lista_vars = _criar_aba("Variáveis")
@@ -267,32 +293,124 @@ func _atualizar_vars() -> void:
 	if not game_temp:
 		_lista_vars.add_child(_rotulo("GameTemp não encontrado"))
 		return
+	# barra: busca + só alteradas
+	var barra := HBoxContainer.new()
+	var busca := LineEdit.new()
+	busca.placeholder_text = "buscar variável..."
+	busca.text = _filtro_vars
+	busca.clear_button_enabled = true
+	busca.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	busca.text_changed.connect(func(txt: String):
+		_filtro_vars = txt
+		_filtrar_vars())
+	barra.add_child(busca)
+	var so := CheckBox.new()
+	so.text = "só alteradas"
+	so.button_pressed = _so_alteradas
+	so.toggled.connect(func(v: bool):
+		_so_alteradas = v
+		_filtrar_vars())
+	barra.add_child(so)
+	_lista_vars.add_child(barra)
+
 	var vars: Dictionary = game_temp.get_all_vars()
 	var nomes: Array = vars.keys()
 	nomes.sort()
+	var grupo_atual := ""
 	for nome in nomes:
-		var linha := HBoxContainer.new()
-		linha.add_child(_rotulo(str(nome)))
-		var valor = vars[nome]
-		if typeof(valor) == TYPE_BOOL:
-			var cb := CheckBox.new()
-			cb.button_pressed = valor
-			cb.toggled.connect(func(v: bool): game_temp.set_var(nome, v))
-			linha.add_child(cb)
-		else:
-			var campo := LineEdit.new()
-			campo.text = str(valor)
-			campo.custom_minimum_size.x = 130
-			var aplicar := func(_t = ""):
-				if campo.text.is_valid_float():
-					game_temp.set_var(nome, float(campo.text))
-				else:
-					campo.text = str(game_temp.get_var(nome))
-			campo.text_submitted.connect(aplicar)
-			campo.focus_exited.connect(aplicar)
-			linha.add_child(campo)
-		_lista_vars.add_child(linha)
+		var g := _grupo_var(str(nome))
+		if g != grupo_atual:
+			grupo_atual = g
+			var cab := _secao(g)
+			cab.set_meta("grupo_cab", g)
+			_lista_vars.add_child(cab)
+		_lista_vars.add_child(_linha_var(str(nome), g))
 	_ajustar_toque(_lista_vars)
+	_filtrar_vars()
+
+## Grupo da variável = prefixo antes do primeiro "_" (missao01, castelo, ponte...).
+func _grupo_var(nome: String) -> String:
+	var i := nome.find("_")
+	return nome.substr(0, i) if i > 0 else "geral"
+
+func _valor_inicial(nome: String) -> float:
+	if database and database.has_method("get_initial_vars"):
+		return float(database.get_initial_vars().get(nome, 0.0))
+	return 0.0
+
+func _linha_var(nome: String, grupo: String) -> Control:
+	var caixa := VBoxContainer.new()
+	caixa.set_meta("var", nome)
+	caixa.set_meta("grupo", grupo)
+	caixa.add_theme_constant_override("separation", 0)
+	var linha := HBoxContainer.new()
+	var rot := _rotulo(nome)
+	var desc: String = database.get_var_descricao(nome) if database and database.has_method("get_var_descricao") else ""
+	rot.tooltip_text = desc
+	rot.mouse_filter = Control.MOUSE_FILTER_PASS
+	linha.add_child(rot)
+	var campo := LineEdit.new()
+	campo.custom_minimum_size.x = 110
+	campo.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var mostrar := func():
+		var v = game_temp.get_var(nome)
+		campo.text = str(v)
+		var alterada: bool = absf(float(v if v != null else 0.0) - _valor_inicial(nome)) > 0.0001
+		rot.add_theme_color_override("font_color", Color(1.0, 0.8, 0.3) if alterada else COR_TEXTO)
+		caixa.set_meta("alterada", alterada)
+	var definir := func(v: float):
+		game_temp.set_var(nome, v)
+		mostrar.call()
+	var aplicar := func(_t = ""):
+		if campo.text.is_valid_float():
+			definir.call(float(campo.text))
+		else:
+			mostrar.call()
+	campo.text_submitted.connect(aplicar)
+	campo.focus_exited.connect(aplicar)
+	var menos := Button.new()
+	menos.text = " − "
+	menos.pressed.connect(func():
+		var atual = game_temp.get_var(nome)
+		definir.call(float(atual if atual != null else 0.0) - 1.0))
+	var mais := Button.new()
+	mais.text = " + "
+	mais.pressed.connect(func():
+		var atual = game_temp.get_var(nome)
+		definir.call(float(atual if atual != null else 0.0) + 1.0))
+	linha.add_child(menos)
+	linha.add_child(campo)
+	linha.add_child(mais)
+	var volta := Button.new()
+	volta.text = " ↺ "
+	volta.tooltip_text = "valor inicial (%s)" % _n(_valor_inicial(nome))
+	volta.pressed.connect(func(): definir.call(_valor_inicial(nome)))
+	linha.add_child(volta)
+	caixa.add_child(linha)
+	if desc != "":
+		var d := _rotulo(desc)
+		d.add_theme_font_size_override("font_size", FONTE - 5)
+		d.add_theme_color_override("font_color", COR_TEXTO.darkened(0.4))
+		caixa.add_child(d)
+	mostrar.call()
+	return caixa
+
+## Mostra só as linhas que batem com a busca (e só as alteradas, se marcado).
+func _filtrar_vars() -> void:
+	var busca := _filtro_vars.strip_edges().to_lower()
+	var grupos_visiveis := {}
+	for c in _lista_vars.get_children():
+		if c.has_meta("var"):
+			var nome: String = c.get_meta("var")
+			var ok := busca == "" or nome.to_lower().contains(busca)
+			if _so_alteradas and not c.get_meta("alterada", false):
+				ok = false
+			c.visible = ok
+			if ok:
+				grupos_visiveis[c.get_meta("grupo")] = true
+	for c in _lista_vars.get_children():
+		if c.has_meta("grupo_cab"):
+			c.visible = grupos_visiveis.has(c.get_meta("grupo_cab"))
 
 
 # =============================================================================
@@ -310,7 +428,17 @@ func _atualizar_pers() -> void:
 		cab.add_child(l)
 	_lista_pers.add_child(cab)
 	for nome in pers:
-		_lista_pers.add_child(_secao(str(nome)))   # nome em cima, valores embaixo
+		var cab_p := HBoxContainer.new()
+		cab_p.add_child(_secao(str(nome)))   # nome em cima, valores embaixo
+		var volta := Button.new()
+		volta.text = " ↺ inicial "
+		volta.pressed.connect(func():
+			var ini: Array = database.get_personality(nome) if database and database.has_method("get_personality") else []
+			if not ini.is_empty():
+				game_temp.set_personality(nome, ini.duplicate())
+				_atualizar_pers())
+		cab_p.add_child(volta)
+		_lista_pers.add_child(cab_p)
 		var linha := HBoxContainer.new()
 		var valores: Array = pers[nome]
 		for i in TRACOS.size():
@@ -377,6 +505,20 @@ func _atualizar_itens() -> void:
 	add.add_child(_qtd_novo)
 	add.add_child(btn)
 	_lista_itens.add_child(add)
+	# ingredientes de uma receita de uma vez (para testar o caldeirão)
+	var receitas := _receitas()
+	if not receitas.is_empty():
+		var lr := HFlowContainer.new()
+		lr.add_child(_rotulo("Ingredientes de:", 190))
+		for r in receitas:
+			var b := Button.new()
+			b.text = r.nome
+			b.pressed.connect(func():
+				for ing in r.ingredientes:
+					if ing and ing.item:
+						game_temp.add_item(ing.item.id, maxi(ing.quantidade, 1)))
+			lr.add_child(b)
+		_lista_itens.add_child(lr)
 	_lista_itens.add_child(HSeparator.new())
 
 	# ---- inventário atual ----
@@ -415,6 +557,20 @@ func _atualizar_itens() -> void:
 	_lista_itens.add_child(limpar)
 	_ajustar_toque(_lista_itens)
 
+
+## Todas as ReceitaData de res://dados/receitas/.
+func _receitas() -> Array:
+	var out: Array = []
+	var dir := DirAccess.open("res://dados/receitas/")
+	if dir == null:
+		return out
+	for arq in dir.get_files():
+		var nome := arq.trim_suffix(".remap")
+		if nome.ends_with(".tres"):
+			var r = load("res://dados/receitas/" + nome)
+			if r is ReceitaData:
+				out.append(r)
+	return out
 
 func _on_qtd_mudou(valor: float, id: String) -> void:
 	var atual: int = game_temp.get_item_quantity(id)
@@ -578,6 +734,57 @@ func _atualizar_mapa() -> void:
 		_lista_mapa.add_child(_rotulo("FerramentasDebug não encontrada"))
 		return
 
+	# ---- ir para outro mapa ----
+	var ir := HBoxContainer.new()
+	var mapas := OptionButton.new()
+	mapas.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	mapas.clip_text = true
+	mapas.fit_to_longest_item = false
+	var dir := DirAccess.open("res://mapas/")
+	if dir:
+		var arqs: Array = []
+		for a in dir.get_files():
+			var n := a.trim_suffix(".remap")
+			if n.ends_with(".tscn"):
+				arqs.append(n)
+		arqs.sort()
+		for n in arqs:
+			mapas.add_item(n.get_basename())
+			mapas.set_item_metadata(mapas.item_count - 1, "res://mapas/" + n)
+	var px := SpinBox.new()
+	px.min_value = 0
+	px.max_value = 10000
+	px.value = 120
+	px.prefix = "x"
+	var ir_btn := Button.new()
+	ir_btn.text = "Ir"
+	ir_btn.pressed.connect(func():
+		if mapas.item_count == 0 or not ferramentas.gm or not ferramentas.gm.get("teleporte"):
+			return
+		var caminho: String = mapas.get_selected_metadata()
+		fechar()
+		ferramentas.gm.teleporte.teleportar(caminho, px.value, 505.0, "dir"))
+	ir.add_child(mapas)
+	ir.add_child(px)
+	ir.add_child(ir_btn)
+	_lista_mapa.add_child(_secao("Ir para"))
+	_lista_mapa.add_child(ir)
+
+	# ---- velocidade do jogo ----
+	var vel := HBoxContainer.new()
+	vel.add_child(_rotulo("Velocidade do jogo"))
+	for k in [0.5, 1.0, 2.0, 4.0]:
+		var b := Button.new()
+		b.text = ("%sx" % _n(k))
+		b.toggle_mode = true
+		b.button_pressed = is_equal_approx(Engine.time_scale, k)
+		b.pressed.connect(func():
+			Engine.time_scale = k
+			_atualizar_mapa())
+		vel.add_child(b)
+	_lista_mapa.add_child(vel)
+	_lista_mapa.add_child(HSeparator.new())
+
 	var areas := CheckBox.new()
 	areas.text = "Mostrar colisões e áreas de interação"
 	areas.button_pressed = ferramentas.areas_visiveis()
@@ -635,6 +842,25 @@ func _atualizar_mapa() -> void:
 			cb.button_pressed = pagina.is_passavel()
 			cb.toggled.connect(func(v: bool): ferramentas.evento_passavel(ev, v))
 			linha.add_child(cb)
+		var ate := Button.new()
+		ate.text = "Ir até"
+		ate.tooltip_text = "leva a bruxa para perto do evento"
+		ate.pressed.connect(func():
+			var p = ferramentas.gm.get_player() if ferramentas.gm else null
+			if p and is_instance_valid(ev):
+				p.global_position.x = ev.global_position.x - 60.0
+				_atualizar_titulo())
+		linha.add_child(ate)
+		if ev.get("evento"):
+			var rodar := Button.new()
+			rodar.text = "Rodar"
+			rodar.tooltip_text = "roda a página ativa deste evento"
+			rodar.pressed.connect(func():
+				var interp = ferramentas.gm.get_node_or_null("Interpeter") if ferramentas.gm else null
+				if interp and is_instance_valid(ev):
+					fechar()
+					interp.trigger_event(ev.evento, ev))
+			linha.add_child(rodar)
 		_lista_mapa.add_child(linha)
 	_ajustar_toque(_lista_mapa)
 

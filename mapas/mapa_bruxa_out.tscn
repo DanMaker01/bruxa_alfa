@@ -13,7 +13,7 @@ script = ExtResource("1_mi5fw")
 metadata/_edit_vertical_guides_ = [2358.0, 2028.0, -56.0, 400.0]
 
 [node name="Fundo" type="Parallax2D" parent="." unique_id=647674415]
-scroll_scale = Vector2(1, 0)
+scroll_scale = Vector2(0.2, 0)
 
 [node name="Meio" type="Parallax2D" parent="." unique_id=1011851333]
 scroll_scale = Vector2(1, 0)
@@ -23,10 +23,7 @@ z_index = -1
 texture = ExtResource("3_w6v2g")
 centered = false
 
-[node name="Frente2" type="Parallax2D" parent="." unique_id=321308689]
-scroll_scale = Vector2(1, 0)
-
-[node name="casa" type="Sprite2D" parent="Frente2" unique_id=1468445260]
+[node name="casa" type="Sprite2D" parent="Meio" unique_id=1468445260]
 z_index = 1
 position = Vector2(64, -32)
 texture = ExtResource("3_mi5fw")

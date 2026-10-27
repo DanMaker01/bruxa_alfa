@@ -15,9 +15,9 @@ const CAMINHO_INTERP := "/root/Main/GameManager/Interpeter"
 ## Atalhos: [texto do botão, arquivo do comando].
 const ATALHOS := [
 	["Mensagem", "cmd_mostrar_msg"], ["Opções", "cmd_mostrar_opcoes"],
-	["Teleporte", "cmd_teleportar"], ["Mover evento", "cmd_mover_evento"],
-	["Mover bruxa", "cmd_mover_player"], ["Tremor", "cmd_tremer_camera"],
-	["Caldeirão", "cmd_preparo"], ["Variável", "cmd_mudar_var"],
+	["Teleporte", "cmd_teleportar"], ["Mover", "cmd_mover"],
+	["Efeito", "cmd_mostrar_efeito"], ["Câmera", "cmd_camera"], ["Balão", "cmd_balao"],
+	["Caldeirão", "cmd_preparo"], ["Variável", "cmd_variavel"],
 	["Item", "cmd_item"], ["Fade", "cmd_fade"], ["Som", "cmd_som"],
 	["Aplicar poção", "cmd_aplicar_pocao"],
 ]
@@ -274,7 +274,7 @@ func _campo(p: Dictionary) -> Control:
 				w = _enum(nome, dica_txt, int(atual))
 			else:
 				var v = atual
-				if nome == "x" and _cmd is CmdMoverPlayer:
+				if nome == "x" and _cmd is CmdMover:
 					v = _pos_bruxa().x
 				w = _numero(nome, float(v), tipo == TYPE_INT)
 		TYPE_STRING:

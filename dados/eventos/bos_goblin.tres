@@ -4,14 +4,13 @@
 [ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_80sos"]
 [ext_resource type="Script" uid="uid://bm6rsgpqii0pt" path="res://src/dados/comandos/cmd_som.gd" id="3_r6b0t"]
 [ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="4_4dg81"]
-[ext_resource type="Script" uid="uid://ba7m6ef3neoh0" path="res://src/dados/comandos/cmd_mover_evento.gd" id="5_ujll2"]
-[ext_resource type="Script" uid="uid://bercma7w4moqu" path="res://src/dados/comandos/cmd_mudar_var.gd" id="6_nmcb4"]
+[ext_resource type="Script" uid="uid://dp3mfol3wf88y" path="res://src/dados/comandos/cmd_mover.gd" id="5_ujll2"]
+[ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="6_nmcb4"]
 [ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="7_ai6iy"]
 [ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="8_7pqtg"]
 [ext_resource type="Script" uid="uid://cwdgcnn30o052" path="res://src/dados/comandos/cmd_if.gd" id="9_ccmig"]
 [ext_resource type="Script" uid="uid://phmwdet0nd7d" path="res://src/dados/comandos/cmd_end.gd" id="10_52cvi"]
 [ext_resource type="SpriteFrames" uid="uid://buer5jfy6tqw6" path="res://animacoes/bos_goblin.tres" id="11_06hrw"]
-[ext_resource type="Script" uid="uid://bdj3wgjdynvll" path="res://src/dados/comandos/cmd_parar_movimento.gd" id="12_j0ql1"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="13_h3kuc"]
 
 [sub_resource type="Resource" id="Resource_ykkwn"]
@@ -26,8 +25,11 @@ texto = "Eu vou me mover até a pos 1500 em 5 seg. Tente pegar!!"
 
 [sub_resource type="Resource" id="Resource_yii1c"]
 script = ExtResource("5_ujll2")
+alvo = 1
 evento = "bos_goblin"
-posicao = Vector2(1500, 552)
+x = 1500
+y = 552
+manter_y = false
 velocidade = 140.0
 direcao = 2
 esperar = false
@@ -83,8 +85,10 @@ script = ExtResource("4_4dg81")
 texto = "Você pegou o GOBLIN enquanto corria!!"
 
 [sub_resource type="Resource" id="Resource_o8n3p"]
-script = ExtResource("12_j0ql1")
+script = ExtResource("5_ujll2")
+alvo = 1
 evento = "bos_goblin"
+destino = 3
 
 [sub_resource type="Resource" id="Resource_ch3rq"]
 script = ExtResource("8_7pqtg")
