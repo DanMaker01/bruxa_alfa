@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" uid="uid://b6ahlah4mhwps" path="res://src/dados/item_data.gd" id="1_item"]
+[ext_resource type="Texture2D" uid="uid://dbl3cple6i0ut" path="res://assets/icones/item_sal.png" id="2_ic"]
+
+[resource]
+script = ExtResource("1_item")
+id = "po_retorno"
+nome = "Pó de Retorno"
+descricao = "Um pó que lembra o caminho de casa. Sozinho não faz nada; bem cozido vira a Poção de Pó de Retorno Concentrada."
+icone = ExtResource("2_ic")
+A = Array[PackedFloat32Array]([PackedFloat32Array(0.97, 0, 0, 0, 0), PackedFloat32Array(0, 1, 0, 0, 0), PackedFloat32Array(0, 0, 1, 0, 0), PackedFloat32Array(0, 0, 0, 1, 0), PackedFloat32Array(0, 0, 0, 0, 1.03)])
+m = 3000.0
+s_menos = 2500.0
+s_mais = 4000.0
+T_min = 60.0
+k_min = 0.4
+T_max = 170.0
+k_max = 0.4
+t_min = 10.0
+h_min = 0.6
+t_max = 150.0
+h_max = 0.6

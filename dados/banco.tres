@@ -15,6 +15,7 @@
 [ext_resource type="Script" uid="uid://cpsgy5p545y3q" path="res://src/dados/banco_dados.gd" id="18_20li3"]
 [ext_resource type="Script" uid="uid://cgrx3adgd06tf" path="res://src/dados/variavel_data.gd" id="19_wsgxr"]
 [ext_resource type="Resource" uid="uid://bkpyaw7owkkb1" path="res://dados/itens/maca.tres" id="20_maca"]
+[ext_resource type="Resource" path="res://dados/itens/po_retorno.tres" id="21_retorno"]
 [ext_resource type="Resource" path="res://dados/personalidades/princesa.tres" id="21_princesa"]
 
 [sub_resource type="Resource" id="Resource_gcosg"]
@@ -139,6 +140,6 @@ nome = "missao01_veu"
 
 [resource]
 script = ExtResource("18_20li3")
-itens = Array[ExtResource("1_nbf8o")]([ExtResource("6_ors41"), ExtResource("6_tjhoh"), ExtResource("11_x7c51"), ExtResource("3_fedlk"), ExtResource("20_maca"), ExtResource("7_6lumw"), ExtResource("i_pena"), ExtResource("i_olho")])
+itens = Array[ExtResource("1_nbf8o")]([ExtResource("6_ors41"), ExtResource("6_tjhoh"), ExtResource("11_x7c51"), ExtResource("3_fedlk"), ExtResource("20_maca"), ExtResource("7_6lumw"), ExtResource("i_pena"), ExtResource("i_olho"), ExtResource("21_retorno")])
 personalidades = Array[ExtResource("14_ufffv")]([ExtResource("15_bsoya"), ExtResource("16_a1bkd"), ExtResource("17_gpqo5"), ExtResource("21_princesa")])
 variaveis = Array[ExtResource("19_wsgxr")]([SubResource("Resource_gcosg"), SubResource("Resource_58tkc"), SubResource("Resource_lht0q"), SubResource("Resource_xr22h"), SubResource("Resource_6jpmy"), SubResource("Resource_1am3v"), SubResource("Resource_yfc4k"), SubResource("Resource_71rhn"), SubResource("Resource_k6iyi"), SubResource("Resource_r6bk8"), SubResource("Resource_erva1"), SubResource("Resource_m1_0"), SubResource("Resource_m1_1"), SubResource("Resource_m1_2"), SubResource("Resource_m1_3"), SubResource("Resource_m1_4"), SubResource("Resource_m2_0"), SubResource("Resource_m2_1"), SubResource("Resource_m2_2"), SubResource("Resource_m2_3"), SubResource("Resource_m2_4"), SubResource("Resource_m3_0"), SubResource("Resource_m3_1"), SubResource("Resource_m3_2"), SubResource("Resource_m3_3"), SubResource("Resource_m3_4"), SubResource("Resource_m3_5"), SubResource("Resource_m4_0"), SubResource("Resource_m4_1")])

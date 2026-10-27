@@ -42,15 +42,19 @@ func _escolher(interp, ev, hud, gt) -> void:
 			_aplicar(interp, gt, CalculadoraPocao.matriz_do_item(item))
 			gt.remove_item(id, 1)
 			aplicou = 1.0
-			await _efeito(interp)
+			var alvo = interp.encontrar_evento(evento_alvo) if evento_alvo != "" else null
+			await efeito_magico(interp, alvo)
 	var antigo = gt.get_var(variavel)
 	gt.set_var(variavel, aplicou)
 	interp.variable_changed.emit(variavel, antigo, aplicou)
 	if not ev.finished and ev.pause_reason == "item":
 		ev.resume_and_advance()
 
-## p' = A · p (linhas O, C, E, A, N), limitado a −10..10.
 func _aplicar(interp, gt, A: Array) -> void:
+	aplicar_matriz(interp, gt, personalidade, A)
+
+## p' = A · p (linhas O, C, E, A, N), limitado a −10..10. Também usado ao "Usar" item no inventário.
+static func aplicar_matriz(interp, gt, personalidade: String, A: Array) -> void:
 	var p: Array = gt.get_personality(personalidade)
 	var novo: Array = []
 	for i in 5:
@@ -64,10 +68,9 @@ func _aplicar(interp, gt, A: Array) -> void:
 			interp.personality_changed.emit(personalidade, i, p[i], novo[i])
 	print("[AplicarPocao] ", personalidade, ": ", p, " -> ", novo)
 
-## Clarão + brilhos subindo no evento alvo + câmera tremendo um pouco.
-func _efeito(interp) -> void:
+## Clarão + brilhos subindo no alvo (evento ou bruxa) + câmera tremendo um pouco.
+static func efeito_magico(interp, alvo) -> void:
 	var tree: SceneTree = interp.get_tree()
-	var alvo = interp.encontrar_evento(evento_alvo) if evento_alvo != "" else null
 	if alvo is Node2D:
 		var p := CPUParticles2D.new()
 		p.one_shot = true

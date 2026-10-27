@@ -73,6 +73,12 @@ func _process(delta):
 			continue
 
 		if event.is_paused:
+			# Esperando um evento chamado (CmdChamarEvento): retoma quando ele terminar
+			if event.pause_reason == "chamado":
+				if event.filho == null or event.filho.finished:
+					event.filho = null
+					event.resume_and_advance()
+				continue
 			# Movimento com wait=true: se o alvo sumiu (troca de mapa), não espera para sempre
 			if event.pause_reason == "move" and (event.move_target_ref == null or event.move_target_ref.get_ref() == null):
 				print("[Interpreter] ⚠️ Evento ", event.id, ": alvo do movimento sumiu, continuando")
@@ -234,6 +240,55 @@ func is_event_running(event_name: String) -> bool:
 
 
 ## origem: nó do evento no mapa (dá a chave das self-variables). Pode ser null.
+## Roda um evento chamado por outro evento (CmdChamarEvento).
+## Usa a mesma regra de página e a mesma chave de self-variables do evento que chamou.
+func chamar_evento(evento: EventoData, pai: EventInstance) -> EventInstance:
+	if evento == null or evento.paginas.is_empty():
+		return null
+	var chave_self: String = pai.chave_self if pai else ""
+	var page_index := PageSelector.select(evento.paginas, game_temp, chave_self)
+	if page_index < 0:
+		return null
+	var commands: Array = []
+	for c in evento.paginas[page_index].comandos:
+		if c != null:
+			commands.append(c)
+	var inst := EventInstance.new()
+	inst.id = event_id_counter
+	event_id_counter += 1
+	inst.name = evento.id
+	inst.page_index = page_index
+	inst.chave_self = chave_self
+	inst.origem = null   # roda sem nó no mapa (o nó, se existir, não é avisado)
+	inst.commands = commands
+	for idx in range(commands.size()):
+		if commands[idx] is CmdLabel:
+			inst.labels[commands[idx].nome] = idx
+	_build_blocks(inst)
+	running_events.append(inst)
+	print("[Interpreter] 📞 Evento ", evento.id, " chamado por ", pai.name if pai else "?")
+	return inst
+
+## Usa um item do inventário (botão "Usar"): matriz A na personalidade (padrão: bruxa),
+## gasta 1 unidade e roda os comandos de efeito do item como um evento.
+func usar_item(id: String, personalidade: String = "bruxa") -> bool:
+	var item: ItemData = database.get_item(id) if database else null
+	if item == null or game_temp == null or not game_temp.has_item(id):
+		return false
+	if game_temp.has_personality(personalidade):
+		CmdAplicarPocao.aplicar_matriz(self, game_temp, personalidade, CalculadoraPocao.matriz_do_item(item))
+	game_temp.remove_item(id, 1)
+	# mesmo efeito mágico de quando a poção é aplicada na princesa, agora na bruxa
+	await CmdAplicarPocao.efeito_magico(self, game_manager.get_player() if game_manager else null)
+	if not item.efeito.is_empty():
+		var pag := PaginaData.new()
+		pag.comandos = item.efeito.duplicate()
+		var ev := EventoData.new()
+		ev.id = "item_" + id
+		ev.paginas = [pag]
+		trigger_event(ev)
+	return true
+
 func trigger_event(evento: EventoData, origem: Node = null) -> bool:
 	if evento == null:
 		print("[Interpreter] ERRO: trigger_event sem EventoData"); return false

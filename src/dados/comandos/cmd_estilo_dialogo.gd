@@ -1,6 +1,6 @@
 # Muda o estilo da janela de diálogo para as próximas falas (até mudar de novo ou restaurar).
 # Ex.: antes de um sonho, fundo tracejado e texto em onda; depois, "restaurar".
-# Pensamento da bruxa: itálico + cor apagada + face_pensando + esconder_nome + vinheta.
+# Pensamento da bruxa: parênteses + cor azulada + face_pensando + esconder_nome + vinheta.
 class_name CmdEstiloDialogo
 extends Comando
 
@@ -25,6 +25,8 @@ const FUNDOS := ["normal", "tracejado", "nenhum"]
 @export var esconder_nome: bool = false
 ## Bordas da tela escurecem.
 @export var vinheta: bool = false
+## Mostra cada fala entre parênteses: "(texto)".
+@export var parenteses: bool = false
 
 func to_dict() -> Dictionary:
 	return {"nome": "estilo_dialogo", "args": ["restaurar"] if restaurar else [tamanho_fonte, italico, EFEITOS[efeito], transparencia, FUNDOS[fundo]]}
@@ -39,5 +41,5 @@ func executar(interp, ev) -> int:
 	else:
 		caixa.definir_estilo({"tamanho_fonte": tamanho_fonte, "cor": cor_texto, "italico": italico,
 			"efeito": EFEITOS[efeito], "transparencia": transparencia, "fundo": FUNDOS[fundo],
-			"face_pensando": face_pensando, "esconder_nome": esconder_nome, "vinheta": vinheta})
+			"face_pensando": face_pensando, "esconder_nome": esconder_nome, "vinheta": vinheta, "parenteses": parenteses})
 	return AVANCAR

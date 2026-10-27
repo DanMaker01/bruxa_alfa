@@ -111,7 +111,7 @@ texto = "[GUARDA;guarda2;100] Então volte quando estiver."
 
 [sub_resource type="Resource" id="R_24"]
 script = ExtResource("3_x")
-texto = "[BRUXA;bruxa_grande;0] Aff."
+texto = "[BRUXA;bruxa_grande;0] Hunf."
 
 [sub_resource type="Resource" id="R_25"]
 script = ExtResource("6_x")
@@ -130,7 +130,7 @@ texto = "[GUARDA;guarda2;100] Então dê meia-volta."
 
 [sub_resource type="Resource" id="R_29"]
 script = ExtResource("3_x")
-texto = "[BRUXA;bruxa_grande;0] Aff."
+texto = "[BRUXA;bruxa_grande;0] Hunf."
 
 [sub_resource type="Resource" id="R_30"]
 script = ExtResource("9_x")

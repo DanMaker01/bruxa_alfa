@@ -97,7 +97,7 @@ valor = 1.0
 
 [sub_resource type="Resource" id="Resource_cy5o6"]
 script = ExtResource("7_bfmu5")
-mapa = "res://mapas/mapa_bruxa_in.tscn"
+mapa = "uid://nm30ra4x1046"
 posicao = Vector2(240, 450)
 direcao = 2
 
@@ -130,7 +130,7 @@ valor = 1.0
 
 [sub_resource type="Resource" id="Resource_ill02"]
 script = ExtResource("1_4j387")
-condicao = SubResource("Resource_1rxl6")
+condicoes = Array[ExtResource("11_m57lc")]([SubResource("Resource_1rxl6")])
 
 [resource]
 script = ExtResource("12_n0agp")

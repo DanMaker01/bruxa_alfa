@@ -39,7 +39,7 @@ const DESTINO_INVENTARIO := Vector2(192, 800)
 const NOME_DESCONHECIDO := "Poção desconhecida"
 ## Poção que não muda nada (matriz identidade, ou sem ingredientes): sempre este nome.
 const NOME_AGUA := "Água de Caldeirão"
-const FAIXA_NOME := Rect2(0, 680, 640, 230)  # faixa escura onde aparece a pergunta do nome
+const FAIXA_NOME := Rect2(0, 0, 640, 200)  # faixa escura onde aparece a pergunta do nome (no topo, sobre o título)
 const BRILHOS: int = 28
 ## z_index absoluto da janela (acima da CenaPreparo, do Fade e das notificações).
 const Z_JANELA: int = 1000
@@ -125,7 +125,7 @@ func _construir() -> void:
 	_pocao.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_pocao)
 
-	# faixa da pergunta do nome (aparece por cima da parte de baixo, depois das informações)
+	# faixa da pergunta do nome (aparece no topo, por cima do título, depois das informações)
 	_faixa_nome = ColorRect.new()
 	_faixa_nome.color = Color(0.04, 0.04, 0.07, 0.95)
 	_faixa_nome.position = FAIXA_NOME.position
@@ -254,10 +254,10 @@ func abrir(resultado: Dictionary) -> void:
 	var pedir_nome: bool = false
 	if CatalogoPocoes.distancia(A, CalculadoraPocao.identidade()) <= 0.0001:
 		_definir_nome(NOME_AGUA)
+	elif nome_unico != "":
+		_definir_nome(nome_unico)   # um item só: "Poção de [item] [qualidade]" (antes do catálogo)
 	elif achada["perto"]:
 		_definir_nome(achada["nome"])
-	elif nome_unico != "":
-		_definir_nome(nome_unico)   # um item só: nome automático, não pergunta
 	elif _nome_ingrediente(A) != "":
 		_definir_nome(_nome_ingrediente(A))   # matriz parecida com um ingrediente puro
 	else:
@@ -277,6 +277,7 @@ func abrir(resultado: Dictionary) -> void:
 	await tw.finished
 	_pentagono.mostrar(A)
 	_grade.mostrar(A)
+	_lista.ao_inicio()   # a lista pode ter ficado rolada da poção anterior
 	await _animar_curvas()
 	await get_tree().create_timer(0.5, true).timeout
 
@@ -327,6 +328,7 @@ func _resetar() -> void:
 	_titulo.scale = Vector2.ONE
 	_campo_nome.text = ""
 	_painel.modulate = Color(1, 1, 1, 0)
+	_lista.ao_inicio()
 	_dica.visible = false
 
 ## Troca o título com um "pop" (o nome acabou de ser dado).
@@ -356,6 +358,7 @@ func _confirmar_nome() -> void:
 func _definir_nome(nome: String) -> void:
 	if _pocao_item:
 		_pocao_item.nome = nome
+		_pocao_item.efeito = CatalogoPocoes.efeito_de(nome)
 
 func _preencher_parametros(_A: Array) -> void:
 	_titulo.text = _pocao_item.get_nome() if _pocao_item else "Poção"

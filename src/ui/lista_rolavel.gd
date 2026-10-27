@@ -42,6 +42,14 @@ func _ready() -> void:
 	_setas.draw.connect(_desenhar_setas)
 	add_child(_setas, false, Node.INTERNAL_MODE_BACK)
 
+## Volta para o começo da lista (sem inércia).
+func ao_inicio() -> void:
+	_vel = 0.0
+	_rolagem = 0.0
+	_apertado = false
+	_arrastando = false
+	_aplicar(0.0)
+
 func _conteudo() -> Control:
 	for c in get_children():
 		if c is Control:

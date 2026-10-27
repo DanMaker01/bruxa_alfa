@@ -1,27 +1,44 @@
-[gd_resource type="Resource" script_class="CatalogoPocoes" format=3]
+[gd_resource type="Resource" script_class="CatalogoPocoes" format=3 uid="uid://b1f3htjgr6552"]
 
-[ext_resource type="Script" path="res://src/dados/catalogo_pocoes.gd" id="1_cat"]
-[ext_resource type="Script" path="res://src/dados/pocao_referencia.gd" id="2_ref"]
-
-[sub_resource type="Resource" id="Resource_calma"]
-script = ExtResource("2_ref")
-nome = "Poção da Calma Profunda"
-descricao = "Acalma os nervos sem mudar quem a pessoa é."
-A = Array[PackedFloat32Array]([PackedFloat32Array(1, 0, 0, 0, 0), PackedFloat32Array(0, 1, 0, 0, 0), PackedFloat32Array(0, 0, 1, 0, 0), PackedFloat32Array(0, 0, 0, 1, 0), PackedFloat32Array(0, 0, 0, 0, 0.5625)])
-
-[sub_resource type="Resource" id="Resource_labia"]
-script = ExtResource("2_ref")
-nome = "Poção da Desenvoltura"
-descricao = "Solta a língua e a timidez, e a pessoa continua sendo ela mesma."
-A = Array[PackedFloat32Array]([PackedFloat32Array(1, 0, 0, 0, 0), PackedFloat32Array(0, 1, 0, 0, 0), PackedFloat32Array(0, 0, 1.2, 0, 0), PackedFloat32Array(0, 0, 0, 1, 0), PackedFloat32Array(0, 0, -0.01, 0, 1)])
-
-[sub_resource type="Resource" id="Resource_identidade"]
-script = ExtResource("2_ref")
-nome = "Água de Caldeirão"
-descricao = "Não muda nada em quem bebe. Pelo menos não faz mal."
-A = Array[PackedFloat32Array]([PackedFloat32Array(1, 0, 0, 0, 0), PackedFloat32Array(0, 1, 0, 0, 0), PackedFloat32Array(0, 0, 1, 0, 0), PackedFloat32Array(0, 0, 0, 1, 0), PackedFloat32Array(0, 0, 0, 0, 1)])
+[ext_resource type="Script" uid="uid://b5rr1o78iiuu8" path="res://src/dados/catalogo_pocoes.gd" id="1_cat"]
+[ext_resource type="Script" uid="uid://cghhhdabyc6r3" path="res://src/dados/pocao_referencia.gd" id="2_ref"]
+[ext_resource type="Resource" path="res://dados/pocoes/calma_profunda.tres" id="p0"]
+[ext_resource type="Resource" path="res://dados/pocoes/desenvoltura.tres" id="p1"]
+[ext_resource type="Resource" path="res://dados/pocoes/agua_caldeirao.tres" id="p2"]
+[ext_resource type="Resource" path="res://dados/pocoes/retorno.tres" id="p3"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_O.tres" id="p4"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_C.tres" id="p5"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_E.tres" id="p6"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_A.tres" id="p7"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_N.tres" id="p8"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_OC.tres" id="p9"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_OE.tres" id="p10"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_OA.tres" id="p11"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_ON.tres" id="p12"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_CE.tres" id="p13"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_CA.tres" id="p14"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_CN.tres" id="p15"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_EA.tres" id="p16"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_EN.tres" id="p17"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_AN.tres" id="p18"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_OCE.tres" id="p19"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_OCA.tres" id="p20"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_OCN.tres" id="p21"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_OEA.tres" id="p22"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_OEN.tres" id="p23"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_OAN.tres" id="p24"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_CEA.tres" id="p25"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_CEN.tres" id="p26"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_CAN.tres" id="p27"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_EAN.tres" id="p28"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_OCEA.tres" id="p29"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_OCEN.tres" id="p30"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_OCAN.tres" id="p31"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_OEAN.tres" id="p32"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_CEAN.tres" id="p33"]
+[ext_resource type="Resource" path="res://dados/pocoes/proibidas/proibida_OCEAN.tres" id="p34"]
 
 [resource]
 script = ExtResource("1_cat")
 distancia_max = 0.05
-pocoes = Array[ExtResource("2_ref")]([SubResource("Resource_calma"), SubResource("Resource_labia"), SubResource("Resource_identidade")])
+pocoes = Array[ExtResource("2_ref")]([ExtResource("p0"), ExtResource("p1"), ExtResource("p2"), ExtResource("p3"), ExtResource("p4"), ExtResource("p5"), ExtResource("p6"), ExtResource("p7"), ExtResource("p8"), ExtResource("p9"), ExtResource("p10"), ExtResource("p11"), ExtResource("p12"), ExtResource("p13"), ExtResource("p14"), ExtResource("p15"), ExtResource("p16"), ExtResource("p17"), ExtResource("p18"), ExtResource("p19"), ExtResource("p20"), ExtResource("p21"), ExtResource("p22"), ExtResource("p23"), ExtResource("p24"), ExtResource("p25"), ExtResource("p26"), ExtResource("p27"), ExtResource("p28"), ExtResource("p29"), ExtResource("p30"), ExtResource("p31"), ExtResource("p32"), ExtResource("p33"), ExtResource("p34")])

@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://chrkm8ylgh7e1"]
+
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="1_pag"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_cmd"]
+[ext_resource type="Script" uid="uid://22r70lmcscvw" path="res://src/dados/comandos/cmd_estilo_dialogo.gd" id="3_estilo"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="4_ev"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="4_lssjl"]
+
+[sub_resource type="Resource" id="R_estilo"]
+script = ExtResource("3_estilo")
+cor_texto = Color(0.75, 0.86, 1, 1)
+italico = true
+face_pensando = true
+esconder_nome = true
+vinheta = true
+
+[sub_resource type="Resource" id="P_1"]
+script = ExtResource("1_pag")
+comandos = Array[ExtResource("2_cmd")]([SubResource("R_estilo")])
+
+[resource]
+script = ExtResource("4_ev")
+id = "pensamento_inicio"
+paginas = Array[ExtResource("1_pag")]([SubResource("P_1")])

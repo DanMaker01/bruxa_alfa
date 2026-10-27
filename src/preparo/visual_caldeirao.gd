@@ -45,6 +45,24 @@ const TREMOR_LEVE_PX: float = 1.5      # amplitude em 100 °C
 const TREMOR_MAX_PX: float = 3.5       # amplitude em T_VERMELHO_MAX
 const VERMELHO_MAX: float = 0.85       # 0..1: quanto puxa para COR_VERMELHO no máximo
 const COR_VERMELHO := Color(1.0, 0.22, 0.15)
+## Vermelho de baixo para cima: acima de T_VERMELHO_INICIO o vermelho sobe do fundo e chega ao topo em T_VERMELHO_TOPO.
+const T_VERMELHO_TOPO: float = 300.0   # vermelho chega ao topo
+const T_VERMELHO_INICIO: float = 50.0
+const SHADER_RADIAL := """
+shader_type canvas_item;
+uniform float progresso : hint_range(0.0, 1.0) = 0.0;   // 0 = nada, 1 = vermelho até o topo
+uniform float forca : hint_range(0.0, 1.0) = 0.85;
+uniform vec4 cor_quente : source_color = vec4(1.0, 0.22, 0.15, 1.0);
+uniform float suavidade = 0.3;
+void fragment() {
+	vec4 c = texture(TEXTURE, UV) * COLOR;
+	float frente = 1.0 - progresso;   // UV.y: 0 no topo, 1 no fundo; a frente sobe do fundo
+	float m = smoothstep(frente - suavidade, frente, UV.y) * min(progresso * 3.0, 1.0) * forca;
+	c.rgb = mix(c.rgb, c.rgb * cor_quente.rgb * 1.3, m);
+	COLOR = c;
+}
+"""
+var _mat_radial: ShaderMaterial
 # ---- caldo turvo (visão geral do aproveitamento) ----
 ## Quanto pior o aproveitamento médio, mais turvo: caldeirão mais escuro, bolhas maiores,
 ## mais lentas e escuras, quase sem estrelas. Bom aproveitamento: calmo e brilhante.
@@ -97,6 +115,13 @@ func configurar(p_caldeirao: AnimatedSprite2D, p_fogo: AnimatedSprite2D, p_bolha
 	if caldeirao:
 		_caldeirao_pos_base = caldeirao.position
 		_caldeirao_escala_base = caldeirao.scale
+		var sh := Shader.new()
+		sh.code = SHADER_RADIAL
+		_mat_radial = ShaderMaterial.new()
+		_mat_radial.shader = sh
+		_mat_radial.set_shader_parameter("cor_quente", COR_VERMELHO)
+		_mat_radial.set_shader_parameter("forca", VERMELHO_MAX)
+		caldeirao.material = _mat_radial
 	if fogo:
 		_fogo_escala_base = fogo.scale
 		_fogo_pos_base = fogo.position
@@ -136,9 +161,12 @@ func boca() -> Vector2:
 ## perda_media: 0 = nada perdido, 1 = tudo perdido (média dos ingredientes).
 func atualizar(sistema: SistemaTermico, delta: float, perda_media: float, _punindo_agora: bool = false) -> void:
 	_t += delta
-	# caldeirão: cor normal até a fervura; acima de 100 °C vai ficando avermelhado
+	# caldeirão: cor normal até 100 °C; acima disso o vermelho sobe do fundo e chega ao topo em 250 °C
 	if caldeirao:
-		caldeirao.self_modulate = Color.WHITE.lerp(COR_VERMELHO, VERMELHO_MAX * _fator_vermelho(sistema.T))
+		caldeirao.self_modulate = Color.WHITE
+		if _mat_radial:
+			var p := clampf((sistema.T - T_VERMELHO_INICIO) / (T_VERMELHO_TOPO - T_VERMELHO_INICIO), 0.0, 1.0)
+			_mat_radial.set_shader_parameter("progresso", p)
 	# fogo: cor/intensidade pela temperatura do fogo
 	if fogo:
 		var cor = sistema.get_cor_fogo()

@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="ReceitaData" format=3 uid="uid://qv13mx8jnsmx"]
+
+[ext_resource type="Script" uid="uid://p12rhdprhwna" path="res://src/dados/receita_data.gd" id="1_rec"]
+[ext_resource type="Script" uid="uid://b5lrxn8b4vdka" path="res://src/dados/receita_ingrediente.gd" id="2_ing"]
+[ext_resource type="Resource" uid="uid://cd8kjx75t1h3t" path="res://dados/itens/erva.tres" id="i0"]
+[ext_resource type="Resource" uid="uid://doj2ouv5pbxo1" path="res://dados/itens/cogumelo_brilhante.tres" id="i1"]
+[ext_resource type="Resource" path="res://dados/pocoes/calma_profunda.tres" id="p_pocao"]
+
+[sub_resource type="Resource" id="L0"]
+script = ExtResource("2_ing")
+item = ExtResource("i0")
+quantidade = 8
+nota = "cozinha bastante, chama vermelha/laranja"
+
+[sub_resource type="Resource" id="L1"]
+script = ExtResource("2_ing")
+item = ExtResource("i1")
+quantidade = 4
+nota = "no fim, chama branca, frita ~10 s"
+
+[resource]
+script = ExtResource("1_rec")
+nome = "Calma Profunda"
+pocao = ExtResource("p_pocao")
+descricao = "Acalma os nervos sem mudar quem a pessoa é. Só o N cai (x 0,5625)."
+ingredientes = Array[ExtResource("2_ing")]([SubResource("L0"), SubResource("L1")])
+passos = PackedStringArray("Segure o botão de fogo ~1 s para acender.", "Assim que o caldo esquentar um pouco (~8 s, chama ainda fraca), jogue as 8 ervas.", "Deixe cozinhar com a chama vermelha/laranja por ~40 s (não deixe chegar ao amarelo por muito tempo).", "Clique no fogo ~1 vez por segundo até a chama ficar branca.", "Jogue os 4 cogumelos e mantenha a chama branca (sem chegar ao púrpura) por ~10 s.")
+duracao = 65.0
+conhecida = true

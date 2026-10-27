@@ -16,3 +16,6 @@ var A: Array[PackedFloat32Array] = [
 	PackedFloat32Array([0, 0, 0, 1, 0]),
 	PackedFloat32Array([0, 0, 0, 0, 1]),
 ]
+## Comandos executados quando a poção é usada (ex.: teleporte). Poções feitas no caldeirão
+## com este nome recebem este efeito. Vazio = só a matriz.
+@export var efeito: Array[Comando] = []

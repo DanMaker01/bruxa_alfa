@@ -13,9 +13,6 @@ const DIRECOES := ["centro", "esq", "dir"]
 ## Cada uma pode ser variável, item, personalidade, posição ou direção da bruxa.
 ## Vazio = a página vale sempre. Vence a ÚLTIMA página cujas condições são todas verdadeiras.
 @export var condicoes: Array[Condicao] = []
-## (formato antigo, uma condição só) Se preenchida, também precisa ser verdadeira.
-## Fica escondida quando vazia; use "condicoes".
-@export var condicao: Condicao
 @export var gatilho: Gatilho = Gatilho.CLIQUE
 @export var passavel: bool = true
 @export var cooldown: float = 0.3
@@ -41,21 +38,13 @@ func get_trigger() -> String:
 	return GATILHOS[gatilho]
 
 
-## true se a condição antiga (se houver) e TODAS as condições da lista forem verdadeiras.
+## true se TODAS as condições da lista forem verdadeiras.
 ## chave_self: chave do nó do evento (para condições de self-variable).
 func condicoes_ok(game_temp, chave_self: String = "") -> bool:
-	if condicao and not condicao.avaliar(game_temp, chave_self):
-		return false
 	for c in condicoes:
 		if c and not c.avaliar(game_temp, chave_self):
 			return false
 	return true
-
-
-# Inspector: esconde o campo antigo "condicao" quando está vazio.
-func _validate_property(property: Dictionary) -> void:
-	if property.name == "condicao" and condicao == null:
-		property.usage = PROPERTY_USAGE_STORAGE
 
 
 ## Lista de comandos no formato {nome, args} (só para debug; o Interpreter executa os Resources).

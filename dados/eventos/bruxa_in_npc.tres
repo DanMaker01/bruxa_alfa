@@ -16,7 +16,7 @@ valor = 1.0
 
 [sub_resource type="Resource" id="Resource_l2g8b"]
 script = ExtResource("1_whluh")
-condicao = SubResource("Resource_063t1")
+condicoes = Array[ExtResource("3_p18u5")]([SubResource("Resource_063t1")])
 sprite_frames = ExtResource("4_s6b36")
 
 [resource]

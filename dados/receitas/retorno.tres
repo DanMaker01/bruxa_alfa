@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ReceitaData" format=3 uid="uid://de8dkr6p7i2qk"]
+
+[ext_resource type="Script" uid="uid://p12rhdprhwna" path="res://src/dados/receita_data.gd" id="1_rec"]
+[ext_resource type="Script" uid="uid://b5lrxn8b4vdka" path="res://src/dados/receita_ingrediente.gd" id="2_ing"]
+[ext_resource type="Resource" path="res://dados/itens/po_retorno.tres" id="i0"]
+[ext_resource type="Resource" uid="uid://j0wuud2oc0d2" path="res://dados/pocoes/retorno.tres" id="p_pocao"]
+
+[sub_resource type="Resource" id="L0"]
+script = ExtResource("2_ing")
+item = ExtResource("i0")
+nota = "cozimento leniente, 60–170 °C"
+
+[resource]
+script = ExtResource("1_rec")
+nome = "Retorno"
+pocao = ExtResource("p_pocao")
+descricao = "Leva quem bebe de volta para casa. Só para casa."
+ingredientes = Array[ExtResource("2_ing")]([SubResource("L0")])
+passos = PackedStringArray("Acenda e esquente o caldeirão.", "Jogue o pó e cozinhe por ~30 s perto de 100 °C.")
+duracao = 35.0
+conhecida = true

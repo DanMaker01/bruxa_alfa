@@ -15,7 +15,9 @@
 [ext_resource type="Script" uid="uid://b3yty8028fcf2" path="res://src/dados/comandos/cmd_goto.gd" id="13_wmm05"]
 [ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="14_jlf5g"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="15_t7kas"]
-[ext_resource type="Script" uid="uid://22r70lmcscvw" path="res://src/dados/comandos/cmd_estilo_dialogo.gd" id="x_estilo"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_chamar_evento.gd" id="92_chamar"]
+[ext_resource type="Resource" path="res://dados/eventos/pensamento_inicio.tres" id="93_pensa_ini"]
+[ext_resource type="Resource" path="res://dados/eventos/pensamento_fim.tres" id="94_pensa_fim"]
 
 [sub_resource type="Resource" id="Resource_73mqy"]
 script = ExtResource("3_gtb0y")
@@ -185,7 +187,7 @@ texto = "[???;;100] Não, não. Sou só um camponês."
 
 [sub_resource type="Resource" id="Resource_lili8"]
 script = ExtResource("6_kgd5i")
-texto = "[BRUXA;bruxa_grande;0] (desconfiada) Pode entrar..."
+texto = "[BRUXA;bruxa_grande;0] Pode entrar..."
 
 [sub_resource type="Resource" id="Resource_3g0ce"]
 script = ExtResource("4_xme6w")
@@ -255,11 +257,11 @@ texto = "[CAMPONÊS;campones;100] É aqui que mora a Bruxa? Passei o dia todo an
 
 [sub_resource type="Resource" id="Resource_aj5ti"]
 script = ExtResource("6_kgd5i")
-texto = "[CAMPONÊS;campones;100] Eu queria falar com você, porque minha irmã vai se casar amanhã. Mas ela não sai da cama."
+texto = "[CAMPONÊS;campones;100] Eu queria falar com você, porque minha irm..."
 
 [sub_resource type="Resource" id="R_irma_brux_0"]
 script = ExtResource("6_kgd5i")
-texto = "[CAMPONÊS;campones;100] Quer dizer... a princesa! A princesa vai se casar amanhã."
+texto = "[CAMPONÊS;campones;100] Quer dizer... a princesa! A princesa vai se casar amanhã. Mas ela não sai da cama."
 
 [sub_resource type="Resource" id="R_irma_brux_1"]
 script = ExtResource("6_kgd5i")
@@ -267,7 +269,7 @@ texto = "[CAMPONÊS;campones;100] Eu trabalho no castelo. Cuido dos cavalos."
 
 [sub_resource type="Resource" id="R_irma_brux_2"]
 script = ExtResource("6_kgd5i")
-texto = "[BRUXA;bruxa_grande;0] (desconfiada) Sei..."
+texto = "[BRUXA;bruxa_grande;0] Sei..."
 
 [sub_resource type="Resource" id="Resource_cjxqi"]
 script = ExtResource("6_kgd5i")
@@ -279,27 +281,23 @@ texto = "[CAMPONÊS;campones;100] Fica dizendo que vai estragar tudo, que o noiv
 
 [sub_resource type="Resource" id="Resource_knokq"]
 script = ExtResource("6_kgd5i")
-texto = "[CAMPONÊS;campones;100] Já chamaram os médicos do castelo, mas ela não melhora, e talvez o casamento não aconteça. Ninguém sabe mais o que fazer."
+texto = "[CAMPONÊS;campones;100] Já chamaram os curandeiros do castelo, mas ela não melhora, e talvez o casamento não aconteça. Ninguém sabe mais o que fazer."
 
 [sub_resource type="Resource" id="R_estilo_pensa"]
-script = ExtResource("x_estilo")
-cor_texto = Color(0.8, 0.76, 0.9, 1)
-italico = true
-face_pensando = true
-esconder_nome = true
-vinheta = true
+script = ExtResource("92_chamar")
+evento = ExtResource("93_pensa_ini")
 
 [sub_resource type="Resource" id="Resource_67ysa"]
 script = ExtResource("6_kgd5i")
-texto = "[BRUXA;bruxa_grande;0] Coração disparado. Mãos trêmulas. Pensamentos catastróficos. "
+texto = "[BRUXA;bruxa_grande;0] Coração disparado. Mãos trêmulas. A cabeça só pensa no pior."
 
 [sub_resource type="Resource" id="Resource_rbw8v"]
 script = ExtResource("6_kgd5i")
 texto = "[BRUXA;bruxa_grande;0] Parece que o corpo dela não sabe mais descansar."
 
 [sub_resource type="Resource" id="R_estilo_volta"]
-script = ExtResource("x_estilo")
-restaurar = true
+script = ExtResource("92_chamar")
+evento = ExtResource("94_pensa_fim")
 
 [sub_resource type="Resource" id="Resource_s0kd1"]
 script = ExtResource("6_kgd5i")
@@ -319,7 +317,7 @@ texto = "[BRUXA;bruxa_grande;0] Deixe eu me lembrar... "
 
 [sub_resource type="Resource" id="Resource_c04db"]
 script = ExtResource("6_kgd5i")
-texto = "[BRUXA;bruxa_grande;0] São oito cogumelos, que crescem logo depois da cidade."
+texto = "[BRUXA;bruxa_grande;0] São quatro cogumelos, que crescem logo depois da cidade."
 metadata/_custom_type_script = "uid://8liac65hmnnq"
 
 [sub_resource type="Resource" id="Resource_ajdrk"]
@@ -352,7 +350,7 @@ texto = "[BRUXA;bruxa_grande;0] E não será barato."
 
 [sub_resource type="Resource" id="Resource_l8py2"]
 script = ExtResource("6_kgd5i")
-texto = "[CAMPONÊS;campones;100] Tudo bem. Obrigado. Obrigado mesmo."
+texto = "[CAMPONÊS;campones;100] Está bem. Obrigado. Obrigado mesmo."
 
 [sub_resource type="Resource" id="Resource_avisoguarda"]
 script = ExtResource("6_kgd5i")
@@ -360,7 +358,7 @@ texto = "[CAMPONÊS;campones;100] Ah! O rei já avisou os guardas sobre você. M
 
 [sub_resource type="Resource" id="Resource_optqh"]
 script = ExtResource("6_kgd5i")
-texto = "[CAMPONÊS;campones;100] Adeus Bruxa!"
+texto = "[CAMPONÊS;campones;100] Adeus, senhora bruxa!"
 metadata/_custom_type_script = "uid://8liac65hmnnq"
 
 [sub_resource type="Resource" id="Resource_wlxkp"]
@@ -424,7 +422,7 @@ segundos = 2.0
 
 [sub_resource type="Resource" id="R_desconfia_brux_0"]
 script = ExtResource("6_kgd5i")
-texto = "[BRUXA;bruxa_grande;0] Um camponês que chama a princesa de irmã..."
+texto = "[BRUXA;bruxa_grande;0] Se eu ouvi direito, ele ia chamar a Princesa de irmã...?"
 
 [sub_resource type="Resource" id="R_desconfia_brux_1"]
 script = ExtResource("6_kgd5i")
@@ -436,7 +434,7 @@ texto = "[BRUXA;bruxa_grande;0] Quem será esse rapaz?"
 
 [sub_resource type="Resource" id="Resource_fkp8f"]
 script = ExtResource("6_kgd5i")
-texto = "[BRUXA;bruxa_grande;0] Oito cogumelos, logo depois da cidade, e oito ervas, no final da floresta. Cozinhando isso, depois é só ir ao castelo."
+texto = "[BRUXA;bruxa_grande;0] Quatro cogumelos, logo depois da cidade, e oito ervas, no final da floresta. Cozinhando isso, depois é só ir ao castelo."
 
 [sub_resource type="Resource" id="Resource_3miql"]
 script = ExtResource("4_xme6w")
@@ -539,7 +537,7 @@ valor = 1.0
 
 [sub_resource type="Resource" id="Resource_de3m8"]
 script = ExtResource("1_c04db")
-condicao = SubResource("Resource_xcod1")
+condicoes = Array[ExtResource("14_jlf5g")]([SubResource("Resource_xcod1")])
 gatilho = 2
 comandos = Array[ExtResource("2_optqh")]([SubResource("Resource_rea3u"), SubResource("Resource_75jjj"), SubResource("Resource_o1yrw"), SubResource("Resource_m57po"), SubResource("Resource_6ynrk"), SubResource("Resource_jyacc"), SubResource("Resource_b6qy7"), SubResource("Resource_315lg"), SubResource("Resource_00nxr"), SubResource("Resource_27lp0"), SubResource("Resource_p8yha")])
 
@@ -550,7 +548,7 @@ valor = 2.0
 
 [sub_resource type="Resource" id="Resource_5ks0u"]
 script = ExtResource("1_c04db")
-condicao = SubResource("Resource_2kxtk")
+condicoes = Array[ExtResource("14_jlf5g")]([SubResource("Resource_2kxtk")])
 
 [resource]
 script = ExtResource("15_t7kas")

@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dsxujjugldv23" path="res://src/cena/mapa_base.gd" id="1_ufder"]
 [ext_resource type="Texture2D" uid="uid://esaevm1fdj31" path="res://assets/mapa/mapa_intro/fundo_preto.png" id="2_hnp2w"]
 [ext_resource type="Script" uid="uid://bjxlt3vqym72w" path="res://src/cena/evento_base.gd" id="4_1fcl5"]
-[ext_resource type="Resource" uid="uid://rwepyb2twq5g" path="res://dados/eventos/intro_historia.tres" id="ev_intro_historia"]
+[ext_resource type="Resource" uid="uid://rwepyb2twq5g" path="res://dados/eventos/intro_auto.tres" id="ev_intro_historia"]
 
 [node name="MapaIntro" type="Node2D" unique_id=231347479]
 script = ExtResource("1_ufder")

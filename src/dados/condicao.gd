@@ -6,6 +6,7 @@
 #   POSICAO_X/Y    posição da bruxa no mapa (px)                           op valor
 #   DIRECAO_PLAYER para onde a bruxa olha ("direcao"), só == ou !=
 #   SELF_VAR       self-variable A/B/C/D DESTE evento (cada nó no mapa tem as suas) op valor
+#   ITEM_NOME      quantos itens no inventário têm este NOME ("variavel"), ex.: uma poção feita op valor
 # Uma página pode ter várias condições (PaginaData.condicoes): todas precisam valer.
 # Páginas reavaliam quando muda uma variável, o inventário ou uma personalidade;
 # posição/direção servem para if/while (numa página só são vistas na próxima reavaliação).
@@ -15,20 +16,20 @@ extends Resource
 
 const PageSelector = preload("res://src/core/page_selector.gd")
 
-enum Tipo { VARIAVEL, ITEM, PERSONALIDADE, POSICAO_X, POSICAO_Y, DIRECAO_PLAYER, SELF_VAR }
+enum Tipo { VARIAVEL, ITEM, PERSONALIDADE, POSICAO_X, POSICAO_Y, DIRECAO_PLAYER, SELF_VAR, ITEM_NOME }
 enum Operador { IGUAL, DIFERENTE, MAIOR, MENOR, MAIOR_IGUAL, MENOR_IGUAL }
 enum Traco { O, C, E, A, N }
 enum Direcao { ESQ, DIR }
 enum Letra { A, B, C, D }
 const OPERADORES := ["==", "!=", ">", "<", ">=", "<="]
-const TIPOS := ["var", "item", "personalidade", "x", "y", "direcao", "self"]
+const TIPOS := ["var", "item", "personalidade", "x", "y", "direcao", "self", "item_nome"]
 const DIRECOES := ["esq", "dir"]
 
 @export var tipo: Tipo = Tipo.VARIAVEL:
 	set(v):
 		tipo = v
 		notify_property_list_changed()   # mostra só os campos do tipo escolhido
-## Nome da variável (VARIAVEL) ou da personalidade (PERSONALIDADE).
+## Nome da variável (VARIAVEL), da personalidade (PERSONALIDADE) ou do item (ITEM_NOME).
 @export var variavel: String = ""
 @export var item: ItemData
 @export var traco: Traco = Traco.O
@@ -36,7 +37,8 @@ const DIRECOES := ["esq", "dir"]
 ## Self-variable (SELF_VAR): começa em 0; use 0 e 1.
 @export var letra: Letra = Letra.A
 @export var operador: Operador = Operador.IGUAL
-@export var valor: float = 0.0
+## Passo de 0.01 no Inspector (evita 4.9999999 ao arrastar).
+@export_range(-1000, 1000, 0.01, "or_greater", "or_less") var valor: float = 0.0
 
 
 ## chave_self: chave do evento dono da condição (só usada por SELF_VAR).
@@ -51,6 +53,8 @@ func avaliar(game_temp, chave_self: String = "") -> bool:
 			atual = game_temp.get_item_quantity(item.id if item else variavel)
 		Tipo.PERSONALIDADE:
 			atual = game_temp.get_personality_value(variavel, traco)
+		Tipo.ITEM_NOME:
+			atual = _qtd_por_nome(game_temp, variavel)
 		Tipo.SELF_VAR:
 			if chave_self == "" or not game_temp.has_method("get_self_var"):
 				return false
@@ -70,6 +74,19 @@ func avaliar(game_temp, chave_self: String = "") -> bool:
 				Operador.DIFERENTE: return not igual
 			return false
 	return PageSelector.compare(atual, OPERADORES[operador], valor)
+
+## Soma das quantidades dos itens do inventário cujo nome é "nome" (poções feitas têm id gerado).
+static func _qtd_por_nome(game_temp, nome: String) -> int:
+	var db = game_temp.get_node_or_null("../DatabaseManager") if game_temp is Node else null
+	if db == null:
+		return 0
+	var total := 0
+	var inv: Dictionary = game_temp.get_inventory()
+	for id in inv:
+		var it: ItemData = db.get_item(id)
+		if it and it.get_nome() == nome:
+			total += int(inv[id])
+	return total
 
 static func _player(game_temp) -> Node:
 	return game_temp.get_node_or_null("/root/Main/Mundo/Player") if game_temp is Node else null
@@ -93,7 +110,7 @@ func _validate_property(property: Dictionary) -> void:
 	var nome: String = property.name
 	var mostrar := true
 	match nome:
-		"variavel": mostrar = tipo == Tipo.VARIAVEL or tipo == Tipo.PERSONALIDADE
+		"variavel": mostrar = tipo == Tipo.VARIAVEL or tipo == Tipo.PERSONALIDADE or tipo == Tipo.ITEM_NOME
 		"item": mostrar = tipo == Tipo.ITEM
 		"traco": mostrar = tipo == Tipo.PERSONALIDADE
 		"direcao": mostrar = tipo == Tipo.DIRECAO_PLAYER

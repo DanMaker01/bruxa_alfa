@@ -37,7 +37,7 @@ const CONST_B: float = 0.0	# queda de T quando um ingrediente entra
 ## Medido (K 0,3): segurando sem parar, F cairia até ~320 (caldo ~50 °C); com o limite
 ## em 360 o fogo apaga perto de caldo ~55–60 °C. Soltando, F volta sozinho para F_EQ (800).
 ## A fumaça de "quase apagando" começa em F_LIMIT_MIN + VisualCaldeirao.MARGEM_APAGAR.
-const F_LIMIT_MIN: float = 360.0
+const F_LIMIT_MIN: float = 400.0
 ## Quanto cada passo de abafar (segurando o botão, a cada 0,3 s) tira de F. Menor = controle mais fino.
 const CONST_C: float = 20.0
 
@@ -183,14 +183,14 @@ func get_intensidade_fogo() -> float:
 ## Dentro de cada faixa a cor "segura" no meio e troca rápido perto da próxima,
 ## para dar para ler a faixa sem números.
 const CORES_FOGO := [
-	# (branco em F 1150 ≈ 136 °C)
+	# T ≈ (F + 175) / 9.75: amarelo 1150 ≈ 136 °C, branco 1350 ≈ 156 °C, púrpura 1500 ≈ 172 °C
 	[70.0, Color(0.55, 0.08, 0.04)],
-	[650.0, Color(1.0, 0.22, 0.06)],
-	[950.0, Color(1.0, 0.55, 0.12)],
-	[1050.0, Color(1.0, 0.88, 0.2)],
-	[1150.0, Color(1.0, 1.0, 0.85)],
-	[1450.0, Color(0.72, 0.92, 1.0)],
-	[2000.0, Color(0.3, 0.5, 1.0)],
+	[800.0, Color(1.0, 0.22, 0.06)],
+	[900.0, Color(1.0, 0.55, 0.12)],
+	[1150.0, Color(1.0, 0.88, 0.2)],
+	[1350.0, Color(1.0, 1.0, 0.85)],
+	[1500.0, Color(0.78, 0.45, 1.0)],
+	[2000.0, Color(0.12, 0.1, 0.35)],   # fogo negro (azul quase preto)
 ]
 
 func get_cor_fogo() -> Color:

@@ -93,7 +93,7 @@ valor = 1.0
 
 [sub_resource type="Resource" id="Resource_2ayws"]
 script = ExtResource("1_rn16p")
-condicao = SubResource("Resource_ch3rq")
+condicoes = Array[ExtResource("8_7pqtg")]([SubResource("Resource_ch3rq")])
 sprite_frames = ExtResource("11_06hrw")
 direcao = 2
 colisao_pos = Vector2(-4, -80)
@@ -111,7 +111,7 @@ valor = 2.0
 
 [sub_resource type="Resource" id="Resource_3m82m"]
 script = ExtResource("1_rn16p")
-condicao = SubResource("Resource_g1fdv")
+condicoes = Array[ExtResource("8_7pqtg")]([SubResource("Resource_g1fdv")])
 sprite_frames = ExtResource("11_06hrw")
 direcao = 2
 colisao_pos = Vector2(-4, -80)
@@ -129,7 +129,7 @@ valor = 3.0
 
 [sub_resource type="Resource" id="Resource_w3rrc"]
 script = ExtResource("1_rn16p")
-condicao = SubResource("Resource_jrnro")
+condicoes = Array[ExtResource("8_7pqtg")]([SubResource("Resource_jrnro")])
 sprite_frames = ExtResource("11_06hrw")
 animacao = "parado"
 direcao = 2

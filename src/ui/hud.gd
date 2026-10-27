@@ -108,11 +108,11 @@ func _colocar_na_carta(caixa: Control, face: Control) -> void:
 	caixa.reparent(face, false)
 	caixa.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	caixa.scale = Vector2.ONE
-	# a carta é o fundo: o painel da caixa fica transparente (só o conteúdo aparece)
 	var painel = caixa.get("panel")
-	if painel is CanvasItem:
-		painel.self_modulate.a = 0.0
 	if caixa.get("margem_texto") != null:
+		# opções: a carta é o fundo, o painel fica transparente (os botões são pretos)
+		if painel is CanvasItem:
+			painel.self_modulate.a = 0.0
 		# opções: os botões ocupam a carta toda; a margem fica no texto deles
 		caixa.margem = 0.0
 		caixa.margem_texto = MARGEM_CONTEUDO
@@ -122,7 +122,9 @@ func _colocar_na_carta(caixa: Control, face: Control) -> void:
 		if adv and caixa.has_method("_estilizar_botao"):
 			caixa._estilizar_botao(adv)
 	else:
-		# diálogo: margem em volta do texto
+		# diálogo: painel preto (igual aos botões das opções) e margem em volta do texto
+		if painel is CanvasItem:
+			painel.self_modulate.a = 1.0
 		var m := caixa.get_node_or_null("Panel/MarginContainer") as Control
 		if m:
 			m.offset_left = MARGEM_CONTEUDO
@@ -312,6 +314,8 @@ func _on_item_button_pressed(item_name: String):
 	popup_instance.show_item(titulo, item_data, quantity, anchor, area)
 	if _escolha_texto != "":
 		popup_instance.mostrar_acao(_escolha_texto, _terminar_escolha.bind(item_name))
+	elif item:
+		popup_instance.mostrar_acao("Usar", _usar_item.bind(item_name))
 
 ## Abre o inventário para escolher um item. texto_botao: ação no popup (ex.: "Aplicar poção").
 func escolher_item(texto_botao: String) -> void:
@@ -342,6 +346,15 @@ func _terminar_escolha(id: String) -> void:
 	carta_inventario.fechar()
 	set_ativo(_escolha_ativo_antes)
 	item_escolhido.emit(id)
+
+## Botão "Usar" do popup: aplica o item na bruxa e roda o efeito dele (se tiver).
+func _usar_item(id: String) -> void:
+	var interp = game_manager.get_node_or_null("Interpeter") if game_manager else null
+	if interp == null or not interp.has_method("usar_item"):
+		return
+	carta_inventario.segurar = false
+	carta_inventario.fechar()
+	interp.usar_item(id)
 
 func _on_linha_tocada(linha: Control) -> void:
 	if linha.has_meta("item"):

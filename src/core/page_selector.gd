@@ -42,9 +42,9 @@ static func compare(a, op: String, b) -> bool:
 	var numeric = is_number(a) and is_number(b)
 	match op:
 		"==":
-			return float(a) == float(b) if numeric else (typeof(a) == typeof(b) and a == b)
+			return is_equal_approx(float(a), float(b)) if numeric else (typeof(a) == typeof(b) and a == b)
 		"!=":
-			return float(a) != float(b) if numeric else not (typeof(a) == typeof(b) and a == b)
+			return not is_equal_approx(float(a), float(b)) if numeric else not (typeof(a) == typeof(b) and a == b)
 		">":
 			return numeric and float(a) > float(b)
 		"<":

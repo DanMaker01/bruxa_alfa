@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PocaoReferencia" format=3 uid="uid://j0wuud2oc0d2"]
+
+[ext_resource type="Script" uid="uid://cghhhdabyc6r3" path="res://src/dados/pocao_referencia.gd" id="2_ref"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="3_cmd"]
+[ext_resource type="Script" uid="uid://dvii04cb4qtqa" path="res://src/dados/comandos/cmd_chamar_evento.gd" id="7_chamar"]
+[ext_resource type="Resource" uid="uid://c4s5vu4bvdt7" path="res://dados/eventos/retorno_casa.tres" id="8_retorno"]
+
+[sub_resource type="Resource" id="R_chamar_retorno"]
+script = ExtResource("7_chamar")
+evento = ExtResource("8_retorno")
+
+[resource]
+script = ExtResource("2_ref")
+nome = "Poção de Pó de Retorno Concentrada"
+descricao = "Leva quem bebe de volta para casa."
+A = Array[PackedFloat32Array]([PackedFloat32Array(0.97, 0, 0, 0, 0), PackedFloat32Array(0, 1, 0, 0, 0), PackedFloat32Array(0, 0, 1, 0, 0), PackedFloat32Array(0, 0, 0, 1, 0), PackedFloat32Array(0, 0, 0, 0, 1.03)])
+efeito = Array[ExtResource("3_cmd")]([SubResource("R_chamar_retorno")])

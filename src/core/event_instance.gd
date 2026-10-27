@@ -25,11 +25,13 @@ var wait_timer: float = 0.0
 
 # ----- PAUSA -----
 # Motivo da pausa. "" = rodando.
-# "dialog" | "option" | "preparo" | "move" | "fade"
+# "dialog" | "option" | "preparo" | "move" | "fade" | "chamado"
 # Cada motivo só é retomado pelo seu próprio sinal, então um diálogo que
 # termina nunca despausa um evento que está esperando fade/movimento.
 var pause_reason: String = ""
 var move_target_ref: WeakRef = null
+## Evento chamado por este (pausa "chamado"): retoma quando ele termina.
+var filho: EventInstance = null
 ## Último comando executado falhou (só para o sinal command_executed).
 var falhou: bool = false
 

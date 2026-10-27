@@ -130,17 +130,12 @@ func _criar_texto():
 
 func _setup_ui():
 	if panel:
+		# fundo preto com borda cinza, igual aos botões das opções
 		var style = StyleBoxFlat.new()
-		style.bg_color = Color(0.1, 0.1, 0.15, 1.0)
-		style.border_width_left = 2
-		style.border_width_right = 2
-		style.border_width_top = 2
-		style.border_width_bottom = 2
-		style.border_color = Color(0.6, 0.6, 0.8, 0.8)
-		style.corner_radius_top_left = 15
-		style.corner_radius_top_right = 15
-		style.corner_radius_bottom_left = 15
-		style.corner_radius_bottom_right = 15
+		style.bg_color = Color(0, 0, 0, 1.0)
+		style.border_color = Color(0.4, 0.4, 0.4, 0.8)
+		style.set_border_width_all(2)
+		style.set_corner_radius_all(12)
 		panel.add_theme_stylebox_override("panel", style)
 
 	if text_label:
@@ -159,6 +154,8 @@ func _show_current_message():
 		var fala := _resolver_fala(str(messages[current_index]))
 		_aplicar_falante(fala["falante"], fala["nome"])
 		var texto: String = fala["texto"]
+		if _estilo.get("parenteses", false):
+			texto = "(" + texto.strip_edges() + ")"
 		_texto_puro = texto
 		_aplicar_estilo_fala()
 		# "[" vira "[lb]" para o texto do diálogo nunca ser lido como bbcode
@@ -543,7 +540,7 @@ func _foto_pensando(tex: Texture2D) -> Texture2D:
 # ESTILO DA JANELA (CmdEstiloDialogo)
 #   tamanho_fonte (0 = padrão) · cor (texto) · italico · efeito ("", "onda", "tremor")
 #   transparencia (1 = opaca) · fundo ("normal", "tracejado", "nenhum")
-#   face_pensando (usa <face>_pensando) · esconder_nome · vinheta
+#   face_pensando (usa <face>_pensando) · esconder_nome · vinheta · parenteses (fala entre parênteses)
 # Vale para as próximas falas até mudar de novo ou restaurar.
 # =============================================================================
 func definir_estilo(e: Dictionary) -> void:

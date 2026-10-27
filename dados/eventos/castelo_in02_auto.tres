@@ -1,0 +1,88 @@
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://cxqbpdxxrryu5"]
+
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="1_bqod1"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_k8rtx"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="3_e6ii4"]
+[ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="4_2fbjl"]
+[ext_resource type="Script" uid="uid://dh3fhyp6vfrt3" path="res://src/dados/comandos/cmd_mover_player.gd" id="5_5m6an"]
+[ext_resource type="Script" uid="uid://u1lexc30s8be" path="res://src/dados/comandos/cmd_player.gd" id="6_8quck"]
+[ext_resource type="Script" uid="uid://bcx1mthgrhnun" path="res://src/dados/comandos/cmd_mover_camera.gd" id="7_fwwpb"]
+[ext_resource type="Script" uid="uid://bercma7w4moqu" path="res://src/dados/comandos/cmd_mudar_var.gd" id="8_5e07p"]
+[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="9_3y4na"]
+[ext_resource type="Script" uid="uid://ba7m6ef3neoh0" path="res://src/dados/comandos/cmd_mover_evento.gd" id="10_6qia0"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="11_jn3au"]
+
+[sub_resource type="Resource" id="Resource_eqdgj"]
+script = ExtResource("1_bqod1")
+metadata/_custom_type_script = "uid://gdfc3xl4mcr4"
+
+[sub_resource type="Resource" id="Resource_fenex"]
+script = ExtResource("4_2fbjl")
+metadata/_custom_type_script = "uid://dkw5y5gsrn515"
+
+[sub_resource type="Resource" id="Resource_sjcg8"]
+script = ExtResource("5_5m6an")
+modo = 1
+evento = "castelo_in02_passagem_in03"
+metadata/_custom_type_script = "uid://dh3fhyp6vfrt3"
+
+[sub_resource type="Resource" id="Resource_u0jxn"]
+script = ExtResource("6_8quck")
+acao = 3
+metadata/_custom_type_script = "uid://u1lexc30s8be"
+
+[sub_resource type="Resource" id="Resource_trixx"]
+script = ExtResource("4_2fbjl")
+metadata/_custom_type_script = "uid://dkw5y5gsrn515"
+
+[sub_resource type="Resource" id="Resource_1jjtf"]
+script = ExtResource("7_fwwpb")
+posicao = Vector2(320, 0)
+tempo = 1.999999999999936
+metadata/_custom_type_script = "uid://bcx1mthgrhnun"
+
+[sub_resource type="Resource" id="Resource_hko5r"]
+script = ExtResource("4_2fbjl")
+segundos = 2.1999999999999296
+metadata/_custom_type_script = "uid://dkw5y5gsrn515"
+
+[sub_resource type="Resource" id="Resource_g3dnw"]
+script = ExtResource("8_5e07p")
+variavel = "missao01_guardas_perseguem"
+valor = 0.999999999999968
+metadata/_custom_type_script = "uid://bercma7w4moqu"
+
+[sub_resource type="Resource" id="Resource_c5goq"]
+script = ExtResource("9_3y4na")
+texto = "Atrás dela!!"
+metadata/_custom_type_script = "uid://8liac65hmnnq"
+
+[sub_resource type="Resource" id="Resource_ujoxq"]
+script = ExtResource("10_6qia0")
+evento = "castelo_in02_guarda1"
+posicao = Vector2(1000, 0)
+manter_y = true
+metadata/_custom_type_script = "uid://ba7m6ef3neoh0"
+
+[sub_resource type="Resource" id="Resource_cth0m"]
+script = ExtResource("4_2fbjl")
+metadata/_custom_type_script = "uid://dkw5y5gsrn515"
+
+[sub_resource type="Resource" id="Resource_y53hh"]
+script = ExtResource("3_e6ii4")
+variavel = "missao1_resultado"
+valor = 4.99999999999984
+metadata/_custom_type_script = "uid://baglqudsvyyrb"
+
+[sub_resource type="Resource" id="Resource_e36sc"]
+script = ExtResource("1_bqod1")
+condicoes = Array[ExtResource("3_e6ii4")]([SubResource("Resource_y53hh")])
+gatilho = 2
+comandos = Array[ExtResource("2_k8rtx")]([SubResource("Resource_fenex"), SubResource("Resource_sjcg8"), SubResource("Resource_u0jxn"), SubResource("Resource_trixx"), SubResource("Resource_1jjtf"), SubResource("Resource_hko5r"), SubResource("Resource_g3dnw"), SubResource("Resource_c5goq"), SubResource("Resource_ujoxq"), SubResource("Resource_cth0m")])
+metadata/_custom_type_script = "uid://gdfc3xl4mcr4"
+
+[resource]
+script = ExtResource("11_jn3au")
+id = "castelo_in02_auto"
+paginas = Array[ExtResource("1_bqod1")]([SubResource("Resource_eqdgj"), SubResource("Resource_e36sc")])
+metadata/_custom_type_script = "uid://bfi0og56a4lak"

@@ -126,7 +126,7 @@ valor = 1.0
 
 [sub_resource type="Resource" id="Resource_8tqvb"]
 script = ExtResource("1_wk0jm")
-condicao = SubResource("Resource_yk2tu")
+condicoes = Array[ExtResource("16_pdo0j")]([SubResource("Resource_yk2tu")])
 animacao = "parado"
 area_scale = Vector2(4, 4)
 

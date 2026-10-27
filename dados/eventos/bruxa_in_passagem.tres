@@ -16,7 +16,9 @@
 [ext_resource type="Script" uid="uid://b3yty8028fcf2" path="res://src/dados/comandos/cmd_goto.gd" id="14_5mnen"]
 [ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="15_epkn7"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="16_8canf"]
-[ext_resource type="Script" uid="uid://22r70lmcscvw" path="res://src/dados/comandos/cmd_estilo_dialogo.gd" id="x_estilo"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_chamar_evento.gd" id="92_chamar"]
+[ext_resource type="Resource" path="res://dados/eventos/pensamento_inicio.tres" id="93_pensa_ini"]
+[ext_resource type="Resource" path="res://dados/eventos/pensamento_fim.tres" id="94_pensa_fim"]
 
 [sub_resource type="Resource" id="Resource_m8ghe"]
 script = ExtResource("3_wbov3")
@@ -118,11 +120,11 @@ texto = "[CAMPONÊS;campones;100] É aqui que mora a Bruxa? Passei o dia todo an
 
 [sub_resource type="Resource" id="Resource_xw4px"]
 script = ExtResource("9_knu6e")
-texto = "[CAMPONÊS;campones;100] Eu queria falar com você, porque minha irmã vai se casar amanhã. Mas ela não sai da cama."
+texto = "[CAMPONÊS;campones;100] Eu queria falar com você, porque minha irm..."
 
 [sub_resource type="Resource" id="R_irma_brux_0"]
 script = ExtResource("9_knu6e")
-texto = "[CAMPONÊS;campones;100] Quer dizer... a princesa! A princesa vai se casar amanhã."
+texto = "[CAMPONÊS;campones;100] Quer dizer... a princesa! A princesa vai se casar amanhã. Mas ela não sai da cama."
 
 [sub_resource type="Resource" id="R_irma_brux_1"]
 script = ExtResource("9_knu6e")
@@ -130,7 +132,7 @@ texto = "[CAMPONÊS;campones;100] Eu trabalho no castelo. Cuido dos cavalos."
 
 [sub_resource type="Resource" id="R_irma_brux_2"]
 script = ExtResource("9_knu6e")
-texto = "[BRUXA;bruxa_grande;0] (desconfiada) Sei..."
+texto = "[BRUXA;bruxa_grande;0] Sei..."
 
 [sub_resource type="Resource" id="Resource_p1udm"]
 script = ExtResource("9_knu6e")
@@ -142,27 +144,23 @@ texto = "[CAMPONÊS;campones;100] Fica dizendo que vai estragar tudo, que o noiv
 
 [sub_resource type="Resource" id="Resource_unal2"]
 script = ExtResource("9_knu6e")
-texto = "[CAMPONÊS;campones;100] Já chamaram os médicos do castelo, mas ela não melhora, e talvez o casamento não aconteça. Ninguém sabe mais o que fazer."
+texto = "[CAMPONÊS;campones;100] Já chamaram os curandeiros do castelo, mas ela não melhora, e talvez o casamento não aconteça. Ninguém sabe mais o que fazer."
 
 [sub_resource type="Resource" id="R_estilo_pensa"]
-script = ExtResource("x_estilo")
-cor_texto = Color(0.8, 0.76, 0.9, 1)
-italico = true
-face_pensando = true
-esconder_nome = true
-vinheta = true
+script = ExtResource("92_chamar")
+evento = ExtResource("93_pensa_ini")
 
 [sub_resource type="Resource" id="Resource_tqa1j"]
 script = ExtResource("9_knu6e")
-texto = "[BRUXA;bruxa_grande;0] Coração disparado. Mãos trêmulas. Pensamentos catastróficos. "
+texto = "[BRUXA;bruxa_grande;0] Coração disparado. Mãos trêmulas. A cabeça só pensa no pior."
 
 [sub_resource type="Resource" id="Resource_rxkpu"]
 script = ExtResource("9_knu6e")
 texto = "[BRUXA;bruxa_grande;0] Parece que o corpo dela não sabe mais descansar."
 
 [sub_resource type="Resource" id="R_estilo_volta"]
-script = ExtResource("x_estilo")
-restaurar = true
+script = ExtResource("92_chamar")
+evento = ExtResource("94_pensa_fim")
 
 [sub_resource type="Resource" id="Resource_y11e0"]
 script = ExtResource("9_knu6e")
@@ -178,7 +176,7 @@ texto = "[BRUXA;bruxa_grande;0] O medo vai continuar ali. Mas ela vai conseguir 
 
 [sub_resource type="Resource" id="Resource_fmhl5"]
 script = ExtResource("9_knu6e")
-texto = "[BRUXA;bruxa_grande;0] Deixe eu me lembrar... são oito cogumelos, que crescem logo depois da cidade."
+texto = "[BRUXA;bruxa_grande;0] Deixe eu me lembrar... são quatro cogumelos, que crescem logo depois da cidade."
 
 [sub_resource type="Resource" id="Resource_3682x"]
 script = ExtResource("9_knu6e")
@@ -210,7 +208,7 @@ texto = "[BRUXA;bruxa_grande;0] E não será barato."
 
 [sub_resource type="Resource" id="Resource_6o5nu"]
 script = ExtResource("9_knu6e")
-texto = "[CAMPONÊS;campones;100] Tudo bem. Obrigado. Obrigado mesmo."
+texto = "[CAMPONÊS;campones;100] Está bem. Obrigado. Obrigado mesmo."
 
 [sub_resource type="Resource" id="Resource_ramt2"]
 script = ExtResource("5_0jff4")
@@ -264,7 +262,7 @@ segundos = 2.0
 
 [sub_resource type="Resource" id="R_desconfia_brux_0"]
 script = ExtResource("9_knu6e")
-texto = "[BRUXA;bruxa_grande;0] Um camponês que chama a princesa de irmã..."
+texto = "[BRUXA;bruxa_grande;0] Se eu ouvi direito, ele ia chamar a Princesa de irmã...?"
 
 [sub_resource type="Resource" id="R_desconfia_brux_1"]
 script = ExtResource("9_knu6e")
@@ -276,7 +274,7 @@ texto = "[BRUXA;bruxa_grande;0] Quem será esse rapaz?"
 
 [sub_resource type="Resource" id="Resource_0twvi"]
 script = ExtResource("9_knu6e")
-texto = "[BRUXA;bruxa_grande;0] Oito cogumelos, logo depois da cidade, e oito ervas, no final da floresta. Cozinhando isso, depois é só ir ao castelo."
+texto = "[BRUXA;bruxa_grande;0] Quatro cogumelos, logo depois da cidade, e oito ervas, no final da floresta. Cozinhando isso, depois é só ir ao castelo."
 
 [sub_resource type="Resource" id="Resource_r3ojj"]
 script = ExtResource("5_0jff4")
@@ -317,7 +315,7 @@ valor = 1.0
 
 [sub_resource type="Resource" id="Resource_pxwyc"]
 script = ExtResource("1_gahnm")
-condicao = SubResource("Resource_uwvc1")
+condicoes = Array[ExtResource("15_epkn7")]([SubResource("Resource_uwvc1")])
 sprite_frames = ExtResource("6_ergwe")
 animacao = "parado"
 area_scale = Vector2(16, 30)
@@ -349,7 +347,7 @@ valor = 2.0
 
 [sub_resource type="Resource" id="Resource_1y87c"]
 script = ExtResource("1_gahnm")
-condicao = SubResource("Resource_inl0e")
+condicoes = Array[ExtResource("15_epkn7")]([SubResource("Resource_inl0e")])
 sprite_frames = ExtResource("6_ergwe")
 animacao = "parado"
 area_scale = Vector2(16, 30)
