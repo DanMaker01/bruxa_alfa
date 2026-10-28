@@ -74,13 +74,30 @@ tempo = 1.0
 
 [sub_resource type="Resource" id="Resource_hko5r"]
 script = ExtResource("4_2fbjl")
-segundos = 2.2
+segundos = 1.5
 metadata/_custom_type_script = "uid://dkw5y5gsrn515"
+
+[sub_resource type="Resource" id="G_abre"]
+script = ExtResource("x0")
+evento = "castelo_in02_passagem_in01"
+animacao = "aberta"
+
+[sub_resource type="Resource" id="G_som_abre"]
+script = ExtResource("x1")
+arquivo = "res://audio/se/porta_abre.mp3"
+
+[sub_resource type="Resource" id="G_esp1"]
+script = ExtResource("4_2fbjl")
+segundos = 0.5
 
 [sub_resource type="Resource" id="Resource_g3dnw"]
 script = ExtResource("8_5e07p")
 variavel = "missao01_guardas_perseguem"
 valor = 1.0
+
+[sub_resource type="Resource" id="G_esp2"]
+script = ExtResource("4_2fbjl")
+segundos = 0.3
 
 [sub_resource type="Resource" id="Resource_c5goq"]
 script = ExtResource("9_3y4na")
@@ -156,7 +173,7 @@ variavel = "missao01_veu"
 script = ExtResource("1_bqod1")
 condicoes = Array[ExtResource("3_e6ii4")]([SubResource("Resource_y53hh"), SubResource("R_veu0")])
 gatilho = 2
-comandos = Array[ExtResource("2_k8rtx")]([SubResource("F_trava"), SubResource("Resource_fenex"), SubResource("Resource_sjcg8"), SubResource("D_abre"), SubResource("D_som_abre"), SubResource("D_esp1"), SubResource("Resource_u0jxn"), SubResource("D_esp2"), SubResource("D_fecha"), SubResource("D_som_fecha"), SubResource("Resource_trixx"), SubResource("Resource_1jjtf"), SubResource("Resource_hko5r"), SubResource("Resource_g3dnw"), SubResource("Resource_c5goq"), SubResource("Resource_k8rtx"), SubResource("Resource_ujoxq"), SubResource("Resource_cth0m"), SubResource("Resource_e6ii4"), SubResource("Resource_2fbjl"), SubResource("Resource_5m6an"), SubResource("Resource_5e07p"), SubResource("Resource_8quck"), SubResource("Resource_fwwpb")])
+comandos = Array[ExtResource("2_k8rtx")]([SubResource("F_trava"), SubResource("Resource_fenex"), SubResource("Resource_sjcg8"), SubResource("D_abre"), SubResource("D_som_abre"), SubResource("D_esp1"), SubResource("Resource_u0jxn"), SubResource("D_esp2"), SubResource("D_fecha"), SubResource("D_som_fecha"), SubResource("Resource_trixx"), SubResource("Resource_1jjtf"), SubResource("Resource_hko5r"), SubResource("G_abre"), SubResource("G_som_abre"), SubResource("G_esp1"), SubResource("Resource_g3dnw"), SubResource("G_esp2"), SubResource("Resource_c5goq"), SubResource("Resource_k8rtx"), SubResource("Resource_ujoxq"), SubResource("Resource_cth0m"), SubResource("Resource_e6ii4"), SubResource("Resource_2fbjl"), SubResource("Resource_5m6an"), SubResource("Resource_5e07p"), SubResource("Resource_8quck"), SubResource("Resource_fwwpb")])
 metadata/_custom_type_script = "uid://gdfc3xl4mcr4"
 
 [resource]

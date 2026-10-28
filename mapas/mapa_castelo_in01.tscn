@@ -14,7 +14,8 @@
 
 [node name="CasteloIn" type="Node2D" unique_id=231347479]
 script = ExtResource("1_d4gbr")
-metadata/_edit_vertical_guides_ = [2358.0, 2028.0, -56.0]
+bruxa_no_centro = false
+metadata/_edit_vertical_guides_ = [2358.0, 2028.0, -56.0, 1328.0]
 
 [node name="Frente+" type="Parallax2D" parent="." unique_id=647674415]
 z_index = 10
@@ -40,26 +41,26 @@ centered = false
 z_index = 1
 
 [node name="Porta_out" type="CharacterBody2D" parent="Eventos" unique_id=516211611]
-z_index = 3
+z_index = 2
 position = Vector2(160, 512)
 script = ExtResource("4_0fnqg")
 evento = ExtResource("5_frvun")
 
 [node name="Porta_in02" type="CharacterBody2D" parent="Eventos" unique_id=1082950876]
 z_index = 3
-position = Vector2(1088, 528)
+position = Vector2(1200, 528)
 script = ExtResource("4_0fnqg")
 evento = ExtResource("6_kv2c0")
 
 [node name="Rei" type="CharacterBody2D" parent="Eventos" unique_id=627617462]
 z_index = 3
-position = Vector2(848, 544)
+position = Vector2(1552, 544)
 script = ExtResource("4_0fnqg")
 evento = ExtResource("6_ntppu")
 
 [node name="Princesa" type="CharacterBody2D" parent="Eventos" unique_id=846509653]
 z_index = 3
-position = Vector2(1008, 544)
+position = Vector2(1664, 544)
 script = ExtResource("4_0fnqg")
 evento = ExtResource("7_byw2k")
 
@@ -76,7 +77,7 @@ script = ExtResource("4_0fnqg")
 evento = ExtResource("9_vf5yp")
 
 [node name="Guarda2" type="CharacterBody2D" parent="Eventos" unique_id=1609237115]
-z_index = 3
+z_index = 2
 position = Vector2(112, 544)
 script = ExtResource("4_0fnqg")
 evento = ExtResource("10_ob6r4")

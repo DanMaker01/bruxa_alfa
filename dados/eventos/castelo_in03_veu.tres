@@ -13,6 +13,10 @@
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="12_xpbed"]
 [ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="x0"]
 
+[sub_resource type="Resource" id="C_esp0"]
+script = ExtResource("10_esp")
+segundos = 0.5
+
 [sub_resource type="Resource" id="C_trava"]
 script = ExtResource("7_player")
 
@@ -37,7 +41,7 @@ valor = 1.0
 
 [sub_resource type="Resource" id="C_esp"]
 script = ExtResource("10_esp")
-segundos = 0.3
+segundos = 0.5
 
 [sub_resource type="Resource" id="C_m3"]
 script = ExtResource("6_msg")
@@ -52,7 +56,7 @@ acao = 1
 script = ExtResource("1_djp1k")
 sprite_frames = ExtResource("5_anim")
 area_scale = Vector2(14, 16)
-comandos = Array[ExtResource("2_ph5fu")]([SubResource("C_trava"), SubResource("C_m1"), SubResource("C_m2"), SubResource("C_efeito"), SubResource("C_var"), SubResource("C_esp"), SubResource("C_m3"), SubResource("C_destrava")])
+comandos = Array[ExtResource("2_ph5fu")]([SubResource("C_trava"), SubResource("C_m1"), SubResource("C_m2"), SubResource("C_efeito"), SubResource("C_esp0"), SubResource("C_var"), SubResource("C_esp"), SubResource("C_m3"), SubResource("C_destrava")])
 
 [sub_resource type="Resource" id="C_m_pego"]
 script = ExtResource("6_msg")
@@ -62,6 +66,7 @@ texto = "Já tenho o meu pedaço. Melhor não abusar."
 [sub_resource type="Resource" id="C_cond_pego"]
 script = ExtResource("3_g6eiw")
 variavel = "missao01_veu"
+operador = 4
 valor = 1.0
 
 [sub_resource type="Resource" id="P_pego"]

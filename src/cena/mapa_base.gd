@@ -71,6 +71,7 @@ func _ready():
 	interpeter = game_manager.get_node("Interpeter") if game_manager else null
 	_calc_limits()
 	_apply_limits()
+	_bruxa_no_centro()
 	_preparar_parallax()
 	_connect_events()
 	call_deferred("_tocar_bgm")   # deferred: o AudioManager pode ainda não estar pronto
@@ -167,16 +168,17 @@ func _on_event_triggered(evento: EventoData, origem: Node = null):
 
 
 # ===== PARALLAX NA BORDA =====
-# Quando a câmera para na borda do mapa, as camadas com fator diferente de 1
-# (fundo 0.2, frente 1.1...) continuam andando como se a câmera ainda seguisse a bruxa.
-# As camadas com fator 1 (Meio, Eventos) param junto com a câmera.
+# Quando a câmera para na borda do mapa, o Meio (fator 1, onde a bruxa anda) para junto,
+# e as outras camadas continuam andando com a MESMA velocidade relativa ao Meio que teriam
+# se a câmera seguisse a bruxa: deslocamento extra = (1 − fator) × quanto a bruxa passou.
+# Fundo 0.2 anda 0,8 × com a bruxa; Frente 1.1 anda 0,1 × para o outro lado. Assim a ilusão
+# de profundidade (diferença de velocidade entre camadas) continua igual, sem freio.
 # Também nunca deixa aparecer a ponta de uma imagem: o deslocamento é limitado ao
 # tamanho dela (camadas com repetição/loop não têm limite).
 # Na tela: x = x_local + scroll_offset.x - fator * (borda esquerda da câmera).
-## Desligado por enquanto (readme: "PROBLEMA" da câmera nas bordas): as camadas
-## param junto com a câmera. true = fundo/frente continuam andando na borda.
+## false = todas as camadas param junto com a câmera na borda.
+## (Desligado: com BRUXA_NO_CENTRO a câmera nunca para com a bruxa andando.)
 const PARALLAX_NA_BORDA := false
-const PARALLAX_SUAVE := 4.0   # igual ao position_smoothing_speed da câmera
 var _camadas: Array = []
 var _centro_virtual: float = NAN
 
@@ -212,20 +214,14 @@ func _extensao_x(camada: Node) -> Vector2:
 			r.y = maxf(r.y, x)
 	return r
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if _camadas.is_empty():
 		return
 	var cam := get_viewport().get_camera_2d()
 	var player = get_node_or_null("/root/Main/Mundo/Player")
 	if cam == null or player == null:
 		return
-	var px: float = player.global_position.x
-	var k := 1.0 - exp(-PARALLAX_SUAVE * delta)
-	if is_nan(_centro_virtual):   # primeiro quadro no mapa: sem deslizar
-		_centro_virtual = px
-		k = 1.0
-	else:
-		_centro_virtual = lerpf(_centro_virtual, px, k)
+	_centro_virtual = player.global_position.x   # sem suavizar: mesma velocidade da bruxa
 	var centro: float = cam.get_screen_center_position().x
 	var largura: float = get_viewport_rect().size.x / cam.zoom.x
 	var cam_esq: float = centro - largura * 0.5
@@ -236,10 +232,71 @@ func _process(delta: float) -> void:
 		if not is_instance_valid(no):
 			continue
 		var f: float = no.scroll_scale.x
-		var alvo: float = c.base - f * diff
+		var alvo: float = c.base + (1.0 - f) * diff
 		if not c.loop and is_finite(c.esq):
 			var lo: float = largura - c.dir + f * cam_esq   # borda direita da imagem fora da tela
 			var hi: float = -c.esq + f * cam_esq            # borda esquerda da imagem fora da tela
 			if lo <= hi:
 				alvo = clampf(alvo, lo, hi)
-		no.scroll_offset.x = lerpf(no.scroll_offset.x, alvo, k)
+		no.scroll_offset.x = alvo
+
+# =============================================================================
+# BRUXA NO CENTRO
+# A bruxa não anda além do ponto onde a câmera pararia (meia tela antes de cada ponta).
+# Assim a câmera nunca para com ela andando: sem tranco, e o parallax fica sempre certo.
+# As passagens de TOQUE que estão nas pontas vêm para esse ponto, e quem chega por elas
+# aparece um pouco para dentro. Mapas do tamanho da tela (a câmera nem anda) ficam livres.
+# Para voltar ao jeito antigo (a bruxa vai até a ponta e todas as camadas param junto
+# com a câmera): BRUXA_NO_CENTRO = false.
+# =============================================================================
+const BRUXA_NO_CENTRO := false   # desligado: encurtava os mapas. Fica o jeito simples.
+## Por mapa: desligue nos interiores (portas, rei, móveis ficam perto das pontas).
+@export var bruxa_no_centro: bool = true
+const MARGEM_CHEGADA := 60.0   # quanto para dentro do limite a bruxa aparece ao chegar numa ponta
+const RECUO_PASSAGEM := 30.0   # a passagem fica este tanto para fora do limite
+
+func _bruxa_no_centro() -> void:
+	var player = get_node_or_null("/root/Main/Mundo/Player")
+	if player == null:
+		return
+	player.set("limite_x", Vector2(-INF, INF))
+	if not BRUXA_NO_CENTRO or not bruxa_no_centro:
+		return
+	var cam_node = get_node_or_null("/root/Main/Mundo/Player/Camera2D")
+	var zoom_x: float = cam_node.zoom.x if cam_node else 1.0
+	var meia: float = get_viewport_rect().size.x * 0.5 / zoom_x
+	var a: float = float(cam.l) + meia
+	var b: float = float(cam.r) - meia
+	if b - a < 2.0 * MARGEM_CHEGADA + 1.0:
+		return
+	player.set("limite_x", Vector2(a, b))
+	for ev in _eventos_toque(self):
+		var x: float = ev.global_position.x
+		if x < a:
+			ev.global_position.x = a - RECUO_PASSAGEM
+		elif x > b:
+			ev.global_position.x = b + RECUO_PASSAGEM
+	for area in _areas_spawn(self):
+		area.limitar_alcance(a, b)
+	var px: float = player.global_position.x
+	if px < a + MARGEM_CHEGADA:
+		player.global_position.x = a + MARGEM_CHEGADA
+	elif px > b - MARGEM_CHEGADA:
+		player.global_position.x = b - MARGEM_CHEGADA
+	print("[MapaBase] Bruxa no centro: anda de ", a, " a ", b)
+
+func _eventos_toque(node: Node) -> Array:
+	var lista: Array = []
+	for c in node.get_children():
+		if c is CharacterBody2D and c.get("trigger") == "touch":
+			lista.append(c)
+		lista.append_array(_eventos_toque(c))
+	return lista
+
+func _areas_spawn(node: Node) -> Array:
+	var lista: Array = []
+	for c in node.get_children():
+		if c.has_method("limitar_alcance"):
+			lista.append(c)
+		lista.append_array(_areas_spawn(c))
+	return lista

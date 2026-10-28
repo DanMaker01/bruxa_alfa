@@ -12,6 +12,20 @@
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="24_x"]
 [ext_resource type="Resource" path="res://dados/falantes/rei.tres" id="x0"]
 [ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="x1"]
+[ext_resource type="Script" uid="uid://dp3mfol3wf88y" path="res://src/dados/comandos/cmd_mover.gd" id="x2"]
+[ext_resource type="Script" uid="uid://bchvbuxgicj1n" path="res://src/dados/comandos/cmd_evento_animacao.gd" id="x3"]
+[ext_resource type="Script" uid="uid://bm6rsgpqii0pt" path="res://src/dados/comandos/cmd_som.gd" id="x4"]
+[ext_resource type="Script" uid="uid://u1lexc30s8be" path="res://src/dados/comandos/cmd_player.gd" id="x5"]
+
+[sub_resource type="Resource" id="G_pensa"]
+script = ExtResource("4_x")
+personagem = ExtResource("x1")
+face = "pensando"
+texto = "Melhor fugir... e aproveitar para pegar o véu."
+
+[sub_resource type="Resource" id="G_esp_pensa"]
+script = ExtResource("2_x")
+segundos = 0.4
 
 [sub_resource type="Resource" id="R_174"]
 script = ExtResource("18_x")
@@ -48,6 +62,50 @@ texto = "Prendam-na! AGORA!"
 script = ExtResource("2_x")
 segundos = 0.3
 
+[sub_resource type="Resource" id="G_cam"]
+script = ExtResource("18_x")
+acao = 1
+tempo = 0.3
+
+[sub_resource type="Resource" id="G_corre"]
+script = ExtResource("x2")
+destino = 1
+ate_evento = "castelo_in01_passagem_in02"
+velocidade = 200.0
+
+[sub_resource type="Resource" id="G_abre"]
+script = ExtResource("x3")
+evento = "castelo_in01_passagem_in02"
+animacao = "aberta"
+
+[sub_resource type="Resource" id="G_som_abre"]
+script = ExtResource("x4")
+arquivo = "res://audio/se/porta_abre.mp3"
+
+[sub_resource type="Resource" id="G_esp1"]
+script = ExtResource("2_x")
+segundos = 0.3
+
+[sub_resource type="Resource" id="G_some"]
+script = ExtResource("x5")
+acao = 3
+
+[sub_resource type="Resource" id="G_esp2"]
+script = ExtResource("2_x")
+segundos = 0.3
+
+[sub_resource type="Resource" id="G_fecha"]
+script = ExtResource("x3")
+evento = "castelo_in01_passagem_in02"
+
+[sub_resource type="Resource" id="G_som_fecha"]
+script = ExtResource("x4")
+arquivo = "res://audio/se/porta_fecha.mp3"
+
+[sub_resource type="Resource" id="G_esp3"]
+script = ExtResource("2_x")
+segundos = 0.6
+
 [sub_resource type="Resource" id="R_181"]
 script = ExtResource("19_x")
 tempo = 0.5
@@ -62,6 +120,10 @@ mapa = "res://mapas/mapa_castelo_in02.tscn"
 posicao = Vector2(100, 505)
 direcao = 2
 
+[sub_resource type="Resource" id="G_mostra"]
+script = ExtResource("x5")
+acao = 2
+
 [sub_resource type="Resource" id="R_fuga_esp"]
 script = ExtResource("2_x")
 segundos = 0.3
@@ -73,7 +135,7 @@ tempo = 0.5
 
 [sub_resource type="Resource" id="P_fuga"]
 script = ExtResource("23_x")
-comandos = Array[ExtResource("22_x")]([SubResource("R_174"), SubResource("R_175"), SubResource("R_176"), SubResource("R_177"), SubResource("R_178"), SubResource("R_179"), SubResource("R_180"), SubResource("R_181"), SubResource("R_182"), SubResource("R_fuga_tele"), SubResource("R_fuga_esp"), SubResource("R_fuga_fade")])
+comandos = Array[ExtResource("22_x")]([SubResource("R_174"), SubResource("R_175"), SubResource("R_176"), SubResource("R_177"), SubResource("R_178"), SubResource("R_179"), SubResource("R_180"), SubResource("G_pensa"), SubResource("G_esp_pensa"), SubResource("G_cam"), SubResource("G_corre"), SubResource("G_abre"), SubResource("G_som_abre"), SubResource("G_esp1"), SubResource("G_some"), SubResource("G_esp2"), SubResource("G_fecha"), SubResource("G_som_fecha"), SubResource("G_esp3"), SubResource("R_181"), SubResource("R_182"), SubResource("R_fuga_tele"), SubResource("G_mostra"), SubResource("R_fuga_esp"), SubResource("R_fuga_fade")])
 
 [resource]
 script = ExtResource("24_x")

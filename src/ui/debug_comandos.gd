@@ -19,7 +19,7 @@ const ATALHOS := [
 	["Efeito", "cmd_mostrar_efeito"], ["Câmera", "cmd_camera"], ["Balão", "cmd_balao"],
 	["Caldeirão", "cmd_preparo"], ["Variável", "cmd_variavel"],
 	["Item", "cmd_item"], ["Fade", "cmd_fade"], ["Som", "cmd_som"],
-	["Aplicar poção", "cmd_aplicar_pocao"],
+	["Aplicar poção", "cmd_aplicar_pocao"], ["Player", "cmd_player"],
 ]
 ## Comandos de controle de fluxo: não fazem sentido sozinhos.
 const ESCONDER := ["comando", "cmd_if", "cmd_else", "cmd_end", "cmd_while", "cmd_break", "cmd_label", "cmd_goto"]

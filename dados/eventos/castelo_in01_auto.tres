@@ -27,12 +27,12 @@ segundos = 0.5
 
 [sub_resource type="Resource" id="R_3"]
 script = ExtResource("3_x")
-posicao = Vector2(848, 505)
-tempo = 1.2
+posicao = Vector2(1552, 505)
+tempo = 2.5
 
 [sub_resource type="Resource" id="R_4"]
 script = ExtResource("2_x")
-segundos = 1.5
+segundos = 3.0
 
 [sub_resource type="Resource" id="R_5"]
 script = ExtResource("4_x")
@@ -47,19 +47,19 @@ segundos = 0.3
 [sub_resource type="Resource" id="R_7"]
 script = ExtResource("3_x")
 acao = 1
-tempo = 0.8
+tempo = 2.0
 
 [sub_resource type="Resource" id="R_8"]
 script = ExtResource("2_x")
-segundos = 0.9
+segundos = 2.3
 
 [sub_resource type="Resource" id="R_9"]
 script = ExtResource("6_x")
 alvo = 1
 evento = "castelo_in01_guarda1"
-x = 828
+x = 1450
 y = 464
-velocidade = 200.0
+velocidade = 150.0
 direcao = 2
 esperar = false
 
@@ -67,21 +67,21 @@ esperar = false
 script = ExtResource("6_x")
 alvo = 1
 evento = "castelo_in01_guarda2"
-x = 652
+x = 1270
 y = 464
+velocidade = 150.0
+direcao = 2
+
+[sub_resource type="Resource" id="R_11"]
+script = ExtResource("6_x")
+x = 1364.0
 velocidade = 200.0
 direcao = 2
 esperar = false
 
-[sub_resource type="Resource" id="R_11"]
-script = ExtResource("6_x")
-x = 660.0
-velocidade = 200.0
-direcao = 2
-
 [sub_resource type="Resource" id="R_12"]
 script = ExtResource("2_x")
-segundos = 0.4
+segundos = 0.8
 
 [sub_resource type="Resource" id="R_13"]
 script = ExtResource("6_x")
@@ -89,7 +89,7 @@ alvo = 1
 evento = "castelo_in01_guarda1"
 x = 288
 y = 464
-velocidade = 200.0
+velocidade = 150.0
 direcao = 1
 esperar = false
 
@@ -99,12 +99,21 @@ alvo = 1
 evento = "castelo_in01_guarda2"
 x = 112
 y = 464
-velocidade = 200.0
+velocidade = 150.0
 direcao = 1
+esperar = false
 
 [sub_resource type="Resource" id="R_15"]
 script = ExtResource("2_x")
-segundos = 0.4
+segundos = 1.5
+
+[sub_resource type="Resource" id="C_centro"]
+script = ExtResource("3_x")
+posicao = Vector2(1510, 505)
+tempo = 0.8
+
+[sub_resource type="Resource" id="C_esp_centro"]
+script = ExtResource("2_x")
 
 [sub_resource type="Resource" id="R_16"]
 script = ExtResource("4_x")
@@ -163,6 +172,15 @@ script = ExtResource("17_x")
 variavel = "castelo_conversou"
 valor = 1.0
 
+[sub_resource type="Resource" id="C_volta"]
+script = ExtResource("3_x")
+acao = 1
+tempo = 0.8
+
+[sub_resource type="Resource" id="C_esp_volta"]
+script = ExtResource("2_x")
+segundos = 0.8
+
 [sub_resource type="Resource" id="F_cond_menor3"]
 script = ExtResource("12_x")
 variavel = "missao01_resultado"
@@ -197,7 +215,7 @@ variavel = "castelo_conversou"
 script = ExtResource("23_x")
 condicoes = Array[ExtResource("12_x")]([SubResource("R_212"), SubResource("R_213"), SubResource("R_214")])
 gatilho = 2
-comandos = Array[ExtResource("22_x")]([SubResource("R_1"), SubResource("R_2"), SubResource("R_3"), SubResource("R_4"), SubResource("R_5"), SubResource("R_6"), SubResource("R_7"), SubResource("R_8"), SubResource("R_9"), SubResource("R_10"), SubResource("R_11"), SubResource("R_12"), SubResource("R_13"), SubResource("R_14"), SubResource("R_15"), SubResource("R_16"), SubResource("R_17"), SubResource("R_18"), SubResource("R_19"), SubResource("R_20"), SubResource("R_22"), SubResource("R_23"), SubResource("R_24"), SubResource("R_chamar_entrega"), SubResource("R_209"), SubResource("R_210"), SubResource("F_if_menor3"), SubResource("R_211"), SubResource("F_end_menor3")])
+comandos = Array[ExtResource("22_x")]([SubResource("R_1"), SubResource("R_2"), SubResource("R_3"), SubResource("R_4"), SubResource("R_5"), SubResource("R_6"), SubResource("R_7"), SubResource("R_8"), SubResource("R_9"), SubResource("R_10"), SubResource("R_11"), SubResource("R_12"), SubResource("R_13"), SubResource("R_14"), SubResource("R_15"), SubResource("C_centro"), SubResource("C_esp_centro"), SubResource("R_16"), SubResource("R_17"), SubResource("R_18"), SubResource("R_19"), SubResource("R_20"), SubResource("R_22"), SubResource("R_23"), SubResource("R_24"), SubResource("R_chamar_entrega"), SubResource("R_209"), SubResource("R_210"), SubResource("C_volta"), SubResource("C_esp_volta"), SubResource("F_if_menor3"), SubResource("R_211"), SubResource("F_end_menor3")])
 
 [sub_resource type="Resource" id="R_216"]
 script = ExtResource("12_x")

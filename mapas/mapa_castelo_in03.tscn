@@ -13,6 +13,7 @@
 
 [node name="CasteloIn03" type="Node2D" unique_id=231347479]
 script = ExtResource("1_argp8")
+bruxa_no_centro = false
 metadata/_edit_vertical_guides_ = [2358.0, 2028.0, -56.0]
 
 [node name="Fundo" type="Parallax2D" parent="." unique_id=647674415]
@@ -60,7 +61,7 @@ evento = ExtResource("ev_auto")
 
 [node name="Guarda1" type="CharacterBody2D" parent="Eventos" unique_id=1118720276]
 z_index = 3
-position = Vector2(1216, 464)
+position = Vector2(816, 464)
 script = ExtResource("4_6m4ys")
 evento = ExtResource("ev_g1")
 
@@ -72,6 +73,6 @@ evento = ExtResource("8_4rfe4")
 
 [node name="Guarda2" type="CharacterBody2D" parent="Eventos" unique_id=1609237115]
 z_index = 3
-position = Vector2(1168, 464)
+position = Vector2(704, 464)
 script = ExtResource("4_6m4ys")
 evento = ExtResource("ev_g2")

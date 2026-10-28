@@ -41,12 +41,14 @@ const TEMPO_APARECER: float = 0.5
 		queue_redraw()
 ## Tempo (s) depois de coletar até nascer um novo.
 @export var cooldown: float = 1.0
-## Espalhamento em relação a UM dos itens que já estão no mapa (sorteado, a "referência"):
-## 0 = nasce o mais perto possível dela, 0,5 = aleatório, 1 = o mais longe possível.
+## Espalhamento em relação a UM dos itens que já estão no mapa (sorteado, a "referência", em x0).
+## h = largura do evento (colado sem encostar), hmax = distância de x0 até a ponta mais longe da área.
+## Cada espalhamento vira uma distância: h + e × (hmax − h)  (0 = colado, 1 = na ponta da área).
+## O novo nasce a uma distância sorteada entre a do mínimo e a do máximo, para um lado que caiba
+## (os dois cabendo, sorteia). Ex.: 0 e 0,2 = sempre perto; 0,8 e 1 = sempre longe; 0 e 1 = qualquer lugar.
 ## Sem nenhum item no mapa: nasce num ponto aleatório da área. (Não depende de onde o item foi colhido.)
-@export_range(0.0, 1.0, 0.05) var espalhamento: float = 0.3
-## Quantos pontos aleatórios são sorteados para escolher o melhor.
-const CANDIDATOS: int = 12
+@export_range(0.0, 1.0, 0.05) var espalhamento_min: float = 0.0
+@export_range(0.0, 1.0, 0.05) var espalhamento_max: float = 0.7
 
 var _gt = null
 var _chave: String = ""
@@ -117,7 +119,7 @@ func _renascer(i: int) -> void:
 	for k in range(_dados.pos.size()):
 		if k != i and _dados.renasce[k] < 0.0:   # só as que estão no mapa
 			outras.append(_dados.pos[k])
-	var nova := _ponto_livre(outras)
+	var nova := _no_alcance(_ponto_livre(outras))
 	no.position = nova
 	_dados.pos[i] = nova
 	_dados.renasce[i] = -1.0
@@ -128,24 +130,54 @@ func _renascer(i: int) -> void:
 		no.refresh_event()
 	_efeito_nascer(no)
 
-## Ponto da faixa conforme o espalhamento: sorteia uma referência entre os itens no mapa,
-## sorteia CANDIDATOS pontos e escolhe o mais perto (espalhamento 0) ou o mais longe
-## (espalhamento 1) dela.
+## Ponto da faixa conforme espalhamento_min/max (veja acima).
 func _ponto_livre(outras: Array) -> Vector2:
 	if outras.is_empty():
 		return _ponto_aleatorio()
-	var ancora: Vector2 = outras.pick_random()
-	var peso: float = 2.0 * espalhamento - 1.0   # +1 = quer longe, −1 = quer perto, 0 = tanto faz
-	var melhor := _ponto_aleatorio()
-	var melhor_nota := -INF
-	for k in CANDIDATOS:
-		var p := _ponto_aleatorio()
-		var d := absf(p.x - ancora.x)
-		var nota: float = peso * d + (1.0 - absf(peso)) * randf() * largura   # perto de 0,5 manda o acaso
-		if nota > melhor_nota:
-			melhor_nota = nota
-			melhor = p
-	return melhor
+	var x0: float = (outras.pick_random() as Vector2).x
+	var meia := largura * 0.5
+	var hmax := maxf(meia - x0, x0 + meia)
+	var h := minf(_largura_evento(), hmax)
+	var e_min := minf(espalhamento_min, espalhamento_max)
+	var e_max := maxf(espalhamento_min, espalhamento_max)
+	var d := randf_range(h + e_min * (hmax - h), h + e_max * (hmax - h))
+	var lados: Array = []
+	if x0 + d <= meia + 0.01:
+		lados.append(1.0)
+	if x0 - d >= -meia - 0.01:
+		lados.append(-1.0)
+	var lado: float = lados.pick_random() if not lados.is_empty() else (1.0 if meia - x0 >= x0 + meia else -1.0)
+	return Vector2(x0 + lado * d, randf_range(-variacao_y, variacao_y))
+
+## Largura (px) do sprite da primeira página do evento; 32 se não tiver.
+func _largura_evento() -> float:
+	if evento and not evento.paginas.is_empty() and evento.paginas[0].sprite_frames:
+		var sf: SpriteFrames = evento.paginas[0].sprite_frames
+		var anim: String = evento.paginas[0].animacao
+		if not sf.has_animation(anim):
+			anim = sf.get_animation_names()[0] if not sf.get_animation_names().is_empty() else ""
+		if anim != "" and sf.get_frame_count(anim) > 0 and sf.get_frame_texture(anim, 0):
+			return float(sf.get_frame_texture(anim, 0).get_width())
+	return 32.0
+
+## Faixa (x global) que a bruxa alcança. O mapa_base avisa quando a bruxa fica no centro
+## (ela não chega nas pontas do mapa); itens que cairiam fora vêm para dentro.
+var _alcance: Vector2 = Vector2(-INF, INF)
+
+func limitar_alcance(a: float, b: float) -> void:
+	_alcance = Vector2(a, b)
+	for i in range(_copias.size()):
+		var p: Vector2 = _no_alcance(_dados.pos[i])
+		_dados.pos[i] = p
+		if is_instance_valid(_copias[i]):
+			_copias[i].position = p
+
+func _no_alcance(p: Vector2) -> Vector2:
+	const MARGEM := 24.0
+	if _alcance.y - _alcance.x <= 2.0 * MARGEM:
+		return p
+	var gx: float = clampf(global_position.x + p.x, _alcance.x + MARGEM, _alcance.y - MARGEM)
+	return Vector2(gx - global_position.x, p.y)
 
 func _ponto_aleatorio() -> Vector2:
 	return Vector2(randf_range(-largura * 0.5, largura * 0.5), randf_range(-variacao_y, variacao_y))

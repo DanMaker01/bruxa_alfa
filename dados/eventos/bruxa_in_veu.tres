@@ -1,0 +1,117 @@
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://clw5p0xtbr155"]
+
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="1_ev"]
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="2_pg"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="3_cmd"]
+[ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="4_1vk2m"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="4_cond"]
+[ext_resource type="Script" uid="uid://u1lexc30s8be" path="res://src/dados/comandos/cmd_player.gd" id="5_player"]
+[ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="6_esp"]
+[ext_resource type="Script" uid="uid://dp3mfol3wf88y" path="res://src/dados/comandos/cmd_mover.gd" id="7_mover"]
+[ext_resource type="Script" uid="uid://7xxa8u611ha0" path="res://src/dados/comandos/cmd_mostrar_efeito.gd" id="8_efeito"]
+[ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="9_var"]
+[ext_resource type="SpriteFrames" path="res://animacoes/veu.tres" id="10_veu"]
+
+[sub_resource type="Resource" id="P_vazia"]
+script = ExtResource("2_pg")
+
+[sub_resource type="Resource" id="V_trava"]
+script = ExtResource("5_player")
+
+[sub_resource type="Resource" id="V_esp0"]
+script = ExtResource("6_esp")
+segundos = 0.5
+
+[sub_resource type="Resource" id="V_anda"]
+script = ExtResource("7_mover")
+x = 880.0
+direcao = 2
+
+[sub_resource type="Resource" id="V_esp_porta"]
+script = ExtResource("6_esp")
+
+[sub_resource type="Resource" id="V_magia"]
+script = ExtResource("8_efeito")
+
+[sub_resource type="Resource" id="V_esp_magia"]
+script = ExtResource("6_esp")
+segundos = 0.5
+
+[sub_resource type="Resource" id="V_pula"]
+script = ExtResource("7_mover")
+alvo = 1
+evento = "bruxa_in_veu"
+x = 900.0
+y = 380.0
+manter_y = false
+velocidade = 100000.0
+
+[sub_resource type="Resource" id="V_var"]
+script = ExtResource("9_var")
+variavel = "missao01_veu"
+valor = 2.0
+
+[sub_resource type="Resource" id="V_brilho"]
+script = ExtResource("8_efeito")
+alvo = 1
+evento = "bruxa_in_veu"
+tipo = 1
+altura = 0.0
+esperar = false
+
+[sub_resource type="Resource" id="V_esp_aparece"]
+script = ExtResource("6_esp")
+segundos = 0.6
+
+[sub_resource type="Resource" id="V_voa"]
+script = ExtResource("7_mover")
+alvo = 1
+evento = "bruxa_in_veu"
+x = 944.0
+y = 330.0
+manter_y = false
+velocidade = 60.0
+
+[sub_resource type="Resource" id="V_magia2"]
+script = ExtResource("8_efeito")
+alvo = 1
+evento = "bruxa_in_veu"
+altura = 0.0
+
+[sub_resource type="Resource" id="V_esp1"]
+script = ExtResource("6_esp")
+
+[sub_resource type="Resource" id="V_destrava"]
+script = ExtResource("5_player")
+acao = 1
+
+[sub_resource type="Resource" id="C_veu1"]
+script = ExtResource("4_cond")
+variavel = "missao01_veu"
+valor = 1.0
+
+[sub_resource type="Resource" id="C_sem_guardas"]
+script = ExtResource("4_cond")
+variavel = "missao01_guardas_perseguem"
+
+[sub_resource type="Resource" id="P_cena"]
+script = ExtResource("2_pg")
+condicoes = Array[ExtResource("4_cond")]([SubResource("C_veu1"), SubResource("C_sem_guardas")])
+gatilho = 2
+comandos = Array[ExtResource("3_cmd")]([SubResource("V_trava"), SubResource("V_esp0"), SubResource("V_anda"), SubResource("V_esp_porta"), SubResource("V_magia"), SubResource("V_esp_magia"), SubResource("V_pula"), SubResource("V_var"), SubResource("V_brilho"), SubResource("V_esp_aparece"), SubResource("V_voa"), SubResource("V_magia2"), SubResource("V_esp1"), SubResource("V_destrava")])
+
+[sub_resource type="Resource" id="C_veu2"]
+script = ExtResource("4_cond")
+variavel = "missao01_veu"
+operador = 4
+valor = 2.0
+
+[sub_resource type="Resource" id="P_porta"]
+script = ExtResource("2_pg")
+condicoes = Array[ExtResource("4_cond")]([SubResource("C_veu2")])
+sprite_frames = ExtResource("10_veu")
+
+[resource]
+script = ExtResource("1_ev")
+id = "bruxa_in_veu"
+paginas = Array[ExtResource("2_pg")]([SubResource("P_vazia"), SubResource("P_cena"), SubResource("P_porta")])

@@ -13,7 +13,7 @@ extends Control
 # CONFIGURAÇÃO
 # =============================================================================
 var y_max_T: float = 250.0     # topo do eixo T (cresce sozinho se T passar)
-var y_max_F: float = 1200.0    # topo do eixo F
+var y_max_F: float = 2000.0    # topo do eixo F (fogo máximo ~2000; cresce sozinho se F passar)
 var t_janela: float = 30.0     # Segundos visíveis
 
 # =============================================================================
@@ -68,6 +68,8 @@ func adicionar_ponto(t: float, temp_T: float, temp_F: float, punindo: bool = fal
 	pontos_fatias.append(fatias)
 	if temp_T * 1.1 > y_max_T:
 		y_max_T = ceilf(temp_T * 1.2 / 50.0) * 50.0
+	if temp_F * 1.05 > y_max_F:
+		y_max_F = ceilf(temp_F * 1.15 / 250.0) * 250.0
 
 	var t_min = t - t_janela
 	while pontos_T.size() > 0 and pontos_T[0].x < t_min:
@@ -101,6 +103,7 @@ func reset() -> void:
 	limites = []
 	t_atual = 0.0
 	y_max_T = 250.0
+	y_max_F = 2000.0
 	queue_redraw()
 
 func configurar(cfg: Dictionary) -> void:

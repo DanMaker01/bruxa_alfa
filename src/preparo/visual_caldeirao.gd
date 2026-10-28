@@ -46,8 +46,8 @@ const TREMOR_MAX_PX: float = 3.5       # amplitude em T_VERMELHO_MAX
 const VERMELHO_MAX: float = 0.85       # 0..1: quanto puxa para COR_VERMELHO no máximo
 const COR_VERMELHO := Color(1.0, 0.22, 0.15)
 ## Vermelho de baixo para cima: acima de T_VERMELHO_INICIO o vermelho sobe do fundo e chega ao topo em T_VERMELHO_TOPO.
-const T_VERMELHO_TOPO: float = 300.0   # vermelho chega ao topo
-const T_VERMELHO_INICIO: float = 100.0   # antes 50: avermelhava cedo demais
+const T_VERMELHO_TOPO: float = 200.0   # vermelho chega ao topo, no máximo
+const T_VERMELHO_INICIO: float = 90.0
 const SHADER_RADIAL := """
 shader_type canvas_item;
 uniform float progresso : hint_range(0.0, 1.0) = 0.0;   // 0 = nada, 1 = vermelho até o topo
@@ -57,7 +57,8 @@ uniform float suavidade = 0.3;
 void fragment() {
 	vec4 c = texture(TEXTURE, UV) * COLOR;
 	float frente = 1.0 - progresso;   // UV.y: 0 no topo, 1 no fundo; a frente sobe do fundo
-	float m = smoothstep(frente - suavidade, frente, UV.y) * smoothstep(0.0, 0.8, progresso) * forca;
+	// aparece já no começo (some nos primeiros 10%) e fica mais forte até o máximo no topo
+	float m = smoothstep(frente - suavidade, frente, UV.y) * smoothstep(0.0, 0.1, progresso) * (0.4 + 0.6 * progresso) * forca;
 	c.rgb = mix(c.rgb, c.rgb * cor_quente.rgb * 1.3, m);
 	COLOR = c;
 }
@@ -161,7 +162,7 @@ func boca() -> Vector2:
 ## perda_media: 0 = nada perdido, 1 = tudo perdido (média dos ingredientes).
 func atualizar(sistema: SistemaTermico, delta: float, perda_media: float, _punindo_agora: bool = false) -> void:
 	_t += delta
-	# caldeirão: cor normal até 100 °C; acima disso o vermelho sobe do fundo e chega ao topo em 250 °C
+	# caldeirão: cor normal até 90 °C; acima disso o vermelho sobe do fundo e chega ao topo (máximo) em 200 °C
 	if caldeirao:
 		caldeirao.self_modulate = Color.WHITE
 		if _mat_radial:

@@ -16,6 +16,133 @@
 [ext_resource type="Resource" path="res://dados/falantes/guarda2.tres" id="x2"]
 [ext_resource type="Script" uid="uid://7xxa8u611ha0" path="res://src/dados/comandos/cmd_mostrar_efeito.gd" id="x_efeito"]
 [ext_resource type="Script" uid="uid://bnrknn0lpp5ss" path="res://src/dados/comandos/cmd_teleportar.gd" id="x_tele"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_direcao.gd" id="x3"]
+
+[sub_resource type="Resource" id="Q_1"]
+script = ExtResource("x3")
+alvo = 1
+evento = "castelo_in03_guarda2"
+direcao = 0
+
+[sub_resource type="Resource" id="Q_2"]
+script = ExtResource("4_fa4c3")
+segundos = 0.3
+
+[sub_resource type="Resource" id="Q_3"]
+script = ExtResource("x3")
+alvo = 1
+evento = "castelo_in03_guarda1"
+
+[sub_resource type="Resource" id="Q_4"]
+script = ExtResource("4_fa4c3")
+segundos = 0.35
+
+[sub_resource type="Resource" id="Q_5"]
+script = ExtResource("x3")
+alvo = 1
+evento = "castelo_in03_guarda2"
+
+[sub_resource type="Resource" id="Q_6"]
+script = ExtResource("4_fa4c3")
+segundos = 0.3
+
+[sub_resource type="Resource" id="Q_7"]
+script = ExtResource("x3")
+alvo = 1
+evento = "castelo_in03_guarda1"
+direcao = 0
+
+[sub_resource type="Resource" id="Q_8"]
+script = ExtResource("4_fa4c3")
+segundos = 0.3
+
+[sub_resource type="Resource" id="Q_9"]
+script = ExtResource("x3")
+alvo = 1
+evento = "castelo_in03_guarda2"
+direcao = 0
+
+[sub_resource type="Resource" id="V_esp_a"]
+script = ExtResource("4_fa4c3")
+segundos = 0.5
+
+[sub_resource type="Resource" id="V_esp_b"]
+script = ExtResource("4_fa4c3")
+segundos = 0.5
+
+[sub_resource type="Resource" id="O_1"]
+script = ExtResource("x3")
+alvo = 1
+evento = "castelo_in03_guarda1"
+
+[sub_resource type="Resource" id="O_2"]
+script = ExtResource("4_fa4c3")
+segundos = 0.35
+
+[sub_resource type="Resource" id="O_3"]
+script = ExtResource("x3")
+alvo = 1
+evento = "castelo_in03_guarda2"
+
+[sub_resource type="Resource" id="O_4"]
+script = ExtResource("4_fa4c3")
+segundos = 0.5
+
+[sub_resource type="Resource" id="O_5"]
+script = ExtResource("x3")
+alvo = 1
+evento = "castelo_in03_guarda1"
+direcao = 0
+
+[sub_resource type="Resource" id="O_6"]
+script = ExtResource("4_fa4c3")
+segundos = 0.3
+
+[sub_resource type="Resource" id="O_7"]
+script = ExtResource("x3")
+alvo = 1
+evento = "castelo_in03_guarda2"
+direcao = 0
+
+[sub_resource type="Resource" id="O_8"]
+script = ExtResource("4_fa4c3")
+segundos = 0.25
+
+[sub_resource type="Resource" id="O_9"]
+script = ExtResource("x3")
+alvo = 1
+evento = "castelo_in03_guarda1"
+
+[sub_resource type="Resource" id="O_10"]
+script = ExtResource("4_fa4c3")
+segundos = 0.45
+
+[sub_resource type="Resource" id="O_11"]
+script = ExtResource("x3")
+alvo = 1
+evento = "castelo_in03_guarda2"
+
+[sub_resource type="Resource" id="O_12"]
+script = ExtResource("4_fa4c3")
+segundos = 0.3
+
+[sub_resource type="Resource" id="O_13"]
+script = ExtResource("x3")
+alvo = 1
+evento = "castelo_in03_guarda1"
+direcao = 0
+
+[sub_resource type="Resource" id="O_14"]
+script = ExtResource("4_fa4c3")
+segundos = 0.2
+
+[sub_resource type="Resource" id="E_esp_a"]
+script = ExtResource("4_fa4c3")
+segundos = 0.4
+
+[sub_resource type="Resource" id="E_esp_b"]
+script = ExtResource("4_fa4c3")
+segundos = 1.0
 
 [sub_resource type="Resource" id="Resource_eqdgj"]
 script = ExtResource("1_77afe")
@@ -95,6 +222,7 @@ metadata/_custom_type_script = "uid://u1lexc30s8be"
 
 [sub_resource type="Resource" id="Resource_fa4c3"]
 script = ExtResource("x_efeito")
+esperar = false
 metadata/_custom_type_script = "uid://8liac65hmnnq"
 
 [sub_resource type="Resource" id="Resource_ui7tj"]
@@ -106,16 +234,16 @@ valor = 1.0
 script = ExtResource("5_kglhu")
 alvo = 1
 evento = "castelo_in03_guarda1"
-x = 640
-velocidade = 200.0
+x = 544
+velocidade = 130.0
 esperar = false
 
 [sub_resource type="Resource" id="Resource_261ie"]
 script = ExtResource("5_kglhu")
 alvo = 1
 evento = "castelo_in03_guarda2"
-x = 512
-velocidade = 100.0
+x = 432
+velocidade = 130.0
 
 [sub_resource type="Resource" id="Resource_6gxk4"]
 script = ExtResource("9_6gxk4")
@@ -133,10 +261,12 @@ metadata/_custom_type_script = "uid://8liac65hmnnq"
 
 [sub_resource type="Resource" id="Resource_ms7j5"]
 script = ExtResource("4_fa4c3")
+segundos = 0.5
 metadata/_custom_type_script = "uid://dkw5y5gsrn515"
 
 [sub_resource type="Resource" id="Resource_vhbs4"]
 script = ExtResource("11_ms7j5")
+esperar = false
 metadata/_custom_type_script = "uid://7c1614u5xl4b"
 
 [sub_resource type="Resource" id="Resource_2wpu5"]
@@ -199,7 +329,7 @@ variavel = "missao01_veu"
 script = ExtResource("1_77afe")
 condicoes = Array[ExtResource("3_kfwn1")]([SubResource("Resource_y53hh"), SubResource("R_veu0")])
 gatilho = 2
-comandos = Array[ExtResource("2_nuod5")]([SubResource("F_trava"), SubResource("Resource_fenex"), SubResource("Resource_sjcg8"), SubResource("Resource_trixx"), SubResource("Resource_c5goq"), SubResource("Resource_u3okc"), SubResource("Resource_tss05"), SubResource("Resource_830pm"), SubResource("Resource_mjxjf"), SubResource("Resource_77afe"), SubResource("Resource_nuod5"), SubResource("Resource_aeogb"), SubResource("Resource_2l5rc"), SubResource("Resource_kfwn1"), SubResource("Resource_kglhu"), SubResource("Resource_fa4c3"), SubResource("Resource_ui7tj"), SubResource("Resource_h5phe"), SubResource("Resource_261ie"), SubResource("Resource_6gxk4"), SubResource("Resource_lgiqq"), SubResource("Resource_ms7j5"), SubResource("Resource_vhbs4"), SubResource("Resource_2wpu5"), SubResource("F_tele"), SubResource("F_mostra"), SubResource("F_esp"), SubResource("F_fade"), SubResource("F_destrava"), SubResource("F_esp2"), SubResource("F_msg1"), SubResource("F_msg2"), SubResource("F_var")])
+comandos = Array[ExtResource("2_nuod5")]([SubResource("F_trava"), SubResource("Resource_fenex"), SubResource("Resource_sjcg8"), SubResource("Resource_trixx"), SubResource("Resource_c5goq"), SubResource("V_esp_a"), SubResource("Resource_u3okc"), SubResource("V_esp_b"), SubResource("Resource_tss05"), SubResource("Resource_830pm"), SubResource("Resource_mjxjf"), SubResource("Resource_77afe"), SubResource("Resource_nuod5"), SubResource("Resource_aeogb"), SubResource("Resource_2l5rc"), SubResource("Resource_kfwn1"), SubResource("Resource_fa4c3"), SubResource("E_esp_a"), SubResource("Resource_kglhu"), SubResource("E_esp_b"), SubResource("Resource_ui7tj"), SubResource("Resource_h5phe"), SubResource("Resource_261ie"), SubResource("Resource_6gxk4"), SubResource("Resource_lgiqq"), SubResource("O_1"), SubResource("O_2"), SubResource("O_3"), SubResource("O_4"), SubResource("O_5"), SubResource("O_6"), SubResource("O_7"), SubResource("O_8"), SubResource("O_9"), SubResource("O_10"), SubResource("O_11"), SubResource("O_12"), SubResource("O_13"), SubResource("O_14"), SubResource("Resource_ms7j5"), SubResource("Resource_vhbs4"), SubResource("Q_1"), SubResource("Q_2"), SubResource("Q_3"), SubResource("Q_4"), SubResource("Q_5"), SubResource("Q_6"), SubResource("Q_7"), SubResource("Q_8"), SubResource("Q_9"), SubResource("Resource_2wpu5"), SubResource("F_tele"), SubResource("F_mostra"), SubResource("F_esp"), SubResource("F_fade"), SubResource("F_destrava"), SubResource("F_esp2"), SubResource("F_msg1"), SubResource("F_msg2"), SubResource("F_var")])
 metadata/_custom_type_script = "uid://gdfc3xl4mcr4"
 
 [resource]

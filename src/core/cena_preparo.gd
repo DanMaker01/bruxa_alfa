@@ -222,7 +222,7 @@ func _debug_caldeirao() -> bool:
 
 func _configurar_grafico() -> void:
 	if grafico and grafico.has_method("configurar"):
-		grafico.configurar({"y_max_T": 250.0, "y_max_F": 1200.0, "t_janela": 30.0})
+		grafico.configurar({"y_max_T": 250.0, "y_max_F": 2000.0, "t_janela": 30.0})
 
 func _conectar_botoes() -> void:
 	if botao_fogo:

@@ -6,6 +6,9 @@ enum Tipo { FADE_OUT, FADE_IN }
 
 @export var tipo: Tipo = Tipo.FADE_OUT
 @export var tempo: float = 1.0
+## Ligado: o evento espera o fade terminar. Desligado: o fade corre e os comandos seguintes
+## rodam junto (ex.: guardas olhando em volta enquanto escurece).
+@export var esperar: bool = true
 
 func to_dict() -> Dictionary:
 	return {"nome": "fade_out" if tipo == Tipo.FADE_OUT else "fade_in", "args": [tempo]}
@@ -15,6 +18,9 @@ func executar(interp, ev) -> int:
 	var metodo := "fade_out" if tipo == Tipo.FADE_OUT else "fade_in"
 	if not gm or not gm.has_method(metodo):
 		interp.falhar(ev, self, "GameManager sem " + metodo)
+		return AVANCAR
+	if not esperar:
+		gm.call(metodo, tempo)
 		return AVANCAR
 	ev.pause("fade")
 	gm.call(metodo, tempo)

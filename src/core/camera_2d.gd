@@ -7,6 +7,12 @@ extends Camera2D
 ## Desligado por enquanto (readme: "PROBLEMA" da câmera nas bordas). true = câmera
 ## desliza até a bruxa e desacelera nas bordas; false = segue seco e para seco.
 const SUAVIZAR := false
+## Freio suave na borda (px): nos últimos BORDA_SUAVE px antes de a câmera chegar no limite,
+## ela vai desacelerando e só para de vez quando a bruxa chega na ponta do mapa.
+## É uma conta direta da posição da bruxa (sem tempo), então nunca "se ajeita" ao entrar no mapa.
+## Todas as camadas de parallax seguem a câmera, então também freiam juntas e nunca mostram
+## área fora do mapa. 0 = desliga (para seco). Mínimo útil: metade da largura da tela / 2.
+const BORDA_SUAVE: float = 0.0   # desligado: mexia na velocidade e quebrava o parallax
 
 # ===== ESTADO =====
 var is_following_player: bool = true
@@ -33,6 +39,39 @@ func _ready():
 	limit_smoothed = SUAVIZAR
 	global_position = player.global_position
 	reset_smoothing()
+
+## X da câmera para a bruxa em x = p: igual a p no meio do mapa; perto das pontas desacelera
+## (curva c·t² + d·t³) até parar no limite quando a bruxa chega na ponta.
+func _x_suave(p: float) -> float:
+	var meia: float = get_viewport_rect().size.x * 0.5 / zoom.x
+	var a := float(limit_left) + meia     # centro da câmera encostada na esquerda
+	var b := float(limit_right) - meia    # ... e na direita
+	if b < a:
+		return (a + b) * 0.5
+	var m: float = maxf(BORDA_SUAVE, meia * 0.5)
+	m = minf(m, (b - a) * 0.5)
+	if BORDA_SUAVE <= 0.0 or m <= 0.0:
+		return clampf(p, a, b)
+	if p < a + m:
+		return a + m - _curva(a + m - p, m, meia)
+	if p > b - m:
+		return b - m + _curva(p - (b - m), m, meia)
+	return p
+
+## Quanto a câmera anda (0..m) quando a bruxa anda "dist" a partir do começo da faixa de freio.
+## A faixa da bruxa tem m + meia px; a da câmera, m. Encaixa com inclinação 1 no começo e 0 na ponta.
+static func _curva(dist: float, m: float, meia: float) -> float:
+	var L := m + meia
+	var u := clampf(1.0 - dist / L, 0.0, 1.0)   # 1 no começo da faixa, 0 na ponta do mapa
+	var r := minf(L / m, 3.0)                   # inclinação no começo (> 3 faria a câmera voltar; mapa pequeno)
+	var c := 3.0 - r
+	var d := r - 2.0
+	var g := c * u * u + d * u * u * u          # g(1) = 1, g'(1) = r, g(0) = g'(0) = 0
+	return m * (1.0 - g)
+
+## Onde a câmera fica quando segue a bruxa.
+func _alvo_bruxa() -> Vector2:
+	return Vector2(_x_suave(player.global_position.x), player.global_position.y)
 
 ## Ponto mais próximo de p que a câmera consegue mostrar (respeita os limites).
 func _dentro(p: Vector2) -> Vector2:
@@ -68,12 +107,12 @@ func resetar_posicao_camera(tempo: float = 0.0):
 	_kill_move_tween()
 	if tempo <= 0.0:
 		is_following_player = true
-		global_position = player.global_position
+		global_position = _alvo_bruxa()
 		reset_smoothing()
 	else:
 		global_position = _dentro(global_position)
 		_move_tween = create_tween()
-		_move_tween.tween_property(self, "global_position", _dentro(player.global_position), tempo)
+		_move_tween.tween_property(self, "global_position", _dentro(_alvo_bruxa()), tempo)
 		_move_tween.tween_callback(func(): is_following_player = true)
 
 # ===== TELEPORTE =====
@@ -81,7 +120,7 @@ func resetar_posicao_camera(tempo: float = 0.0):
 func snap_to_player():
 	_kill_move_tween()
 	is_following_player = true
-	global_position = player.global_position
+	global_position = _alvo_bruxa()
 	reset_smoothing()
 
 func _kill_move_tween():
@@ -99,7 +138,7 @@ func tremer_camera(intensidade: float, velocidade: float, duracao: float):
 # ===== PROCESSAMENTO =====
 func _process(delta):
 	if is_following_player:
-		global_position = player.global_position
+		global_position = _alvo_bruxa()
 
 	if shake_duration > 0.0:
 		shake_timer += delta

@@ -89,11 +89,18 @@ static func _brilhos(tree: SceneTree, no, c: Color, alt: float) -> void:
 	rampa.set_color(1, Color(c, 0.0))
 	rampa.add_point(0.3, c)
 	p.color_ramp = rampa
-	p.z_index = 20
-	no.add_child(p)
-	p.position = Vector2(0, -alt)
+	_por_no_mapa(p, no, Vector2(0, -alt))
 	p.emitting = true
 	tree.create_timer(p.lifetime + 0.3).timeout.connect(p.queue_free)
+
+## Põe as partículas no mapa, onde o alvo está (não como filhas dele): assim continuam
+## aparecendo se o alvo sumir logo depois (ex.: a bruxa some com o Pó de Retorno).
+static func _por_no_mapa(p: CPUParticles2D, no: Node2D, desloc: Vector2) -> void:
+	p.z_index = 20
+	p.z_as_relative = false
+	var pai: Node = no.get_parent() if no.get_parent() else no
+	pai.add_child(p)
+	p.global_position = no.global_position + desloc
 
 static func _fumaca(tree: SceneTree, no, alt: float) -> void:
 	if not (no is Node2D):
@@ -116,9 +123,7 @@ static func _fumaca(tree: SceneTree, no, alt: float) -> void:
 	rampa.set_color(0, Color(0.85, 0.85, 0.85, 0.9))
 	rampa.set_color(1, Color(0.5, 0.5, 0.55, 0.0))
 	p.color_ramp = rampa
-	p.z_index = 20
-	no.add_child(p)
-	p.position = Vector2(0, -alt * 0.6)
+	_por_no_mapa(p, no, Vector2(0, -alt * 0.6))
 	p.emitting = true
 	tree.create_timer(p.lifetime + 0.3).timeout.connect(p.queue_free)
 

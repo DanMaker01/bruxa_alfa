@@ -8,6 +8,9 @@ const FRICTION: float = 600.0		 # Desaceleração (px/s²)
 const FLIP_THRESHOLD: float = 0.5
 ## Multiplica velocidade e aceleração (1 = normal; o menu de debug usa 2).
 var multiplicador_velocidade: float = 1.0
+## Faixa de x onde a bruxa pode andar (o mapa_base escreve; infinito = sem limite).
+## Fora dela pode voltar para dentro, mas não ir mais para fora.
+var limite_x: Vector2 = Vector2(-INF, INF)
 
 func velocidade_max() -> float:
 	return MAX_SPEED * multiplicador_velocidade
@@ -134,7 +137,9 @@ func _physics_process(delta: float) -> void:
 				velocity.x = 0
 	
 	# 3. APLICA O MOVIMENTO
+	var x_antes: float = global_position.x
 	move_and_slide()
+	_respeitar_limite(x_antes)
 	
 	#DEBUG, saber com quem colidiu
 	# for i in get_slide_collision_count():
@@ -243,3 +248,14 @@ func _find_event(node: Node, target: String) -> Node:
 		if found:
 			return found
 	return null
+
+## Não deixa passar de limite_x (se já estava fora, só não vai mais para fora).
+func _respeitar_limite(x_antes: float) -> void:
+	var piso: float = minf(x_antes, limite_x.x)
+	var teto: float = maxf(x_antes, limite_x.y)
+	if global_position.x < piso:
+		global_position.x = piso
+		velocity.x = 0.0
+	elif global_position.x > teto:
+		global_position.x = teto
+		velocity.x = 0.0
