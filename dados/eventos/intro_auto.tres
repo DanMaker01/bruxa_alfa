@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="12_n0agp"]
 [ext_resource type="Script" uid="uid://c8c7nvlca7oyd" path="res://src/dados/comandos/cmd_legenda.gd" id="13_leg"]
 [ext_resource type="Script" uid="uid://c57bkkyuga7b" path="res://src/dados/comandos/cmd_pular_com_toque.gd" id="14_pul"]
+[ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="15_6xfj1"]
 [ext_resource type="Script" uid="uid://crwb7mjauibuo" path="res://src/dados/comandos/cmd_label.gd" id="15_lab"]
 [ext_resource type="SpriteFrames" path="res://animacoes/intro_fundo.tres" id="16_fundo"]
 [ext_resource type="Script" uid="uid://ugvh8ya5s1gp" path="res://src/dados/comandos/cmd_camera.gd" id="20_cam"]
@@ -126,6 +127,10 @@ direcao = 1
 script = ExtResource("9_8cojv")
 acao = 3
 
+[sub_resource type="Resource" id="I_pular2"]
+script = ExtResource("14_pul")
+label = "casa"
+
 [sub_resource type="Resource" id="I_cam0"]
 script = ExtResource("20_cam")
 posicao = Vector2(960, 480)
@@ -148,6 +153,10 @@ tempo = 2.0
 script = ExtResource("4_ghp5v")
 segundos = 9.0
 
+[sub_resource type="Resource" id="I_lab_casa"]
+script = ExtResource("15_lab")
+nome = "casa"
+
 [sub_resource type="Resource" id="I_fout1"]
 script = ExtResource("6_qvtfd")
 tempo = 1.5
@@ -159,7 +168,7 @@ segundos = 0.5
 [sub_resource type="Resource" id="Resource_cy5o6"]
 script = ExtResource("7_bfmu5")
 mapa = "res://mapas/mapa_bruxa_in.tscn"
-posicao = Vector2(240, 450)
+posicao = Vector2(240, 490)
 direcao = 2
 
 [sub_resource type="Resource" id="Resource_cdvw3"]
@@ -173,7 +182,7 @@ acao = 2
 script = ExtResource("1_4j387")
 gatilho = 2
 sprite_frames = ExtResource("16_fundo")
-comandos = Array[ExtResource("2_ku1uc")]([SubResource("Resource_4j387"), SubResource("Resource_pular"), SubResource("Resource_subir"), SubResource("Resource_ghp5v"), SubResource("Resource_leg0"), SubResource("Resource_leg1"), SubResource("Resource_leg2"), SubResource("Resource_leg3"), SubResource("Resource_6xfj1"), SubResource("Resource_leg4"), SubResource("Resource_7qo38"), SubResource("Resource_uw0a6"), SubResource("Resource_sauaa"), SubResource("Resource_fim"), SubResource("Resource_82dll"), SubResource("Resource_qvtfd"), SubResource("Resource_0fsx2"), SubResource("I_tp_out"), SubResource("I_sumir"), SubResource("I_cam0"), SubResource("Resource_5hi55"), SubResource("I_cam1"), SubResource("I_fin1"), SubResource("I_esp1"), SubResource("I_fout1"), SubResource("I_esp2"), SubResource("Resource_cy5o6"), SubResource("Resource_cdvw3"), SubResource("Resource_d27pl")])
+comandos = Array[ExtResource("2_ku1uc")]([SubResource("Resource_4j387"), SubResource("Resource_pular"), SubResource("Resource_subir"), SubResource("Resource_ghp5v"), SubResource("Resource_leg0"), SubResource("Resource_leg1"), SubResource("Resource_leg2"), SubResource("Resource_leg3"), SubResource("Resource_6xfj1"), SubResource("Resource_leg4"), SubResource("Resource_7qo38"), SubResource("Resource_uw0a6"), SubResource("Resource_sauaa"), SubResource("Resource_fim"), SubResource("Resource_82dll"), SubResource("Resource_qvtfd"), SubResource("Resource_0fsx2"), SubResource("I_tp_out"), SubResource("I_sumir"), SubResource("I_pular2"), SubResource("I_cam0"), SubResource("Resource_5hi55"), SubResource("I_cam1"), SubResource("I_fin1"), SubResource("I_esp1"), SubResource("I_lab_casa"), SubResource("I_fout1"), SubResource("I_esp2"), SubResource("Resource_cy5o6"), SubResource("Resource_cdvw3"), SubResource("Resource_d27pl")])
 
 [sub_resource type="Resource" id="Resource_1rxl6"]
 script = ExtResource("11_m57lc")

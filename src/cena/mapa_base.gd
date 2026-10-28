@@ -161,6 +161,9 @@ func _on_event_triggered(evento: EventoData, origem: Node = null):
 # Também nunca deixa aparecer a ponta de uma imagem: o deslocamento é limitado ao
 # tamanho dela (camadas com repetição/loop não têm limite).
 # Na tela: x = x_local + scroll_offset.x - fator * (borda esquerda da câmera).
+## Desligado por enquanto (readme: "PROBLEMA" da câmera nas bordas): as camadas
+## param junto com a câmera. true = fundo/frente continuam andando na borda.
+const PARALLAX_NA_BORDA := false
 const PARALLAX_SUAVE := 4.0   # igual ao position_smoothing_speed da câmera
 var _camadas: Array = []
 var _centro_virtual: float = NAN
@@ -168,6 +171,8 @@ var _centro_virtual: float = NAN
 func _preparar_parallax() -> void:
 	_camadas.clear()
 	_centro_virtual = NAN
+	if not PARALLAX_NA_BORDA:
+		return
 	for c in get_children():
 		if c is Parallax2D and not is_equal_approx(c.scroll_scale.x, 1.0):
 			var ext := _extensao_x(c)

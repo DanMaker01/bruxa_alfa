@@ -47,7 +47,22 @@ func executar(interp, ev) -> int:
 			ev.resume_and_advance())
 	return MANTER
 
+## Mostra um balão em "no" (sem evento rodando: usado pela rota dos eventos). Devolve o tween.
+static func mostrar(no: Node2D, emocao_: int, duracao_: float = 1.2, altura_: float = 150.0) -> Tween:
+	var balao := _criar_balao(emocao_)
+	no.add_child(balao)
+	balao.position = Vector2(0, -altura_)
+	var tw := balao.create_tween()
+	tw.tween_property(balao, "scale", Vector2.ONE, 0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tw.tween_interval(maxf(duracao_ - 0.4, 0.1))
+	tw.tween_property(balao, "modulate:a", 0.0, 0.22)
+	tw.tween_callback(balao.queue_free)
+	return tw
+
 func _criar() -> Node2D:
+	return _criar_balao(emocao)
+
+static func _criar_balao(emocao_: int) -> Node2D:
 	var raiz := Node2D.new()
 	raiz.z_index = 30
 	raiz.scale = Vector2(0.2, 0.2)
@@ -62,9 +77,9 @@ func _criar() -> Node2D:
 	st.content_margin_right = 14
 	painel.add_theme_stylebox_override("panel", st)
 	var rot := Label.new()
-	rot.text = SIMBOLOS[emocao]
+	rot.text = SIMBOLOS[emocao_]
 	rot.add_theme_font_size_override("font_size", 34)
-	rot.add_theme_color_override("font_color", CORES[emocao])
+	rot.add_theme_color_override("font_color", CORES[emocao_])
 	rot.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	painel.add_child(rot)
 	raiz.add_child(painel)

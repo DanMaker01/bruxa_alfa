@@ -4,6 +4,10 @@ extends Camera2D
 # A desaceleração na borda vem do próprio Godot: position_smoothing + limit_smoothed.
 # Fundo e frente continuarem andando na borda é feito no mapa_base (_parallax_na_borda).
 
+## Desligado por enquanto (readme: "PROBLEMA" da câmera nas bordas). true = câmera
+## desliza até a bruxa e desacelera nas bordas; false = segue seco e para seco.
+const SUAVIZAR := false
+
 # ===== ESTADO =====
 var is_following_player: bool = true
 var target_position: Vector2 = Vector2.ZERO
@@ -25,7 +29,8 @@ func _ready():
 	# A câmera é filha do Player, mas com top_level ela NÃO herda o movimento dele.
 	# Assim mover_camera fica parada no ponto pedido; seguindo, _process copia o player.
 	top_level = true
-	limit_smoothed = true
+	position_smoothing_enabled = SUAVIZAR
+	limit_smoothed = SUAVIZAR
 	global_position = player.global_position
 	reset_smoothing()
 

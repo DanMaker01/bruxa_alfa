@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://phmwdet0nd7d" path="res://src/dados/comandos/cmd_end.gd" id="14_x"]
 [ext_resource type="Resource" path="res://dados/personalidades/princesa.tres" id="15_x"]
 [ext_resource type="Script" uid="uid://dqed4jkru1owa" path="res://src/dados/comandos/cmd_classificar_personalidade.gd" id="16_x"]
+[ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="17_u1m2q"]
 [ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="17_x"]
 [ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="22_x"]
 [ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="23_x"]

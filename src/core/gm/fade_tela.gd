@@ -30,6 +30,9 @@ func _rodar(tipo: String, de: float, ate: float, tempo: float) -> void:
 		push_warning("[Fade] nó Fade não encontrado")
 		_emitir(tipo)
 		return
+	# começa de onde a tela está (um fade interrompido no meio não pisca)
+	if fade_rect.visible:
+		de = fade_rect.color.a
 	_interromper()
 	_tipo = tipo
 	fade_rect.color = Color(0, 0, 0, de)

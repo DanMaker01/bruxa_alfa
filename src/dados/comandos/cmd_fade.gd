@@ -25,11 +25,14 @@ func executar(interp, ev) -> int:
 # dentro de fade_out/fade_in) não é confundido com o nosso. Sem tween rodando
 # (ex.: sem nó Fade), o fade já terminou na hora.
 func _esperar_fim(interp, ev, gm) -> void:
+	# índice deste comando: se o evento pular para outro lugar (ex.: toque que pula a
+	# cena) enquanto espera, este fade não pode "avançar" o comando que estiver lá.
+	var meu_indice: int = ev.current_index
 	if gm.has_method("is_fading") and gm.is_fading():
 		var fim := [false]
 		var sinal: Signal = gm.fade_out_completed if tipo == Tipo.FADE_OUT else gm.fade_in_completed
 		sinal.connect(func(): fim[0] = true, CONNECT_ONE_SHOT)
 		while not fim[0]:
 			await interp.get_tree().process_frame
-	if not ev.finished and ev.pause_reason == "fade":
+	if not ev.finished and ev.pause_reason == "fade" and ev.current_index == meu_indice:
 		ev.resume_and_advance()

@@ -423,6 +423,7 @@ func move_to(target_x: float, target_y: float, speed: float = 100.0, dir: String
 		if callback.is_valid(): callback.call(false)
 		return
 	
+	_rota_cancelar_passo()   # comando Mover manda: a rota pausa e larga o passo atual
 	move_target = Vector2(target_x, target_y)
 	move_speed = speed
 	move_direction = dir
@@ -438,6 +439,7 @@ func move_to(target_x: float, target_y: float, speed: float = 100.0, dir: String
 func _physics_process(delta):
 	if is_moving:
 		_process_movement(delta)
+	_rota_process(delta)
 
 func _process_movement(delta):
 	if not is_moving:
@@ -599,3 +601,244 @@ func get_event_name() -> String:
 func is_running() -> bool:
 	"""Retorna se o evento está em execução"""
 	return is_event_running
+
+
+# ===== MOVIMENTO AUTÔNOMO (rota da página) =====
+# PaginaData.movimento = ROTA: o evento executa os PassoRota da página em ordem, sozinho.
+# Pausa enquanto a própria página roda (clique/toque) e enquanto um comando Mover o move.
+var _rota_pagina: int = -1
+var _rota_i: int = 0
+var _rota_espera: float = 0.0
+var _rota_andando: bool = false
+var _rota_alvo_x: float = 0.0
+var _rota_vel: float = 80.0
+var _rota_fixa: bool = false
+var _rota_fim: bool = false          # rota sem repetir terminou
+var _rota_origem_x: float = NAN      # para o "rota_raio"
+var _rota_anim_base: String = ""     # animação parada (passo ANIMACAO)
+var _rota_pulo: Dictionary = {}      # {de, para, dur, t, h}
+
+func _rota_reiniciar(p: PaginaData) -> void:
+	_rota_pagina = active_page_index
+	_rota_i = 0
+	_rota_espera = 0.0
+	_rota_fim = false
+	_rota_fixa = false
+	_rota_anim_base = ""
+	_rota_vel = p.rota_velocidade if p else 80.0
+	_rota_cancelar_passo()
+	if is_nan(_rota_origem_x):
+		_rota_origem_x = global_position.x
+
+func _rota_cancelar_passo() -> void:
+	if _rota_andando:
+		_rota_andando = false
+		_rota_anim("")
+	if not _rota_pulo.is_empty():
+		_rota_pulo = {}
+		_rota_sprite_y(0.0)
+		_rota_anim("")
+
+func _rota_process(delta: float) -> void:
+	var p := _get_active_page_data()
+	if p == null or p.movimento != PaginaData.Movimento.ROTA or p.rota.is_empty():
+		if _rota_pagina != -1:
+			_rota_cancelar_passo()
+			_rota_pagina = -1
+		return
+	if _rota_pagina != active_page_index:
+		_rota_reiniciar(p)
+	if not _rota_pulo.is_empty():   # pulo começado termina mesmo com a rota em pausa
+		_rota_pular(delta)
+		return
+	if _rota_fim or is_moving:
+		return
+	if trigger != "parallel" and interpreter and interpreter.has_method("is_page_running") \
+			and interpreter.is_page_running(get_event_name(), active_page_index, chave_self()):
+		_rota_cancelar_passo()
+		return
+	if _rota_andando:
+		_rota_andar(delta, p)
+		return
+	if _rota_espera > 0.0:
+		_rota_espera -= delta
+		return
+	_rota_proximo(p)
+
+## Executa passos instantâneos até achar um que leva tempo (andar, pular, esperar...).
+func _rota_proximo(p: PaginaData) -> void:
+	for _g in range(p.rota.size() + 1):
+		if _rota_i >= p.rota.size():
+			if not p.rota_repetir:
+				_rota_fim = true
+				return
+			_rota_i = 0
+		var passo: PassoRota = p.rota[_rota_i]
+		_rota_i += 1
+		if passo == null or randf() > passo.chance:
+			continue
+		if _rota_executar(passo, p):
+			return
+
+## true = o passo leva tempo (a rota espera ele acabar).
+func _rota_executar(passo: PassoRota, p: PaginaData) -> bool:
+	match passo.tipo:
+		PassoRota.Tipo.MOVER:
+			return _rota_iniciar_andar(passo.distancia, true, p)
+		PassoRota.Tipo.FRENTE:
+			return _rota_iniciar_andar(_rota_lado() * passo.distancia, true, p)
+		PassoRota.Tipo.TRAS:
+			return _rota_iniciar_andar(-_rota_lado() * passo.distancia, false, p)
+		PassoRota.Tipo.ALEATORIO:
+			var d: float = passo.distancia * randf_range(0.5, 1.0) * (1.0 if randf() < 0.5 else -1.0)
+			return _rota_iniciar_andar(d, true, p)
+		PassoRota.Tipo.PULAR:
+			return _rota_iniciar_pulo(_rota_lado() * passo.distancia, passo.altura, p)
+		PassoRota.Tipo.OLHAR:
+			_rota_olhar(passo.olhar)
+		PassoRota.Tipo.FIXAR_DIRECAO:
+			_rota_fixa = passo.fixar
+		PassoRota.Tipo.ESPERAR:
+			_rota_espera = randf_range(passo.segundos, passo.segundos_max) if passo.segundos_max > passo.segundos else passo.segundos
+			return true
+		PassoRota.Tipo.BALAO:
+			CmdBalao.mostrar(self, passo.emocao, passo.segundos, _rota_altura_sprite() * 0.5 + 24.0)
+			_rota_espera = passo.segundos
+			return true
+		PassoRota.Tipo.VELOCIDADE:
+			_rota_vel = maxf(passo.velocidade, 1.0)
+		PassoRota.Tipo.ANIMACAO:
+			_rota_anim_base = passo.animacao
+			_rota_anim("")
+	return false
+
+## dx limitado pelo rota_raio (0 = sem limite).
+func _rota_limitar(dx: float, p: PaginaData) -> float:
+	if p.rota_raio <= 0.0:
+		return dx
+	var x: float = global_position.x
+	return clampf(x + dx, _rota_origem_x - p.rota_raio, _rota_origem_x + p.rota_raio) - x
+
+func _rota_iniciar_andar(dx: float, virar: bool, p: PaginaData) -> bool:
+	dx = _rota_limitar(dx, p)
+	if absf(dx) < 1.0:
+		return false
+	if virar and not _rota_fixa:
+		_rota_set_dir("dir" if dx > 0.0 else "esq")
+	if p.rota_pular_se_bloqueado and _rota_bloqueado(signf(dx) * 2.0):
+		return false
+	_rota_alvo_x = global_position.x + dx
+	_rota_andando = true
+	_rota_anim("andar")
+	return true
+
+func _rota_andar(delta: float, p: PaginaData) -> void:
+	var falta: float = _rota_alvo_x - global_position.x
+	var passo: float = _rota_vel * delta
+	if absf(falta) <= passo:
+		global_position.x = _rota_alvo_x
+		_rota_cancelar_passo()
+		return
+	var dx: float = signf(falta) * passo
+	if _rota_bloqueado(dx):
+		if p.rota_pular_se_bloqueado:
+			_rota_cancelar_passo()   # desiste deste passo; senão fica tentando
+		return
+	global_position.x += dx
+
+func _rota_iniciar_pulo(dx: float, h: float, p: PaginaData) -> bool:
+	dx = _rota_limitar(dx, p)
+	if absf(dx) >= 1.0:
+		if not _rota_fixa:
+			_rota_set_dir("dir" if dx > 0.0 else "esq")
+		if _rota_bloqueado(dx):
+			if p.rota_pular_se_bloqueado:
+				return false
+			_rota_i -= 1           # tenta de novo daqui a pouco
+			_rota_espera = 0.3
+			return true
+	var x: float = global_position.x
+	_rota_pulo = {"de": x, "para": x + dx, "dur": maxf(0.35, absf(dx) / _rota_vel), "t": 0.0, "h": h}
+	_rota_anim("pular")
+	return true
+
+func _rota_pular(delta: float) -> void:
+	_rota_pulo["t"] += delta
+	var k: float = minf(_rota_pulo["t"] / _rota_pulo["dur"], 1.0)
+	global_position.x = lerpf(_rota_pulo["de"], _rota_pulo["para"], k)
+	_rota_sprite_y(-4.0 * _rota_pulo["h"] * k * (1.0 - k))
+	if k >= 1.0:
+		_rota_pulo = {}
+		_rota_sprite_y(0.0)
+		_rota_anim("")
+
+## Algo sólido no caminho? A colisão do evento fica na página (StaticBody2D), então
+## testa o shape dela. Página passável (colisão desligada) nunca é bloqueada.
+func _rota_bloqueado(dx: float) -> bool:
+	var pg = _get_active_page_node()
+	var cs: CollisionShape2D = pg.get("collision_shape") if pg else null
+	if cs == null or cs.shape == null or cs.disabled:
+		return false
+	var q := PhysicsShapeQueryParameters2D.new()
+	q.shape = cs.shape
+	q.transform = cs.global_transform
+	q.motion = Vector2(dx, 0.0)
+	q.collision_mask = pg.collision_mask
+	q.exclude = [pg.get_rid(), get_rid()]
+	var r: PackedFloat32Array = get_world_2d().direct_space_state.cast_motion(q)
+	return r.size() > 0 and r[0] < 1.0
+
+func _rota_olhar(o: int) -> void:
+	var player = get_node_or_null("/root/Main/Mundo/Player")
+	var atual := _rota_dir()
+	match o:
+		PassoRota.Olhar.ESQ: _rota_set_dir("esq")
+		PassoRota.Olhar.DIR: _rota_set_dir("dir")
+		PassoRota.Olhar.INVERTER: _rota_set_dir("dir" if atual == "esq" else "esq")
+		PassoRota.Olhar.ALEATORIO: _rota_set_dir("esq" if randf() < 0.5 else "dir")
+		PassoRota.Olhar.PARA_BRUXA, PassoRota.Olhar.LONGE_DA_BRUXA:
+			if player:
+				var esq: bool = player.global_position.x < global_position.x
+				if o == PassoRota.Olhar.LONGE_DA_BRUXA:
+					esq = not esq
+				_rota_set_dir("esq" if esq else "dir")
+
+func _rota_dir() -> String:
+	var pg = _get_active_page_node()
+	return pg.get_direcao() if pg and pg.has_method("get_direcao") else "centro"
+
+func _rota_lado() -> float:
+	return -1.0 if _rota_dir() == "esq" else 1.0
+
+func _rota_set_dir(lado: String) -> void:
+	var pg = _get_active_page_node()
+	if pg and pg.has_method("set_direcao"):
+		pg.set_direcao(lado)
+
+## Troca a animação se ela existir no SpriteFrames ("" = a parada da rota/página).
+func _rota_anim(nome: String) -> void:
+	var pg = _get_active_page_node()
+	if pg == null or not pg.has_method("set_animation"):
+		return
+	if nome != "" and pg.set_animation(nome):
+		return
+	pg.set_animation(_rota_anim_base)
+
+## Sobe/desce só o desenho (o corpo e a colisão ficam no chão).
+func _rota_sprite_y(y: float) -> void:
+	var pg = _get_active_page_node()
+	var s = pg.get("animated_sprite") if pg else null
+	if s == null:
+		return
+	if not s.has_meta("rota_y0"):
+		s.set_meta("rota_y0", s.position.y)
+	s.position.y = s.get_meta("rota_y0") + y
+
+func _rota_altura_sprite() -> float:
+	var pg = _get_active_page_node()
+	var s = pg.get("animated_sprite") if pg else null
+	if s and s.sprite_frames and s.sprite_frames.has_animation(s.animation):
+		var tex = s.sprite_frames.get_frame_texture(s.animation, 0)
+		if tex:
+			return tex.get_height() * absf(s.scale.y * pg.scale.y)
+	return 80.0

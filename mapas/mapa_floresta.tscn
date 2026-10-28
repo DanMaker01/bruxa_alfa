@@ -1,9 +1,11 @@
 [gd_scene format=3 uid="uid://cavyxotir3mvg"]
 
-[ext_resource type="Texture2D" uid="uid://dpuq6q80de6dm" path="res://assets/mapa/mapa_floresta/mapa_floresta_bg.png" id="1_caki5"]
+[ext_resource type="Texture2D" uid="uid://d2qftyymvjlx7" path="res://assets/mapa/mapa_floresta/mapa_floresta_fundo2.png" id="1_caki5"]
 [ext_resource type="Script" uid="uid://dsxujjugldv23" path="res://src/cena/mapa_base.gd" id="1_fs1tk"]
+[ext_resource type="Texture2D" uid="uid://cbbuek8w2qa0r" path="res://assets/mapa/mapa_floresta/mapa_floresta_fundo.png" id="2_ceu"]
+[ext_resource type="Texture2D" uid="uid://dwrg030fni3np" path="res://assets/mapa/mapa_floresta/floresta_fundo.png" id="2_pinheiros"]
 [ext_resource type="Script" uid="uid://bjxlt3vqym72w" path="res://src/cena/evento_base.gd" id="3_0h868"]
-[ext_resource type="Texture2D" uid="uid://s7fsf5qmeqi2" path="res://assets/eventos/casa_bruxa/casa_bruxa.png" id="4_v0cwm"]
+[ext_resource type="Texture2D" uid="uid://s7fsf5qmeqi2" path="res://assets/mapa/mapa_bruxa_out/casa_bruxa.png" id="4_v0cwm"]
 [ext_resource type="Script" uid="uid://ci10r4ypiyt11" path="res://src/cena/area_spawn.gd" id="area_spawn"]
 [ext_resource type="Resource" uid="uid://0m5adb2hqhhk" path="res://dados/eventos/floresta_passagem1.tres" id="ev_floresta_passagem1"]
 [ext_resource type="Resource" uid="uid://p5edxojtjva3" path="res://dados/eventos/floresta_passagem2.tres" id="ev_floresta_passagem2"]
@@ -13,7 +15,7 @@
 [node name="MapaFloresta" type="Node2D" unique_id=1629322827]
 script = ExtResource("1_fs1tk")
 bgm = "res://audio/bgm/floresta.mp3"
-metadata/_edit_vertical_guides_ = [5185.0]
+metadata/_edit_vertical_guides_ = [3889.0]
 
 [node name="Eventos" type="Parallax2D" parent="." unique_id=1256108855]
 z_index = 1
@@ -24,29 +26,47 @@ script = ExtResource("3_0h868")
 evento = ExtResource("ev_floresta_passagem1")
 
 [node name="Passagem2" type="CharacterBody2D" parent="Eventos" unique_id=1677333150]
-position = Vector2(7993, 534)
+position = Vector2(5993, 534)
 script = ExtResource("3_0h868")
 evento = ExtResource("ev_floresta_passagem2")
 
 [node name="Passagem3" type="CharacterBody2D" parent="Eventos" unique_id=1985447023]
-position = Vector2(5185, 534)
+position = Vector2(3729, 598)
 script = ExtResource("3_0h868")
 evento = ExtResource("ev_floresta_passagem_bruxa_out")
 
 [node name="AreaErva" type="Node2D" parent="Eventos" unique_id=1893270734]
-position = Vector2(2490, 582)
+position = Vector2(1892, 582)
 script = ExtResource("area_spawn")
 evento = ExtResource("ev_spawn_erva")
-largura = 4820.0
+largura = 3399.9999999998913
+
+[node name="Fundo2" type="Parallax2D" parent="." unique_id=2071520963]
+z_index = -20
+scroll_scale = Vector2(0.2, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Fundo2" unique_id=1692489713]
+texture = ExtResource("2_ceu")
+centered = false
+
+[node name="Fundo" type="Parallax2D" parent="." unique_id=602047412]
+z_index = -10
+scroll_scale = Vector2(0.2, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Fundo" unique_id=2002498009]
+texture = ExtResource("2_pinheiros")
+centered = false
 
 [node name="Meio" type="Parallax2D" parent="." unique_id=1765584545]
+scroll_scale = Vector2(1, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="Meio" unique_id=2119594852]
 texture = ExtResource("1_caki5")
 centered = false
 
 [node name="Sprite2D2" type="Sprite2D" parent="Meio" unique_id=9624765]
-position = Vector2(5144, 544)
-scale = Vector2(0.1, 0.1)
+z_index = -1
+position = Vector2(3666.0002, 552)
+scale = Vector2(0.15, 0.15)
 texture = ExtResource("4_v0cwm")
 centered = false

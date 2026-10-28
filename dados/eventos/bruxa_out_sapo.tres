@@ -1,0 +1,73 @@
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://kuc1sasloivk"]
+
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="1_pag"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_cmd"]
+[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="3_msg"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="4_ev"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="4_sksnh"]
+[ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="5_passo"]
+[ext_resource type="SpriteFrames" path="res://animacoes/sapo.tres" id="6_anim"]
+
+[sub_resource type="Resource" id="M_1"]
+script = ExtResource("3_msg")
+texto = "[BRUXA;bruxa_grande;0] Bom dia, vizinho. Hoje você não vai para o caldeirão."
+
+[sub_resource type="Resource" id="P_esp1"]
+script = ExtResource("5_passo")
+segundos_max = 4.0
+
+[sub_resource type="Resource" id="P_olhar"]
+script = ExtResource("5_passo")
+tipo = 5
+
+[sub_resource type="Resource" id="P_pulo1"]
+script = ExtResource("5_passo")
+tipo = 4
+altura = 26.0
+
+[sub_resource type="Resource" id="P_esp2"]
+script = ExtResource("5_passo")
+segundos = 0.2
+segundos_max = 0.6
+
+[sub_resource type="Resource" id="P_olhar2"]
+script = ExtResource("5_passo")
+tipo = 5
+chance = 0.6
+
+[sub_resource type="Resource" id="P_pulo2"]
+script = ExtResource("5_passo")
+tipo = 4
+chance = 0.6
+altura = 26.0
+
+[sub_resource type="Resource" id="P_esp3"]
+script = ExtResource("5_passo")
+segundos = 1.5
+segundos_max = 4.0
+
+[sub_resource type="Resource" id="P_coaxar"]
+script = ExtResource("5_passo")
+tipo = 8
+chance = 0.25
+segundos = 1.2
+
+[sub_resource type="Resource" id="P_olhar3"]
+script = ExtResource("5_passo")
+tipo = 5
+chance = 0.6
+
+[sub_resource type="Resource" id="Pag_1"]
+script = ExtResource("1_pag")
+sprite_frames = ExtResource("6_anim")
+area_scale = Vector2(6, 5)
+movimento = 1
+rota = Array[ExtResource("5_passo")]([SubResource("P_esp1"), SubResource("P_olhar"), SubResource("P_pulo1"), SubResource("P_esp2"), SubResource("P_olhar2"), SubResource("P_pulo2"), SubResource("P_esp3"), SubResource("P_coaxar"), SubResource("P_olhar3")])
+rota_velocidade = 120.0
+rota_raio = 160.0
+comandos = Array[ExtResource("2_cmd")]([SubResource("M_1")])
+
+[resource]
+script = ExtResource("4_ev")
+id = "bruxa_out_sapo"
+paginas = Array[ExtResource("1_pag")]([SubResource("Pag_1")])

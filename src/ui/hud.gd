@@ -103,8 +103,11 @@ func _montar_dialogo() -> void:
 	_colocar_na_carta(canvas.get_node_or_null("DialogBox"), carta_inventario.face("Dialogo"))
 	_colocar_na_carta(canvas.get_node_or_null("OptionBox"), carta_status.face("Opcoes"))
 
-## Margem (px) entre a borda da carta e o conteúdo (texto, lista, botões... o texto dos botões).
+## Margem (px) entre a borda da caixa preta (painel do diálogo ou botão) e o texto dela.
 const MARGEM_CONTEUDO: float = 20.0
+## Margem (px) entre a borda da carta e a caixa preta: diálogo, botões das opções e o
+## botão de avançar ficam todos com a mesma (igual a OptionBox.MARGEM_AVANCAR).
+const MARGEM_CARTA: float = 14.0
 
 func _colocar_na_carta(caixa: Control, face: Control) -> void:
 	if caixa == null or face == null:
@@ -118,8 +121,8 @@ func _colocar_na_carta(caixa: Control, face: Control) -> void:
 		# opções: a carta é o fundo, o painel fica transparente (os botões são pretos)
 		if painel is CanvasItem:
 			painel.self_modulate.a = 0.0
-		# opções: os botões ocupam a carta toda; a margem fica no texto deles
-		caixa.margem = 0.0
+		# opções: botões com a mesma margem da carta que o avançar; texto com MARGEM_CONTEUDO
+		caixa.margem = MARGEM_CARTA
 		caixa.margem_texto = MARGEM_CONTEUDO
 		if caixa.has_method("_setup_ui"):
 			caixa._setup_ui()
@@ -127,9 +130,15 @@ func _colocar_na_carta(caixa: Control, face: Control) -> void:
 		if adv and caixa.has_method("_estilizar_botao"):
 			caixa._estilizar_botao(adv)
 	else:
-		# diálogo: painel preto (igual aos botões das opções) e margem em volta do texto
+		# diálogo: painel preto com a mesma margem da carta que o avançar, texto com MARGEM_CONTEUDO
 		if painel is CanvasItem:
 			painel.self_modulate.a = 1.0
+		if painel is Control:
+			painel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+			painel.offset_left = MARGEM_CARTA
+			painel.offset_top = MARGEM_CARTA
+			painel.offset_right = -MARGEM_CARTA
+			painel.offset_bottom = -MARGEM_CARTA
 		var m := caixa.get_node_or_null("Panel/MarginContainer") as Control
 		if m:
 			m.offset_left = MARGEM_CONTEUDO

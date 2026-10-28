@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="6_self"]
 [ext_resource type="SpriteFrames" uid="uid://cni8h54vvqrak" path="res://animacoes/musgo_recato.tres" id="7_anim"]
 [ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="8_cond"]
+[ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="8_ludc1"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="9_ev"]
 
 [sub_resource type="Resource" id="Resource_msg"]

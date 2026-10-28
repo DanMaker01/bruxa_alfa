@@ -6,6 +6,7 @@ extends Resource
 
 enum Gatilho { CLIQUE, TOQUE, PARALELO }
 enum Direcao { CENTRO, ESQ, DIR }
+enum Movimento { FIXO, ROTA }
 const GATILHOS := ["click", "touch", "parallel"]
 const DIRECOES := ["centro", "esq", "dir"]
 
@@ -29,6 +30,25 @@ const DIRECOES := ["centro", "esq", "dir"]
 @export var area_pos: Vector2 = Vector2.ZERO
 ## Tamanho da área de interação = 10 px x escala.
 @export var area_scale: Vector2 = Vector2.ONE
+
+@export_group("Movimento autônomo")
+## FIXO = parado (só se move por comando). ROTA = repete os passos da "rota" sozinho,
+## sem travar o jogo; o gatilho da página continua valendo. Pausa enquanto a própria
+## página roda (clique/toque) ou enquanto um comando Mover move este evento.
+@export var movimento: Movimento = Movimento.FIXO:
+	set(v):
+		movimento = v
+		notify_property_list_changed()
+@export var rota: Array[PassoRota] = []
+## Ligado: no fim da rota, recomeça. Desligado: faz uma vez e fica parado.
+@export var rota_repetir: bool = true
+## Ligado: se der de cara com algo sólido, desiste daquele passo e segue a rota.
+## Desligado: fica tentando até conseguir passar.
+@export var rota_pular_se_bloqueado: bool = true
+## Velocidade inicial da rota (px/s). O passo VELOCIDADE troca no meio.
+@export var rota_velocidade: float = 80.0
+## Não se afasta mais que isso (px) do ponto onde começou. 0 = sem limite.
+@export var rota_raio: float = 0.0
 
 @export_group("Comandos")
 @export var comandos: Array[Comando] = []
@@ -54,3 +74,9 @@ func comandos_dict() -> Array:
 		if c:
 			lista.append(c.to_dict())
 	return lista
+
+
+func _validate_property(property: Dictionary) -> void:
+	if property.name in ["rota", "rota_repetir", "rota_pular_se_bloqueado", "rota_velocidade", "rota_raio"] \
+			and movimento != Movimento.ROTA:
+		property.usage = PROPERTY_USAGE_STORAGE

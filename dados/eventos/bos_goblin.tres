@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://cwdgcnn30o052" path="res://src/dados/comandos/cmd_if.gd" id="9_ccmig"]
 [ext_resource type="Script" uid="uid://phmwdet0nd7d" path="res://src/dados/comandos/cmd_end.gd" id="10_52cvi"]
 [ext_resource type="SpriteFrames" uid="uid://buer5jfy6tqw6" path="res://animacoes/bos_goblin.tres" id="11_06hrw"]
+[ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="11_rn16p"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="13_h3kuc"]
 
 [sub_resource type="Resource" id="Resource_ykkwn"]

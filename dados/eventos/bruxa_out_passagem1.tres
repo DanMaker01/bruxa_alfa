@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="6_am362"]
 [ext_resource type="SpriteFrames" uid="uid://nipt5oq20nr3" path="res://animacoes/portal.tres" id="6_vfc0w"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="7_36x56"]
+[ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="7_r8edh"]
 
 [sub_resource type="Resource" id="Resource_g2mlv"]
 script = ExtResource("3_r8edh")
@@ -16,7 +17,7 @@ tempo = 0.2
 [sub_resource type="Resource" id="Resource_gj8ib"]
 script = ExtResource("4_17buu")
 mapa = "res://mapas/mapa_floresta.tscn"
-posicao = Vector2(5185, 505)
+posicao = Vector2(3800, 505)
 direcao = 2
 
 [sub_resource type="Resource" id="Resource_jxxn7"]
