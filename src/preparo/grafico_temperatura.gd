@@ -54,7 +54,7 @@ const MARGEM_TOPO: float = 16.0
 const MARGEM_BASE: float = 18.0
 const ALTURA_FAIXA: float = 8.0
 const MAX_FAIXAS: int = 6
-const PX_POR_COLUNA: float = 2.0   # resolução das fatias (em px)
+const PX_POR_COLUNA: float = 3.0   # resolução das fatias (em px)
 
 # =============================================================================
 # API
@@ -270,11 +270,13 @@ func _y_F(temp: float, py: float, ph: float) -> float:
 func _desenhar_linha(pontos: Array, cor: Color, largura: float, px, py, pw, ph, t_min, t_max, eixo_F: bool, destaque: Array = []) -> void:
 	if pontos.size() < 2:
 		return
-	var anterior := Vector2.ZERO
+	# uma polilinha só (antes: um draw_line por ponto); trechos "punindo" por cima
+	var linha := PackedVector2Array()
+	linha.resize(pontos.size())
 	for i in pontos.size():
 		var p: Vector2 = pontos[i]
-		var atual := Vector2(_x(p.x, px, pw, t_min, t_max), _y_F(p.y, py, ph) if eixo_F else _y_T(p.y, py, ph))
-		if i > 0:
-			var punindo: bool = i < destaque.size() and destaque[i]
-			draw_line(anterior, atual, COR_T_PUNINDO if punindo else cor, largura + (1.5 if punindo else 0.0))
-		anterior = atual
+		linha[i] = Vector2(_x(p.x, px, pw, t_min, t_max), _y_F(p.y, py, ph) if eixo_F else _y_T(p.y, py, ph))
+	draw_polyline(linha, cor, largura)
+	for i in range(1, mini(destaque.size(), linha.size())):
+		if destaque[i]:
+			draw_line(linha[i - 1], linha[i], COR_T_PUNINDO, largura + 1.5)

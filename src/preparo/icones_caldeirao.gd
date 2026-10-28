@@ -323,6 +323,19 @@ static func _t_cheio(item: ItemData) -> float:
 
 ## Cor do cozimento num Q qualquer da régua: branco (cru), dourado (a ≥ 0.9, no ponto),
 ## e depois do ponto a cor da punição (1 − a_Q) que aquele Q dá.
+## Cache das cores do anel por item e modo (são sempre as mesmas; antes eram
+## recalculadas 36 vezes por ícone a cada frame).
+static var _cache_anel: Dictionary = {}
+static func cores_anel(item: ItemData) -> Array:
+	var chave := str(item.get_instance_id() if item else 0) + ":" + str(modo)
+	if not _cache_anel.has(chave):
+		var q_cheio: float = _q_cheio(item)
+		var lista: Array = []
+		for b in ANEL_BOLHAS:
+			lista.append(cor_cozimento(item, (float(b) + 0.5) / ANEL_BOLHAS * q_cheio))
+		_cache_anel[chave] = lista
+	return _cache_anel[chave]
+
 static func cor_cozimento(item: ItemData, Q: float) -> Color:
 	if item == null or item.m <= 0.0:
 		return cor_escala(1.0)
@@ -506,7 +519,7 @@ func _desenhar_anel(ic: Dictionary) -> void:
 	var cheias: float = ic["progresso"] * ANEL_BOLHAS
 	var pulso: float = 0.5 + 0.5 * sin(_t * 4.0)
 	var item: ItemData = ic["item"]
-	var q_cheio: float = _q_cheio(item)
+	var cores: Array = cores_anel(item) if modo != ModoRegua.PUNICAO else []
 	var chegou: bool = ic["ponto"] or ic["progresso"] >= FRACAO_PONTO - 0.01
 	for b in ANEL_BOLHAS:
 		var ang := -PI * 0.5 + TAU * (float(b) + 0.5) / ANEL_BOLHAS
@@ -520,7 +533,7 @@ func _desenhar_anel(ic: Dictionary) -> void:
 			cor = Color(COR_ANEL_COZINHANDO, 0.16 * alfa)
 			r = ANEL_TAM * 0.5
 		elif modo != ModoRegua.PUNICAO:
-			cor = cor_cozimento(item, u * q_cheio)
+			cor = cores[b]
 			var dourada: bool = cor.is_equal_approx(cor_escala(1.0))
 			if dourada and ic["ponto"]:
 				cor.a = (0.75 + 0.25 * pulso) * alfa   # brilhando: está no ponto agora

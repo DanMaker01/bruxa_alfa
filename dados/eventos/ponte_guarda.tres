@@ -18,6 +18,39 @@
 [ext_resource type="Script" uid="uid://u1lexc30s8be" path="res://src/dados/comandos/cmd_player.gd" id="21_player"]
 [ext_resource type="Script" path="res://src/dados/comandos/cmd_chamar_evento.gd" id="22_chamar"]
 [ext_resource type="Resource" path="res://dados/eventos/ponte_passagem1.tres" id="23_passagem"]
+[ext_resource type="Resource" path="res://dados/falantes/guarda1.tres" id="x0"]
+[ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="x1"]
+
+[sub_resource type="Resource" id="G_cond"]
+script = ExtResource("1_x")
+variavel = "ponte_guarda_conhece"
+
+[sub_resource type="Resource" id="G_if"]
+script = ExtResource("2_x")
+condicao = SubResource("G_cond")
+
+[sub_resource type="Resource" id="G_m1"]
+script = ExtResource("3_x")
+personagem = ExtResource("x0")
+posicao = 100.0
+texto = "Você é a moça do chapéu? O guarda da estrada me avisou de você."
+
+[sub_resource type="Resource" id="G_m2"]
+script = ExtResource("3_x")
+personagem = ExtResource("x0")
+posicao = 100.0
+texto = "Pode passar. O castelo fica logo adiante."
+
+[sub_resource type="Resource" id="G_var"]
+script = ExtResource("4_x")
+variavel = "ponte_guarda_conhece"
+valor = 1.0
+
+[sub_resource type="Resource" id="G_else"]
+script = ExtResource("5_x")
+
+[sub_resource type="Resource" id="G_end"]
+script = ExtResource("6_x")
 
 [sub_resource type="Resource" id="R_1"]
 script = ExtResource("1_x")
@@ -29,15 +62,20 @@ condicao = SubResource("R_1")
 
 [sub_resource type="Resource" id="R_3"]
 script = ExtResource("3_x")
-texto = "[GUARDA;guarda1;100] Alto! Quem vem lá?"
+personagem = ExtResource("x0")
+posicao = 100.0
+texto = "Alto! Quem vem lá?"
 
 [sub_resource type="Resource" id="R_4"]
 script = ExtResource("3_x")
-texto = "[BRUXA;bruxa_grande;0] Só uma moradora da floresta."
+personagem = ExtResource("x1")
+texto = "Só uma moradora da floresta."
 
 [sub_resource type="Resource" id="R_5"]
 script = ExtResource("3_x")
-texto = "[GUARDA;guarda1;100] Da floresta, é? Com esse chapéu? Hmm..."
+personagem = ExtResource("x0")
+posicao = 100.0
+texto = "Da floresta, é? Com esse chapéu? Hmm..."
 
 [sub_resource type="Resource" id="R_6"]
 script = ExtResource("4_x")
@@ -49,7 +87,9 @@ script = ExtResource("5_x")
 
 [sub_resource type="Resource" id="R_8"]
 script = ExtResource("3_x")
-texto = "[GUARDA;guarda1;100] Você de novo, moça do chapéu."
+personagem = ExtResource("x0")
+posicao = 100.0
+texto = "Você de novo, moça do chapéu."
 
 [sub_resource type="Resource" id="R_9"]
 script = ExtResource("6_x")
@@ -60,11 +100,14 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_11"]
 script = ExtResource("3_x")
-texto = "[GUARDA;guarda1;100] Ninguém atravessa sem motivo. Ainda mais agora, com o casamento da princesa."
+personagem = ExtResource("x0")
+posicao = 100.0
+texto = "Ninguém atravessa sem motivo. Ainda mais agora, com o casamento da princesa."
 
 [sub_resource type="Resource" id="R_12"]
 script = ExtResource("8_x")
-pergunta = "[BRUXA;bruxa_grande;0] (Hmm... o que eu digo?)"
+personagem = ExtResource("x1")
+pergunta = "(Hmm... o que eu digo?)"
 opcoes = Array[String](["Levo uma poção para a princesa.", "Nada. Já vou indo."])
 labels = Array[String](["sim", "nao"])
 
@@ -74,11 +117,14 @@ nome = "sim"
 
 [sub_resource type="Resource" id="R_14"]
 script = ExtResource("3_x")
-texto = "[BRUXA;bruxa_grande;0] É uma encomenda do castelo. Uma poção para a princesa."
+personagem = ExtResource("x1")
+texto = "É uma encomenda do castelo. Uma poção para a princesa."
 
 [sub_resource type="Resource" id="R_15"]
 script = ExtResource("3_x")
-texto = "[GUARDA;guarda1;100] Uma poção, é? Então mostre."
+personagem = ExtResource("x0")
+posicao = 100.0
+texto = "Uma poção, é? Então mostre."
 
 [sub_resource type="Resource" id="R_16"]
 script = ExtResource("1_x")
@@ -91,11 +137,14 @@ condicao = SubResource("R_16")
 
 [sub_resource type="Resource" id="R_18"]
 script = ExtResource("3_x")
-texto = "[BRUXA;bruxa_grande;0] Aqui está."
+personagem = ExtResource("x1")
+texto = "Aqui está."
 
 [sub_resource type="Resource" id="R_19"]
 script = ExtResource("3_x")
-texto = "[GUARDA;guarda1;100] Está certo. Fui avisado de que uma bruxa viria. As ordens são claras, e sou leal à vontade do Rei. Pode passar."
+personagem = ExtResource("x0")
+posicao = 100.0
+texto = "Está certo. Fui avisado de que uma bruxa viria. As ordens são claras, e sou leal à vontade do Rei. Pode passar."
 
 [sub_resource type="Resource" id="R_20"]
 script = ExtResource("4_x")
@@ -107,15 +156,19 @@ script = ExtResource("5_x")
 
 [sub_resource type="Resource" id="R_22"]
 script = ExtResource("3_x")
-texto = "[BRUXA;bruxa_grande;0] Bem... ainda não está pronta."
+personagem = ExtResource("x1")
+texto = "Bem... ainda não está pronta."
 
 [sub_resource type="Resource" id="R_23"]
 script = ExtResource("3_x")
-texto = "[GUARDA;guarda1;100] Então volte quando estiver."
+personagem = ExtResource("x0")
+posicao = 100.0
+texto = "Então volte quando estiver."
 
 [sub_resource type="Resource" id="R_24"]
 script = ExtResource("3_x")
-texto = "[BRUXA;bruxa_grande;0] Hunf."
+personagem = ExtResource("x1")
+texto = "Hunf."
 
 [sub_resource type="Resource" id="R_25"]
 script = ExtResource("6_x")
@@ -130,11 +183,14 @@ nome = "nao"
 
 [sub_resource type="Resource" id="R_28"]
 script = ExtResource("3_x")
-texto = "[GUARDA;guarda1;100] Então dê meia-volta."
+personagem = ExtResource("x0")
+posicao = 100.0
+texto = "Então dê meia-volta."
 
 [sub_resource type="Resource" id="R_29"]
 script = ExtResource("3_x")
-texto = "[BRUXA;bruxa_grande;0] Hunf."
+personagem = ExtResource("x1")
+texto = "Hunf."
 
 [sub_resource type="Resource" id="R_30"]
 script = ExtResource("9_x")
@@ -151,7 +207,9 @@ comandos = Array[ExtResource("12_x")]([SubResource("R_2"), SubResource("R_3"), S
 
 [sub_resource type="Resource" id="R_32"]
 script = ExtResource("3_x")
-texto = "[GUARDA;guarda1;100] Pode passar, moça do chapéu. O castelo fica logo adiante."
+personagem = ExtResource("x0")
+posicao = 100.0
+texto = "Pode passar, moça do chapéu. O castelo fica logo adiante."
 
 [sub_resource type="Resource" id="R_33"]
 script = ExtResource("1_x")
@@ -165,11 +223,13 @@ sprite_frames = ExtResource("11_x")
 colisao_scale = Vector2(9, 20.25)
 area_pos = Vector2(0, -10)
 area_scale = Vector2(16, 20.25)
-comandos = Array[ExtResource("12_x")]([SubResource("R_32")])
+comandos = Array[ExtResource("12_x")]([SubResource("G_if"), SubResource("G_m1"), SubResource("G_m2"), SubResource("G_var"), SubResource("G_else"), SubResource("R_32"), SubResource("G_end")])
 
 [sub_resource type="Resource" id="R_35"]
 script = ExtResource("3_x")
-texto = "[GUARDA;guarda1;100] Soube que esteve com a princesa. Pode passar, senhora."
+personagem = ExtResource("x0")
+posicao = 100.0
+texto = "Soube que esteve com a princesa. Pode passar, senhora."
 
 [sub_resource type="Resource" id="R_36"]
 script = ExtResource("1_x")
@@ -197,15 +257,20 @@ script = ExtResource("21_player")
 
 [sub_resource type="Resource" id="F_m1"]
 script = ExtResource("3_x")
-texto = "[GUARDA;guarda1;100] Alto! É a bruxa que enfeitiçou a princesa!"
+personagem = ExtResource("x0")
+posicao = 100.0
+texto = "Alto! É a bruxa que enfeitiçou a princesa!"
 
 [sub_resource type="Resource" id="F_m2"]
 script = ExtResource("3_x")
-texto = "[GUARDA;guarda1;100] Guardas! Prendam-na!"
+personagem = ExtResource("x0")
+posicao = 100.0
+texto = "Guardas! Prendam-na!"
 
 [sub_resource type="Resource" id="F_m3"]
 script = ExtResource("3_x")
-texto = "[BRUXA;bruxa_grande;0] Melhor voltar outra hora!"
+personagem = ExtResource("x1")
+texto = "Melhor voltar outra hora!"
 
 [sub_resource type="Resource" id="F_corre"]
 script = ExtResource("20_mover")

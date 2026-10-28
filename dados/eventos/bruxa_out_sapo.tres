@@ -7,10 +7,12 @@
 [ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="4_sksnh"]
 [ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="5_passo"]
 [ext_resource type="SpriteFrames" path="res://animacoes/sapo.tres" id="6_anim"]
+[ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="x0"]
 
 [sub_resource type="Resource" id="M_1"]
 script = ExtResource("3_msg")
-texto = "[BRUXA;bruxa_grande;0] Bom dia, vizinho. Hoje você não vai para o caldeirão."
+personagem = ExtResource("x0")
+texto = "Bom dia, vizinho. Hoje você não vai para o caldeirão."
 
 [sub_resource type="Resource" id="P_esp1"]
 script = ExtResource("5_passo")

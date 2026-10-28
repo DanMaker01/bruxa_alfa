@@ -5,9 +5,25 @@
 [ext_resource type="Script" uid="uid://7c1614u5xl4b" path="res://src/dados/comandos/cmd_fade.gd" id="3_irauo"]
 [ext_resource type="Script" uid="uid://bnrknn0lpp5ss" path="res://src/dados/comandos/cmd_teleportar.gd" id="4_pdsia"]
 [ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="5_8yti3"]
-[ext_resource type="SpriteFrames" uid="uid://nipt5oq20nr3" path="res://animacoes/portal.tres" id="6_5rdbs"]
+[ext_resource type="SpriteFrames" path="res://animacoes/porta.tres" id="6_5rdbs"]
 [ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="6_i7745"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="7_kx00b"]
+[ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="9_8yti3"]
+[ext_resource type="Script" uid="uid://bchvbuxgicj1n" path="res://src/dados/comandos/cmd_evento_animacao.gd" id="x0"]
+[ext_resource type="Script" uid="uid://bm6rsgpqii0pt" path="res://src/dados/comandos/cmd_som.gd" id="x1"]
+
+[sub_resource type="Resource" id="F_porta_abre1"]
+script = ExtResource("x0")
+evento = "cidadeA_passagem_in03"
+animacao = "aberta"
+
+[sub_resource type="Resource" id="F_porta_som1"]
+script = ExtResource("x1")
+arquivo = "res://audio/se/porta_abre.mp3"
+
+[sub_resource type="Resource" id="F_porta_esp1"]
+script = ExtResource("5_8yti3")
+segundos = 0.25
 
 [sub_resource type="Resource" id="Resource_gggx2"]
 script = ExtResource("3_irauo")
@@ -34,7 +50,7 @@ sprite_frames = ExtResource("6_5rdbs")
 animacao = "parado"
 area_pos = Vector2(0, -10)
 area_scale = Vector2(9, 22)
-comandos = Array[ExtResource("2_i7745")]([SubResource("Resource_gggx2"), SubResource("Resource_la1c2"), SubResource("Resource_6gkue"), SubResource("Resource_36q6g")])
+comandos = Array[ExtResource("2_i7745")]([SubResource("F_porta_abre1"), SubResource("F_porta_som1"), SubResource("F_porta_esp1"), SubResource("Resource_gggx2"), SubResource("Resource_la1c2"), SubResource("Resource_6gkue"), SubResource("Resource_36q6g")])
 
 [resource]
 script = ExtResource("7_kx00b")

@@ -7,7 +7,6 @@
 [ext_resource type="Script" uid="uid://ci10r4ypiyt11" path="res://src/cena/area_spawn.gd" id="area_spawn"]
 [ext_resource type="Resource" uid="uid://ce10d2m4o0epu" path="res://dados/eventos/bosque_passagem1.tres" id="ev_bosque_passagem1"]
 [ext_resource type="Resource" uid="uid://c8yqnpd4myw1d" path="res://dados/eventos/bosque_passagem2.tres" id="ev_bosque_passagem2"]
-[ext_resource type="Resource" uid="uid://b5ndemxtygux0" path="res://dados/eventos/bos_goblin.tres" id="ev_bos_goblin"]
 [ext_resource type="Resource" uid="uid://bnd00o7jed88l" path="res://dados/eventos/spawn_cogumelo.tres" id="ev_spawn_cogumelo"]
 
 [node name="MapaBosque" type="Node2D" unique_id=231347479]
@@ -34,12 +33,6 @@ centered = false
 [node name="Eventos" type="Parallax2D" parent="." unique_id=1673461017]
 z_index = 1
 
-[node name="Goblin" type="CharacterBody2D" parent="Eventos" unique_id=2062644373]
-z_index = 3
-position = Vector2(832, 544)
-script = ExtResource("3_ofmjg")
-evento = ExtResource("ev_bos_goblin")
-
 [node name="Passagem2" type="CharacterBody2D" parent="Eventos" unique_id=1043341573]
 z_index = 3
 position = Vector2(1952, 512)
@@ -60,3 +53,4 @@ evento = ExtResource("ev_spawn_cogumelo")
 quantidade = 1
 largura = 700.0
 cooldown = 20.0
+espalhamento = 0.5

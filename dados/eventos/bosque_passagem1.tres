@@ -9,6 +9,11 @@
 [ext_resource type="SpriteFrames" uid="uid://nipt5oq20nr3" path="res://animacoes/portal.tres" id="6_v320q"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="7_jqwgg"]
 [ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="7_mknye"]
+[ext_resource type="Script" uid="uid://bm6rsgpqii0pt" path="res://src/dados/comandos/cmd_som.gd" id="x0"]
+
+[sub_resource type="Resource" id="F_som_passos1"]
+script = ExtResource("x0")
+arquivo = "res://audio/se/move.mp3"
 
 [sub_resource type="Resource" id="Resource_y3xlr"]
 script = ExtResource("3_mknye")
@@ -36,7 +41,7 @@ passavel = false
 sprite_frames = ExtResource("6_v320q")
 animacao = "parado"
 area_scale = Vector2(4, 25)
-comandos = Array[ExtResource("2_jpcas")]([SubResource("Resource_y3xlr"), SubResource("Resource_xm7xj"), SubResource("Resource_8kgiq"), SubResource("Resource_biyyr")])
+comandos = Array[ExtResource("2_jpcas")]([SubResource("F_som_passos1"), SubResource("Resource_y3xlr"), SubResource("Resource_xm7xj"), SubResource("Resource_8kgiq"), SubResource("Resource_biyyr")])
 
 [resource]
 script = ExtResource("7_jqwgg")

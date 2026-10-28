@@ -1,12 +1,29 @@
-[gd_resource type="Resource" script_class="EventoData" format=3]
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://cleybmiq0x444"]
 
-[ext_resource type="Script" path="res://src/dados/pagina_data.gd" id="1_g12um"]
-[ext_resource type="Script" path="res://src/dados/comandos/comando.gd" id="2_xou6e"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_fade.gd" id="3_su7tn"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_teleportar.gd" id="4_cqkna"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_esperar.gd" id="5_gslsm"]
-[ext_resource type="SpriteFrames" path="res://animacoes/portal.tres" id="6_a30cl"]
-[ext_resource type="Script" path="res://src/dados/evento_data.gd" id="7_13cnb"]
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="1_g12um"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_xou6e"]
+[ext_resource type="Script" uid="uid://7c1614u5xl4b" path="res://src/dados/comandos/cmd_fade.gd" id="3_su7tn"]
+[ext_resource type="Script" uid="uid://bnrknn0lpp5ss" path="res://src/dados/comandos/cmd_teleportar.gd" id="4_cqkna"]
+[ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="5_gslsm"]
+[ext_resource type="SpriteFrames" path="res://animacoes/porta.tres" id="6_a30cl"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="7_13cnb"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="8_gslsm"]
+[ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="9_a30cl"]
+[ext_resource type="Script" uid="uid://bchvbuxgicj1n" path="res://src/dados/comandos/cmd_evento_animacao.gd" id="x0"]
+[ext_resource type="Script" uid="uid://bm6rsgpqii0pt" path="res://src/dados/comandos/cmd_som.gd" id="x1"]
+
+[sub_resource type="Resource" id="F_porta_abre1"]
+script = ExtResource("x0")
+evento = "cidadeA_in01_passagem"
+animacao = "aberta"
+
+[sub_resource type="Resource" id="F_porta_som1"]
+script = ExtResource("x1")
+arquivo = "res://audio/se/porta_abre.mp3"
+
+[sub_resource type="Resource" id="F_porta_esp1"]
+script = ExtResource("5_gslsm")
+segundos = 0.25
 
 [sub_resource type="Resource" id="Resource_ud52c"]
 script = ExtResource("3_su7tn")
@@ -33,7 +50,7 @@ sprite_frames = ExtResource("6_a30cl")
 animacao = "parado"
 area_pos = Vector2(0, -10)
 area_scale = Vector2(9, 36)
-comandos = Array[ExtResource("2_xou6e")]([SubResource("Resource_ud52c"), SubResource("Resource_mn7bn"), SubResource("Resource_8d2r8"), SubResource("Resource_ie4s2")])
+comandos = Array[ExtResource("2_xou6e")]([SubResource("F_porta_abre1"), SubResource("F_porta_som1"), SubResource("F_porta_esp1"), SubResource("Resource_ud52c"), SubResource("Resource_mn7bn"), SubResource("Resource_8d2r8"), SubResource("Resource_ie4s2")])
 
 [resource]
 script = ExtResource("7_13cnb")

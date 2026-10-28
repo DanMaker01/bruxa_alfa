@@ -3,13 +3,74 @@
 [ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="1_djp1k"]
 [ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_ph5fu"]
 [ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="3_g6eiw"]
-[ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="4_g6eiw"]
+[ext_resource type="SpriteFrames" path="res://animacoes/veu.tres" id="5_anim"]
+[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="6_msg"]
+[ext_resource type="Script" uid="uid://u1lexc30s8be" path="res://src/dados/comandos/cmd_player.gd" id="7_player"]
+[ext_resource type="Script" uid="uid://7xxa8u611ha0" path="res://src/dados/comandos/cmd_mostrar_efeito.gd" id="8_efeito"]
+[ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="9_var"]
+[ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="9_vp2ol"]
+[ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="10_esp"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="12_xpbed"]
+[ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="x0"]
+
+[sub_resource type="Resource" id="C_trava"]
+script = ExtResource("7_player")
+
+[sub_resource type="Resource" id="C_m1"]
+script = ExtResource("6_msg")
+personagem = ExtResource("x0")
+texto = "Aqui está o véu. Fino como névoa, igual contavam."
+
+[sub_resource type="Resource" id="C_m2"]
+script = ExtResource("6_msg")
+personagem = ExtResource("x0")
+texto = "Só um pedacinho. Ninguém vai notar."
+
+[sub_resource type="Resource" id="C_efeito"]
+script = ExtResource("8_efeito")
+tipo = 1
+
+[sub_resource type="Resource" id="C_var"]
+script = ExtResource("9_var")
+variavel = "missao01_veu"
+valor = 1.0
+
+[sub_resource type="Resource" id="C_esp"]
+script = ExtResource("10_esp")
+segundos = 0.3
+
+[sub_resource type="Resource" id="C_m3"]
+script = ExtResource("6_msg")
+personagem = ExtResource("x0")
+texto = "Pronto. Com isso na porta de casa, posso ir a qualquer lugar sem ser vista."
+
+[sub_resource type="Resource" id="C_destrava"]
+script = ExtResource("7_player")
+acao = 1
 
 [sub_resource type="Resource" id="P_veu"]
 script = ExtResource("1_djp1k")
+sprite_frames = ExtResource("5_anim")
+area_scale = Vector2(14, 16)
+comandos = Array[ExtResource("2_ph5fu")]([SubResource("C_trava"), SubResource("C_m1"), SubResource("C_m2"), SubResource("C_efeito"), SubResource("C_var"), SubResource("C_esp"), SubResource("C_m3"), SubResource("C_destrava")])
+
+[sub_resource type="Resource" id="C_m_pego"]
+script = ExtResource("6_msg")
+personagem = ExtResource("x0")
+texto = "Já tenho o meu pedaço. Melhor não abusar."
+
+[sub_resource type="Resource" id="C_cond_pego"]
+script = ExtResource("3_g6eiw")
+variavel = "missao01_veu"
+valor = 1.0
+
+[sub_resource type="Resource" id="P_pego"]
+script = ExtResource("1_djp1k")
+condicoes = Array[ExtResource("3_g6eiw")]([SubResource("C_cond_pego")])
+area_scale = Vector2(14, 16)
+comandos = Array[ExtResource("2_ph5fu")]([SubResource("C_m_pego")])
 
 [resource]
 script = ExtResource("12_xpbed")
 id = "castelo_in03_veu"
-paginas = Array[ExtResource("1_djp1k")]([SubResource("P_veu")])
+paginas = Array[ExtResource("1_djp1k")]([SubResource("P_veu"), SubResource("P_pego")])

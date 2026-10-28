@@ -7,10 +7,13 @@
 [ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="4_x"]
 [ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="5_os4vu"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="5_x"]
+[ext_resource type="Resource" path="res://dados/falantes/guarda2.tres" id="x0"]
 
 [sub_resource type="Resource" id="R_1"]
 script = ExtResource("1_x")
-texto = "[GUARDA;guarda2;100] Ande logo, bruxa."
+personagem = ExtResource("x0")
+posicao = 100.0
+texto = "Ande logo, bruxa."
 
 [sub_resource type="Resource" id="R_2"]
 script = ExtResource("4_x")

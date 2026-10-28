@@ -7,6 +7,7 @@
 #   DIRECAO_PLAYER para onde a bruxa olha ("direcao"), só == ou !=
 #   SELF_VAR       self-variable A/B/C/D DESTE evento (cada nó no mapa tem as suas) op valor
 #   ITEM_NOME      quantos itens no inventário têm este NOME ("variavel"), ex.: uma poção feita op valor
+#                  terminado em * = começa com (ex.: "Poção*" = qualquer poção)
 # Uma página pode ter várias condições (PaginaData.condicoes): todas precisam valer.
 # Páginas reavaliam quando muda uma variável, o inventário ou uma personalidade;
 # posição/direção servem para if/while (numa página só são vistas na próxima reavaliação).
@@ -76,7 +77,11 @@ func avaliar(game_temp, chave_self: String = "") -> bool:
 	return PageSelector.compare(atual, OPERADORES[operador], valor)
 
 ## Soma das quantidades dos itens do inventário cujo nome é "nome" (poções feitas têm id gerado).
+## "nome" terminado em * compara só o começo: "Poção*" conta qualquer poção.
 static func _qtd_por_nome(game_temp, nome: String) -> int:
+	var prefixo := nome.ends_with("*")
+	if prefixo:
+		nome = nome.left(-1)
 	var db = game_temp.get_node_or_null("../DatabaseManager") if game_temp is Node else null
 	if db == null:
 		return 0
@@ -84,7 +89,7 @@ static func _qtd_por_nome(game_temp, nome: String) -> int:
 	var inv: Dictionary = game_temp.get_inventory()
 	for id in inv:
 		var it: ItemData = db.get_item(id)
-		if it and it.get_nome() == nome:
+		if it and (it.get_nome().begins_with(nome) if prefixo else it.get_nome() == nome):
 			total += int(inv[id])
 	return total
 

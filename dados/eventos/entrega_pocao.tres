@@ -16,12 +16,16 @@
 [ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="22_x"]
 [ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="23_x"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="24_x"]
+[ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="x0"]
+[ext_resource type="Resource" path="res://dados/falantes/rei.tres" id="x1"]
+[ext_resource type="Resource" path="res://dados/falantes/princesa.tres" id="x2"]
 [ext_resource type="Script" uid="uid://dvii04cb4qtqa" path="res://src/dados/comandos/cmd_chamar_evento.gd" id="x_chamar"]
 [ext_resource type="Resource" uid="uid://chvxqa728uuio" path="res://dados/eventos/fuga_castelo.tres" id="x_fuga"]
 
 [sub_resource type="Resource" id="R_25"]
 script = ExtResource("8_x")
-pergunta = "[BRUXA;bruxa_grande;0] (Ele não confia em mim... o que eu respondo?)"
+personagem = ExtResource("x0")
+pergunta = "(Ele não confia em mim... o que eu respondo?)"
 opcoes = Array[String](["Vai funcionar, Majestade.", "Acredito que sim...", "Não... ainda não."])
 labels = Array[String](["sim", "talvez", "nao"])
 
@@ -35,7 +39,9 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_28"]
 script = ExtResource("4_x")
-texto = "[REI;rei;100] Tanta certeza assim? Veremos."
+personagem = ExtResource("x1")
+posicao = 100.0
+texto = "Tanta certeza assim? Veremos."
 
 [sub_resource type="Resource" id="R_29"]
 script = ExtResource("10_x")
@@ -51,7 +57,9 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_32"]
 script = ExtResource("4_x")
-texto = "[REI;rei;100] \"Acredita\"? Hmpf. Pelo menos é honesta."
+personagem = ExtResource("x1")
+posicao = 100.0
+texto = "\"Acredita\"? Hmpf. Pelo menos é honesta."
 
 [sub_resource type="Resource" id="R_33"]
 script = ExtResource("10_x")
@@ -67,11 +75,14 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_36"]
 script = ExtResource("4_x")
-texto = "[BRUXA;bruxa_grande;0] A lua ainda não está cheia. A poção precisa de mais uma noite."
+personagem = ExtResource("x0")
+texto = "A lua ainda não está cheia. A poção precisa de mais uma noite."
 
 [sub_resource type="Resource" id="R_37"]
 script = ExtResource("4_x")
-texto = "[REI;rei;100] Desculpas. Volte quando tiver algo que preste."
+personagem = ExtResource("x1")
+posicao = 100.0
+texto = "Desculpas. Volte quando tiver algo que preste."
 
 [sub_resource type="Resource" id="R_38"]
 script = ExtResource("10_x")
@@ -87,11 +98,14 @@ segundos = 0.5
 
 [sub_resource type="Resource" id="R_41"]
 script = ExtResource("4_x")
-texto = "[REI;rei;100] Pois então aplique em minha filha. Aqui, na minha frente."
+personagem = ExtResource("x1")
+posicao = 100.0
+texto = "Pois então aplique em minha filha. Aqui, na minha frente."
 
 [sub_resource type="Resource" id="R_42"]
 script = ExtResource("8_x")
-pergunta = "[BRUXA;bruxa_grande;0] (Aqui, na frente dele?)"
+personagem = ExtResource("x0")
+pergunta = "(Aqui, na frente dele?)"
 opcoes = Array[String](["Aplicar a poção.", "Agora não, Majestade."])
 labels = Array[String](["aplicar", "recusa"])
 
@@ -105,11 +119,14 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_45"]
 script = ExtResource("4_x")
-texto = "[BRUXA;bruxa_grande;0] A princesa precisa estar em jejum para a poção fazer efeito. Volto outra hora."
+personagem = ExtResource("x0")
+texto = "A princesa precisa estar em jejum para a poção fazer efeito. Volto outra hora."
 
 [sub_resource type="Resource" id="R_46"]
 script = ExtResource("4_x")
-texto = "[REI;rei;100] Hmpf. Não me faça perder tempo, bruxa."
+personagem = ExtResource("x1")
+posicao = 100.0
+texto = "Hmpf. Não me faça perder tempo, bruxa."
 
 [sub_resource type="Resource" id="R_47"]
 script = ExtResource("10_x")
@@ -125,7 +142,8 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_50"]
 script = ExtResource("4_x")
-texto = "[BRUXA;bruxa_grande;0] Com licença, Alteza. Fique tranquila."
+personagem = ExtResource("x0")
+texto = "Com licença, Alteza. Fique tranquila."
 
 [sub_resource type="Resource" id="R_51"]
 script = ExtResource("2_x")
@@ -151,11 +169,14 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_56"]
 script = ExtResource("4_x")
-texto = "[BRUXA;bruxa_grande;0] Hmm... pensando melhor, ainda não."
+personagem = ExtResource("x0")
+texto = "Hmm... pensando melhor, ainda não."
 
 [sub_resource type="Resource" id="R_57"]
 script = ExtResource("4_x")
-texto = "[REI;rei;100] Está brincando comigo, bruxa? Saia daqui."
+personagem = ExtResource("x1")
+posicao = 100.0
+texto = "Está brincando comigo, bruxa? Saia daqui."
 
 [sub_resource type="Resource" id="R_58"]
 script = ExtResource("10_x")
@@ -387,7 +408,9 @@ condicao = SubResource("R_107")
 
 [sub_resource type="Resource" id="R_109"]
 script = ExtResource("4_x")
-texto = "[PRINCESA;princesa;100] Eu... já me sinto mais calma."
+personagem = ExtResource("x2")
+posicao = 100.0
+texto = "Eu... já me sinto mais calma."
 
 [sub_resource type="Resource" id="R_110"]
 script = ExtResource("2_x")
@@ -395,7 +418,9 @@ segundos = 0.6
 
 [sub_resource type="Resource" id="R_111"]
 script = ExtResource("4_x")
-texto = "[REI;rei;100] Hmpf."
+personagem = ExtResource("x1")
+posicao = 100.0
+texto = "Hmpf."
 
 [sub_resource type="Resource" id="R_112"]
 script = ExtResource("2_x")
@@ -403,7 +428,9 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_113"]
 script = ExtResource("4_x")
-texto = "[REI;rei;100] ...Parece que funcionou."
+personagem = ExtResource("x1")
+posicao = 100.0
+texto = "...Parece que funcionou."
 
 [sub_resource type="Resource" id="R_114"]
 script = ExtResource("2_x")
@@ -411,7 +438,9 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_115"]
 script = ExtResource("4_x")
-texto = "[REI;rei;100] Mas não pense que isso faz de você alguém de confiança, bruxa. Uma poção não muda o que..."
+personagem = ExtResource("x1")
+posicao = 100.0
+texto = "Mas não pense que isso faz de você alguém de confiança, bruxa. Uma poção não muda o que..."
 
 [sub_resource type="Resource" id="R_116"]
 script = ExtResource("2_x")
@@ -419,7 +448,9 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_117"]
 script = ExtResource("4_x")
-texto = "[PRINCESA;princesa;100] Pai! Ela me ajudou."
+personagem = ExtResource("x2")
+posicao = 100.0
+texto = "Pai! Ela me ajudou."
 
 [sub_resource type="Resource" id="R_118"]
 script = ExtResource("2_x")
@@ -427,7 +458,9 @@ segundos = 0.4
 
 [sub_resource type="Resource" id="R_119"]
 script = ExtResource("4_x")
-texto = "[PRINCESA;princesa;100] Obrigada, senhora bruxa. Agora consigo até pensar no vestido... o azul, talvez. Ou o branco com as fitas..."
+personagem = ExtResource("x2")
+posicao = 100.0
+texto = "Obrigada, senhora bruxa. Agora consigo até pensar no vestido... o azul, talvez. Ou o branco com as fitas..."
 
 [sub_resource type="Resource" id="R_120"]
 script = ExtResource("2_x")
@@ -435,7 +468,9 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_121"]
 script = ExtResource("4_x")
-texto = "[PRINCESA;princesa;100] A senhora precisa vir ao casamento! Não é, pai?"
+personagem = ExtResource("x2")
+posicao = 100.0
+texto = "A senhora precisa vir ao casamento! Não é, pai?"
 
 [sub_resource type="Resource" id="R_122"]
 script = ExtResource("2_x")
@@ -443,7 +478,9 @@ segundos = 0.6
 
 [sub_resource type="Resource" id="R_123"]
 script = ExtResource("4_x")
-texto = "[REI;rei;100] ..."
+personagem = ExtResource("x1")
+posicao = 100.0
+texto = "..."
 
 [sub_resource type="Resource" id="R_124"]
 script = ExtResource("2_x")
@@ -451,7 +488,9 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_125"]
 script = ExtResource("4_x")
-texto = "[REI;rei;100] Hmpf. Está bem. Está convidada, bruxa."
+personagem = ExtResource("x1")
+posicao = 100.0
+texto = "Hmpf. Está bem. Está convidada, bruxa."
 
 [sub_resource type="Resource" id="R_126"]
 script = ExtResource("2_x")
@@ -459,7 +498,8 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_127"]
 script = ExtResource("4_x")
-texto = "[BRUXA;bruxa_grande;0] Será uma honra, Majestade."
+personagem = ExtResource("x0")
+texto = "Será uma honra, Majestade."
 
 [sub_resource type="Resource" id="R_128"]
 script = ExtResource("17_x")
@@ -480,7 +520,9 @@ condicao = SubResource("R_130")
 
 [sub_resource type="Resource" id="R_132"]
 script = ExtResource("4_x")
-texto = "[PRINCESA;princesa;100] Estou calma... mas me sinto estranha. Não pareço eu mesma."
+personagem = ExtResource("x2")
+posicao = 100.0
+texto = "Estou calma... mas me sinto estranha. Não pareço eu mesma."
 
 [sub_resource type="Resource" id="R_133"]
 script = ExtResource("2_x")
@@ -488,7 +530,9 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_134"]
 script = ExtResource("4_x")
-texto = "[REI;rei;100] O que você fez com a minha filha, bruxa?"
+personagem = ExtResource("x1")
+posicao = 100.0
+texto = "O que você fez com a minha filha, bruxa?"
 
 [sub_resource type="Resource" id="R_135"]
 script = ExtResource("2_x")
@@ -496,7 +540,8 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_136"]
 script = ExtResource("4_x")
-texto = "[BRUXA;bruxa_grande;0] Ela está calma, Majestade. Como pediram."
+personagem = ExtResource("x0")
+texto = "Ela está calma, Majestade. Como pediram."
 
 [sub_resource type="Resource" id="R_137"]
 script = ExtResource("2_x")
@@ -504,7 +549,9 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_138"]
 script = ExtResource("4_x")
-texto = "[REI;rei;100] Hmpf. Veremos no casamento. Saia."
+personagem = ExtResource("x1")
+posicao = 100.0
+texto = "Hmpf. Veremos no casamento. Saia."
 
 [sub_resource type="Resource" id="R_139"]
 script = ExtResource("14_x")
@@ -520,7 +567,9 @@ condicao = SubResource("R_140")
 
 [sub_resource type="Resource" id="R_142"]
 script = ExtResource("4_x")
-texto = "[PRINCESA;princesa;100] Acho que... continuo nervosa."
+personagem = ExtResource("x2")
+posicao = 100.0
+texto = "Acho que... continuo nervosa."
 
 [sub_resource type="Resource" id="R_143"]
 script = ExtResource("2_x")
@@ -528,7 +577,9 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_144"]
 script = ExtResource("4_x")
-texto = "[REI;rei;100] Era só isso? Água colorida?"
+personagem = ExtResource("x1")
+posicao = 100.0
+texto = "Era só isso? Água colorida?"
 
 [sub_resource type="Resource" id="R_145"]
 script = ExtResource("2_x")
@@ -536,7 +587,9 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_ira3"]
 script = ExtResource("4_x")
-texto = "[REI;rei;100] Você zombou de mim e da minha filha, bruxa?!"
+personagem = ExtResource("x1")
+posicao = 100.0
+texto = "Você zombou de mim e da minha filha, bruxa?!"
 
 [sub_resource type="Resource" id="R_ira_esp"]
 script = ExtResource("2_x")
@@ -560,7 +613,9 @@ condicao = SubResource("R_148")
 
 [sub_resource type="Resource" id="R_150"]
 script = ExtResource("4_x")
-texto = "[PRINCESA;princesa;100] Meu coração... está batendo ainda mais rápido!"
+personagem = ExtResource("x2")
+posicao = 100.0
+texto = "Meu coração... está batendo ainda mais rápido!"
 
 [sub_resource type="Resource" id="R_151"]
 script = ExtResource("2_x")
@@ -568,7 +623,9 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_152"]
 script = ExtResource("4_x")
-texto = "[REI;rei;100] Você piorou tudo!"
+personagem = ExtResource("x1")
+posicao = 100.0
+texto = "Você piorou tudo!"
 
 [sub_resource type="Resource" id="R_153"]
 script = ExtResource("14_x")
@@ -584,7 +641,9 @@ condicao = SubResource("R_154")
 
 [sub_resource type="Resource" id="R_156"]
 script = ExtResource("4_x")
-texto = "[PRINCESA;princesa;100] ..."
+personagem = ExtResource("x2")
+posicao = 100.0
+texto = "..."
 
 [sub_resource type="Resource" id="R_157"]
 script = ExtResource("2_x")
@@ -592,7 +651,9 @@ segundos = 0.8
 
 [sub_resource type="Resource" id="R_158"]
 script = ExtResource("4_x")
-texto = "[REI;rei;100] Filha? Filha, fale comigo!"
+personagem = ExtResource("x1")
+posicao = 100.0
+texto = "Filha? Filha, fale comigo!"
 
 [sub_resource type="Resource" id="R_159"]
 script = ExtResource("2_x")
@@ -600,7 +661,9 @@ segundos = 0.5
 
 [sub_resource type="Resource" id="R_160"]
 script = ExtResource("4_x")
-texto = "[PRINCESA;princesa;100] Casamento. Vestido. Casamento."
+personagem = ExtResource("x2")
+posicao = 100.0
+texto = "Casamento. Vestido. Casamento."
 
 [sub_resource type="Resource" id="R_161"]
 script = ExtResource("2_x")
@@ -608,7 +671,9 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_162"]
 script = ExtResource("4_x")
-texto = "[REI;rei;100] Filha...?"
+personagem = ExtResource("x1")
+posicao = 100.0
+texto = "Filha...?"
 
 [sub_resource type="Resource" id="R_163"]
 script = ExtResource("2_x")
@@ -616,7 +681,9 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_164"]
 script = ExtResource("4_x")
-texto = "[PRINCESA;princesa;100] Casamento. Vestido. Casamento. Vestido."
+personagem = ExtResource("x2")
+posicao = 100.0
+texto = "Casamento. Vestido. Casamento. Vestido."
 
 [sub_resource type="Resource" id="R_165"]
 script = ExtResource("2_x")
@@ -624,7 +691,9 @@ segundos = 0.5
 
 [sub_resource type="Resource" id="R_166"]
 script = ExtResource("4_x")
-texto = "[REI;rei;100] O que você fez com ela, bruxa?!"
+personagem = ExtResource("x1")
+posicao = 100.0
+texto = "O que você fez com ela, bruxa?!"
 
 [sub_resource type="Resource" id="R_167"]
 script = ExtResource("2_x")
@@ -632,7 +701,8 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_168"]
 script = ExtResource("4_x")
-texto = "[BRUXA;bruxa_grande;0] Majestade, eu... isso não devia acontecer. Deve passar com o tempo."
+personagem = ExtResource("x0")
+texto = "Majestade, eu... isso não devia acontecer. Deve passar com o tempo."
 
 [sub_resource type="Resource" id="R_169"]
 script = ExtResource("2_x")
@@ -640,7 +710,9 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_170"]
 script = ExtResource("4_x")
-texto = "[REI;rei;100] Passar?! Olhe para ela!"
+personagem = ExtResource("x1")
+posicao = 100.0
+texto = "Passar?! Olhe para ela!"
 
 [sub_resource type="Resource" id="R_171"]
 script = ExtResource("2_x")
@@ -648,7 +720,9 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_172"]
 script = ExtResource("4_x")
-texto = "[PRINCESA;princesa;100] CASAMENTO. VESTIDO."
+personagem = ExtResource("x2")
+posicao = 100.0
+texto = "CASAMENTO. VESTIDO."
 
 [sub_resource type="Resource" id="R_173"]
 script = ExtResource("2_x")

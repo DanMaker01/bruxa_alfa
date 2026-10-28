@@ -10,6 +10,8 @@
 [ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="22_x"]
 [ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="23_x"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="24_x"]
+[ext_resource type="Resource" path="res://dados/falantes/rei.tres" id="x0"]
+[ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="x1"]
 
 [sub_resource type="Resource" id="R_174"]
 script = ExtResource("18_x")
@@ -19,7 +21,9 @@ duracao = 0.8
 
 [sub_resource type="Resource" id="R_175"]
 script = ExtResource("4_x")
-texto = "[REI;rei;100] Guardas! Prendam essa bruxa!"
+personagem = ExtResource("x0")
+posicao = 100.0
+texto = "Guardas! Prendam essa bruxa!"
 
 [sub_resource type="Resource" id="R_176"]
 script = ExtResource("2_x")
@@ -27,7 +31,8 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_177"]
 script = ExtResource("4_x")
-texto = "[BRUXA;bruxa_grande;0] Majestade, por favor, me desculpe! Eu posso consertar!"
+personagem = ExtResource("x1")
+texto = "Majestade, por favor, me desculpe! Eu posso consertar!"
 
 [sub_resource type="Resource" id="R_178"]
 script = ExtResource("2_x")
@@ -35,7 +40,9 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_179"]
 script = ExtResource("4_x")
-texto = "[REI;rei;100] Prendam-na! AGORA!"
+personagem = ExtResource("x0")
+posicao = 100.0
+texto = "Prendam-na! AGORA!"
 
 [sub_resource type="Resource" id="R_180"]
 script = ExtResource("2_x")

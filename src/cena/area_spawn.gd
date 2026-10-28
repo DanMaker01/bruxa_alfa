@@ -41,8 +41,9 @@ const TEMPO_APARECER: float = 0.5
 		queue_redraw()
 ## Tempo (s) depois de coletar até nascer um novo.
 @export var cooldown: float = 1.0
-## Espalhamento: 0 = bem espalhados (longe dos que já estão no mapa), 0,5 = aleatório,
-## 1 = bem próximos (perto dos que já estão no mapa).
+## Espalhamento em relação a UM dos itens que já estão no mapa (sorteado, a "referência"):
+## 0 = nasce o mais perto possível dela, 0,5 = aleatório, 1 = o mais longe possível.
+## Sem nenhum item no mapa: nasce num ponto aleatório da área. (Não depende de onde o item foi colhido.)
 @export_range(0.0, 1.0, 0.05) var espalhamento: float = 0.3
 ## Quantos pontos aleatórios são sorteados para escolher o melhor.
 const CANDIDATOS: int = 12
@@ -127,19 +128,19 @@ func _renascer(i: int) -> void:
 		no.refresh_event()
 	_efeito_nascer(no)
 
-## Ponto da faixa conforme o espalhamento: sorteia CANDIDATOS pontos e escolhe o que
-## fica mais longe (espalhamento 0) ou mais perto (espalhamento 1) dos que já estão no mapa.
+## Ponto da faixa conforme o espalhamento: sorteia uma referência entre os itens no mapa,
+## sorteia CANDIDATOS pontos e escolhe o mais perto (espalhamento 0) ou o mais longe
+## (espalhamento 1) dela.
 func _ponto_livre(outras: Array) -> Vector2:
 	if outras.is_empty():
 		return _ponto_aleatorio()
-	var peso: float = 1.0 - 2.0 * espalhamento   # +1 = quer longe, −1 = quer perto, 0 = tanto faz
+	var ancora: Vector2 = outras.pick_random()
+	var peso: float = 2.0 * espalhamento - 1.0   # +1 = quer longe, −1 = quer perto, 0 = tanto faz
 	var melhor := _ponto_aleatorio()
 	var melhor_nota := -INF
 	for k in CANDIDATOS:
 		var p := _ponto_aleatorio()
-		var d := INF
-		for q in outras:
-			d = minf(d, absf(p.x - q.x))
+		var d := absf(p.x - ancora.x)
 		var nota: float = peso * d + (1.0 - absf(peso)) * randf() * largura   # perto de 0,5 manda o acaso
 		if nota > melhor_nota:
 			melhor_nota = nota

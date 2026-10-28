@@ -68,7 +68,7 @@ func texto_flutuante(texto: String, cor: Color) -> void:
 		return
 	var label := Label.new()
 	label.text = texto
-	label.add_theme_font_size_override("font_size", 18)
+	label.add_theme_font_size_override("font_size", 26)
 	label.add_theme_color_override("font_color", cor)
 	label.add_theme_color_override("font_outline_color", Color.BLACK)
 	label.add_theme_constant_override("outline_size", 6)

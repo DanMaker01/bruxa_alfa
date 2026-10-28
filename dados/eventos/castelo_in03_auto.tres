@@ -11,12 +11,18 @@
 [ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="9_6gxk4"]
 [ext_resource type="Script" uid="uid://7c1614u5xl4b" path="res://src/dados/comandos/cmd_fade.gd" id="11_ms7j5"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="12_vhbs4"]
+[ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="x0"]
+[ext_resource type="Resource" path="res://dados/falantes/guarda1.tres" id="x1"]
+[ext_resource type="Resource" path="res://dados/falantes/guarda2.tres" id="x2"]
 [ext_resource type="Script" uid="uid://7xxa8u611ha0" path="res://src/dados/comandos/cmd_mostrar_efeito.gd" id="x_efeito"]
 [ext_resource type="Script" uid="uid://bnrknn0lpp5ss" path="res://src/dados/comandos/cmd_teleportar.gd" id="x_tele"]
 
 [sub_resource type="Resource" id="Resource_eqdgj"]
 script = ExtResource("1_77afe")
 metadata/_custom_type_script = "uid://gdfc3xl4mcr4"
+
+[sub_resource type="Resource" id="F_trava"]
+script = ExtResource("6_ui7tj")
 
 [sub_resource type="Resource" id="Resource_fenex"]
 script = ExtResource("4_fa4c3")
@@ -33,7 +39,8 @@ metadata/_custom_type_script = "uid://dkw5y5gsrn515"
 
 [sub_resource type="Resource" id="Resource_c5goq"]
 script = ExtResource("9_6gxk4")
-texto = "[BRUXA;bruxa_grande;100] Aqui está o véu. Tenho que pegá-lo e dar um jeito de sair daqui."
+personagem = ExtResource("x0")
+texto = "Aqui está o véu. Tenho que pegá-lo e dar um jeito de sair daqui."
 metadata/_custom_type_script = "uid://8liac65hmnnq"
 
 [sub_resource type="Resource" id="Resource_u3okc"]
@@ -43,7 +50,8 @@ valor = 1.0
 
 [sub_resource type="Resource" id="Resource_tss05"]
 script = ExtResource("9_6gxk4")
-texto = "[BRUXA;bruxa_grande;100] E agora!? Não consigo pular daqui. O que eu faço?"
+personagem = ExtResource("x0")
+texto = "E agora!? Não consigo pular daqui. O que eu faço?"
 metadata/_custom_type_script = "uid://8liac65hmnnq"
 
 [sub_resource type="Resource" id="Resource_830pm"]
@@ -76,7 +84,8 @@ metadata/_custom_type_script = "uid://dkw5y5gsrn515"
 
 [sub_resource type="Resource" id="Resource_kfwn1"]
 script = ExtResource("9_6gxk4")
-texto = "[BRUXA;bruxa_grande;100] Ah!! Espera aí... eu tinha uma Poção Concentrada de Pó de Retorno aqui no bolso. Veio em boa hora!"
+personagem = ExtResource("x0")
+texto = "Ah!! Espera aí... eu tinha uma Poção de Pó de Retorno Concentrada aqui no bolso. Veio em boa hora!"
 metadata/_custom_type_script = "uid://8liac65hmnnq"
 
 [sub_resource type="Resource" id="Resource_kglhu"]
@@ -110,12 +119,16 @@ velocidade = 100.0
 
 [sub_resource type="Resource" id="Resource_6gxk4"]
 script = ExtResource("9_6gxk4")
-texto = "[GUARDA;guarda;100] Ela não pode ter fugido por aqui..."
+personagem = ExtResource("x1")
+posicao = 100.0
+texto = "Ela não pode ter fugido por aqui..."
 metadata/_custom_type_script = "uid://8liac65hmnnq"
 
 [sub_resource type="Resource" id="Resource_lgiqq"]
 script = ExtResource("9_6gxk4")
-texto = "[GUARDA;guarda;50] Parece que ela desapareceu. "
+personagem = ExtResource("x2")
+posicao = 50.0
+texto = "Parece que ela desapareceu."
 metadata/_custom_type_script = "uid://8liac65hmnnq"
 
 [sub_resource type="Resource" id="Resource_ms7j5"]
@@ -149,17 +162,23 @@ script = ExtResource("11_ms7j5")
 tipo = 1
 tempo = 0.8
 
+[sub_resource type="Resource" id="F_destrava"]
+script = ExtResource("6_ui7tj")
+acao = 1
+
 [sub_resource type="Resource" id="F_esp2"]
 script = ExtResource("4_fa4c3")
 segundos = 0.5
 
 [sub_resource type="Resource" id="F_msg1"]
 script = ExtResource("9_6gxk4")
-texto = "[BRUXA;bruxa_grande;0] ...Por pouco."
+personagem = ExtResource("x0")
+texto = "...Por pouco."
 
 [sub_resource type="Resource" id="F_msg2"]
 script = ExtResource("9_6gxk4")
-texto = "[BRUXA;bruxa_grande;0] Mas agora tenho um pedaço do véu."
+personagem = ExtResource("x0")
+texto = "Mas agora tenho um pedaço do véu."
 
 [sub_resource type="Resource" id="F_var"]
 script = ExtResource("8_261ie")
@@ -180,7 +199,7 @@ variavel = "missao01_veu"
 script = ExtResource("1_77afe")
 condicoes = Array[ExtResource("3_kfwn1")]([SubResource("Resource_y53hh"), SubResource("R_veu0")])
 gatilho = 2
-comandos = Array[ExtResource("2_nuod5")]([SubResource("Resource_fenex"), SubResource("Resource_sjcg8"), SubResource("Resource_trixx"), SubResource("Resource_c5goq"), SubResource("Resource_u3okc"), SubResource("Resource_tss05"), SubResource("Resource_830pm"), SubResource("Resource_mjxjf"), SubResource("Resource_77afe"), SubResource("Resource_nuod5"), SubResource("Resource_aeogb"), SubResource("Resource_2l5rc"), SubResource("Resource_kfwn1"), SubResource("Resource_kglhu"), SubResource("Resource_fa4c3"), SubResource("Resource_ui7tj"), SubResource("Resource_h5phe"), SubResource("Resource_261ie"), SubResource("Resource_6gxk4"), SubResource("Resource_lgiqq"), SubResource("Resource_ms7j5"), SubResource("Resource_vhbs4"), SubResource("Resource_2wpu5"), SubResource("F_tele"), SubResource("F_mostra"), SubResource("F_esp"), SubResource("F_fade"), SubResource("F_esp2"), SubResource("F_msg1"), SubResource("F_msg2"), SubResource("F_var")])
+comandos = Array[ExtResource("2_nuod5")]([SubResource("F_trava"), SubResource("Resource_fenex"), SubResource("Resource_sjcg8"), SubResource("Resource_trixx"), SubResource("Resource_c5goq"), SubResource("Resource_u3okc"), SubResource("Resource_tss05"), SubResource("Resource_830pm"), SubResource("Resource_mjxjf"), SubResource("Resource_77afe"), SubResource("Resource_nuod5"), SubResource("Resource_aeogb"), SubResource("Resource_2l5rc"), SubResource("Resource_kfwn1"), SubResource("Resource_kglhu"), SubResource("Resource_fa4c3"), SubResource("Resource_ui7tj"), SubResource("Resource_h5phe"), SubResource("Resource_261ie"), SubResource("Resource_6gxk4"), SubResource("Resource_lgiqq"), SubResource("Resource_ms7j5"), SubResource("Resource_vhbs4"), SubResource("Resource_2wpu5"), SubResource("F_tele"), SubResource("F_mostra"), SubResource("F_esp"), SubResource("F_fade"), SubResource("F_destrava"), SubResource("F_esp2"), SubResource("F_msg1"), SubResource("F_msg2"), SubResource("F_var")])
 metadata/_custom_type_script = "uid://gdfc3xl4mcr4"
 
 [resource]

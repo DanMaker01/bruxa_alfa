@@ -1,6 +1,6 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://dmrkasnqwesa"]
 
-[ext_resource type="Texture2D" uid="uid://cjqrmth4vy8a7" path="res://assets/mapa/mapa_bruxa_in/vestido.png" id="1_dux12"]
+[ext_resource type="Texture2D" uid="uid://cjqrmth4vy8a7" path="res://assets/eventos/vestido/vestido.png" id="1_dux12"]
 
 [resource]
 animations = [{

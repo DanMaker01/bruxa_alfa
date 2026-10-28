@@ -53,7 +53,7 @@ segundos = 7.999999999999744
 script = ExtResource("13_leg")
 texto = "Em 1484, o Papa Inocêncio VIII deu aos inquisidores o poder de caçar bruxas.
 
-Toda mulher que vivesse sozinha, ou entendesse de ervas passou a ser suspeita."
+Toda mulher que vivesse sozinha ou entendesse de ervas passou a ser suspeita."
 segundos = 9.99999999999968
 
 [sub_resource type="Resource" id="Resource_leg2"]
@@ -110,6 +110,7 @@ tempo = 1.499999999999952
 
 [sub_resource type="Resource" id="Resource_qvtfd"]
 script = ExtResource("4_ghp5v")
+segundos = 0.1999999999999936
 metadata/_custom_type_script = "uid://dkw5y5gsrn515"
 
 [sub_resource type="Resource" id="Resource_0fsx2"]
@@ -134,9 +135,11 @@ label = "casa"
 [sub_resource type="Resource" id="I_cam0"]
 script = ExtResource("20_cam")
 posicao = Vector2(960, 480)
+velocidade = 0.999999999999968
 
 [sub_resource type="Resource" id="Resource_5hi55"]
 script = ExtResource("4_ghp5v")
+segundos = 0.499999999999984
 metadata/_custom_type_script = "uid://dkw5y5gsrn515"
 
 [sub_resource type="Resource" id="I_cam1"]
@@ -168,7 +171,7 @@ segundos = 0.5
 [sub_resource type="Resource" id="Resource_cy5o6"]
 script = ExtResource("7_bfmu5")
 mapa = "res://mapas/mapa_bruxa_in.tscn"
-posicao = Vector2(240, 490)
+posicao = Vector2(240, 440)
 direcao = 2
 
 [sub_resource type="Resource" id="Resource_cdvw3"]

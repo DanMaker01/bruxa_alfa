@@ -129,10 +129,11 @@ func _process(delta: float) -> void:
 		_acumular_ingredientes(historico_T[-1])
 		if historico_T.size() > MAX_PONTOS + BLOCO_DESCARTE:
 			historico_T = historico_T.slice(BLOCO_DESCARTE)
+		# gráfico só 20x por segundo (antes era a cada frame: muitos pontos e fatias = lag)
+		if grafico and grafico.has_method("adicionar_ponto"):
+			grafico.adicionar_ponto(sistema.t_sim, sistema.T, sistema.F, _punindo_agora, _fatias_atual.duplicate())
 
 	indicadores.update(sistema, sistema.dt_step_atual)
-	if grafico and grafico.has_method("adicionar_ponto"):
-		grafico.adicionar_ponto(sistema.t_sim, sistema.T, sistema.F, _punindo_agora, _fatias_atual.duplicate())
 	if indicadores_label:
 		indicadores_label.text = "\n".join(indicadores.get_linhas_ui(sistema))
 	visual.atualizar(sistema, delta, _perda_media(), _punindo_agora)

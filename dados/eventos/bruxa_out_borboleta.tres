@@ -1,0 +1,64 @@
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://bukse5hyynds4"]
+
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="1_pag"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_cmd"]
+[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="3_msg"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="4_ev"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="4_o5k4v"]
+[ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="5_passo"]
+[ext_resource type="SpriteFrames" path="res://animacoes/borboleta.tres" id="6_anim"]
+[ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="x0"]
+
+[sub_resource type="Resource" id="M_1"]
+script = ExtResource("3_msg")
+personagem = ExtResource("x0")
+texto = "Voa, pequena. Hoje nenhuma receita pede asas de borboleta."
+
+[sub_resource type="Resource" id="P_voo1"]
+script = ExtResource("5_passo")
+tipo = 4
+distancia = 34.0
+altura = 16.0
+
+[sub_resource type="Resource" id="P_voo2"]
+script = ExtResource("5_passo")
+tipo = 4
+distancia = 26.0
+
+[sub_resource type="Resource" id="P_olhar"]
+script = ExtResource("5_passo")
+tipo = 5
+chance = 0.35
+
+[sub_resource type="Resource" id="P_voo3"]
+script = ExtResource("5_passo")
+tipo = 4
+chance = 0.7
+distancia = 40.0
+altura = 12.0
+
+[sub_resource type="Resource" id="P_paira"]
+script = ExtResource("5_passo")
+segundos = 0.0
+segundos_max = 0.5
+
+[sub_resource type="Resource" id="P_volta"]
+script = ExtResource("5_passo")
+tipo = 5
+chance = 0.25
+olhar = 2
+
+[sub_resource type="Resource" id="Pag_1"]
+script = ExtResource("1_pag")
+sprite_frames = ExtResource("6_anim")
+area_scale = Vector2(5, 5)
+movimento = 1
+rota = Array[ExtResource("5_passo")]([SubResource("P_voo1"), SubResource("P_voo2"), SubResource("P_olhar"), SubResource("P_voo3"), SubResource("P_paira"), SubResource("P_volta")])
+rota_velocidade = 70.0
+rota_raio = 220.0
+comandos = Array[ExtResource("2_cmd")]([SubResource("M_1")])
+
+[resource]
+script = ExtResource("4_ev")
+id = "bruxa_out_borboleta"
+paginas = Array[ExtResource("1_pag")]([SubResource("Pag_1")])

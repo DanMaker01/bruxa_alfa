@@ -9,6 +9,11 @@
 [ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="6_mugk8"]
 [ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="7_452dn"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="7_x3b4m"]
+[ext_resource type="Script" uid="uid://bm6rsgpqii0pt" path="res://src/dados/comandos/cmd_som.gd" id="x0"]
+
+[sub_resource type="Resource" id="F_som_passos1"]
+script = ExtResource("x0")
+arquivo = "res://audio/se/move.mp3"
 
 [sub_resource type="Resource" id="Resource_2svp3"]
 script = ExtResource("3_452dn")
@@ -36,7 +41,7 @@ sprite_frames = ExtResource("6_dcmtn")
 animacao = "parado"
 area_pos = Vector2(0, -10)
 area_scale = Vector2(9, 36)
-comandos = Array[ExtResource("2_mugk8")]([SubResource("Resource_2svp3"), SubResource("Resource_yn3p2"), SubResource("Resource_p2kj0"), SubResource("Resource_xqsd6")])
+comandos = Array[ExtResource("2_mugk8")]([SubResource("F_som_passos1"), SubResource("Resource_2svp3"), SubResource("Resource_yn3p2"), SubResource("Resource_p2kj0"), SubResource("Resource_xqsd6")])
 
 [resource]
 script = ExtResource("7_x3b4m")

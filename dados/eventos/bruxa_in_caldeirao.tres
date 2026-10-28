@@ -13,10 +13,12 @@
 [ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="11_x"]
 [ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="12_x"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="13_x"]
+[ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="x0"]
 
 [sub_resource type="Resource" id="R_2"]
 script = ExtResource("2_x")
-texto = "[BRUXA;bruxa_grande;0] Vamos ver o que sai deste caldeirão."
+personagem = ExtResource("x0")
+texto = "Vamos ver o que sai deste caldeirão."
 
 [sub_resource type="Resource" id="R_3"]
 script = ExtResource("3_x")
@@ -59,7 +61,8 @@ condicao = SubResource("R_11")
 
 [sub_resource type="Resource" id="R_13"]
 script = ExtResource("2_x")
-texto = "[BRUXA;bruxa_grande;0] Perfeita! Está do jeitinho que eu queria."
+personagem = ExtResource("x0")
+texto = "Perfeita! Está do jeitinho que eu queria."
 
 [sub_resource type="Resource" id="R_14"]
 script = ExtResource("8_x")
@@ -76,7 +79,8 @@ condicao = SubResource("R_15")
 
 [sub_resource type="Resource" id="R_17"]
 script = ExtResource("2_x")
-texto = "[BRUXA;bruxa_grande;0] Não ficou perfeita... mas deve acalmar a moça."
+personagem = ExtResource("x0")
+texto = "Não ficou perfeita... mas deve acalmar a moça."
 
 [sub_resource type="Resource" id="R_18"]
 script = ExtResource("8_x")
@@ -93,14 +97,16 @@ condicao = SubResource("R_19")
 
 [sub_resource type="Resource" id="R_21"]
 script = ExtResource("2_x")
-texto = "[BRUXA;bruxa_grande;0] Hmm. Saiu fraca. Vai servir, ou faço outra?"
+personagem = ExtResource("x0")
+texto = "Hmm. Saiu fraca. Vai servir, ou faço outra?"
 
 [sub_resource type="Resource" id="R_22"]
 script = ExtResource("8_x")
 
 [sub_resource type="Resource" id="R_23"]
 script = ExtResource("2_x")
-texto = "[BRUXA;bruxa_grande;0] Isso não é Calma Profunda nem aqui nem no inferno. Melhor fazer de novo."
+personagem = ExtResource("x0")
+texto = "Isso não é Calma Profunda nem aqui nem no inferno. Melhor fazer de novo."
 
 [sub_resource type="Resource" id="R_24"]
 script = ExtResource("9_x")
@@ -117,7 +123,8 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_28"]
 script = ExtResource("2_x")
-texto = "[BRUXA;bruxa_grande;0] De qualquer jeito, agora os guardas vão me deixar passar até o castelo."
+personagem = ExtResource("x0")
+texto = "De qualquer jeito, agora os guardas vão me deixar passar até o castelo."
 
 [sub_resource type="Resource" id="R_29"]
 script = ExtResource("9_x")

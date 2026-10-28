@@ -1,12 +1,12 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://3d8yoldrsi2c"]
 
-[ext_resource type="Texture2D" uid="uid://0mbq87mk43a1" path="res://assets/mapa/mapa_floresta/floresta_erva.png" id="1_181kk"]
+[ext_resource type="Texture2D" uid="uid://f8ct3hb1xpp3" path="res://assets/eventos/erva/floresta_erva.png" id="1_dpfft"]
 
 [resource]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_181kk")
+"texture": ExtResource("1_dpfft")
 }],
 "loop": true,
 "name": &"default",

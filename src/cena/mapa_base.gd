@@ -26,23 +26,35 @@ func _find_sprite_recursive(node: Node) -> Sprite2D:
 			return found
 	return null
 
+## Limites da câmera = do x 0 até a borda direita da MAIOR imagem da camada "Meio"
+## (antes era a primeira imagem: um enfeite pequeno no Meio, como a casa, cortava o mapa).
 func _calc_limits():
 	var n = _find_frente()
 	if n:
-		var sprite = _find_sprite_recursive(n)
-		if sprite and sprite.texture:
-			var tex_size = sprite.texture.get_size()
-			var effective_width = tex_size.x * sprite.scale.x
-			var sprite_left = sprite.global_position.x
-			var sprite_right = sprite_left + effective_width
-			
-			# 🔥 LIMITES AJUSTADOS
+		var direita := 0.0
+		for sprite in _sprites_recursivo(n):
+			if sprite.texture:
+				direita = maxf(direita, _borda_direita(sprite))
+		if direita > 0.0:
 			cam.l = 0
-			cam.r = sprite_right
+			cam.r = direita
 			cam.b = 960
-			
 			print("[MapaBase] Limites: L:", cam.l, " R:", cam.r)
 			return
+
+func _sprites_recursivo(node: Node) -> Array:
+	var lista: Array = []
+	for child in node.get_children():
+		if child is Sprite2D:
+			lista.append(child)
+		lista.append_array(_sprites_recursivo(child))
+	return lista
+
+## Borda direita (x global) de uma imagem, considerando posição, escala e centered.
+func _borda_direita(sprite: Sprite2D) -> float:
+	var r: Rect2 = sprite.get_rect()
+	var xf: Transform2D = sprite.get_global_transform()
+	return maxf((xf * r.position).x, (xf * r.end).x)
 
 func _find_frente():
 	for c in get_children():

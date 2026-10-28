@@ -1,0 +1,18 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/eventos/borboleta/borboleta1.png" id="1_b1"]
+[ext_resource type="Texture2D" path="res://assets/eventos/borboleta/borboleta2.png" id="2_b2"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_b1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_b2")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]

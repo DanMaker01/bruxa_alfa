@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Personagem" format=3]
+
+[ext_resource type="Script" path="res://src/dados/personagem.gd" id="1_p"]
+[ext_resource type="Texture2D" path="res://assets/faces/princesa.png" id="f0"]
+
+[resource]
+script = ExtResource("1_p")
+nome = "PRINCESA"
+faces = {"normal": ExtResource("f0")}

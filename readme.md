@@ -41,14 +41,17 @@ EstradaB
 
 [.] v3
 [] mapa:
-	[.] bruxa_out, mais camadas[frente,meio,fundo], animais[sapo,borboleta], etc.
+	[?] o espalhamento não é em relação ao item que foi colhido, é em relação a um dos itens que já está na tela.
+		Feito (area_spawn.gd): sorteia uma referência entre as cópias que estão no mapa. Espalhamento 0 = nasce o mais perto possível dela, 1 = o mais longe possível, 0,5 = aleatório. Sem nenhuma no mapa: ponto aleatório da área. Padrão 0,7; cogumelo (bosque e estradaA) 0,3.
 [?] Parallax revisado (fundo 0.2, meio 1.0, frente 1.1; mapa_base acha os limites pela camada "Meio"):
-		bosque: Fundo (chão) virou Meio 1.0; Meio (árvores na frente) virou Frente 1.1.
-		bruxa_out: Fundo 0.2; casa foi para Meio; Frente2 removida.
-		castelo_in03: Fundo 0.2, Frente 1.1. castelo_out: Fundo 0.2, Frente2 virou Frente 1.1.
-		cidadeA, estradaA, estradaB: Fundo 0.2.
-		ponte: Fundo4 céu (z -20), Fundo3 nuvens longe (z -15, pan -6), Fundo2 montanha (z -10), Fundo nuvens (z -5, pan -12) todos 0.2; Meio/Meio2/Meio3 penhasco e ponte 1.0; Frente nuvens perto (z 10, fator 1.1, pan -40, alto da tela).
-		Interiores (bruxa_in, castelo_in01/02, cidadeA_in01-03): a camada "Frente+" tem a moldura escura *_fundo.png na frente: 0.9 (era 0.8).
+	Corrigido: o limite da câmera usava só a PRIMEIRA imagem do Meio; tirando as árvores do Meio, sobrava a casa (pequena) e o mapa cortava. Agora usa a borda direita da maior imagem do Meio.
+	Camada Frente (1.1) num mapa de 6000 px precisa de imagem com 640 + 1,1 × 5360 = 6536 px (ou scale x 1.09 na de 6000); senão aparece um buraco na direita.
+	bosque: Fundo (chão) virou Meio 1.0; Meio (árvores na frente) virou Frente 1.1.
+	bruxa_out: Fundo 0.2; casa foi para Meio; Frente2 removida.
+	castelo_in03: Fundo 0.2, Frente 1.1. castelo_out: Fundo 0.2, Frente2 virou Frente 1.1.
+	cidadeA, estradaA, estradaB: Fundo 0.2.
+	ponte: Fundo4 céu (z -20), Fundo3 nuvens longe (z -15, pan -6), Fundo2 montanha (z -10), Fundo nuvens (z -5, pan -12) todos 0.2; Meio/Meio2/Meio3 penhasco e ponte 1.0; Frente nuvens perto (z 10, fator 1.1, pan -40, alto da tela).
+	Interiores (bruxa_in, castelo_in01/02, cidadeA_in01-03): a camada "Frente+" tem a moldura escura *_fundo.png na frente: 0.9 (era 0.8).
 	3 pouco efeito: "Era só isso? Água colorida?" → "Você zombou de mim e da minha filha, bruxa?!" → fuga.
 	4 piorou: "Você piorou tudo!" → fuga.
 	5 estereotipada: igual antes → fuga.
@@ -63,9 +66,30 @@ EstradaB
 	CamadaParallax: saiu continuar_na_borda/suavidade (agora é automático).
 	PROBLEMA:Ainda tem algum efeito com a camera nas bordas, até no mapa_intro acontece da câmera começar no lugar errado e se acertar rapidinho. Vamos deixar sem efeito nenhum e ir avançando para entender o problema.
 		Feito: desligado. camera_2d.gd SUAVIZAR = false (sem position_smoothing nem limit_smoothed: segue seco, para seco na borda, entra no mapa já no lugar). mapa_base.gd PARALLAX_NA_BORDA = false (camadas param junto). Para religar, trocar para true.
-
+		Resultado e ajustes: Deu certo, sem nada ficou bom. Agora vamos explorar para chegar no efeito de parallax que eu quero. a câmera parece certa, está parando nas bordas do mapa (as bordas são x=0 e x=max(larguras_sprites_camada_meio)). Já as camadas de fundo e frente não devem parar nas bordas, devem continuar, eu acho.
+		Testado: a frente ficou rápida demais (a camada acompanha a bruxa inteira na borda). Voltou PARALLAX_NA_BORDA = false; ajustar depois.
 [ ] História / missão: (em ordem)
-	[ ]	Verificação de diálogos e de todos os caminhos possíveis do Cap. 1 (resultados 1 a 5, com e sem poção no bolso, voltar à ponte/estradaB depois da fuga, véu pego ou não).
+	[?]	Verificação de diálogos e de todos os caminhos possíveis do Cap. 1 (resultados 1 a 5, com e sem poção no bolso, voltar à ponte/estradaB depois da fuga, véu pego ou não).
+		Corrigido:
+			Fuga com a bruxa destravada: castelo_in02_auto e castelo_in03_auto travam no começo (in03 destrava depois do fade em bruxa_in). O destravar do rei/princesa/castelo_in01_auto depois da entrega só roda com missao01_resultado < 3 (senão soltava a bruxa no meio da fuga e ela podia clicar nas passagens).
+			Porta (bruxa_in_passagem, "Ignorar" e depois "Abrir"): trava a bruxa na cena; missao01_aceita = 2 só no fim (antes dava para sair pela porta no meio da conversa). Ganhou o aviso do camponês sobre os guardas, que só existia no outro caminho.
+			Véu nos resultados 1 e 2: castelo_in03_veu agora tem a imagem (animacoes/veu.tres) e dá para clicar: ela pega um pedaço (missao01_veu = 1). Depois: "Já tenho o meu pedaço." Na fuga continua sendo pego pelo castelo_in03_auto.
+			Textos: nome "Poção de Pó de Retorno Concentrada" igual em todo lugar; etiquetas no castelo_in03_auto (bruxa ;0, guarda1/guarda2) e "Atrás dela!!" no in02 com quem fala; "E fala do príncipe sumido..."; vírgula na intro; espaços sobrando.
+		Removidos dos mapas: goblin de teste (bosque e cidadeA), baú (bruxa_in) e maçãs (cidadeA_in01, 02, 03). Os .tres (bos_goblin, bruxa_in_bau, cidadeA_in01_maca) ficaram sem uso: pode apagar.
+		Guardas (ponte e estradaB) continuam olhando só a variável missao01_pocao_feita (já cozinhou = pode passar).
+		Condição ITEM_NOME aceita * no fim: "Poção*" = qualquer item cujo nome começa com "Poção" (ficou disponível, sem uso por enquanto).
+		Abertura: a bruxa ainda anda até onde era o baú (A_mv1, deslocamento -50); lá vai entrar outro móvel.
+		"Fique com sua irmã" saiu: "Vá para casa. Amanhã, antes do casamento, ela vai estar mais tranquila."
+		Não mexi (decidir depois):
+			entrega_pocao aceita qualquer item.
+			Pó de Retorno nunca é dado nem gasto (de propósito: "tinha uma guardada no bolso").
+			castelo_in02_auto teleporta para o in03 em y 400 (o resto do jogo usa 505).
+			missao01_convite é gravada e nunca lida: fica para o Cap. 2 (convite do casamento).
+		Feito:
+			Rei e princesa: saíram as páginas de resultado >= 3 ("Prendam-na!", "Casamento. Vestido."), que não tinham como aparecer.
+			"Voltou, bruxa." / "Pai! A bruxa voltou." viraram "Então, bruxa?" / "Pai, a bruxa quer falar com o senhor." (servem saindo ou não da sala) + "Essa poção vai funcionar?".
+			Sprites próprios: animacoes/rei.tres usa eventos/rei/rei.png e princesa.tres usa eventos/princesa/princesa.png.
+			Pode apagar (sem uso): dados/variaveis/estradaA_pegou_cogumelo, pegou_floresta_erva, missao01_desvio, var01, var02; e, junto com os eventos bos_goblin/bruxa_in_bau/cidadeA_in01_maca, var00 e pegou_maca. ouro e reputacao ficam.
 ```
 
 ## Terminar até o Cap. 1 (1)
@@ -93,7 +117,11 @@ EstradaB
 
 [ ] Bugs/Revisão:
 [ ]		Tutorial do caldeirão na 1ª vez.
-[ ]		Fazer faces tbm terem seu .tres
+[?]		Faces em .tres: dados/falantes/*.tres são Personagem (src/dados/personagem.gd): nome + faces com nome ({"normal": ..., "pensando": ...}; a primeira é a padrão). O lado da tela não fica no personagem.
+			Mostrar mensagem / Mostrar opções: personagem, face ("" = a primeira) e posicao (0 = esquerda, 100 = direita) em cada fala. As 201 falas convertidas (bruxa 0, os outros 100, guarda2 50 numa fala; pensamentos da bruxa com face "pensando").
+			Posição: menu "(padrão)" / "escolher posição" no inspetor (no arquivo, posicao -1 = padrão). (padrão) repete a última posição em que aquele personagem falou (0 na primeira vez); qualquer outro valor vira a nova posição lembrada dele. Cada personagem lembra a sua.
+			[nome;foto;pos] no começo do texto continua valendo, com prioridade.
+			Personagens: bruxa (normal, pensando), campones, desconhecido (???), guarda1, guarda2, princesa, rei. bruxa_pensando.tres ficou sem uso: pode apagar.
 [ ]		Variações no flip card. (depois) Sorteadas: normal = 1 flip diagonal; variações no mesmo tempo: 5 flips com velocidade decrescente; flip mudando a dimensão horizontal, com 1 ou 5 flips.
 
 
@@ -123,7 +151,7 @@ EstradaB
 
 
 [ ]	Caldeirão:
-[.]		Labaredas (faíscas laranja subindo) ao abanar o fogo.
+[?]		Labaredas (faíscas laranja subindo) ao abanar o fogo. Agora são duas coisas: a labareda (bolhas de fogo) e brasas pequenas que sobem alto balançando de lado e somem. Abanar seguido (dentro de 0,9 s) aumenta as duas, até 4 abanadas (visual_caldeirao.gd: _labaredas, _brasas, LABAREDA_JANELA).
 [ ]		Tutorial(leve) na primeira vez. (DEPOIS DO CAP. 1)
 
 [ ] Mapa:
@@ -135,7 +163,7 @@ EstradaB
 [?]		Testar loop de bgm, loop de bgs. (floresta.mp3 já está com loop=true no import)
 [?]		cada mapa tocando BGM da fase em loop. (verificar mapa_base)
 			Feito: mapa_base tem bgm/bgm_volume no Inspector. Mesmo bgm = continua; outro = troca; vazio = para. Só a floresta tem bgm (floresta.mp3).
-[ ]		SE nos teleport (depois: som de passos na transição)
+[?]		SE nos teleport: passagens de beira de mapa tocam audio/se/move.mp3 antes do fade (17 passagens); portas tocam porta_abre.
 [?]		Tela preta das passagens mais curta: "esperar" depois do teleporte baixado de 0.4 para 0.2
 [ ]	Verificar todos os parallaxes (valores, direção, bordas).
 

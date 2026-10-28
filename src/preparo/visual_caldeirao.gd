@@ -47,7 +47,7 @@ const VERMELHO_MAX: float = 0.85       # 0..1: quanto puxa para COR_VERMELHO no 
 const COR_VERMELHO := Color(1.0, 0.22, 0.15)
 ## Vermelho de baixo para cima: acima de T_VERMELHO_INICIO o vermelho sobe do fundo e chega ao topo em T_VERMELHO_TOPO.
 const T_VERMELHO_TOPO: float = 300.0   # vermelho chega ao topo
-const T_VERMELHO_INICIO: float = 50.0
+const T_VERMELHO_INICIO: float = 100.0   # antes 50: avermelhava cedo demais
 const SHADER_RADIAL := """
 shader_type canvas_item;
 uniform float progresso : hint_range(0.0, 1.0) = 0.0;   // 0 = nada, 1 = vermelho até o topo
@@ -57,7 +57,7 @@ uniform float suavidade = 0.3;
 void fragment() {
 	vec4 c = texture(TEXTURE, UV) * COLOR;
 	float frente = 1.0 - progresso;   // UV.y: 0 no topo, 1 no fundo; a frente sobe do fundo
-	float m = smoothstep(frente - suavidade, frente, UV.y) * min(progresso * 3.0, 1.0) * forca;
+	float m = smoothstep(frente - suavidade, frente, UV.y) * smoothstep(0.0, 0.8, progresso) * forca;
 	c.rgb = mix(c.rgb, c.rgb * cor_quente.rgb * 1.3, m);
 	COLOR = c;
 }
@@ -467,15 +467,25 @@ func _atualizar_fumaca_fraca(sistema: SistemaTermico) -> void:
 		_fumaca_fraca.modulate.a = lerpf(0.4, 1.0, clampf(v, 0.0, 1.0))
 
 ## Labaredas: faíscas/chamas subindo quando abana (atiça) o fogo.
+## Abanar seguido aumenta as labaredas (combo dentro de LABAREDA_JANELA segundos).
+const LABAREDA_JANELA: float = 0.9
+var _labareda_combo: int = 0
+var _labareda_ultima: float = -10.0
+
 func _labaredas() -> void:
 	if not fogo or not fogo.get_parent():
 		return
+	var agora := Time.get_ticks_msec() / 1000.0
+	_labareda_combo = _labareda_combo + 1 if agora - _labareda_ultima < LABAREDA_JANELA else 1
+	_labareda_ultima = agora
+	var forca: float = clampf(float(_labareda_combo) / 4.0, 0.25, 1.0)
+	_brasas(forca)
 	var p := CPUParticles2D.new()
 	p.one_shot = true
 	p.explosiveness = 0.85
-	p.amount = 16
+	p.amount = int(10 + 14 * forca)
 	p.lifetime = 0.6
-	p.position = _base_fogo()
+	p.position = _base_fogo() + Vector2(0, PARTICULAS_DESCER)
 	p.z_index = fogo.z_index + 1
 	p.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
 	p.emission_rect_extents = Vector2(24, 4)
@@ -493,13 +503,46 @@ func _labaredas() -> void:
 	curva.add_point(Vector2(1, 0.2))
 	p.scale_amount_curve = curva
 	var rampa := Gradient.new()
-	rampa.set_color(0, Color(1.0, 0.95, 0.6, 1.0))
-	rampa.set_color(1, Color(0.9, 0.2, 0.05, 0.0))
-	rampa.add_point(0.4, Color(1.0, 0.55, 0.1, 0.9))
+	rampa = _rampa_fogo(0.4, 0.9)
 	p.color_ramp = rampa
 	fogo.get_parent().add_child(p)
 	p.emitting = true
 	get_tree().create_timer(p.lifetime + 0.3).timeout.connect(p.queue_free)
+
+## Faíscas laranja subindo ao abanar: pequenas, sobem alto balançando e somem no ar.
+func _brasas(forca: float) -> void:
+	var p := CPUParticles2D.new()
+	p.one_shot = true
+	p.explosiveness = 0.55
+	p.amount = int(8 + 22 * forca)
+	p.lifetime = lerpf(1.0, 1.7, forca)
+	p.randomness = 0.5
+	p.position = _base_fogo() + Vector2(0, PARTICULAS_DESCER - 10.0)
+	p.z_index = fogo.z_index + 2
+	p.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
+	p.emission_rect_extents = Vector2(26, 6)
+	p.direction = Vector2.UP
+	p.spread = 28.0
+	p.initial_velocity_min = 60.0 + 40.0 * forca
+	p.initial_velocity_max = 130.0 + 70.0 * forca
+	p.gravity = Vector2(0, -35)
+	p.damping_min = 10.0
+	p.damping_max = 25.0
+	p.tangential_accel_min = -45.0   # balanço de lado, como brasa no ar quente
+	p.tangential_accel_max = 45.0
+	p.scale_amount_min = 1.5
+	p.scale_amount_max = 3.2
+	var curva := Curve.new()
+	curva.add_point(Vector2(0, 1.0))
+	curva.add_point(Vector2(0.7, 0.8))
+	curva.add_point(Vector2(1, 0.0))
+	p.scale_amount_curve = curva
+	var rampa := Gradient.new()
+	rampa = _rampa_fogo(0.25)
+	p.color_ramp = rampa
+	fogo.get_parent().add_child(p)
+	p.emitting = true
+	get_tree().create_timer(p.lifetime + 0.4).timeout.connect(p.queue_free)
 
 ## Baforada pequena de fumaça a cada passo de abafar.
 func _baforada() -> void:
@@ -572,6 +615,26 @@ func faisca_inicial() -> void:
 	_faiscas(randi_range(6, 9), 1.5, 0.0)
 	_faisca_timer = FAISCA_INTERVALO_INICIO
 
+## Partículas do fogo (faíscas, labaredas, brasas) saem um pouco abaixo da base.
+const PARTICULAS_DESCER: float = 16.0
+
+## Cor do fogo agora (a mesma do sprite); apagado = laranja padrão.
+func _cor_fogo() -> Color:
+	var c: Color = fogo.self_modulate if fogo else COR_FOGO_LIGA
+	if c.a < 0.1:
+		c = COR_FOGO_LIGA
+	c.a = 1.0
+	return c
+
+## Rampa: clara no começo, a cor do fogo no meio, some no fim.
+func _rampa_fogo(meio: float = 0.3, alfa_meio: float = 1.0) -> Gradient:
+	var c := _cor_fogo()
+	var g := Gradient.new()
+	g.set_color(0, c.lerp(Color.WHITE, 0.55))
+	g.set_color(1, Color(c.darkened(0.35), 0.0))
+	g.add_point(meio, Color(c, alfa_meio))
+	return g
+
 ## Base do fogo (onde fica a lenha), no espaço do pai do sprite do fogo.
 func _base_fogo() -> Vector2:
 	if not fogo:
@@ -588,7 +651,7 @@ func _faiscas(qtd: int, forca: float, sucesso: float) -> void:
 	p.explosiveness = 1.0
 	p.amount = maxi(qtd, 1)
 	p.lifetime = lerpf(0.3, 0.9, sucesso) * randf_range(0.8, 1.2)
-	p.position = _base_fogo() + Vector2(randf_range(-18.0, 18.0) * (1.0 - sucesso), 0)
+	p.position = _base_fogo() + Vector2(randf_range(-18.0, 18.0) * (1.0 - sucesso), PARTICULAS_DESCER)
 	p.z_index = fogo.z_index + 1
 	p.direction = Vector2.UP
 	p.spread = lerpf(55.0, 85.0, sucesso)
@@ -600,9 +663,9 @@ func _faiscas(qtd: int, forca: float, sucesso: float) -> void:
 	p.scale_amount_min = 2.0 * forca
 	p.scale_amount_max = 4.0 * forca
 	var rampa := Gradient.new()
-	rampa.set_color(0, Color.WHITE if sucesso > 0.0 else COR_FAISCA)
-	rampa.set_color(1, COR_FAISCA_FIM)
-	rampa.add_point(0.35, COR_FAISCA)
+	rampa = _rampa_fogo(0.35)
+	if sucesso > 0.0:
+		rampa.set_color(0, Color.WHITE)
 	p.color_ramp = rampa
 	fogo.get_parent().add_child(p)
 	p.emitting = true

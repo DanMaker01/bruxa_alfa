@@ -11,10 +11,16 @@
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="21_x"]
 [ext_resource type="Script" uid="uid://dvii04cb4qtqa" path="res://src/dados/comandos/cmd_chamar_evento.gd" id="90_chamar"]
 [ext_resource type="Resource" uid="uid://boovm6x2jeto4" path="res://dados/eventos/entrega_pocao.tres" id="91_entrega"]
+[ext_resource type="Script" uid="uid://cwdgcnn30o052" path="res://src/dados/comandos/cmd_if.gd" id="x0"]
+[ext_resource type="Script" uid="uid://phmwdet0nd7d" path="res://src/dados/comandos/cmd_end.gd" id="x1"]
+[ext_resource type="Resource" path="res://dados/falantes/princesa.tres" id="x2"]
+[ext_resource type="Resource" path="res://dados/falantes/rei.tres" id="x3"]
 
 [sub_resource type="Resource" id="R_1"]
 script = ExtResource("1_x")
-texto = "[PRINCESA;princesa;100] Desculpe... não consigo pensar em nada além do casamento."
+personagem = ExtResource("x2")
+posicao = 100.0
+texto = "Desculpe... não consigo pensar em nada além do casamento."
 
 [sub_resource type="Resource" id="R_2"]
 script = ExtResource("4_x")
@@ -29,7 +35,9 @@ script = ExtResource("5_x")
 
 [sub_resource type="Resource" id="R_4"]
 script = ExtResource("1_x")
-texto = "[PRINCESA;princesa;100] Pai! A bruxa voltou."
+personagem = ExtResource("x2")
+posicao = 100.0
+texto = "Pai, a bruxa quer falar com o senhor."
 
 [sub_resource type="Resource" id="R_5"]
 script = ExtResource("6_x")
@@ -37,7 +45,9 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_6"]
 script = ExtResource("1_x")
-texto = "[REI;rei;100] Hmpf. Voltou, bruxa."
+personagem = ExtResource("x3")
+posicao = 100.0
+texto = "Hmpf. Então, bruxa?"
 
 [sub_resource type="Resource" id="R_7"]
 script = ExtResource("6_x")
@@ -45,7 +55,9 @@ segundos = 0.3
 
 [sub_resource type="Resource" id="R_8"]
 script = ExtResource("1_x")
-texto = "[REI;rei;100] E então? Essa poção vai funcionar?"
+personagem = ExtResource("x3")
+posicao = 100.0
+texto = "Essa poção vai funcionar?"
 
 [sub_resource type="Resource" id="R_chamar_entrega"]
 script = ExtResource("90_chamar")
@@ -55,9 +67,22 @@ evento = ExtResource("91_entrega")
 script = ExtResource("6_x")
 segundos = 0.5
 
+[sub_resource type="Resource" id="F_cond_menor3"]
+script = ExtResource("11_x")
+variavel = "missao01_resultado"
+operador = 3
+valor = 3.0
+
+[sub_resource type="Resource" id="F_if_menor3"]
+script = ExtResource("x0")
+condicao = SubResource("F_cond_menor3")
+
 [sub_resource type="Resource" id="R_194"]
 script = ExtResource("5_x")
 acao = 1
+
+[sub_resource type="Resource" id="F_end_menor3"]
+script = ExtResource("x1")
 
 [sub_resource type="Resource" id="R_195"]
 script = ExtResource("11_x")
@@ -75,11 +100,13 @@ sprite_frames = ExtResource("2_x")
 colisao_scale = Vector2(9, 20.25)
 area_pos = Vector2(0, -10)
 area_scale = Vector2(16, 20.25)
-comandos = Array[ExtResource("3_x")]([SubResource("R_3"), SubResource("R_4"), SubResource("R_5"), SubResource("R_6"), SubResource("R_7"), SubResource("R_8"), SubResource("R_chamar_entrega"), SubResource("R_193"), SubResource("R_194")])
+comandos = Array[ExtResource("3_x")]([SubResource("R_3"), SubResource("R_4"), SubResource("R_5"), SubResource("R_6"), SubResource("R_7"), SubResource("R_8"), SubResource("R_chamar_entrega"), SubResource("R_193"), SubResource("F_if_menor3"), SubResource("R_194"), SubResource("F_end_menor3")])
 
 [sub_resource type="Resource" id="R_198"]
 script = ExtResource("1_x")
-texto = "[PRINCESA;princesa;100] O azul ou o branco com fitas? Ah, a senhora vem, não vem?"
+personagem = ExtResource("x2")
+posicao = 100.0
+texto = "O azul ou o branco com fitas? Ah, a senhora vem, não vem?"
 
 [sub_resource type="Resource" id="R_199"]
 script = ExtResource("11_x")
@@ -97,7 +124,9 @@ comandos = Array[ExtResource("3_x")]([SubResource("R_198")])
 
 [sub_resource type="Resource" id="R_201"]
 script = ExtResource("1_x")
-texto = "[PRINCESA;princesa;100] Senhora bruxa... eu sou eu mesma? Às vezes não sei."
+personagem = ExtResource("x2")
+posicao = 100.0
+texto = "Senhora bruxa... eu sou eu mesma? Às vezes não sei."
 
 [sub_resource type="Resource" id="R_202"]
 script = ExtResource("11_x")
@@ -113,26 +142,7 @@ area_pos = Vector2(0, -10)
 area_scale = Vector2(16, 20.25)
 comandos = Array[ExtResource("3_x")]([SubResource("R_201")])
 
-[sub_resource type="Resource" id="R_210"]
-script = ExtResource("1_x")
-texto = "[PRINCESA;princesa;100] Casamento. Vestido. Casamento."
-
-[sub_resource type="Resource" id="R_211"]
-script = ExtResource("11_x")
-variavel = "missao01_resultado"
-operador = 4
-valor = 3.0
-
-[sub_resource type="Resource" id="R_212"]
-script = ExtResource("4_x")
-condicoes = Array[ExtResource("11_x")]([SubResource("R_211")])
-sprite_frames = ExtResource("2_x")
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
-comandos = Array[ExtResource("3_x")]([SubResource("R_210")])
-
 [resource]
 script = ExtResource("21_x")
 id = "castelo_in01_princesa"
-paginas = Array[ExtResource("4_x")]([SubResource("R_2"), SubResource("R_197"), SubResource("R_200"), SubResource("R_203"), SubResource("R_212")])
+paginas = Array[ExtResource("4_x")]([SubResource("R_2"), SubResource("R_197"), SubResource("R_200"), SubResource("R_203")])

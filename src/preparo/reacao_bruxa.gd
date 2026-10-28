@@ -67,7 +67,7 @@ func _criar_balao() -> void:
 	st.content_margin_bottom = 4
 	_balao.add_theme_stylebox_override("panel", st)
 	_balao_label = Label.new()
-	_balao_label.add_theme_font_size_override("font_size", 20)
+	_balao_label.add_theme_font_size_override("font_size", 28)
 	_balao_label.add_theme_color_override("font_color", Color(0.1, 0.1, 0.1))
 	_balao.add_child(_balao_label)
 	_balao.position = BALAO_OFFSET

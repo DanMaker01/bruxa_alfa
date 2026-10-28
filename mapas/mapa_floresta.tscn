@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dwrg030fni3np" path="res://assets/mapa/mapa_floresta/floresta_fundo.png" id="2_pinheiros"]
 [ext_resource type="Script" uid="uid://bjxlt3vqym72w" path="res://src/cena/evento_base.gd" id="3_0h868"]
 [ext_resource type="Texture2D" uid="uid://s7fsf5qmeqi2" path="res://assets/mapa/mapa_bruxa_out/casa_bruxa.png" id="4_v0cwm"]
+[ext_resource type="Resource" uid="uid://bukse5hyynds4" path="res://dados/eventos/bruxa_out_borboleta.tres" id="8_lmgey"]
 [ext_resource type="Script" uid="uid://ci10r4ypiyt11" path="res://src/cena/area_spawn.gd" id="area_spawn"]
 [ext_resource type="Resource" uid="uid://0m5adb2hqhhk" path="res://dados/eventos/floresta_passagem1.tres" id="ev_floresta_passagem1"]
 [ext_resource type="Resource" uid="uid://p5edxojtjva3" path="res://dados/eventos/floresta_passagem2.tres" id="ev_floresta_passagem2"]
@@ -36,10 +37,36 @@ script = ExtResource("3_0h868")
 evento = ExtResource("ev_floresta_passagem_bruxa_out")
 
 [node name="AreaErva" type="Node2D" parent="Eventos" unique_id=1893270734]
-position = Vector2(1892, 582)
+z_index = 10
+position = Vector2(1892, 606)
 script = ExtResource("area_spawn")
 evento = ExtResource("ev_spawn_erva")
+quantidade = 5
 largura = 3399.9999999998913
+
+[node name="Borboleta" type="CharacterBody2D" parent="Eventos" unique_id=722555934]
+z_index = 4
+position = Vector2(3584, 440)
+script = ExtResource("3_0h868")
+evento = ExtResource("8_lmgey")
+
+[node name="Borboleta2" type="CharacterBody2D" parent="Eventos" unique_id=1156461238]
+z_index = 10
+position = Vector2(1856, 272)
+script = ExtResource("3_0h868")
+evento = ExtResource("8_lmgey")
+
+[node name="Borboleta3" type="CharacterBody2D" parent="Eventos" unique_id=1665855592]
+z_index = 4
+position = Vector2(744, 392)
+script = ExtResource("3_0h868")
+evento = ExtResource("8_lmgey")
+
+[node name="Borboleta4" type="CharacterBody2D" parent="Eventos" unique_id=1907933867]
+z_index = 4
+position = Vector2(4736, 320)
+script = ExtResource("3_0h868")
+evento = ExtResource("8_lmgey")
 
 [node name="Fundo2" type="Parallax2D" parent="." unique_id=2071520963]
 z_index = -20
@@ -60,11 +87,12 @@ centered = false
 [node name="Meio" type="Parallax2D" parent="." unique_id=1765584545]
 scroll_scale = Vector2(1, 0)
 
-[node name="Sprite2D" type="Sprite2D" parent="Meio" unique_id=2119594852]
+[node name="floresta_frente" type="Sprite2D" parent="Meio" unique_id=2119594852]
+z_index = 10
 texture = ExtResource("1_caki5")
 centered = false
 
-[node name="Sprite2D2" type="Sprite2D" parent="Meio" unique_id=9624765]
+[node name="casa" type="Sprite2D" parent="Meio" unique_id=9624765]
 z_index = -1
 position = Vector2(3666.0002, 552)
 scale = Vector2(0.15, 0.15)
