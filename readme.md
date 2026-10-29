@@ -10,17 +10,6 @@
 <tr><td>Idioma</td><td>Português</td></tr>
 </table>
 
-```
-Floresta    -   BruxaOut    -   BruxaIn
-Bosque
-Bosque
-CidadeA     -   in01    -   in02    -   in03
-EstradaA
-Ponte
-Castelo     -   in
-EstradaB
-```
-
 ![1788646480585](image/readme/1788646480585.png)![1788646486876](image/readme/1788646486876.png)
 
 ## Coisas a fazer
@@ -41,7 +30,7 @@ EstradaB
 
 [.] v3
 [ ] História / missão: 
-	[ ]	Diminuir a cidade (mapa_cidadeA) 5000 -> 4000?
+	[ ]	Diminuir a cidade (mapa_cidadeA) 5000 -> 4000? vou mudar sprite, organizar posição das casas, teleport ida e teleport volta. Adicionar 3 NPC. Vou criar os sprites.
 	[.] castelon_in01: Guardas e bruxa saem juntos e chegam juntos. a posição de início dos guardas e da bruxa está correta. mas as velocidades no decorrer estão diferentes para um dos guardas.
 	[.] na primeira vez que o campones bate na porta, deve ter uma expressão de som saindo da direção próximo à porta, aparecendo na câmera, um efeito simples. Quero efeito de tres risquinhos saindo radialmente de um ponto central, num cone de 30° para a esquerda.
 		remover: novo tipo SOM no cmd_mostrar_efeito (três arcos que abrem e somem, virados para o meio da tela; se a porta estiver fora da tela, aparecem na beira do lado dela). Em cada batida da primeira sequência do bruxa_in_auto.
@@ -62,6 +51,16 @@ EstradaB
 [ ]		Sprites 100%
 [ ]		Audio 100%
 [ ]		Menus 100%
+
+
+[] organização da pasta Graphics(está sendo chamada de assets neste projeto) estilo rpgmaker:
+	Animations (efeitos especiais, magias, etc)
+	Characters (eventos)
+	Icons
+	Panoramas (imagens para cenário)
+	Pictures (sprites para controlar na tela)
+	Transitions
+	Windowskins
 
 [] Casamento/História:
 	Decidido: sem prazo no Cap. 1. O casamento só acontece depois que ela entrega a poção e pega o véu; ninguém perde por demorar (sem contador de tempo).
