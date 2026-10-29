@@ -1,0 +1,144 @@
+[gd_scene format=3 uid="uid://vf2ekewtvgmc"]
+
+[ext_resource type="Script" uid="uid://dsxujjugldv23" path="res://src/cena/mapa_base.gd" id="1_aqo2a"]
+[ext_resource type="Texture2D" uid="uid://b031j80rwqloj" path="res://assets/mapa/mapa_bruxa_out/mapa_bruxa_out2_fundo.png" id="2_aqo2a"]
+[ext_resource type="Texture2D" uid="uid://bs3hyi7e40hjo" path="res://assets/mapa/mapa_bruxa_out/mapa_bruxa_out2_frente.png" id="3_lt8y8"]
+[ext_resource type="Texture2D" uid="uid://s7fsf5qmeqi2" path="res://assets/mapa/mapa_bruxa_out/casa_bruxa.png" id="4_gxuuu"]
+[ext_resource type="Script" uid="uid://bjxlt3vqym72w" path="res://src/cena/evento_base.gd" id="5_8ke3u"]
+[ext_resource type="Resource" uid="uid://dnakudqdv774e" path="res://dados/eventos/bruxa_out_passagem2.tres" id="6_1wdrw"]
+[ext_resource type="Resource" uid="uid://b50tjq8hxn2er" path="res://dados/eventos/bruxa_out_passagem1.tres" id="7_5ppnj"]
+[ext_resource type="Resource" uid="uid://ca2oinxrwxc5d" path="res://dados/eventos/bruxa_out_passagem_bruxa_in.tres" id="8_wkuko"]
+[ext_resource type="Resource" uid="uid://bukse5hyynds4" path="res://dados/eventos/bruxa_out_borboleta.tres" id="10_3jla3"]
+
+[node name="MapaBruxaOut" type="Node2D" unique_id=231347479]
+script = ExtResource("1_aqo2a")
+metadata/_edit_vertical_guides_ = [2358.0, 2028.0, -56.0, 400.0]
+
+[node name="Fundo" type="Parallax2D" parent="." unique_id=647674415]
+scroll_scale = Vector2(0.2, 0)
+
+[node name="Sprite2D2" type="Sprite2D" parent="Fundo" unique_id=1163311882]
+z_index = -1
+texture = ExtResource("2_aqo2a")
+centered = false
+
+[node name="Meio" type="Parallax2D" parent="." unique_id=1011851333]
+scroll_scale = Vector2(1, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Meio" unique_id=1731043530]
+z_index = -1
+texture = ExtResource("3_lt8y8")
+centered = false
+
+[node name="casa" type="Sprite2D" parent="Meio" unique_id=1468445260]
+z_index = 1
+position = Vector2(231, -32)
+scale = Vector2(0.49946064, 1)
+texture = ExtResource("4_gxuuu")
+centered = false
+
+[node name="Eventos" type="Parallax2D" parent="." unique_id=1673461017]
+z_index = 1
+
+[node name="Passagem2" type="CharacterBody2D" parent="Eventos" unique_id=1043341573]
+z_index = 3
+position = Vector2(1280, 512)
+script = ExtResource("5_8ke3u")
+evento = ExtResource("6_1wdrw")
+
+[node name="Passagem1" type="CharacterBody2D" parent="Eventos" unique_id=693460388]
+z_index = 3
+position = Vector2(0, 496)
+script = ExtResource("5_8ke3u")
+evento = ExtResource("7_5ppnj")
+
+[node name="Porta" type="CharacterBody2D" parent="Eventos" unique_id=772237566]
+z_index = 3
+position = Vector2(392, 400)
+scale = Vector2(0.6, 0.6)
+script = ExtResource("5_8ke3u")
+evento = ExtResource("8_wkuko")
+
+[node name="Borboleta" type="CharacterBody2D" parent="Eventos" unique_id=2053805256]
+z_index = 4
+position = Vector2(744, 376)
+script = ExtResource("5_8ke3u")
+evento = ExtResource("10_3jla3")
+
+[node name="Borboleta2" type="CharacterBody2D" parent="Eventos" unique_id=90734167]
+z_index = 4
+position = Vector2(144, 304)
+script = ExtResource("5_8ke3u")
+evento = ExtResource("10_3jla3")
+
+[node name="Borboleta3" type="CharacterBody2D" parent="Eventos" unique_id=1196089933]
+z_index = 4
+position = Vector2(352, 192)
+script = ExtResource("5_8ke3u")
+evento = ExtResource("10_3jla3")
+
+[node name="Borboleta4" type="CharacterBody2D" parent="Eventos" unique_id=2029663657]
+z_index = 4
+position = Vector2(776, 200)
+script = ExtResource("5_8ke3u")
+evento = ExtResource("10_3jla3")
+
+[node name="Borboleta5" type="CharacterBody2D" parent="Eventos" unique_id=127198824]
+z_index = 4
+position = Vector2(232, 336)
+script = ExtResource("5_8ke3u")
+evento = ExtResource("10_3jla3")
+
+[node name="Borboleta6" type="CharacterBody2D" parent="Eventos" unique_id=2124333670]
+z_index = 4
+position = Vector2(200, 200)
+script = ExtResource("5_8ke3u")
+evento = ExtResource("10_3jla3")
+
+[node name="Borboleta7" type="CharacterBody2D" parent="Eventos" unique_id=883059441]
+z_index = 4
+position = Vector2(600, 344)
+script = ExtResource("5_8ke3u")
+evento = ExtResource("10_3jla3")
+
+[node name="Borboleta8" type="CharacterBody2D" parent="Eventos" unique_id=65642189]
+z_index = 4
+position = Vector2(536, 144)
+script = ExtResource("5_8ke3u")
+evento = ExtResource("10_3jla3")
+
+[node name="Borboleta9" type="CharacterBody2D" parent="Eventos" unique_id=1412824999]
+z_index = 4
+position = Vector2(1128, 208)
+script = ExtResource("5_8ke3u")
+evento = ExtResource("10_3jla3")
+
+[node name="Borboleta10" type="CharacterBody2D" parent="Eventos" unique_id=286085911]
+z_index = 4
+position = Vector2(984, 344)
+script = ExtResource("5_8ke3u")
+evento = ExtResource("10_3jla3")
+
+[node name="Borboleta11" type="CharacterBody2D" parent="Eventos" unique_id=1519243221]
+z_index = 4
+position = Vector2(904, 192)
+script = ExtResource("5_8ke3u")
+evento = ExtResource("10_3jla3")
+
+[node name="Borboleta12" type="CharacterBody2D" parent="Eventos" unique_id=1524853944]
+z_index = 4
+position = Vector2(1184, 360)
+script = ExtResource("5_8ke3u")
+evento = ExtResource("10_3jla3")
+
+[node name="Borboleta13" type="CharacterBody2D" parent="Eventos" unique_id=1937173108]
+z_index = 4
+position = Vector2(1024, 24)
+script = ExtResource("5_8ke3u")
+evento = ExtResource("10_3jla3")
+
+[node name="Borboleta14" type="CharacterBody2D" parent="Eventos" unique_id=1671519467]
+z_index = 4
+position = Vector2(56, 72)
+script = ExtResource("5_8ke3u")
+evento = ExtResource("10_3jla3")

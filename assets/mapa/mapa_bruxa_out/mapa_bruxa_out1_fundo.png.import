@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cvtu2nbuv3hsm"
-path="res://.godot/imported/mapa_bruxa_out_frente.png-06f7b3975fdc221988317ff867bd7861.ctex"
+uid="uid://bab2weyx2vlx2"
+path="res://.godot/imported/mapa_bruxa_out1_fundo.png-1be7f1e08c834ace0467a1956b0551dd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/mapa/mapa_bruxa_out/mapa_bruxa_out_frente.png"
-dest_files=["res://.godot/imported/mapa_bruxa_out_frente.png-06f7b3975fdc221988317ff867bd7861.ctex"]
+source_file="res://assets/mapa/mapa_bruxa_out/mapa_bruxa_out1_fundo.png"
+dest_files=["res://.godot/imported/mapa_bruxa_out1_fundo.png-1be7f1e08c834ace0467a1956b0551dd.ctex"]
 
 [params]
 

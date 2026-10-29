@@ -120,7 +120,7 @@ valor = 1.0
 
 [sub_resource type="Resource" id="I_tp_out"]
 script = ExtResource("7_bfmu5")
-mapa = "res://mapas/mapa_bruxa_out.tscn"
+mapa = "res://mapas/mapa_bruxa_out1.tscn"
 posicao = Vector2(800, 505)
 direcao = 1
 

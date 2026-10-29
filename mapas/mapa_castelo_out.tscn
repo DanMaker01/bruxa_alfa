@@ -52,7 +52,7 @@ evento = ExtResource("ev_castelo_out_passagem1")
 
 [node name="Passagem3" type="CharacterBody2D" parent="Eventos" unique_id=538271156]
 z_index = 3
-position = Vector2(1090, 543)
+position = Vector2(1096, 536)
 script = ExtResource("4_igm17")
 evento = ExtResource("ev_castelo_out_passagem_castelo_in")
 
@@ -61,41 +61,41 @@ z_index = 3
 position = Vector2(567, 580)
 script = ExtResource("area_spawn_x")
 evento = ExtResource("ev_flor")
-espalhamento_min = 0.1
-espalhamento_max = 1.0
 quantidade = 1
 largura = 80.0
 cooldown = 50.0
+espalhamento_min = 0.1
+espalhamento_max = 1.0
 
 [node name="AreaFlorDir" type="Node2D" parent="Eventos" unique_id=784961491]
 z_index = 3
 position = Vector2(2704, 580)
 script = ExtResource("area_spawn_x")
 evento = ExtResource("ev_flor")
-espalhamento_min = 0.1
-espalhamento_max = 1.0
 quantidade = 1
 largura = 80.0
 cooldown = 50.0
+espalhamento_min = 0.1
+espalhamento_max = 1.0
 
 [node name="AreaMusgo" type="Node2D" parent="Eventos" unique_id=1618855334]
 z_index = 3
 position = Vector2(521, 603)
 script = ExtResource("area_spawn_x")
 evento = ExtResource("ev_musgo")
-espalhamento_min = 0.1
-espalhamento_max = 1.0
 quantidade = 1
 largura = 799.9999999999744
 cooldown = 15.0
+espalhamento_min = 0.1
+espalhamento_max = 1.0
 
 [node name="AreaMusgo2" type="Node2D" parent="Eventos" unique_id=1204022080]
 z_index = 3
 position = Vector2(2021, 599)
 script = ExtResource("area_spawn_x")
 evento = ExtResource("ev_musgo")
-espalhamento_min = 0.1
-espalhamento_max = 1.0
 quantidade = 2
 largura = 1499.999999999952
 cooldown = 15.0
+espalhamento_min = 0.1
+espalhamento_max = 1.0

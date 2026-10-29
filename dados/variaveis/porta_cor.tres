@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="VariavelData" format=3]
+
+[ext_resource type="Script" uid="uid://cgrx3adgd06tf" path="res://src/dados/variavel_data.gd" id="1_var"]
+
+[resource]
+script = ExtResource("1_var")
+nome = "porta_cor"
+descricao = "Cor ativa do véu na porta de casa: 0 = lavanda (bruxa_out1), 1 = azul (bruxa_out2), 2 = rosa (bruxa_out3). Clicar no véu troca."

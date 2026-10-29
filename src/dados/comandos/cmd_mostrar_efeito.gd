@@ -3,7 +3,7 @@
 #   BRILHOS = só os brilhos subindo no alvo
 #   CLARAO  = só a tela piscando na cor escolhida
 #   FUMACA  = nuvem cinza que se espalha (ex.: alguém sumindo)
-#   SOM     = ondinhas de som saindo do alvo (ex.: batida na porta); se o alvo estiver fora
+#   SOM     = três risquinhos saindo do alvo num cone de 30° (ex.: batida na porta); se o alvo estiver fora
 #             da tela, aparecem na beira da tela do lado dele
 class_name CmdMostrarEfeito
 extends Comando
@@ -154,7 +154,7 @@ func _validate_property(property: Dictionary) -> void:
 		property.usage = PROPERTY_USAGE_STORAGE
 
 # =============================================================================
-# SOM: três arcos que abrem e somem, virados para o meio da tela
+# SOM: três risquinhos num cone de 30°, virados para o meio da tela
 # =============================================================================
 static func _som(_tree: SceneTree, no, c: Color, alt: float) -> void:
 	if not (no is Node2D):
@@ -182,16 +182,21 @@ static func _som(_tree: SceneTree, no, c: Color, alt: float) -> void:
 	tw.tween_callback(o.queue_free)
 
 class Ondas extends Node2D:
+	## Três risquinhos saindo de um ponto, num cone de 30° (para a esquerda se dir = -1).
 	const DURACAO := 0.45
-	var dir := -1.0          # -1 = abre para a esquerda
+	const CONE := 30.0         # abertura total do cone, em graus
+	var dir := -1.0          # -1 = para a esquerda, 1 = para a direita
 	var cor := Color.WHITE
 	var prog := 0.0:
 		set(v):
 			prog = v
 			queue_redraw()
 	func _draw() -> void:
-		var ang := 0.0 if dir > 0.0 else PI
+		var base := 0.0 if dir > 0.0 else PI
+		var a := clampf(1.0 - prog, 0.0, 1.0)
+		var ini := 6.0 + prog * 16.0           # os risquinhos se afastam do centro
+		var comp := 10.0 - prog * 3.0
 		for i in 3:
-			var r := 12.0 + i * 11.0 + prog * 14.0
-			var a := clampf(1.0 - prog, 0.0, 1.0) * (1.0 - i * 0.25)
-			draw_arc(Vector2.ZERO, r, ang - 0.75, ang + 0.75, 14, Color(cor, a), 3.0, true)
+			var ang := base + deg_to_rad((i - 1) * CONE * 0.5)
+			var v := Vector2(cos(ang), sin(ang))
+			draw_line(v * ini, v * (ini + comp), Color(cor, a), 3.0, true)

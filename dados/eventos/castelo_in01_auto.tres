@@ -57,9 +57,9 @@ segundos = 2.3
 script = ExtResource("6_x")
 alvo = 1
 evento = "castelo_in01_guarda1"
-x = 1450
+x = 1504
 y = 464
-velocidade = 159.0
+velocidade = 170.0
 direcao = 2
 esperar = false
 
@@ -67,16 +67,16 @@ esperar = false
 script = ExtResource("6_x")
 alvo = 1
 evento = "castelo_in01_guarda2"
-x = 1270
+x = 1224
 y = 464
-velocidade = 175.0
+velocidade = 170.0
 direcao = 2
 esperar = false
 
 [sub_resource type="Resource" id="R_11"]
 script = ExtResource("6_x")
 x = 1364.0
-velocidade = 168.0
+velocidade = 170.0
 direcao = 2
 
 [sub_resource type="Resource" id="R_12"]
@@ -89,7 +89,7 @@ alvo = 1
 evento = "castelo_in01_guarda1"
 x = 470
 y = 464
-velocidade = 175.0
+velocidade = 170.0
 direcao = 1
 esperar = false
 
@@ -99,7 +99,7 @@ alvo = 1
 evento = "castelo_in01_guarda2"
 x = 190
 y = 464
-velocidade = 175.0
+velocidade = 170.0
 direcao = 1
 esperar = false
 

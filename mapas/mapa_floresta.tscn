@@ -41,10 +41,10 @@ z_index = 10
 position = Vector2(1892, 606)
 script = ExtResource("area_spawn")
 evento = ExtResource("ev_spawn_erva")
-espalhamento_min = 0.1
-espalhamento_max = 1.0
 quantidade = 5
 largura = 3399.9999999998913
+espalhamento_min = 0.1
+espalhamento_max = 1.0
 
 [node name="Borboleta" type="CharacterBody2D" parent="Eventos" unique_id=722555934]
 z_index = 4

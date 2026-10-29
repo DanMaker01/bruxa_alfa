@@ -10,7 +10,9 @@
 [ext_resource type="Script" uid="uid://dp3mfol3wf88y" path="res://src/dados/comandos/cmd_mover.gd" id="7_mover"]
 [ext_resource type="Script" uid="uid://7xxa8u611ha0" path="res://src/dados/comandos/cmd_mostrar_efeito.gd" id="8_efeito"]
 [ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="9_var"]
-[ext_resource type="SpriteFrames" path="res://animacoes/veu.tres" id="10_veu"]
+[ext_resource type="SpriteFrames" path="res://animacoes/veu_porta1.tres" id="x0"]
+[ext_resource type="SpriteFrames" path="res://animacoes/veu_porta2.tres" id="x1"]
+[ext_resource type="SpriteFrames" path="res://animacoes/veu_porta3.tres" id="x2"]
 
 [sub_resource type="Resource" id="P_vazia"]
 script = ExtResource("2_pg")
@@ -44,14 +46,6 @@ script = ExtResource("9_var")
 variavel = "missao01_veu"
 valor = 2.0
 
-[sub_resource type="Resource" id="V_brilho"]
-script = ExtResource("8_efeito")
-alvo = 1
-evento = "bruxa_in_veu"
-tipo = 1
-altura = 0.0
-esperar = false
-
 [sub_resource type="Resource" id="V_esp_aparece"]
 script = ExtResource("6_esp")
 segundos = 0.6
@@ -61,7 +55,7 @@ script = ExtResource("7_mover")
 alvo = 1
 evento = "bruxa_in_veu"
 x = 944.0
-y = 409.99999999998687
+y = 305.0
 manter_y = false
 velocidade = 60.0
 
@@ -91,20 +85,88 @@ variavel = "missao01_guardas_perseguem"
 script = ExtResource("2_pg")
 condicoes = Array[ExtResource("4_cond")]([SubResource("C_veu1"), SubResource("C_sem_guardas")])
 gatilho = 2
-comandos = Array[ExtResource("3_cmd")]([SubResource("V_trava"), SubResource("V_esp0"), SubResource("V_anda"), SubResource("V_esp_porta"), SubResource("V_pula"), SubResource("V_var"), SubResource("V_brilho"), SubResource("V_esp_aparece"), SubResource("V_voa"), SubResource("V_magia2"), SubResource("V_esp1"), SubResource("V_destrava")])
+comandos = Array[ExtResource("3_cmd")]([SubResource("V_trava"), SubResource("V_esp0"), SubResource("V_anda"), SubResource("V_esp_porta"), SubResource("V_pula"), SubResource("V_var"), SubResource("V_esp_aparece"), SubResource("V_voa"), SubResource("V_magia2"), SubResource("V_esp1"), SubResource("V_destrava")])
 
-[sub_resource type="Resource" id="C_veu2"]
+[sub_resource type="Resource" id="PCor_brilho0"]
+script = ExtResource("8_efeito")
+alvo = 1
+evento = "bruxa_in_veu"
+tipo = 1
+altura = 0.0
+esperar = false
+
+[sub_resource type="Resource" id="PCor_var0"]
+script = ExtResource("9_var")
+variavel = "porta_cor"
+valor = 1.0
+
+[sub_resource type="Resource" id="PCor_veu"]
 script = ExtResource("4_cond")
 variavel = "missao01_veu"
 operador = 4
 valor = 2.0
 
-[sub_resource type="Resource" id="P_porta"]
+[sub_resource type="Resource" id="PCor_c0"]
+script = ExtResource("4_cond")
+variavel = "porta_cor"
+
+[sub_resource type="Resource" id="PCor_pg0"]
 script = ExtResource("2_pg")
-condicoes = Array[ExtResource("4_cond")]([SubResource("C_veu2")])
-sprite_frames = ExtResource("10_veu")
+condicoes = Array[ExtResource("4_cond")]([SubResource("PCor_veu"), SubResource("PCor_c0")])
+sprite_frames = ExtResource("x0")
+area_scale = Vector2(8, 8)
+comandos = Array[ExtResource("3_cmd")]([SubResource("PCor_brilho0"), SubResource("PCor_var0")])
+
+[sub_resource type="Resource" id="PCor_brilho1"]
+script = ExtResource("8_efeito")
+alvo = 1
+evento = "bruxa_in_veu"
+tipo = 1
+altura = 0.0
+esperar = false
+
+[sub_resource type="Resource" id="PCor_var1"]
+script = ExtResource("9_var")
+variavel = "porta_cor"
+valor = 2.0
+
+[sub_resource type="Resource" id="PCor_c1"]
+script = ExtResource("4_cond")
+variavel = "porta_cor"
+valor = 1.0
+
+[sub_resource type="Resource" id="PCor_pg1"]
+script = ExtResource("2_pg")
+condicoes = Array[ExtResource("4_cond")]([SubResource("PCor_veu"), SubResource("PCor_c1")])
+sprite_frames = ExtResource("x1")
+area_scale = Vector2(8, 8)
+comandos = Array[ExtResource("3_cmd")]([SubResource("PCor_brilho1"), SubResource("PCor_var1")])
+
+[sub_resource type="Resource" id="PCor_brilho2"]
+script = ExtResource("8_efeito")
+alvo = 1
+evento = "bruxa_in_veu"
+tipo = 1
+altura = 0.0
+esperar = false
+
+[sub_resource type="Resource" id="PCor_var2"]
+script = ExtResource("9_var")
+variavel = "porta_cor"
+
+[sub_resource type="Resource" id="PCor_c2"]
+script = ExtResource("4_cond")
+variavel = "porta_cor"
+valor = 2.0
+
+[sub_resource type="Resource" id="PCor_pg2"]
+script = ExtResource("2_pg")
+condicoes = Array[ExtResource("4_cond")]([SubResource("PCor_veu"), SubResource("PCor_c2")])
+sprite_frames = ExtResource("x2")
+area_scale = Vector2(8, 8)
+comandos = Array[ExtResource("3_cmd")]([SubResource("PCor_brilho2"), SubResource("PCor_var2")])
 
 [resource]
 script = ExtResource("1_ev")
 id = "bruxa_in_veu"
-paginas = Array[ExtResource("2_pg")]([SubResource("P_vazia"), SubResource("P_cena"), SubResource("P_porta")])
+paginas = Array[ExtResource("2_pg")]([SubResource("P_vazia"), SubResource("P_cena"), SubResource("PCor_pg0"), SubResource("PCor_pg1"), SubResource("PCor_pg2")])

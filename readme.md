@@ -32,13 +32,24 @@
 [ ] História / missão: 
 	[ ]	Diminuir a cidade (mapa_cidadeA) 5000 -> 4000? vou mudar sprite, organizar posição das casas, teleport ida e teleport volta. Adicionar 3 NPC. Vou criar os sprites.
 	[.] castelon_in01: Guardas e bruxa saem juntos e chegam juntos. a posição de início dos guardas e da bruxa está correta. mas as velocidades no decorrer estão diferentes para um dos guardas.
+		Feito: os três na mesma velocidade (170) e andando a mesma distância (1034 px): bruxa 330 -> 1364, guarda1 470 -> 1504, guarda2 190 -> 1224. Voltam aos postos também a 170.
+		Por algum motivo o guarda atrás da bruxa é um pouco mais rápido e começa a diminuir a distância entre ela e a bruxa. E o guarda da frente fica muito a frente. Tente manter a distância entre guarda-bruxa constante.pode ser uma distância curta, mas que seja constante.	
 	[.] na primeira vez que o campones bate na porta, deve ter uma expressão de som saindo da direção próximo à porta, aparecendo na câmera, um efeito simples. Quero efeito de tres risquinhos saindo radialmente de um ponto central, num cone de 30° para a esquerda.
-		remover: novo tipo SOM no cmd_mostrar_efeito (três arcos que abrem e somem, virados para o meio da tela; se a porta estiver fora da tela, aparecem na beira do lado dela). Em cada batida da primeira sequência do bruxa_in_auto.
+		Feito: o efeito SOM (cmd_mostrar_efeito) agora são três risquinhos saindo de um ponto central num cone de 30° para a esquerda (para a direita se a porta estiver à esquerda da tela), afastando e sumindo. Saíram os arcos. Continua em cada batida da primeira sequência do bruxa_in_auto.
+		Fazer: som sai mais abaixo e quero maior.	
 	[?]	Verificação de diálogos e de todos os caminhos possíveis do Cap. 1 (resultados 1 a 5, caso você enrole e chege o dia do casamento, com e sem poção no bolso, voltar à ponte/estradaB depois da fuga, véu pego ou não). Colocar um contador de tempo a partir de quando fala com o Rei para chegar o dia do casamento? Como evitar algo de corrida contra o tempo? Porque ela tem que pegar o véu para continuar o jogo, o que muda é o convite, se não ocorre ou se o rei manda prender a bruxa.
 		[] Resultado: 1: 
 		[] Resultado: 2: 
 		[] Resultado: 3,4,5: FUGA
-		[] Resultado: enrolar para entregar - não avança o jogo?
+		[] Resultado: enrolar para entregar - não consegue avançar (ok? sim 1/3)
+
+[.] Véu em 3 cores separadas (para a porta com 3 destinos):
+	Gerador ganhou --separadas 1: um conjunto de PNGs por cor, cada um só com a sua folha, no mesmo lugar e na mesma fase. Sobrepondo os 3 (3 eventos na mesma posição) o conjunto oscila igual ao véu junto.
+	Gerados com: python gerador_veu.py --separadas 1 --cores "#d7aaff" "#a0e6ff" "#ffd0e0" --fps 12 --voltas_onda 3 --nome veu3 --opacidade 0.1 --largura 100 --altura 160 --tres ../../animacoes/veu3.tres
+	Arquivos: assets/eventos/veu/veu3_cor1_1..16 (lavanda), veu3_cor2_* (azul), veu3_cor3_* (rosa); PNG 128x192 (aumentado para caber o movimento). animacoes/veu3_cor1.tres, veu3_cor2.tres, veu3_cor3.tres (12 fps).
+	Ideia: a cor ativa fica na frente (z_index maior) e as outras atrás; ao falar com a porta escolhe a cor e o teleporte depende dela. (os eventos: depois)
+	Ajustar: Ao clicar no véu para selecionar a cor do efeito deve ser a mesma que irá virar após o clique.
+
 ```
 
 ## Terminar até o Cap. 1 (1)

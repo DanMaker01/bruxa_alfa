@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://dmpa330svbyks"]
 
 [ext_resource type="Script" uid="uid://dsxujjugldv23" path="res://src/cena/mapa_base.gd" id="1_mi5fw"]
-[ext_resource type="Texture2D" uid="uid://bab2weyx2vlx2" path="res://assets/mapa/mapa_bruxa_out/mapa_bruxa_out_fundo.png" id="2_58aqh"]
+[ext_resource type="Texture2D" uid="uid://bab2weyx2vlx2" path="res://assets/mapa/mapa_bruxa_out/mapa_bruxa_out1_fundo.png" id="2_58aqh"]
 [ext_resource type="Texture2D" uid="uid://s7fsf5qmeqi2" path="res://assets/mapa/mapa_bruxa_out/casa_bruxa.png" id="3_mi5fw"]
-[ext_resource type="Texture2D" uid="uid://cvtu2nbuv3hsm" path="res://assets/mapa/mapa_bruxa_out/mapa_bruxa_out_frente.png" id="3_w6v2g"]
+[ext_resource type="Texture2D" uid="uid://cvtu2nbuv3hsm" path="res://assets/mapa/mapa_bruxa_out/mapa_bruxa_out1_frente.png" id="3_w6v2g"]
 [ext_resource type="Script" uid="uid://bjxlt3vqym72w" path="res://src/cena/evento_base.gd" id="4_42op0"]
 [ext_resource type="Resource" uid="uid://bukse5hyynds4" path="res://dados/eventos/bruxa_out_borboleta.tres" id="ev_borboleta"]
 [ext_resource type="Resource" uid="uid://b50tjq8hxn2er" path="res://dados/eventos/bruxa_out_passagem1.tres" id="ev_bruxa_out_passagem1"]

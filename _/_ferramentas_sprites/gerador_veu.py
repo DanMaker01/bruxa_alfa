@@ -16,6 +16,8 @@ Exemplos (de qualquer pasta; os PNGs vão para assets/eventos/veu do projeto):
     python gerador_veu.py --cores "#d7aaff" "#a0e6ff" "#ffd0e0" --nome veu3 --tres ../../animacoes/veu.tres
     python gerador_veu.py --fps 4 --voltas_onda 2 --voltas_alternancia 1 --amplitude 4
     python gerador_veu.py --png_largura 128 --png_altura 256   (folhas acompanham o tamanho)
+    python gerador_veu.py --separadas 1 --cores "#d7aaff" "#a0e6ff" "#ffd0e0" --nome veu3 --tres ../../animacoes/veu3.tres
+        (um conjunto por cor: veu3_cor1_*.png, veu3_cor2_*... e veu3_cor1.tres, veu3_cor2.tres...)
     python gerador_veu.py -h        (lista tudo)
 
 Por padrão também grava um GIF animado de prévia (<nome>.gif, na mesma pasta deste script),
@@ -168,6 +170,7 @@ def gerar(a):
     os.makedirs(a.saida, exist_ok=True)
     arquivos = []
     quadros_gif = []
+    por_cor = [[] for _ in range(n)]                         # --separadas: arquivos de cada cor
     for f in range(a.quadros):
         t = f / a.quadros                                    # 0..1 dentro do ciclo
         folhas = []
@@ -187,8 +190,20 @@ def gerar(a):
                 "assim": a.assimetria,
             }
             m = mascara(W, H, a.ss, cx, topo, a.largura, a.altura, p)
-            alfa = np.clip(a.opacidade + a.var_opacidade * prof, 0, 1) * m
-            folhas.append((prof, alfa, cores[k]))
+            op = a.opacidade + a.var_opacidade * prof
+            if a.frente == k + 1:
+                op += a.opacidade_frente                     # a cor ativa aparece mais
+            alfa = np.clip(op, 0, 1) * m
+            # ordem de desenho: a da --frente sempre por cima; as outras pela profundidade
+            folhas.append(((a.frente == k + 1, prof), alfa, cores[k]))
+            if a.separadas:
+                # só esta folha, no mesmo lugar e na mesma fase: sobrepondo os N PNGs
+                # (um evento por cor na mesma posição) o conjunto fica igual ao junto
+                so = np.dstack([np.broadcast_to(cores[k] * 255, (H, W, 3)), alfa * 255])
+                so = so.clip(0, 255).round().astype(np.uint8)
+                nome_k = "%s_cor%d_%d.png" % (a.nome, k + 1, f + 1)
+                Image.fromarray(so, "RGBA").save(os.path.join(a.saida, nome_k))
+                por_cor[k].append(nome_k)
         folhas.sort(key=lambda x: x[0])                      # de trás para a frente
         oa = np.zeros((H, W))
         oc = np.zeros((H, W, 3))
@@ -202,28 +217,45 @@ def gerar(a):
         if a.margem >= 1 and (img[0, :, 3].any() or img[-1, :, 3].any()
                               or img[:, 0, 3].any() or img[:, -1, 3].any()):
             raise SystemExit("Erro: o quadro %d encostou na borda." % (f + 1))
-        nome = "%s_%d.png" % (a.nome, f + 1)
-        Image.fromarray(img, "RGBA").save(os.path.join(a.saida, nome))
-        arquivos.append(nome)
-        quadros_gif.append(img)
-    print("Gerados %d quadros em %s (%.1f s por ciclo a %s fps)"
-          % (len(arquivos), a.saida, a.quadros / a.fps, a.fps))
+        if not a.separadas:
+            nome = "%s_%d.png" % (a.nome, f + 1)
+            Image.fromarray(img, "RGBA").save(os.path.join(a.saida, nome))
+            arquivos.append(nome)
+        quadros_gif.append(img)                              # o GIF mostra sempre o conjunto
+    if a.separadas:
+        print("Gerados %d quadros por cor (%d cores: %s_cor1 .. %s_cor%d) em %s (%.1f s por ciclo a %s fps)"
+              % (a.quadros, n, a.nome, a.nome, n, a.saida, a.quadros / a.fps, a.fps))
+    else:
+        print("Gerados %d quadros em %s (%.1f s por ciclo a %s fps)"
+              % (len(arquivos), a.saida, a.quadros / a.fps, a.fps))
 
     if a.gif:
         salvar_gif(a, quadros_gif)
 
     if a.tres:
-        pasta_res = a.pasta_res.rstrip("/")
-        ext = "".join('[ext_resource type="Texture2D" path="%s/%s" id="q%d"]\n' % (pasta_res, arq, i + 1)
-                      for i, arq in enumerate(arquivos))
-        fr = ",\n".join('{\n"duration": 1.0,\n"texture": ExtResource("q%d")\n}' % (i + 1)
-                        for i in range(len(arquivos)))
-        tres = ('[gd_resource type="SpriteFrames" format=3]\n\n' + ext +
-                '\n[resource]\nanimations = [{\n"frames": [' + fr +
-                '],\n"loop": true,\n"name": &"default",\n"speed": %s\n}]\n' % float(a.fps))
-        with open(a.tres, "w", encoding="utf-8") as arq:
-            arq.write(tres)
-        print("SpriteFrames gravado em", a.tres)
+        if a.separadas:
+            for k in range(n):
+                base, ext_ = os.path.splitext(a.tres)
+                caminho = a.tres.replace("{cor}", str(k + 1)) if "{cor}" in a.tres \
+                    else "%s_cor%d%s" % (base, k + 1, ext_)
+                gravar_tres(a, por_cor[k], caminho)
+        else:
+            gravar_tres(a, arquivos, a.tres)
+
+
+def gravar_tres(a, arquivos, caminho):
+    """SpriteFrames do Godot com os quadros, em loop, na velocidade do --fps."""
+    pasta_res = a.pasta_res.rstrip("/")
+    ext = "".join('[ext_resource type="Texture2D" path="%s/%s" id="q%d"]\n' % (pasta_res, arq, i + 1)
+                  for i, arq in enumerate(arquivos))
+    fr = ",\n".join('{\n"duration": 1.0,\n"texture": ExtResource("q%d")\n}' % (i + 1)
+                    for i in range(len(arquivos)))
+    tres = ('[gd_resource type="SpriteFrames" format=3]\n\n' + ext +
+            '\n[resource]\nanimations = [{\n"frames": [' + fr +
+            '],\n"loop": true,\n"name": &"default",\n"speed": %s\n}]\n' % float(a.fps))
+    with open(caminho, "w", encoding="utf-8") as arq:
+        arq.write(tres)
+    print("SpriteFrames gravado em", caminho)
 
 
 # =============================================================================
@@ -262,6 +294,10 @@ if __name__ == "__main__":
                    help="1 = folhas vizinhas ondulam em sentidos opostos, 0 = todas iguais")
 
     g = p.add_argument_group("alternância frente/trás")
+    g.add_argument("--frente", type=int, default=0,
+                   help="número da cor (1..N) que fica sempre na frente, a 'ativa' (0 = revezam)")
+    g.add_argument("--opacidade_frente", type=float, default=0.0,
+                   help="opacidade a mais para a cor da --frente")
     g.add_argument("--profundidade", type=float, default=0.035,
                    help="quanto a folha da frente desce/abre a mais (0.035 = 3,5%%)")
     g.add_argument("--var_opacidade", type=float, default=0.06,
@@ -277,6 +313,9 @@ if __name__ == "__main__":
                         '"movimento" mantém o PNG e reduz o movimento')
     g.add_argument("--margem", type=float, default=2, help="px que ficam sempre vazios em volta")
     g.add_argument("--ss", type=int, default=4, help="supersampling (bordas suaves)")
+    g.add_argument("--separadas", type=int, default=0,
+                   help="1 = um conjunto de PNGs por cor (<nome>_cor1_1.png...), para sobrepor N eventos "
+                        "na mesma posição; com --tres grava um .tres por cor (<tres>_cor1.tres ou use {cor} no nome)")
     g.add_argument("--nome", default="veu2", help="prefixo dos arquivos (veu2 -> veu2_1.png...)")
     g.add_argument("--saida", default=os.path.join(raiz_projeto(), "assets", "eventos", "veu"),
                    help="pasta dos PNGs (padrão: assets/eventos/veu do projeto)")

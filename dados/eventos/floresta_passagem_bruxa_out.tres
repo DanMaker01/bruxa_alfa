@@ -21,7 +21,7 @@ tempo = 0.2
 
 [sub_resource type="Resource" id="Resource_ueufw"]
 script = ExtResource("4_0vn06")
-mapa = "res://mapas/mapa_bruxa_out.tscn"
+mapa = "res://mapas/mapa_bruxa_out1.tscn"
 posicao = Vector2(120, 505)
 direcao = 2
 

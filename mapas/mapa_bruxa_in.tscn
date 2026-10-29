@@ -67,6 +67,6 @@ evento = ExtResource("ev_bruxa_in_npc")
 
 [node name="Veu" type="CharacterBody2D" parent="Eventos" unique_id=1281485401]
 z_index = 2
-position = Vector2(944, 416)
+position = Vector2(944, 305)
 script = ExtResource("4_iquun")
 evento = ExtResource("ev_bruxa_in_veu")
