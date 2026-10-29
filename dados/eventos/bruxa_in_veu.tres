@@ -30,19 +30,12 @@ direcao = 2
 [sub_resource type="Resource" id="V_esp_porta"]
 script = ExtResource("6_esp")
 
-[sub_resource type="Resource" id="V_magia"]
-script = ExtResource("8_efeito")
-
-[sub_resource type="Resource" id="V_esp_magia"]
-script = ExtResource("6_esp")
-segundos = 0.5
-
 [sub_resource type="Resource" id="V_pula"]
 script = ExtResource("7_mover")
 alvo = 1
 evento = "bruxa_in_veu"
-x = 900.0
-y = 380.0
+x = 889.9999999999715
+y = 439.9999999999859
 manter_y = false
 velocidade = 100000.0
 
@@ -68,7 +61,7 @@ script = ExtResource("7_mover")
 alvo = 1
 evento = "bruxa_in_veu"
 x = 944.0
-y = 330.0
+y = 409.99999999998687
 manter_y = false
 velocidade = 60.0
 
@@ -98,7 +91,7 @@ variavel = "missao01_guardas_perseguem"
 script = ExtResource("2_pg")
 condicoes = Array[ExtResource("4_cond")]([SubResource("C_veu1"), SubResource("C_sem_guardas")])
 gatilho = 2
-comandos = Array[ExtResource("3_cmd")]([SubResource("V_trava"), SubResource("V_esp0"), SubResource("V_anda"), SubResource("V_esp_porta"), SubResource("V_magia"), SubResource("V_esp_magia"), SubResource("V_pula"), SubResource("V_var"), SubResource("V_brilho"), SubResource("V_esp_aparece"), SubResource("V_voa"), SubResource("V_magia2"), SubResource("V_esp1"), SubResource("V_destrava")])
+comandos = Array[ExtResource("3_cmd")]([SubResource("V_trava"), SubResource("V_esp0"), SubResource("V_anda"), SubResource("V_esp_porta"), SubResource("V_pula"), SubResource("V_var"), SubResource("V_brilho"), SubResource("V_esp_aparece"), SubResource("V_voa"), SubResource("V_magia2"), SubResource("V_esp1"), SubResource("V_destrava")])
 
 [sub_resource type="Resource" id="C_veu2"]
 script = ExtResource("4_cond")

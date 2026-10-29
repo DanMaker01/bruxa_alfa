@@ -9,7 +9,7 @@
 [ext_resource type="Resource" uid="uid://himp7lgodr5s" path="res://dados/eventos/bruxa_in_npc.tres" id="ev_bruxa_in_npc"]
 [ext_resource type="Resource" uid="uid://ca2repsthqv07" path="res://dados/eventos/bruxa_in_passagem.tres" id="ev_bruxa_in_passagem"]
 [ext_resource type="Resource" uid="uid://16tnqj4gw7my" path="res://dados/eventos/bruxa_in_vestido.tres" id="ev_bruxa_in_vestido"]
-[ext_resource type="Resource" path="res://dados/eventos/bruxa_in_veu.tres" id="ev_bruxa_in_veu"]
+[ext_resource type="Resource" uid="uid://clw5p0xtbr155" path="res://dados/eventos/bruxa_in_veu.tres" id="ev_bruxa_in_veu"]
 
 [node name="MapaBruxaIn" type="Node2D" unique_id=231347479]
 script = ExtResource("1_1lk5r")
@@ -65,8 +65,8 @@ position = Vector2(944, 464)
 script = ExtResource("4_iquun")
 evento = ExtResource("ev_bruxa_in_npc")
 
-[node name="Veu" type="CharacterBody2D" parent="Eventos"]
+[node name="Veu" type="CharacterBody2D" parent="Eventos" unique_id=1281485401]
 z_index = 2
-position = Vector2(944, 330)
+position = Vector2(944, 416)
 script = ExtResource("4_iquun")
 evento = ExtResource("ev_bruxa_in_veu")

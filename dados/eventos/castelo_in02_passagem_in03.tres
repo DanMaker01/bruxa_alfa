@@ -32,7 +32,7 @@ tempo = 0.2
 [sub_resource type="Resource" id="Resource_dcu0w"]
 script = ExtResource("4_sdft0")
 mapa = "uid://b4h4pi1dkmkti"
-posicao = Vector2(1000, 505)
+posicao = Vector2(1000, 400)
 direcao = 2
 
 [sub_resource type="Resource" id="Resource_2kfn5"]

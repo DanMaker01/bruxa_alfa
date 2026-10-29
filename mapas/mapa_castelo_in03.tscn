@@ -55,7 +55,7 @@ evento = ExtResource("5_fjoa0")
 
 [node name="Auto" type="CharacterBody2D" parent="Eventos" unique_id=1026644220]
 z_index = 3
-position = Vector2(1168, 464)
+position = Vector2(416, 144)
 script = ExtResource("4_6m4ys")
 evento = ExtResource("ev_auto")
 
@@ -65,7 +65,7 @@ position = Vector2(816, 464)
 script = ExtResource("4_6m4ys")
 evento = ExtResource("ev_g1")
 
-[node name="Véu" type="CharacterBody2D" parent="Eventos" unique_id=1525510335]
+[node name="Veu" type="CharacterBody2D" parent="Eventos" unique_id=1525510335]
 z_index = 3
 position = Vector2(288, 400)
 script = ExtResource("4_6m4ys")

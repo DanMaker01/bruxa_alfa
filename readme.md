@@ -40,22 +40,16 @@ EstradaB
 ```
 
 [.] v3
-[?] no debug do caldeirão não consegue mostrar valores altos de F(t), ajuste a escala de F para que alcance as temperaturas máximas do Fogo.
-	Feito (grafico_temperatura.gd): eixo F vai até 2000 (fogo mais forte) e cresce sozinho se F passar disso, como o eixo T.
-[ ] História / missão: (em ordem)
-	[?]	Aumentar o mapa do castelo para 2000, deixar o rei e princesa mais para direita, adaptar tudo ao redor. Os guardaas agora acompanham por um deslocamento maior. Os guardas acompanham a bruxa até perto do trono. Os guardas saem. Espera. A cena centraliza no Rei. Começa o diálogo.
-		Feito (castelo_in01_auto): câmera vai até o rei (1552) e volta mais devagar (2,5 s / 2 s); bruxa anda até 1364, guarda1 para um pouco antes (1450) e guarda2 atrás dela (1270); pausa de 0,8 s e os guardas voltam para os postos sem a bruxa esperar; espera 1,5 s; câmera centraliza em 1510 (bruxa, rei e princesa na tela); diálogo. No fim (sem fuga) a câmera volta para a bruxa. Chegada vinda do castelo_in02 agora na porta (1280).
-	[?]	Fuga (fuga_castelo): depois do "Prendam-na! AGORA!" pausa curta, a bruxa pensa "Melhor fugir... e aproveitar para pegar o véu.", outra pausa, e ela corre (200 px/s, no máximo a velocidade normal) até a porta do in02, a porta abre (som), ela entra (some), a porta fecha (som), fade e teleporte; ela reaparece no castelo_in02.
-	[?]	Véu: pega com pausa (0,5 s antes de mudar missao01_veu, 0,5 s depois) e só então continua o diálogo; vale na fuga (castelo_in03_auto) e nos resultados 1 e 2 (castelo_in03_veu).
-	[?]	castelo_in03, guardas sem sucesso: depois do "Parece que ela desapareceu." os dois olham para um lado e para o outro em tempos diferentes (cmd_direcao), continuam olhando enquanto a tela escurece (fade com "esperar" desligado, novo campo no cmd_fade) e vem o teleporte.
-		Guardas mais lentos: castelo_in01 150 px/s (a bruxa espera o guarda2 chegar), castelo_in03 130 px/s.
+[ ] História / missão: 
+	[ ]	Diminuir a cidade (mapa_cidadeA) 5000 -> 4000?
+	[.] castelon_in01: Guardas e bruxa saem juntos e chegam juntos. a posição de início dos guardas e da bruxa está correta. mas as velocidades no decorrer estão diferentes para um dos guardas.
+	[.] na primeira vez que o campones bate na porta, deve ter uma expressão de som saindo da direção próximo à porta, aparecendo na câmera, um efeito simples. Quero efeito de tres risquinhos saindo radialmente de um ponto central, num cone de 30° para a esquerda.
+		remover: novo tipo SOM no cmd_mostrar_efeito (três arcos que abrem e somem, virados para o meio da tela; se a porta estiver fora da tela, aparecem na beira do lado dela). Em cada batida da primeira sequência do bruxa_in_auto.
 	[?]	Verificação de diálogos e de todos os caminhos possíveis do Cap. 1 (resultados 1 a 5, caso você enrole e chege o dia do casamento, com e sem poção no bolso, voltar à ponte/estradaB depois da fuga, véu pego ou não). Colocar um contador de tempo a partir de quando fala com o Rei para chegar o dia do casamento? Como evitar algo de corrida contra o tempo? Porque ela tem que pegar o véu para continuar o jogo, o que muda é o convite, se não ocorre ou se o rei manda prender a bruxa.
-	[] Casamento:
-		Decidido: sem prazo no Cap. 1. O casamento só acontece depois que ela entrega a poção e pega o véu; ninguém perde por demorar (sem contador de tempo).
-		Não mexi (decidir depois):
-		missao01_convite é gravada e nunca lida: fica para o Cap. 2 (convite do casamento).
-
-
+		[] Resultado: 1: 
+		[] Resultado: 2: 
+		[] Resultado: 3,4,5: FUGA
+		[] Resultado: enrolar para entregar - não avança o jogo?
 ```
 
 ## Terminar até o Cap. 1 (1)
@@ -68,6 +62,12 @@ EstradaB
 [ ]		Sprites 100%
 [ ]		Audio 100%
 [ ]		Menus 100%
+
+[] Casamento/História:
+	Decidido: sem prazo no Cap. 1. O casamento só acontece depois que ela entrega a poção e pega o véu; ninguém perde por demorar (sem contador de tempo).
+	Não mexi (decidir depois):
+	missao01_convite é gravada e nunca lida: fica para o Cap. 2 (convite do casamento).
+
 
 [] 2ª receita:  - desenvoltura
 	Ajustado: musgo t_max 12 → 35 (aguenta os ~30 s finais); flor m 2400 → 5000, s−/s+ 900/1400 → 1900/2900 (Q de 60 s a ~85 °C ≈ 5100). Juntos dão diag(1,1,1.4,1,1) se o musgo entra depois.

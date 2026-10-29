@@ -24,6 +24,7 @@
 [ext_resource type="Script" uid="uid://b4qulgg7vsh20" path="res://src/dados/comandos/cmd_balao.gd" id="x1"]
 [ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="x2"]
 [ext_resource type="Resource" path="res://dados/falantes/campones.tres" id="x3"]
+[ext_resource type="Script" uid="uid://d133ab77oamwa" path="res://src/dados/comandos/cmd_apagar_evento.gd" id="x4"]
 
 [sub_resource type="Resource" id="F_porta_abre1"]
 script = ExtResource("x0")
@@ -95,6 +96,11 @@ segundos = 0.5
 script = ExtResource("x0")
 evento = "bruxa_in_passagem"
 animacao = "aberta"
+
+[sub_resource type="Resource" id="F_para_batida"]
+script = ExtResource("x4")
+evento = "bruxa_in_auto"
+parar = true
 
 [sub_resource type="Resource" id="Resource_6sudh"]
 script = ExtResource("11_doc50")
@@ -423,7 +429,7 @@ condicoes = Array[ExtResource("15_epkn7")]([SubResource("Resource_uwvc1")])
 sprite_frames = ExtResource("6_ergwe")
 animacao = "parado"
 area_scale = Vector2(16, 30)
-comandos = Array[ExtResource("2_5y5jk")]([SubResource("Resource_7op6n"), SubResource("Resource_iblo4"), SubResource("F_trava_porta"), SubResource("Resource_87v1b"), SubResource("Resource_we1cm"), SubResource("Resource_pb0s0"), SubResource("F_cena_abre1"), SubResource("Resource_6sudh"), SubResource("Resource_lxmvx"), SubResource("Resource_skx01"), SubResource("Resource_pa72o"), SubResource("Resource_6jw8w"), SubResource("F_cena_fecha2"), SubResource("Resource_8tull"), SubResource("Resource_5yxed"), SubResource("Resource_qchvi"), SubResource("Resource_cmkkc"), SubResource("Resource_575dk"), SubResource("Resource_xw4px"), SubResource("R_irma_brux_0"), SubResource("R_irma_brux_1"), SubResource("R_irma_brux_2"), SubResource("Resource_p1udm"), SubResource("Resource_j0vgw"), SubResource("Resource_unal2"), SubResource("T_cura2"), SubResource("R_estilo_pensa"), SubResource("Resource_tqa1j"), SubResource("Resource_rxkpu"), SubResource("R_estilo_volta"), SubResource("Resource_y11e0"), SubResource("Resource_ut354"), SubResource("Resource_50d2e"), SubResource("Resource_fmhl5"), SubResource("Resource_6i5r4"), SubResource("Resource_vtqx8"), SubResource("Resource_3682x"), SubResource("Resource_oixjs"), SubResource("Resource_u7qwp"), SubResource("Resource_v0jwt"), SubResource("Resource_exejc"), SubResource("Resource_6o5nu"), SubResource("F_aviso_guarda"), SubResource("Resource_ramt2"), SubResource("Resource_ypnfl"), SubResource("Resource_yivqu"), SubResource("F_cena_abre3"), SubResource("Resource_e1xbl"), SubResource("Resource_4mlns"), SubResource("Resource_spsty"), SubResource("Resource_e0v20"), SubResource("Resource_4csen"), SubResource("Resource_4nlao"), SubResource("F_cena_fecha4"), SubResource("Resource_7hd30"), SubResource("Resource_m688k"), SubResource("Resource_lbwnx"), SubResource("R_estilo_pensa"), SubResource("T_balao_duvida"), SubResource("R_desconfia_brux_0"), SubResource("Resource_0twvi"), SubResource("T_resumo2"), SubResource("R_estilo_volta"), SubResource("Resource_r3ojj"), SubResource("Resource_bnhvo"), SubResource("Resource_q24qn"), SubResource("Resource_1jrcm"), SubResource("Resource_eclo5"), SubResource("Resource_8th6g"), SubResource("Resource_5r5mu"), SubResource("Resource_150wu"), SubResource("Resource_b3lj6")])
+comandos = Array[ExtResource("2_5y5jk")]([SubResource("Resource_7op6n"), SubResource("Resource_iblo4"), SubResource("F_trava_porta"), SubResource("Resource_87v1b"), SubResource("Resource_we1cm"), SubResource("Resource_pb0s0"), SubResource("F_cena_abre1"), SubResource("F_para_batida"), SubResource("Resource_6sudh"), SubResource("Resource_lxmvx"), SubResource("Resource_skx01"), SubResource("Resource_pa72o"), SubResource("Resource_6jw8w"), SubResource("F_cena_fecha2"), SubResource("Resource_8tull"), SubResource("Resource_5yxed"), SubResource("Resource_qchvi"), SubResource("Resource_cmkkc"), SubResource("Resource_575dk"), SubResource("Resource_xw4px"), SubResource("R_irma_brux_0"), SubResource("R_irma_brux_1"), SubResource("R_irma_brux_2"), SubResource("Resource_p1udm"), SubResource("Resource_j0vgw"), SubResource("Resource_unal2"), SubResource("T_cura2"), SubResource("R_estilo_pensa"), SubResource("Resource_tqa1j"), SubResource("Resource_rxkpu"), SubResource("R_estilo_volta"), SubResource("Resource_y11e0"), SubResource("Resource_ut354"), SubResource("Resource_50d2e"), SubResource("Resource_fmhl5"), SubResource("Resource_6i5r4"), SubResource("Resource_vtqx8"), SubResource("Resource_3682x"), SubResource("Resource_oixjs"), SubResource("Resource_u7qwp"), SubResource("Resource_v0jwt"), SubResource("Resource_exejc"), SubResource("Resource_6o5nu"), SubResource("F_aviso_guarda"), SubResource("Resource_ramt2"), SubResource("Resource_ypnfl"), SubResource("Resource_yivqu"), SubResource("F_cena_abre3"), SubResource("Resource_e1xbl"), SubResource("Resource_4mlns"), SubResource("Resource_spsty"), SubResource("Resource_e0v20"), SubResource("Resource_4csen"), SubResource("Resource_4nlao"), SubResource("F_cena_fecha4"), SubResource("Resource_7hd30"), SubResource("Resource_m688k"), SubResource("Resource_lbwnx"), SubResource("R_estilo_pensa"), SubResource("T_balao_duvida"), SubResource("R_desconfia_brux_0"), SubResource("Resource_0twvi"), SubResource("T_resumo2"), SubResource("R_estilo_volta"), SubResource("Resource_r3ojj"), SubResource("Resource_bnhvo"), SubResource("Resource_q24qn"), SubResource("Resource_1jrcm"), SubResource("Resource_eclo5"), SubResource("Resource_8th6g"), SubResource("Resource_5r5mu"), SubResource("Resource_150wu"), SubResource("Resource_b3lj6")])
 
 [sub_resource type="Resource" id="F_porta_abre2"]
 script = ExtResource("x0")

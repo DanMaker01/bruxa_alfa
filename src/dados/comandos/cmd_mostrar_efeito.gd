@@ -3,12 +3,14 @@
 #   BRILHOS = só os brilhos subindo no alvo
 #   CLARAO  = só a tela piscando na cor escolhida
 #   FUMACA  = nuvem cinza que se espalha (ex.: alguém sumindo)
+#   SOM     = ondinhas de som saindo do alvo (ex.: batida na porta); se o alvo estiver fora
+#             da tela, aparecem na beira da tela do lado dele
 class_name CmdMostrarEfeito
 extends Comando
 
 enum Alvo { BRUXA, EVENTO, TELA }
-enum Tipo { MAGICO, BRILHOS, CLARAO, FUMACA }
-const TIPOS := ["magico", "brilhos", "clarao", "fumaca"]
+enum Tipo { MAGICO, BRILHOS, CLARAO, FUMACA, SOM }
+const TIPOS := ["magico", "brilhos", "clarao", "fumaca", "som"]
 const COR_PADRAO := Color(0.85, 0.7, 1.0)
 
 @export var alvo: Alvo = Alvo.BRUXA:
@@ -66,6 +68,9 @@ static func mostrar(interp, no, qual: int = Tipo.MAGICO, c: Color = COR_PADRAO, 
 		Tipo.FUMACA:
 			_fumaca(tree, no, alt)
 			await tree.create_timer(1.2).timeout
+		Tipo.SOM:
+			_som(tree, no, c, alt)
+			await tree.create_timer(Ondas.DURACAO).timeout
 
 static func _brilhos(tree: SceneTree, no, c: Color, alt: float) -> void:
 	if not (no is Node2D):
@@ -147,3 +152,46 @@ func _validate_property(property: Dictionary) -> void:
 		property.usage = PROPERTY_USAGE_STORAGE
 	if property.name == "altura" and alvo == Alvo.TELA:
 		property.usage = PROPERTY_USAGE_STORAGE
+
+# =============================================================================
+# SOM: três arcos que abrem e somem, virados para o meio da tela
+# =============================================================================
+static func _som(_tree: SceneTree, no, c: Color, alt: float) -> void:
+	if not (no is Node2D):
+		return
+	var pos: Vector2 = no.global_position + Vector2(0, -alt)
+	var dir := -1.0
+	var cam: Camera2D = no.get_viewport().get_camera_2d()
+	if cam:
+		var centro: Vector2 = cam.get_screen_center_position()
+		var meia: Vector2 = no.get_viewport_rect().size * 0.5 / cam.zoom
+		const MARGEM := 48.0
+		dir = -1.0 if pos.x > centro.x else 1.0
+		pos.x = clampf(pos.x, centro.x - meia.x + MARGEM, centro.x + meia.x - MARGEM)
+		pos.y = clampf(pos.y, centro.y - meia.y + MARGEM, centro.y + meia.y - MARGEM)
+	var o := Ondas.new()
+	o.dir = dir
+	o.cor = c
+	o.z_index = 30
+	o.z_as_relative = false
+	var pai: Node = no.get_parent() if no.get_parent() else no
+	pai.add_child(o)
+	o.global_position = pos
+	var tw := o.create_tween()
+	tw.tween_property(o, "prog", 1.0, Ondas.DURACAO)
+	tw.tween_callback(o.queue_free)
+
+class Ondas extends Node2D:
+	const DURACAO := 0.45
+	var dir := -1.0          # -1 = abre para a esquerda
+	var cor := Color.WHITE
+	var prog := 0.0:
+		set(v):
+			prog = v
+			queue_redraw()
+	func _draw() -> void:
+		var ang := 0.0 if dir > 0.0 else PI
+		for i in 3:
+			var r := 12.0 + i * 11.0 + prog * 14.0
+			var a := clampf(1.0 - prog, 0.0, 1.0) * (1.0 - i * 0.25)
+			draw_arc(Vector2.ZERO, r, ang - 0.75, ang + 0.75, 14, Color(cor, a), 3.0, true)

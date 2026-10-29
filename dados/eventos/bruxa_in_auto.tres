@@ -24,6 +24,7 @@
 [ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="x1"]
 [ext_resource type="Resource" path="res://dados/falantes/desconhecido.tres" id="x2"]
 [ext_resource type="Resource" path="res://dados/falantes/campones.tres" id="x3"]
+[ext_resource type="Script" uid="uid://7xxa8u611ha0" path="res://src/dados/comandos/cmd_mostrar_efeito.gd" id="x4"]
 
 [sub_resource type="Resource" id="Resource_73mqy"]
 script = ExtResource("3_gtb0y")
@@ -115,6 +116,15 @@ segundos = 1.5
 script = ExtResource("5_gomjd")
 arquivo = "res://audio/se/batida01.mp3"
 
+[sub_resource type="Resource" id="S_onda1"]
+script = ExtResource("x4")
+alvo = 1
+evento = "bruxa_in_passagem"
+tipo = 4
+cor = Color(1, 1, 1, 1)
+altura = 100.0
+esperar = false
+
 [sub_resource type="Resource" id="Resource_o7nlj"]
 script = ExtResource("4_xme6w")
 segundos = 0.5
@@ -122,6 +132,15 @@ segundos = 0.5
 [sub_resource type="Resource" id="Resource_kg7wh"]
 script = ExtResource("5_gomjd")
 arquivo = "res://audio/se/batida01.mp3"
+
+[sub_resource type="Resource" id="S_onda2"]
+script = ExtResource("x4")
+alvo = 1
+evento = "bruxa_in_passagem"
+tipo = 4
+cor = Color(1, 1, 1, 1)
+altura = 100.0
+esperar = false
 
 [sub_resource type="Resource" id="Resource_fs43n"]
 script = ExtResource("4_xme6w")
@@ -131,6 +150,15 @@ segundos = 0.1
 script = ExtResource("5_gomjd")
 arquivo = "res://audio/se/batida01.mp3"
 
+[sub_resource type="Resource" id="S_onda3"]
+script = ExtResource("x4")
+alvo = 1
+evento = "bruxa_in_passagem"
+tipo = 4
+cor = Color(1, 1, 1, 1)
+altura = 100.0
+esperar = false
+
 [sub_resource type="Resource" id="Resource_dvbhk"]
 script = ExtResource("4_xme6w")
 segundos = 0.1
@@ -138,6 +166,15 @@ segundos = 0.1
 [sub_resource type="Resource" id="Resource_go3bc"]
 script = ExtResource("5_gomjd")
 arquivo = "res://audio/se/batida01.mp3"
+
+[sub_resource type="Resource" id="S_onda4"]
+script = ExtResource("x4")
+alvo = 1
+evento = "bruxa_in_passagem"
+tipo = 4
+cor = Color(1, 1, 1, 1)
+altura = 100.0
+esperar = false
 
 [sub_resource type="Resource" id="Resource_45lbe"]
 script = ExtResource("4_xme6w")
@@ -147,6 +184,15 @@ segundos = 0.2
 script = ExtResource("5_gomjd")
 arquivo = "res://audio/se/batida01.mp3"
 
+[sub_resource type="Resource" id="S_onda5"]
+script = ExtResource("x4")
+alvo = 1
+evento = "bruxa_in_passagem"
+tipo = 4
+cor = Color(1, 1, 1, 1)
+altura = 100.0
+esperar = false
+
 [sub_resource type="Resource" id="Resource_7g4fa"]
 script = ExtResource("4_xme6w")
 segundos = 1.5
@@ -154,6 +200,15 @@ segundos = 1.5
 [sub_resource type="Resource" id="Resource_glly0"]
 script = ExtResource("5_gomjd")
 arquivo = "res://audio/se/batida01.mp3"
+
+[sub_resource type="Resource" id="S_onda6"]
+script = ExtResource("x4")
+alvo = 1
+evento = "bruxa_in_passagem"
+tipo = 4
+cor = Color(1, 1, 1, 1)
+altura = 100.0
+esperar = false
 
 [sub_resource type="Resource" id="Resource_jkh3a"]
 script = ExtResource("4_xme6w")
@@ -163,6 +218,15 @@ segundos = 0.1
 script = ExtResource("5_gomjd")
 arquivo = "res://audio/se/batida01.mp3"
 
+[sub_resource type="Resource" id="S_onda7"]
+script = ExtResource("x4")
+alvo = 1
+evento = "bruxa_in_passagem"
+tipo = 4
+cor = Color(1, 1, 1, 1)
+altura = 100.0
+esperar = false
+
 [sub_resource type="Resource" id="Resource_iprbv"]
 script = ExtResource("4_xme6w")
 segundos = 0.1
@@ -171,6 +235,15 @@ segundos = 0.1
 script = ExtResource("5_gomjd")
 arquivo = "res://audio/se/batida01.mp3"
 
+[sub_resource type="Resource" id="S_onda8"]
+script = ExtResource("x4")
+alvo = 1
+evento = "bruxa_in_passagem"
+tipo = 4
+cor = Color(1, 1, 1, 1)
+altura = 100.0
+esperar = false
+
 [sub_resource type="Resource" id="Resource_jye12"]
 script = ExtResource("4_xme6w")
 segundos = 0.2
@@ -178,6 +251,15 @@ segundos = 0.2
 [sub_resource type="Resource" id="Resource_7olg0"]
 script = ExtResource("5_gomjd")
 arquivo = "res://audio/se/batida01.mp3"
+
+[sub_resource type="Resource" id="S_onda9"]
+script = ExtResource("x4")
+alvo = 1
+evento = "bruxa_in_passagem"
+tipo = 4
+cor = Color(1, 1, 1, 1)
+altura = 100.0
+esperar = false
 
 [sub_resource type="Resource" id="Resource_3xlgm"]
 script = ExtResource("4_xme6w")
@@ -662,7 +744,7 @@ nome = "fim"
 [sub_resource type="Resource" id="Resource_jh0eb"]
 script = ExtResource("1_c04db")
 gatilho = 2
-comandos = Array[ExtResource("2_optqh")]([SubResource("Resource_73mqy"), SubResource("A_cam0"), SubResource("A_fin"), SubResource("A_cam1"), SubResource("A_e1"), SubResource("A_camv"), SubResource("A_e2"), SubResource("A_mv1"), SubResource("A_bal1"), SubResource("A_e3"), SubResource("A_mv2"), SubResource("A_e4"), SubResource("A_bal2"), SubResource("A_m1"), SubResource("A_m2"), SubResource("A_m3"), SubResource("A_bal3"), SubResource("A_m4"), SubResource("Resource_5asad"), SubResource("Resource_0kgrr"), SubResource("Resource_o7nlj"), SubResource("Resource_kg7wh"), SubResource("Resource_fs43n"), SubResource("Resource_1noqm"), SubResource("Resource_dvbhk"), SubResource("Resource_go3bc"), SubResource("Resource_45lbe"), SubResource("Resource_uijtt"), SubResource("Resource_7g4fa"), SubResource("Resource_glly0"), SubResource("Resource_jkh3a"), SubResource("Resource_p3lq3"), SubResource("Resource_iprbv"), SubResource("Resource_2bbq4"), SubResource("Resource_jye12"), SubResource("Resource_7olg0"), SubResource("Resource_3xlgm"), SubResource("Resource_gar4i"), SubResource("Resource_h5k3h"), SubResource("Resource_1csho"), SubResource("Resource_aa4hk"), SubResource("Resource_4nvo0"), SubResource("Resource_h2c3j"), SubResource("Resource_ftfcc"), SubResource("Resource_8msh3"), SubResource("Resource_v5fb7"), SubResource("Resource_ffo14"), SubResource("Resource_3ft7v"), SubResource("Resource_msusd"), SubResource("Resource_c5yhq"), SubResource("Resource_28dil"), SubResource("Resource_5scxx"), SubResource("Resource_wduen"), SubResource("Resource_ovkkp"), SubResource("Resource_7fjw0"), SubResource("Resource_7p7qa"), SubResource("Resource_aqp7k"), SubResource("Resource_rj6aj"), SubResource("Resource_lili8"), SubResource("Resource_3g0ce"), SubResource("Resource_mhvxu"), SubResource("Resource_6inrx"), SubResource("F_cena_abre1"), SubResource("Resource_ae7rc"), SubResource("Resource_aa8rj"), SubResource("Resource_31pmp"), SubResource("Resource_1opvw"), SubResource("Resource_a7ju0"), SubResource("F_cena_fecha2"), SubResource("Resource_bifeq"), SubResource("Resource_wjf6o"), SubResource("Resource_3opxw"), SubResource("Resource_j0oay"), SubResource("Resource_m45oa"), SubResource("Resource_3bqtm"), SubResource("Resource_dxax8"), SubResource("Resource_aj5ti"), SubResource("R_irma_brux_0"), SubResource("R_irma_brux_1"), SubResource("R_irma_brux_2"), SubResource("Resource_cjxqi"), SubResource("Resource_uh1o3"), SubResource("Resource_knokq"), SubResource("T_cura2"), SubResource("R_estilo_pensa"), SubResource("Resource_67ysa"), SubResource("Resource_rbw8v"), SubResource("R_estilo_volta"), SubResource("Resource_s0kd1"), SubResource("Resource_rgmyk"), SubResource("Resource_7fgmm"), SubResource("Resource_3fdd6"), SubResource("Resource_c04db"), SubResource("Resource_1dger"), SubResource("Resource_3cm0n"), SubResource("Resource_ajdrk"), SubResource("Resource_e4tah"), SubResource("Resource_4ohjl"), SubResource("Resource_lym1c"), SubResource("Resource_5iktt"), SubResource("Resource_l8py2"), SubResource("Resource_avisoguarda"), SubResource("Resource_optqh"), SubResource("Resource_wlxkp"), SubResource("Resource_b5bcm"), SubResource("Resource_6ctfg"), SubResource("Resource_tefxn"), SubResource("F_cena_abre3"), SubResource("Resource_yja8x"), SubResource("Resource_vkiss"), SubResource("Resource_ggtyw"), SubResource("Resource_1eqwh"), SubResource("Resource_rmpw7"), SubResource("Resource_ifmlr"), SubResource("F_cena_fecha4"), SubResource("Resource_puxdq"), SubResource("Resource_8jf04"), SubResource("Resource_kj00y"), SubResource("Resource_quhje"), SubResource("R_estilo_pensa"), SubResource("T_balao_duvida"), SubResource("R_desconfia_brux_0"), SubResource("Resource_fkp8f"), SubResource("T_resumo2"), SubResource("R_estilo_volta"), SubResource("Resource_3miql"), SubResource("Resource_r2kvu"), SubResource("Resource_4jqi4"), SubResource("Resource_uqwpp"), SubResource("Resource_ffkj5"), SubResource("Resource_ai35c"), SubResource("Resource_ux7ap"), SubResource("Resource_lkqac"), SubResource("Resource_ohnie"), SubResource("Resource_pmmvm"), SubResource("Resource_wax0t")])
+comandos = Array[ExtResource("2_optqh")]([SubResource("Resource_73mqy"), SubResource("A_cam0"), SubResource("A_fin"), SubResource("A_cam1"), SubResource("A_e1"), SubResource("A_camv"), SubResource("A_e2"), SubResource("A_mv1"), SubResource("A_bal1"), SubResource("A_e3"), SubResource("A_mv2"), SubResource("A_e4"), SubResource("A_bal2"), SubResource("A_m1"), SubResource("A_m2"), SubResource("A_m3"), SubResource("A_bal3"), SubResource("A_m4"), SubResource("Resource_5asad"), SubResource("Resource_0kgrr"), SubResource("S_onda1"), SubResource("Resource_o7nlj"), SubResource("Resource_kg7wh"), SubResource("S_onda2"), SubResource("Resource_fs43n"), SubResource("Resource_1noqm"), SubResource("S_onda3"), SubResource("Resource_dvbhk"), SubResource("Resource_go3bc"), SubResource("S_onda4"), SubResource("Resource_45lbe"), SubResource("Resource_uijtt"), SubResource("S_onda5"), SubResource("Resource_7g4fa"), SubResource("Resource_glly0"), SubResource("S_onda6"), SubResource("Resource_jkh3a"), SubResource("Resource_p3lq3"), SubResource("S_onda7"), SubResource("Resource_iprbv"), SubResource("Resource_2bbq4"), SubResource("S_onda8"), SubResource("Resource_jye12"), SubResource("Resource_7olg0"), SubResource("S_onda9"), SubResource("Resource_3xlgm"), SubResource("Resource_gar4i"), SubResource("Resource_h5k3h"), SubResource("Resource_1csho"), SubResource("Resource_aa4hk"), SubResource("Resource_4nvo0"), SubResource("Resource_h2c3j"), SubResource("Resource_ftfcc"), SubResource("Resource_8msh3"), SubResource("Resource_v5fb7"), SubResource("Resource_ffo14"), SubResource("Resource_3ft7v"), SubResource("Resource_msusd"), SubResource("Resource_c5yhq"), SubResource("Resource_28dil"), SubResource("Resource_5scxx"), SubResource("Resource_wduen"), SubResource("Resource_ovkkp"), SubResource("Resource_7fjw0"), SubResource("Resource_7p7qa"), SubResource("Resource_aqp7k"), SubResource("Resource_rj6aj"), SubResource("Resource_lili8"), SubResource("Resource_3g0ce"), SubResource("Resource_mhvxu"), SubResource("Resource_6inrx"), SubResource("F_cena_abre1"), SubResource("Resource_ae7rc"), SubResource("Resource_aa8rj"), SubResource("Resource_31pmp"), SubResource("Resource_1opvw"), SubResource("Resource_a7ju0"), SubResource("F_cena_fecha2"), SubResource("Resource_bifeq"), SubResource("Resource_wjf6o"), SubResource("Resource_3opxw"), SubResource("Resource_j0oay"), SubResource("Resource_m45oa"), SubResource("Resource_3bqtm"), SubResource("Resource_dxax8"), SubResource("Resource_aj5ti"), SubResource("R_irma_brux_0"), SubResource("R_irma_brux_1"), SubResource("R_irma_brux_2"), SubResource("Resource_cjxqi"), SubResource("Resource_uh1o3"), SubResource("Resource_knokq"), SubResource("T_cura2"), SubResource("R_estilo_pensa"), SubResource("Resource_67ysa"), SubResource("Resource_rbw8v"), SubResource("R_estilo_volta"), SubResource("Resource_s0kd1"), SubResource("Resource_rgmyk"), SubResource("Resource_7fgmm"), SubResource("Resource_3fdd6"), SubResource("Resource_c04db"), SubResource("Resource_1dger"), SubResource("Resource_3cm0n"), SubResource("Resource_ajdrk"), SubResource("Resource_e4tah"), SubResource("Resource_4ohjl"), SubResource("Resource_lym1c"), SubResource("Resource_5iktt"), SubResource("Resource_l8py2"), SubResource("Resource_avisoguarda"), SubResource("Resource_optqh"), SubResource("Resource_wlxkp"), SubResource("Resource_b5bcm"), SubResource("Resource_6ctfg"), SubResource("Resource_tefxn"), SubResource("F_cena_abre3"), SubResource("Resource_yja8x"), SubResource("Resource_vkiss"), SubResource("Resource_ggtyw"), SubResource("Resource_1eqwh"), SubResource("Resource_rmpw7"), SubResource("Resource_ifmlr"), SubResource("F_cena_fecha4"), SubResource("Resource_puxdq"), SubResource("Resource_8jf04"), SubResource("Resource_kj00y"), SubResource("Resource_quhje"), SubResource("R_estilo_pensa"), SubResource("T_balao_duvida"), SubResource("R_desconfia_brux_0"), SubResource("Resource_fkp8f"), SubResource("T_resumo2"), SubResource("R_estilo_volta"), SubResource("Resource_3miql"), SubResource("Resource_r2kvu"), SubResource("Resource_4jqi4"), SubResource("Resource_uqwpp"), SubResource("Resource_ffkj5"), SubResource("Resource_ai35c"), SubResource("Resource_ux7ap"), SubResource("Resource_lkqac"), SubResource("Resource_ohnie"), SubResource("Resource_pmmvm"), SubResource("Resource_wax0t")])
 
 [sub_resource type="Resource" id="Resource_rea3u"]
 script = ExtResource("4_xme6w")
