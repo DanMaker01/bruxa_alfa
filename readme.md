@@ -1,18 +1,12 @@
 # Jogo da Bruxa
 
-<table>
-<tr><td>Engine</td><td>Godot 4</td></tr>
-<tr><td>Plataforma</td><td>Android</td></tr>
-<tr><td>Resolução</td><td>640 × 960 px</td></tr>
-<tr><td>Gênero</td><td>Point & Click</td></tr>
-<tr><td>Estilo</td><td>2D Side-scroller</td></tr>
-<tr><td>Gameplay</td><td>Exploração + Crafting</td></tr>
-<tr><td>Idioma</td><td>Português</td></tr>
-</table>
+![1793375384971](image/readme/1793375384971.png)
 
-![1788646480585](image/readme/1788646480585.png)![1788646486876](image/readme/1788646486876.png)
+![1793377160839](image/readme/1793377160839.png)
 
-## Coisas a fazer
+![1793375398241](image/readme/1793375398241.png)
+
+# Coisas a fazer
 
 ```
   ==============================
@@ -30,25 +24,19 @@
 
 [.] v3
 [ ] História / missão: 
-	[ ]	Diminuir a cidade (mapa_cidadeA) 5000 -> 4000? vou mudar sprite, organizar posição das casas, teleport ida e teleport volta. Adicionar 3 NPC. Vou criar os sprites.
-	[.] castelon_in01: Guardas e bruxa saem juntos e chegam juntos. a posição de início dos guardas e da bruxa está correta. mas as velocidades no decorrer estão diferentes para um dos guardas.
-		Feito: os três na mesma velocidade (170) e andando a mesma distância (1034 px): bruxa 330 -> 1364, guarda1 470 -> 1504, guarda2 190 -> 1224. Voltam aos postos também a 170.
-		Por algum motivo o guarda atrás da bruxa é um pouco mais rápido e começa a diminuir a distância entre ela e a bruxa. E o guarda da frente fica muito a frente. Tente manter a distância entre guarda-bruxa constante.pode ser uma distância curta, mas que seja constante.	
-	[.] na primeira vez que o campones bate na porta, deve ter uma expressão de som saindo da direção próximo à porta, aparecendo na câmera, um efeito simples. Quero efeito de tres risquinhos saindo radialmente de um ponto central, num cone de 30° para a esquerda.
-		Feito: o efeito SOM (cmd_mostrar_efeito) agora são três risquinhos saindo de um ponto central num cone de 30° para a esquerda (para a direita se a porta estiver à esquerda da tela), afastando e sumindo. Saíram os arcos. Continua em cada batida da primeira sequência do bruxa_in_auto.
-		Fazer: som sai mais abaixo e quero maior.	
 	[?]	Verificação de diálogos e de todos os caminhos possíveis do Cap. 1 (resultados 1 a 5, caso você enrole e chege o dia do casamento, com e sem poção no bolso, voltar à ponte/estradaB depois da fuga, véu pego ou não). Colocar um contador de tempo a partir de quando fala com o Rei para chegar o dia do casamento? Como evitar algo de corrida contra o tempo? Porque ela tem que pegar o véu para continuar o jogo, o que muda é o convite, se não ocorre ou se o rei manda prender a bruxa.
 		[] Resultado: 1: 
+        		recebe o convite e fica livre. 
+            	Pode pegar musgo e flor.
 		[] Resultado: 2: 
-		[] Resultado: 3,4,5: FUGA
-		[] Resultado: enrolar para entregar - não consegue avançar (ok? sim 1/3)
-
-[.] Véu em 3 cores separadas (para a porta com 3 destinos):
-	Gerador ganhou --separadas 1: um conjunto de PNGs por cor, cada um só com a sua folha, no mesmo lugar e na mesma fase. Sobrepondo os 3 (3 eventos na mesma posição) o conjunto oscila igual ao véu junto.
-	Gerados com: python gerador_veu.py --separadas 1 --cores "#d7aaff" "#a0e6ff" "#ffd0e0" --fps 12 --voltas_onda 3 --nome veu3 --opacidade 0.1 --largura 100 --altura 160 --tres ../../animacoes/veu3.tres
-	Arquivos: assets/eventos/veu/veu3_cor1_1..16 (lavanda), veu3_cor2_* (azul), veu3_cor3_* (rosa); PNG 128x192 (aumentado para caber o movimento). animacoes/veu3_cor1.tres, veu3_cor2.tres, veu3_cor3.tres (12 fps).
-	Ideia: a cor ativa fica na frente (z_index maior) e as outras atrás; ao falar com a porta escolhe a cor e o teleporte depende dela. (os eventos: depois)
-	Ajustar: Ao clicar no véu para selecionar a cor do efeito deve ser a mesma que irá virar após o clique.
+        		fica livre. 
+            	Pode pegar musgo e flor.
+		[] Resultado: 3,4,5: 
+        		FUGA
+            	termina em casa com o véu
+            	não pode chegar próximo ao castelo.
+		[.] Resultado: 
+        		enrolar para entregar - não consegue avançar (ok? sim 2/3)
 
 ```
 
@@ -60,8 +48,121 @@
 [ ]		Caldeirão 100%
 [ ]		Diálogos 100%
 [ ]		Sprites 100%
-[ ]		Audio 100%
-[ ]		Menus 100%
+	[] Faces
+		[] Bruxa
+			[] neutro
+			[] pensando
+		[] Rei
+			[] neutro
+			[] furioso
+		[] Princesa
+			[] neutro
+		[] Guarda1
+		[] Guarda2
+		[] NPC1 - Criança
+			[] neutro
+		[] NPC2 - Criança
+			[] neutro
+		[] NPC3 - Adulto
+			[] neutro
+		[] Goblin
+			[] neutro
+	[] Sprites
+		[] Bruxa
+			[] parada
+			[] andando
+		[] Rei
+		[] Princesa
+		[] Guarda1
+			[] parado
+			[] andando
+		[] Guarda2
+			[] parado
+			[] andando
+		[] NPC1 - Criança
+			[] parado
+			[] andando
+		[] NPC2 - Criança
+			[] parado
+			[] andando
+		[] NPC3 - Adulto
+			[] parado
+		[] Portas
+			[] porta padrão
+			[] porta bruxa
+			[] portão castelo
+		[] Objetos
+			[] 
+	[] Cenários
+		[] floresta
+		[] bruxa_in
+		[] bruxa_out1
+		[] bruxa_out2
+		[] bruxa_out3
+		[] bosque
+		[] cidade
+		[] cidade_in01
+		[] cidade_in02
+		[] cidade_in03
+		[] estrada_a
+		[] ponte
+		[] castelo
+		[] castelo_in01
+		[] castelo_in02
+		[] castelo_in03
+		[] estrada_b
+
+[ ]	Audio 100%
+	[] BGM
+		[] floresta
+		[] bruxa_out1
+		[] bruxa_out2
+		[] bruxa_out3
+		[] bruxa_in
+		[] bosque
+		[] cidade
+		[] cidade_in01
+		[] cidade_in02
+		[] cidade_in03
+		[] estrada_a
+		[] ponte
+		[] castelo
+		[] castelo_in01
+		[] castelo_in02
+		[] castelo_in03
+		[] estrada_b
+	[] BGS
+		[] tremor
+		[] passaros
+		[] grilo
+	[] SE
+		[] porta01
+		[] porta02
+		[] passos
+		[] pulo
+		[] dash
+		[] magia01
+		[] magia02
+		[] magia03
+		[] pancada01
+		[] pancada02
+		[] corte01
+		[] corte02
+		[] vidro01
+		[] vidro02
+
+
+
+
+
+
+[ ]	Menus 100%
+	[] estilo de cartas
+	[] inicial
+		[] start, load, config, sair
+	[] pause
+		[]
+	[] caldeirão
 
 
 [] organização da pasta Graphics(está sendo chamada de assets neste projeto) estilo rpgmaker:
@@ -105,6 +206,11 @@
 [ ]		(Cap. 2) Mostrar o pentagrama, cada aresta representa um componente. Pensei em relacionar as arestas com a_ij e criar um feedback útil visualmente.
 [ ]		(Cap. 2) O pentagrama deve ter animações a depender da matriz. Por exemplo, matriz diagonal (ou próxima de diagonal a menos de ruído) só escala, então a animação do pentagram é escalar. Matriz que troca dois componentes deve trocar duas pontas do pentagrama suavemente, como uma permutação ou rotação.
 
+[?] melhorar visual do balão de expressões.
+	Feito: balão desenhado (sombra, contorno escuro, miolo creme, rabicho, brilho no canto); entra com pop, flutua para cima e o símbolo dá um pulinho.
+
+[?] toctoc, a bruxa tem expressão, a camera vai até a porta e dá o segundo toc toc e mostra a mensagem do "Toc toc..."
+	Feito: batidas 1 (com efeito) -> balão "!" na bruxa -> câmera na porta (espera 1.2) -> batidas 2 (com efeito) -> "TOC! TOC! TOC!" -> "Ei. Tem alguém em casa!?" -> câmera volta.
 
 [ ]	Escrita/Estilo:
 [ ]		Diálogos devem condizer com a época

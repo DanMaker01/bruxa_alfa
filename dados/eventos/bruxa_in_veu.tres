@@ -92,6 +92,7 @@ script = ExtResource("8_efeito")
 alvo = 1
 evento = "bruxa_in_veu"
 tipo = 1
+cor = Color(0.627451, 0.9019608, 1, 1)
 altura = 0.0
 esperar = false
 
@@ -122,6 +123,7 @@ script = ExtResource("8_efeito")
 alvo = 1
 evento = "bruxa_in_veu"
 tipo = 1
+cor = Color(1, 0.8156863, 0.8784314, 1)
 altura = 0.0
 esperar = false
 
@@ -147,6 +149,7 @@ script = ExtResource("8_efeito")
 alvo = 1
 evento = "bruxa_in_veu"
 tipo = 1
+cor = Color(0.84313726, 0.6666667, 1, 1)
 altura = 0.0
 esperar = false
 

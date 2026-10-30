@@ -32,7 +32,7 @@ tempo = 0.2
 [sub_resource type="Resource" id="Resource_vd5a3"]
 script = ExtResource("4_ilogd")
 mapa = "res://mapas/mapa_cidadeA.tscn"
-posicao = Vector2(3488, 505)
+posicao = Vector2(3072, 505)
 direcao = 1
 
 [sub_resource type="Resource" id="Resource_yt2qv"]

@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" uid="uid://dleyw57m3dpsy" path="res://assets/eventos/cidade_npc2/npc.png" id="1_t"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_t")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

@@ -1,9 +1,0 @@
-Tamanho:
-	Precisa caber dentro de um retangulo 240x360 (	no máximo 360x540)
-
-Conteúdo:
-	Bruxa de pé, corpo todo, posição padrão.
-
-Obs.: 
-	Tamanho precisa ser coerente com o cenário interno da casa.
-	

@@ -53,15 +53,15 @@ segundos = 7.999999999999744
 script = ExtResource("13_leg")
 texto = "Em 1484, o Papa Inocêncio VIII deu aos inquisidores o poder de caçar bruxas.
 
-Toda mulher que vivesse sozinha ou entendesse de ervas passou a ser suspeita."
+Toda mulher que vivesse sozinha ou entendesse de ervas, passou a ser suspeita."
 segundos = 9.99999999999968
 
 [sub_resource type="Resource" id="Resource_leg2"]
 script = ExtResource("13_leg")
-texto = "A Bruxa, vendo que a situação não era boa, decidiu se mudar e morar na floresta.
+texto = "A Bruxa, vendo que a situação não era boa, decidiu se mudar e ir morar na floresta.
 
-Mas vivos e mortos continuavam batendo à sua porta, pedindo poções e favores."
-segundos = 8.999999999999712
+Mas vivos e mortos, continuavam batendo à sua porta, pedindo poções e favores."
+segundos = 9.99999999999968
 
 [sub_resource type="Resource" id="Resource_leg3"]
 script = ExtResource("13_leg")
@@ -72,13 +72,13 @@ segundos = 9.99999999999968
 
 [sub_resource type="Resource" id="Resource_6xfj1"]
 script = ExtResource("13_leg")
-texto = "Com um pedaço do tecido na porta de casa, ela poderia chegar a qualquer lugar sem que ninguém a visse."
+texto = "Com um pedaço do tecido na porta de casa, a Bruxa poderia chegar a qualquer lugar sem que ninguém a visse."
 segundos = 7.999999999999744
 metadata/_custom_type_script = "uid://c8c7nvlca7oyd"
 
 [sub_resource type="Resource" id="Resource_leg4"]
 script = ExtResource("13_leg")
-texto = "Então, em três dias ela ergueu sua casa na floresta.
+texto = "Então, em três dias ela ergueu sua casa na floresta:
 
 No primeiro dia ela cortou a madeira. Fez paredes e telhado."
 segundos = 7.999999999999744
@@ -92,7 +92,7 @@ metadata/_custom_type_script = "uid://c8c7nvlca7oyd"
 [sub_resource type="Resource" id="Resource_uw0a6"]
 script = ExtResource("13_leg")
 texto = "No terceiro dia ela saiu para pegar o tecido do véu..."
-segundos = 5.999999999999808
+segundos = 4.99999999999984
 metadata/_custom_type_script = "uid://c8c7nvlca7oyd"
 
 [sub_resource type="Resource" id="Resource_sauaa"]

@@ -171,7 +171,7 @@ texto = "Eu queria falar com você, porque minh..."
 script = ExtResource("9_knu6e")
 personagem = ExtResource("x3")
 posicao = 100.0
-texto = "A princesa vai se casar amanhã. Mas ela não sai da cama."
+texto = "...a princesa. A princesa vai se casar amanhã. Mas ela está muito sensível. Não quer sair do castelo."
 
 [sub_resource type="Resource" id="R_irma_brux_1"]
 script = ExtResource("9_knu6e")
@@ -216,13 +216,13 @@ evento = ExtResource("93_pensa_ini")
 script = ExtResource("9_knu6e")
 personagem = ExtResource("x2")
 face = "pensando"
-texto = "Coração disparado. Mãos trêmulas. A cabeça só pensa no pior."
+texto = "Hmm... Coração disparado. Mãos trêmulas. A cabeça só pensa no pior."
 
 [sub_resource type="Resource" id="Resource_rxkpu"]
 script = ExtResource("9_knu6e")
 personagem = ExtResource("x2")
 face = "pensando"
-texto = "Parece que o corpo dela não sabe mais descansar."
+texto = "Parece que o corpo dela não sabe mais descansar. Está neurótica."
 
 [sub_resource type="Resource" id="R_estilo_volta"]
 script = ExtResource("92_chamar")
@@ -247,7 +247,7 @@ texto = "O medo vai continuar ali. Mas ela vai conseguir agir apesar dele. Levan
 [sub_resource type="Resource" id="Resource_fmhl5"]
 script = ExtResource("9_knu6e")
 personagem = ExtResource("x2")
-texto = "Deixe eu me lembrar... são oito ervas, que posso pegar no final da floresta."
+texto = "Deixe eu me lembrar... "
 
 [sub_resource type="Resource" id="Resource_6i5r4"]
 script = ExtResource("9_knu6e")
@@ -258,12 +258,12 @@ texto = "No fim da floresta? Eu tenho medo de ir lá, desde que o príncipe Zigm
 [sub_resource type="Resource" id="Resource_vtqx8"]
 script = ExtResource("9_knu6e")
 personagem = ExtResource("x2")
-texto = "Eu sei. Deixa essa parte comigo."
+texto = "Entendo... Mas deixe-me lembrar a receita."
 
 [sub_resource type="Resource" id="Resource_3682x"]
 script = ExtResource("9_knu6e")
 personagem = ExtResource("x2")
-texto = "E quatro cogumelos, que crescem logo depois da cidade."
+texto = "Oito ervas... ok... e quatro cogumelos, que crescem logo depois da cidade."
 
 [sub_resource type="Resource" id="Resource_oixjs"]
 script = ExtResource("9_knu6e")
@@ -375,13 +375,13 @@ texto = "Se eu ouvi direito, ele ia chamar a Princesa de irmã...?"
 script = ExtResource("9_knu6e")
 personagem = ExtResource("x2")
 face = "pensando"
-texto = "Oito ervas, no final da floresta, e quatro cogumelos, logo depois da cidade."
+texto = "Enfim... Oito ervas, no final da floresta, e quatro cogumelos, logo depois da cidade."
 
 [sub_resource type="Resource" id="T_resumo2"]
 script = ExtResource("9_knu6e")
 personagem = ExtResource("x2")
 face = "pensando"
-texto = "Cozinhando isso, depois é só ir ao castelo."
+texto = "Cozinhando isso, depois é só ir ao castelo, não deve ser difícil."
 
 [sub_resource type="Resource" id="Resource_r3ojj"]
 script = ExtResource("5_0jff4")
@@ -394,11 +394,6 @@ acao = 1
 [sub_resource type="Resource" id="Resource_q24qn"]
 script = ExtResource("5_0jff4")
 segundos = 0.1
-
-[sub_resource type="Resource" id="Resource_1jrcm"]
-script = ExtResource("9_knu6e")
-personagem = ExtResource("x2")
-texto = "Vamos lá."
 
 [sub_resource type="Resource" id="Resource_eclo5"]
 script = ExtResource("10_2o2br")
@@ -426,13 +421,24 @@ script = ExtResource("15_epkn7")
 variavel = "missao01_aceita"
 valor = 1.0
 
+[sub_resource type="Resource" id="B_receita2"]
+script = ExtResource("9_knu6e")
+personagem = ExtResource("x2")
+texto = "São oito ervas, que nascem no final da floresta..."
+
+[sub_resource type="Resource" id="B_adeus"]
+script = ExtResource("9_knu6e")
+personagem = ExtResource("x3")
+posicao = 100.0
+texto = "Adeus, senhora bruxa!"
+
 [sub_resource type="Resource" id="Resource_pxwyc"]
 script = ExtResource("1_gahnm")
 condicoes = Array[ExtResource("15_epkn7")]([SubResource("Resource_uwvc1")])
 sprite_frames = ExtResource("6_ergwe")
 animacao = "parado"
 area_scale = Vector2(16, 30)
-comandos = Array[ExtResource("2_5y5jk")]([SubResource("Resource_7op6n"), SubResource("Resource_iblo4"), SubResource("F_trava_porta"), SubResource("Resource_87v1b"), SubResource("Resource_we1cm"), SubResource("Resource_pb0s0"), SubResource("F_cena_abre1"), SubResource("F_para_batida"), SubResource("Resource_6sudh"), SubResource("Resource_lxmvx"), SubResource("Resource_skx01"), SubResource("Resource_pa72o"), SubResource("Resource_6jw8w"), SubResource("F_cena_fecha2"), SubResource("Resource_8tull"), SubResource("Resource_5yxed"), SubResource("Resource_qchvi"), SubResource("Resource_cmkkc"), SubResource("Resource_575dk"), SubResource("Resource_xw4px"), SubResource("R_irma_brux_0"), SubResource("R_irma_brux_1"), SubResource("R_irma_brux_2"), SubResource("Resource_p1udm"), SubResource("Resource_j0vgw"), SubResource("Resource_unal2"), SubResource("T_cura2"), SubResource("R_estilo_pensa"), SubResource("Resource_tqa1j"), SubResource("Resource_rxkpu"), SubResource("R_estilo_volta"), SubResource("Resource_y11e0"), SubResource("Resource_ut354"), SubResource("Resource_50d2e"), SubResource("Resource_fmhl5"), SubResource("Resource_6i5r4"), SubResource("Resource_vtqx8"), SubResource("Resource_3682x"), SubResource("Resource_oixjs"), SubResource("Resource_u7qwp"), SubResource("Resource_v0jwt"), SubResource("Resource_exejc"), SubResource("Resource_6o5nu"), SubResource("F_aviso_guarda"), SubResource("Resource_ramt2"), SubResource("Resource_ypnfl"), SubResource("Resource_yivqu"), SubResource("F_cena_abre3"), SubResource("Resource_e1xbl"), SubResource("Resource_4mlns"), SubResource("Resource_spsty"), SubResource("Resource_e0v20"), SubResource("Resource_4csen"), SubResource("Resource_4nlao"), SubResource("F_cena_fecha4"), SubResource("Resource_7hd30"), SubResource("Resource_m688k"), SubResource("Resource_lbwnx"), SubResource("R_estilo_pensa"), SubResource("T_balao_duvida"), SubResource("R_desconfia_brux_0"), SubResource("Resource_0twvi"), SubResource("T_resumo2"), SubResource("R_estilo_volta"), SubResource("Resource_r3ojj"), SubResource("Resource_bnhvo"), SubResource("Resource_q24qn"), SubResource("Resource_1jrcm"), SubResource("Resource_eclo5"), SubResource("Resource_8th6g"), SubResource("Resource_5r5mu"), SubResource("Resource_150wu"), SubResource("Resource_b3lj6")])
+comandos = Array[ExtResource("2_5y5jk")]([SubResource("Resource_7op6n"), SubResource("Resource_iblo4"), SubResource("F_trava_porta"), SubResource("Resource_87v1b"), SubResource("Resource_we1cm"), SubResource("Resource_pb0s0"), SubResource("F_cena_abre1"), SubResource("F_para_batida"), SubResource("Resource_6sudh"), SubResource("Resource_lxmvx"), SubResource("Resource_skx01"), SubResource("Resource_pa72o"), SubResource("Resource_6jw8w"), SubResource("F_cena_fecha2"), SubResource("Resource_8tull"), SubResource("Resource_5yxed"), SubResource("Resource_qchvi"), SubResource("Resource_cmkkc"), SubResource("Resource_575dk"), SubResource("Resource_xw4px"), SubResource("R_irma_brux_0"), SubResource("R_irma_brux_1"), SubResource("R_irma_brux_2"), SubResource("Resource_p1udm"), SubResource("Resource_j0vgw"), SubResource("Resource_unal2"), SubResource("T_cura2"), SubResource("R_estilo_pensa"), SubResource("Resource_tqa1j"), SubResource("Resource_rxkpu"), SubResource("R_estilo_volta"), SubResource("Resource_y11e0"), SubResource("Resource_ut354"), SubResource("Resource_50d2e"), SubResource("Resource_fmhl5"), SubResource("B_receita2"), SubResource("Resource_6i5r4"), SubResource("Resource_vtqx8"), SubResource("Resource_3682x"), SubResource("Resource_oixjs"), SubResource("Resource_u7qwp"), SubResource("Resource_v0jwt"), SubResource("Resource_exejc"), SubResource("Resource_6o5nu"), SubResource("F_aviso_guarda"), SubResource("B_adeus"), SubResource("Resource_ramt2"), SubResource("Resource_ypnfl"), SubResource("Resource_yivqu"), SubResource("F_cena_abre3"), SubResource("Resource_e1xbl"), SubResource("Resource_4mlns"), SubResource("Resource_spsty"), SubResource("Resource_e0v20"), SubResource("Resource_4csen"), SubResource("Resource_4nlao"), SubResource("F_cena_fecha4"), SubResource("Resource_7hd30"), SubResource("Resource_m688k"), SubResource("Resource_lbwnx"), SubResource("R_estilo_pensa"), SubResource("T_balao_duvida"), SubResource("R_desconfia_brux_0"), SubResource("Resource_0twvi"), SubResource("T_resumo2"), SubResource("R_estilo_volta"), SubResource("Resource_r3ojj"), SubResource("Resource_bnhvo"), SubResource("Resource_q24qn"), SubResource("Resource_eclo5"), SubResource("Resource_8th6g"), SubResource("Resource_5r5mu"), SubResource("Resource_150wu"), SubResource("Resource_b3lj6")])
 
 [sub_resource type="Resource" id="F_porta_abre2"]
 script = ExtResource("x0")

@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="Personagem" format=3]
+
+[ext_resource type="Script" path="res://src/dados/personagem.gd" id="1_p"]
+
+[resource]
+script = ExtResource("1_p")
+nome = "MENINA"
+faces = {}

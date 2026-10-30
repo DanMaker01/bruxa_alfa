@@ -11,7 +11,7 @@
 
 [node name="MapaBosque" type="Node2D" unique_id=231347479]
 script = ExtResource("1_7tbou")
-metadata/_edit_vertical_guides_ = [2358.0, 2028.0, -56.0]
+metadata/_edit_vertical_guides_ = [2128.0, 2000.0]
 
 [node name="Meio" type="Parallax2D" parent="." unique_id=647674415]
 z_index = -1
@@ -23,10 +23,10 @@ centered = false
 
 [node name="Frente" type="Parallax2D" parent="." unique_id=1011851333]
 z_index = 5
+scale = Vector2(1.068, 1)
 scroll_scale = Vector2(1.1, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="Frente" unique_id=1731043530]
-scale = Vector2(1.07, 1)
 texture = ExtResource("2_be1d2")
 centered = false
 
@@ -45,13 +45,24 @@ position = Vector2(32, 496)
 script = ExtResource("3_ofmjg")
 evento = ExtResource("ev_bosque_passagem1")
 
-[node name="AreaCogumelo" type="Node2D" parent="Eventos" unique_id=521088507]
+[node name="AreaCogumelo2" type="Node2D" parent="Eventos" unique_id=521088507]
 z_index = 3
-position = Vector2(1344, 608)
+position = Vector2(1376, 608)
 script = ExtResource("area_spawn")
 evento = ExtResource("ev_spawn_cogumelo")
+quantidade = 1
+largura = 799.9999999999744
+cooldown = 14.99999999999952
 espalhamento_min = 0.3
 espalhamento_max = 0.5
+
+[node name="AreaCogumelo1" type="Node2D" parent="Eventos" unique_id=1277997191]
+z_index = 3
+position = Vector2(560, 608)
+script = ExtResource("area_spawn")
+evento = ExtResource("ev_spawn_cogumelo")
 quantidade = 1
-largura = 700.0
-cooldown = 20.0
+largura = 499.999999999984
+cooldown = 14.99999999999952
+espalhamento_min = 0.3
+espalhamento_max = 0.5

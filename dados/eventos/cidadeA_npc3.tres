@@ -1,0 +1,115 @@
+[gd_resource type="Resource" script_class="EventoData" format=3]
+
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="1_pag"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_cmd"]
+[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="3_msg"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="4_cond"]
+[ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="5_passo"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="6_ev"]
+[ext_resource type="SpriteFrames" path="res://animacoes/cidade_npc3.tres" id="7_anim"]
+[ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="8_bruxa"]
+[ext_resource type="Resource" path="res://dados/falantes/morador.tres" id="9_npc"]
+
+[sub_resource type="Resource" id="M_0_0"]
+script = ExtResource("3_msg")
+personagem = ExtResource("9_npc")
+posicao = 100.0
+texto = "Bom dia, senhora."
+
+[sub_resource type="Resource" id="M_0_1"]
+script = ExtResource("3_msg")
+personagem = ExtResource("9_npc")
+posicao = 100.0
+texto = "Se procura cogumelos, eles crescem logo depois da cidade. Mas não ande pela estrada de noite."
+
+[sub_resource type="Resource" id="Pag_0"]
+script = ExtResource("1_pag")
+sprite_frames = ExtResource("7_anim")
+colisao_scale = Vector2(9, 20.25)
+area_pos = Vector2(0, -10)
+area_scale = Vector2(16, 20.25)
+comandos = Array[ExtResource("2_cmd")]([SubResource("M_0_0"), SubResource("M_0_1")])
+
+[sub_resource type="Resource" id="C_1_0"]
+script = ExtResource("4_cond")
+variavel = "missao01_resultado"
+valor = 1.0
+
+[sub_resource type="Resource" id="M_1_0"]
+script = ExtResource("3_msg")
+personagem = ExtResource("9_npc")
+posicao = 100.0
+texto = "Ouvi dizer que o Rei convidou a bruxa para o casamento."
+
+[sub_resource type="Resource" id="M_1_1"]
+script = ExtResource("3_msg")
+personagem = ExtResource("9_npc")
+posicao = 100.0
+texto = "Quem diria! Antes queriam queimar, agora querem na festa."
+
+[sub_resource type="Resource" id="Pag_1"]
+script = ExtResource("1_pag")
+condicoes = Array[ExtResource("4_cond")]([SubResource("C_1_0")])
+sprite_frames = ExtResource("7_anim")
+colisao_scale = Vector2(9, 20.25)
+area_pos = Vector2(0, -10)
+area_scale = Vector2(16, 20.25)
+comandos = Array[ExtResource("2_cmd")]([SubResource("M_1_0"), SubResource("M_1_1")])
+
+[sub_resource type="Resource" id="C_2_0"]
+script = ExtResource("4_cond")
+variavel = "missao01_resultado"
+valor = 2.0
+
+[sub_resource type="Resource" id="M_2_0"]
+script = ExtResource("3_msg")
+personagem = ExtResource("9_npc")
+posicao = 100.0
+texto = "A princesa saiu do quarto hoje cedo. Dizem que foi coisa de bruxaria..."
+
+[sub_resource type="Resource" id="M_2_1"]
+script = ExtResource("3_msg")
+personagem = ExtResource("9_npc")
+posicao = 100.0
+texto = "Da boa, pelo jeito."
+
+[sub_resource type="Resource" id="Pag_2"]
+script = ExtResource("1_pag")
+condicoes = Array[ExtResource("4_cond")]([SubResource("C_2_0")])
+sprite_frames = ExtResource("7_anim")
+colisao_scale = Vector2(9, 20.25)
+area_pos = Vector2(0, -10)
+area_scale = Vector2(16, 20.25)
+comandos = Array[ExtResource("2_cmd")]([SubResource("M_2_0"), SubResource("M_2_1")])
+
+[sub_resource type="Resource" id="C_3_0"]
+script = ExtResource("4_cond")
+variavel = "missao01_resultado"
+operador = 4
+valor = 3.0
+
+[sub_resource type="Resource" id="M_3_0"]
+script = ExtResource("3_msg")
+personagem = ExtResource("9_npc")
+posicao = 100.0
+texto = "Não quero confusão com o Rei."
+
+[sub_resource type="Resource" id="M_3_1"]
+script = ExtResource("3_msg")
+personagem = ExtResource("9_npc")
+posicao = 100.0
+texto = "Melhor a senhora seguir o seu caminho."
+
+[sub_resource type="Resource" id="Pag_3"]
+script = ExtResource("1_pag")
+condicoes = Array[ExtResource("4_cond")]([SubResource("C_3_0")])
+sprite_frames = ExtResource("7_anim")
+colisao_scale = Vector2(9, 20.25)
+area_pos = Vector2(0, -10)
+area_scale = Vector2(16, 20.25)
+comandos = Array[ExtResource("2_cmd")]([SubResource("M_3_0"), SubResource("M_3_1")])
+
+[resource]
+script = ExtResource("6_ev")
+id = "cidadeA_npc3"
+paginas = Array[ExtResource("1_pag")]([SubResource("Pag_0"), SubResource("Pag_1"), SubResource("Pag_2"), SubResource("Pag_3")])

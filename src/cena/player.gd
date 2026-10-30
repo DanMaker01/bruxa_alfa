@@ -122,6 +122,9 @@ func _physics_process(delta: float) -> void:
 		# Aplica aceleração
 		velocity.x = move_toward(velocity.x, direction_input * velocidade_max(), aceleracao() * delta)
 		
+	elif _andando_com_vel_fixa():
+		# comando Mover com velocidade fixa: sem fricção (senão anda ~10 px/s mais devagar que os eventos)
+		pass
 	else:
 		# PARANDO: aplica fricção
 		if is_moving_from_input:
@@ -148,6 +151,13 @@ func _physics_process(delta: float) -> void:
 	
 	# 4. ATUALIZA A ANIMAÇÃO
 	_update_animation()
+
+## O InputManager está levando a bruxa numa velocidade fixa (cmd_mover com velocidade > 0)?
+func _andando_com_vel_fixa() -> bool:
+	if not game_manager or not game_manager.has_method("get_input_manager"):
+		return false
+	var im = game_manager.get_input_manager()
+	return im != null and im.is_moving and im._vel_fixa > 0.0
 
 # 🔥 MÉTODO CHAMADO PELO INPUT MANAGER (clique)
 func set_movement_direction(direction: int) -> void:

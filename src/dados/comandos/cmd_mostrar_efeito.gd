@@ -194,9 +194,9 @@ class Ondas extends Node2D:
 	func _draw() -> void:
 		var base := 0.0 if dir > 0.0 else PI
 		var a := clampf(1.0 - prog, 0.0, 1.0)
-		var ini := 6.0 + prog * 16.0           # os risquinhos se afastam do centro
-		var comp := 10.0 - prog * 3.0
+		var ini := 10.0 + prog * 28.0          # os risquinhos se afastam do centro
+		var comp := 18.0 - prog * 5.0
 		for i in 3:
 			var ang := base + deg_to_rad((i - 1) * CONE * 0.5)
 			var v := Vector2(cos(ang), sin(ang))
-			draw_line(v * ini, v * (ini + comp), Color(cor, a), 3.0, true)
+			draw_line(v * ini, v * (ini + comp), Color(cor, a), 5.0, true)
