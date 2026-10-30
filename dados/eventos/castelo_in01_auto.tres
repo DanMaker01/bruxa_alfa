@@ -185,7 +185,7 @@ segundos = 0.8
 script = ExtResource("12_x")
 variavel = "missao01_resultado"
 operador = 3
-valor = 3.0
+valor = 4.0
 
 [sub_resource type="Resource" id="F_if_menor3"]
 script = ExtResource("x0")

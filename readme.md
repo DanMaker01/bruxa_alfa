@@ -26,15 +26,18 @@
 [ ] História / missão: 
 	[?]	Verificação de diálogos e de todos os caminhos possíveis do Cap. 1 (resultados 1 a 5, caso você enrole e chege o dia do casamento, com e sem poção no bolso, voltar à ponte/estradaB depois da fuga, véu pego ou não). Colocar um contador de tempo a partir de quando fala com o Rei para chegar o dia do casamento? Como evitar algo de corrida contra o tempo? Porque ela tem que pegar o véu para continuar o jogo, o que muda é o convite, se não ocorre ou se o rei manda prender a bruxa.
 		[] Resultado: 1: 
-        		recebe o convite e fica livre. 
-            	Pode pegar musgo e flor.
+        		recebe o convite
+                tem acesso ao castelo
+            	Pode pegar musgo e flor. e fazer a quest da cidade_in02
 		[] Resultado: 2: 
         		fica livre. 
+                tem acesso ao castelo
             	Pode pegar musgo e flor. e fazer a quest da cidade_in02
 		[] Resultado: 3,4,5: 
         		FUGA
             	termina em casa com o véu
-            	não pode chegar próximo ao castelo, perde acesso à flor e musgo.
+            	não pode chegar próximo ao castelo, perde acesso à flor e musgo e quest da cidade_in02
+            
 		[.] Resultado: 
         		enrolar para entregar - não consegue avançar (ok? sim 2/3)
 ```

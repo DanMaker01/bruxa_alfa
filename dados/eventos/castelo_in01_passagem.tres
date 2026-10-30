@@ -9,6 +9,16 @@
 [ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="6_t7kwy"]
 [ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="7_1uhpe"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="7_pqqer"]
+[ext_resource type="Script" uid="uid://u1lexc30s8be" path="res://src/dados/comandos/cmd_player.gd" id="Tx0"]
+[ext_resource type="Script" uid="uid://cwdgcnn30o052" path="res://src/dados/comandos/cmd_if.gd" id="Tx1"]
+[ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="Tx2"]
+[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="Tx3"]
+[ext_resource type="Script" uid="uid://b2vy54pculhyg" path="res://src/dados/comandos/cmd_else.gd" id="Tx4"]
+[ext_resource type="Script" uid="uid://phmwdet0nd7d" path="res://src/dados/comandos/cmd_end.gd" id="Tx5"]
+[ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="Tx6"]
+[ext_resource type="Script" uid="uid://c8c7nvlca7oyd" path="res://src/dados/comandos/cmd_legenda.gd" id="Tx7"]
+[ext_resource type="Resource" uid="uid://dxfehf8j2wj0b" path="res://dados/eventos/casamento_cena.tres" id="Tx8"]
+[ext_resource type="Script" uid="uid://dvii04cb4qtqa" path="res://src/dados/comandos/cmd_chamar_evento.gd" id="Tx9"]
 [ext_resource type="Script" uid="uid://bchvbuxgicj1n" path="res://src/dados/comandos/cmd_evento_animacao.gd" id="x0"]
 [ext_resource type="Script" uid="uid://bm6rsgpqii0pt" path="res://src/dados/comandos/cmd_som.gd" id="x1"]
 
@@ -52,7 +62,140 @@ area_pos = Vector2(0, -10)
 area_scale = Vector2(9, 36)
 comandos = Array[ExtResource("2_t7kwy")]([SubResource("F_porta_abre1"), SubResource("F_porta_som1"), SubResource("F_porta_esp1"), SubResource("Resource_1hk6o"), SubResource("Resource_dcu0w"), SubResource("Resource_2kfn5"), SubResource("Resource_mpele")])
 
+[sub_resource type="Resource" id="T_6"]
+script = ExtResource("Tx0")
+
+[sub_resource type="Resource" id="T_7"]
+script = ExtResource("5_23ca8")
+segundos = 0.3
+
+[sub_resource type="Resource" id="T_5"]
+script = ExtResource("6_t7kwy")
+variavel = "missao01_resultado"
+valor = 1.0
+
+[sub_resource type="Resource" id="T_8"]
+script = ExtResource("Tx1")
+condicao = SubResource("T_5")
+
+[sub_resource type="Resource" id="T_9"]
+script = ExtResource("Tx3")
+personagem = ExtResource("Tx2")
+texto = "Bem... preciso me arrumar para o casamento."
+
+[sub_resource type="Resource" id="T_10"]
+script = ExtResource("Tx4")
+
+[sub_resource type="Resource" id="T_11"]
+script = ExtResource("Tx3")
+personagem = ExtResource("Tx2")
+texto = "Que dia... vou para casa descansar."
+
+[sub_resource type="Resource" id="T_12"]
+script = ExtResource("Tx5")
+
+[sub_resource type="Resource" id="T_13"]
+script = ExtResource("5_23ca8")
+segundos = 0.3
+
+[sub_resource type="Resource" id="T_14"]
+script = ExtResource("x0")
+evento = "castelo_in01_passagem"
+animacao = "aberta"
+
+[sub_resource type="Resource" id="T_15"]
+script = ExtResource("x1")
+arquivo = "res://audio/se/porta_abre.mp3"
+
+[sub_resource type="Resource" id="T_16"]
+script = ExtResource("5_23ca8")
+segundos = 0.25
+
+[sub_resource type="Resource" id="T_17"]
+script = ExtResource("3_ub07r")
+tempo = 0.8
+
+[sub_resource type="Resource" id="T_18"]
+script = ExtResource("Tx6")
+variavel = "missao01_casamento"
+valor = 1.0
+
+[sub_resource type="Resource" id="T_19"]
+script = ExtResource("Tx1")
+condicao = SubResource("T_5")
+
+[sub_resource type="Resource" id="T_20"]
+script = ExtResource("4_2t1em")
+mapa = "res://mapas/mapa_cidadeA_in03.tscn"
+posicao = Vector2(360, 455)
+direcao = 2
+
+[sub_resource type="Resource" id="T_21"]
+script = ExtResource("Tx4")
+
+[sub_resource type="Resource" id="T_22"]
+script = ExtResource("4_2t1em")
+mapa = "res://mapas/mapa_bruxa_in.tscn"
+posicao = Vector2(240, 450)
+direcao = 2
+
+[sub_resource type="Resource" id="T_23"]
+script = ExtResource("Tx5")
+
+[sub_resource type="Resource" id="T_24"]
+script = ExtResource("5_23ca8")
+segundos = 0.5
+
+[sub_resource type="Resource" id="T_25"]
+script = ExtResource("Tx7")
+texto = "No dia seguinte..."
+segundos = 2.5
+
+[sub_resource type="Resource" id="T_26"]
+script = ExtResource("3_ub07r")
+tipo = 1
+
+[sub_resource type="Resource" id="T_27"]
+script = ExtResource("Tx1")
+condicao = SubResource("T_5")
+
+[sub_resource type="Resource" id="T_28"]
+script = ExtResource("Tx9")
+evento = ExtResource("Tx8")
+
+[sub_resource type="Resource" id="T_29"]
+script = ExtResource("Tx5")
+
+[sub_resource type="Resource" id="T_30"]
+script = ExtResource("Tx0")
+acao = 1
+
+[sub_resource type="Resource" id="T_2"]
+script = ExtResource("6_t7kwy")
+variavel = "missao01_resultado"
+operador = 4
+valor = 1.0
+
+[sub_resource type="Resource" id="T_3"]
+script = ExtResource("6_t7kwy")
+variavel = "missao01_resultado"
+operador = 5
+valor = 3.0
+
+[sub_resource type="Resource" id="T_4"]
+script = ExtResource("6_t7kwy")
+variavel = "missao01_casamento"
+
+[sub_resource type="Resource" id="T_31"]
+script = ExtResource("1_5ek33")
+condicoes = Array[ExtResource("6_t7kwy")]([SubResource("T_2"), SubResource("T_3"), SubResource("T_4")])
+sprite_frames = ExtResource("6_3io24")
+animacao = "parado"
+area_pos = Vector2(0, -10)
+area_scale = Vector2(9, 36)
+comandos = Array[ExtResource("2_t7kwy")]([SubResource("T_6"), SubResource("T_7"), SubResource("T_8"), SubResource("T_9"), SubResource("T_10"), SubResource("T_11"), SubResource("T_12"), SubResource("T_13"), SubResource("T_14"), SubResource("T_15"), SubResource("T_16"), SubResource("T_17"), SubResource("T_18"), SubResource("T_19"), SubResource("T_20"), SubResource("T_21"), SubResource("T_22"), SubResource("T_23"), SubResource("T_24"), SubResource("T_25"), SubResource("T_26"), SubResource("T_27"), SubResource("T_28"), SubResource("T_29"), SubResource("T_30")])
+
 [resource]
 script = ExtResource("7_pqqer")
 id = "castelo_in01_passagem"
-paginas = Array[ExtResource("1_5ek33")]([SubResource("Resource_hb47w")])
+paginas = Array[ExtResource("1_5ek33")]([SubResource("Resource_hb47w"), SubResource("T_31")])

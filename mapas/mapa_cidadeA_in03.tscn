@@ -35,6 +35,6 @@ z_index = 1
 
 [node name="Passagem" type="CharacterBody2D" parent="Eventos" unique_id=516211611]
 z_index = 3
-position = Vector2(992, 432)
+position = Vector2(336, 384)
 script = ExtResource("4_lru5l")
 evento = ExtResource("ev_cidadeA_in03_passagem")

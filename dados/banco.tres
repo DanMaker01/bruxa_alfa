@@ -16,8 +16,9 @@
 [ext_resource type="Resource" uid="uid://bkpyaw7owkkb1" path="res://dados/itens/maca.tres" id="20_maca"]
 [ext_resource type="Resource" path="res://dados/itens/po_retorno.tres" id="21_retorno"]
 [ext_resource type="Resource" path="res://dados/personalidades/princesa.tres" id="21_princesa"]
+[ext_resource type="Resource" path="res://dados/personalidades/filho_mercador.tres" id="22_filho"]
 
 [resource]
 script = ExtResource("18_20li3")
 itens = Array[ExtResource("1_nbf8o")]([ExtResource("6_ors41"), ExtResource("6_tjhoh"), ExtResource("11_x7c51"), ExtResource("3_fedlk"), ExtResource("20_maca"), ExtResource("7_6lumw"), ExtResource("i_pena"), ExtResource("i_olho"), ExtResource("21_retorno")])
-personalidades = Array[ExtResource("14_ufffv")]([ExtResource("15_bsoya"), ExtResource("16_a1bkd"), ExtResource("17_gpqo5"), ExtResource("21_princesa")])
+personalidades = Array[ExtResource("14_ufffv")]([ExtResource("15_bsoya"), ExtResource("16_a1bkd"), ExtResource("17_gpqo5"), ExtResource("21_princesa"), ExtResource("22_filho")])

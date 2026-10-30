@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://dxfehf8j2wj0b"]
+
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="6_bs1ox"]
+[ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="7_60tcb"]
+[ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="Cx0"]
+[ext_resource type="Script" uid="uid://c8c7nvlca7oyd" path="res://src/dados/comandos/cmd_legenda.gd" id="Cx1"]
+[ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="Cx2"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="Cx3"]
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="Cx4"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="Cx5"]
+
+[sub_resource type="Resource" id="C_1"]
+script = ExtResource("Cx0")
+
+[sub_resource type="Resource" id="C_2"]
+script = ExtResource("Cx1")
+texto = "A princesa atravessou a igreja de cabeça erguida.
+O casamento aconteceu."
+segundos = 4.0
+
+[sub_resource type="Resource" id="C_3"]
+script = ExtResource("Cx1")
+texto = "(cena provisória do casamento)"
+segundos = 2.0
+
+[sub_resource type="Resource" id="C_4"]
+script = ExtResource("Cx2")
+variavel = "missao01_casamento"
+valor = 2.0
+
+[sub_resource type="Resource" id="C_5"]
+script = ExtResource("Cx4")
+comandos = Array[ExtResource("Cx3")]([SubResource("C_1"), SubResource("C_2"), SubResource("C_3"), SubResource("C_4")])
+
+[resource]
+script = ExtResource("Cx5")
+id = "casamento_cena"
+paginas = Array[ExtResource("Cx4")]([SubResource("C_5")])

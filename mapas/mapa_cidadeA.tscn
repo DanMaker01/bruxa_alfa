@@ -3,18 +3,19 @@
 [ext_resource type="Script" uid="uid://dsxujjugldv23" path="res://src/cena/mapa_base.gd" id="1_4bgty"]
 [ext_resource type="Texture2D" uid="uid://cnq3etyechy23" path="res://assets/mapa/mapa_cidadeA/mapa_cidadeA_fundo.png" id="2_4bgty"]
 [ext_resource type="Texture2D" uid="uid://b0vm76umpterx" path="res://assets/mapa/mapa_cidadeA/mapa_cidadeA_frente.png" id="3_c1d3n"]
-[ext_resource type="Texture2D" uid="uid://boo4wfpu172ha" path="res://assets/mapa/mapa_cidadeA/cidadeA_casa1.png" id="3_kgy4o"]
 [ext_resource type="Texture2D" uid="uid://bsm3tr7rk34c0" path="res://assets/mapa/mapa_cidadeA/cidadeA_casa2.png" id="3_casa2"]
 [ext_resource type="Texture2D" uid="uid://de0hvnc7bovcm" path="res://assets/mapa/mapa_cidadeA/cidadeA_casa3.png" id="3_casa3"]
+[ext_resource type="Texture2D" uid="uid://boo4wfpu172ha" path="res://assets/mapa/mapa_cidadeA/cidadeA_casa1.png" id="3_kgy4o"]
 [ext_resource type="Script" uid="uid://bjxlt3vqym72w" path="res://src/cena/evento_base.gd" id="4_ka47h"]
 [ext_resource type="Resource" uid="uid://b15dthvgmkjey" path="res://dados/eventos/cidadeA_passagem1.tres" id="ev_cidadeA_passagem1"]
 [ext_resource type="Resource" uid="uid://bk3cj5jqlyonf" path="res://dados/eventos/cidadeA_passagem2.tres" id="ev_cidadeA_passagem2"]
 [ext_resource type="Resource" uid="uid://c223ejma6kqps" path="res://dados/eventos/cidadeA_passagem_in01.tres" id="ev_cidadeA_passagem_in01"]
 [ext_resource type="Resource" uid="uid://opwbriean41q" path="res://dados/eventos/cidadeA_passagem_in02.tres" id="ev_cidadeA_passagem_in02"]
 [ext_resource type="Resource" uid="uid://wxr1qs0wq10f" path="res://dados/eventos/cidadeA_passagem_in03.tres" id="ev_cidadeA_passagem_in03"]
-[ext_resource type="Resource" path="res://dados/eventos/cidadeA_npc1.tres" id="ev_npc1"]
-[ext_resource type="Resource" path="res://dados/eventos/cidadeA_npc2.tres" id="ev_npc2"]
-[ext_resource type="Resource" path="res://dados/eventos/cidadeA_npc3.tres" id="ev_npc3"]
+[ext_resource type="Resource" uid="uid://r5geo8aa07wd" path="res://dados/eventos/cidadeA_npc1.tres" id="ev_npc1"]
+[ext_resource type="Resource" uid="uid://d0wqfsw5p5bga" path="res://dados/eventos/cidadeA_npc2.tres" id="ev_npc2"]
+[ext_resource type="Resource" uid="uid://balhpuvbmr2v1" path="res://dados/eventos/cidadeA_npc3.tres" id="ev_npc3"]
+[ext_resource type="Resource" path="res://dados/eventos/cidadeA_igreja_barulho.tres" id="ev_igreja_barulho"]
 
 [node name="CidadeA" type="Node2D" unique_id=231347479]
 script = ExtResource("1_4bgty")
@@ -82,20 +83,26 @@ position = Vector2(3072, 496)
 script = ExtResource("4_ka47h")
 evento = ExtResource("ev_cidadeA_passagem_in03")
 
-[node name="Npc1" type="CharacterBody2D" parent="Eventos"]
+[node name="Npc1" type="CharacterBody2D" parent="Eventos" unique_id=1201332551]
 z_index = 3
 position = Vector2(1400, 544)
 script = ExtResource("4_ka47h")
 evento = ExtResource("ev_npc1")
 
-[node name="Npc2" type="CharacterBody2D" parent="Eventos"]
+[node name="Npc2" type="CharacterBody2D" parent="Eventos" unique_id=1398434381]
 z_index = 3
 position = Vector2(1520, 544)
 script = ExtResource("4_ka47h")
 evento = ExtResource("ev_npc2")
 
-[node name="Npc3" type="CharacterBody2D" parent="Eventos"]
+[node name="Npc3" type="CharacterBody2D" parent="Eventos" unique_id=373407382]
 z_index = 3
 position = Vector2(2440, 544)
 script = ExtResource("4_ka47h")
 evento = ExtResource("ev_npc3")
+
+[node name="IgrejaBarulho" type="CharacterBody2D" parent="Eventos"]
+z_index = 3
+position = Vector2(3072, 544)
+script = ExtResource("4_ka47h")
+evento = ExtResource("ev_igreja_barulho")

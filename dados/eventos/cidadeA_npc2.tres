@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="EventoData" format=3]
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://d0wqfsw5p5bga"]
 
 [ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="1_pag"]
 [ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_cmd"]
@@ -9,6 +9,17 @@
 [ext_resource type="SpriteFrames" path="res://animacoes/cidade_npc2.tres" id="7_anim"]
 [ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="8_bruxa"]
 [ext_resource type="Resource" path="res://dados/falantes/menino.tres" id="9_npc"]
+
+[sub_resource type="Resource" id="M_0_0"]
+script = ExtResource("3_msg")
+personagem = ExtResource("9_npc")
+posicao = 100.0
+texto = "Aposto que eu pulo mais alto que um sapo!"
+
+[sub_resource type="Resource" id="M_0_1"]
+script = ExtResource("3_msg")
+personagem = ExtResource("8_bruxa")
+texto = "Duvido. Já vi sapo pular por cima de cerca."
 
 [sub_resource type="Resource" id="P_0"]
 script = ExtResource("5_passo")
@@ -26,7 +37,6 @@ script = ExtResource("5_passo")
 tipo = 4
 chance = 0.7
 distancia = 30.0
-altura = 24.0
 
 [sub_resource type="Resource" id="P_3"]
 script = ExtResource("5_passo")
@@ -37,17 +47,6 @@ olhar = 2
 script = ExtResource("5_passo")
 segundos = 0.5
 segundos_max = 1.2
-
-[sub_resource type="Resource" id="M_0_0"]
-script = ExtResource("3_msg")
-personagem = ExtResource("9_npc")
-posicao = 100.0
-texto = "Aposto que eu pulo mais alto que um sapo!"
-
-[sub_resource type="Resource" id="M_0_1"]
-script = ExtResource("3_msg")
-personagem = ExtResource("8_bruxa")
-texto = "Duvido. Já vi sapo pular por cima de cerca."
 
 [sub_resource type="Resource" id="Pag_0"]
 script = ExtResource("1_pag")
@@ -60,18 +59,6 @@ rota = Array[ExtResource("5_passo")]([SubResource("P_0"), SubResource("P_1"), Su
 rota_velocidade = 70.0
 rota_raio = 90.0
 comandos = Array[ExtResource("2_cmd")]([SubResource("M_0_0"), SubResource("M_0_1")])
-
-[sub_resource type="Resource" id="C_1_0"]
-script = ExtResource("4_cond")
-variavel = "missao01_resultado"
-operador = 4
-valor = 1.0
-
-[sub_resource type="Resource" id="C_1_1"]
-script = ExtResource("4_cond")
-variavel = "missao01_resultado"
-operador = 5
-valor = 2.0
 
 [sub_resource type="Resource" id="M_1_0"]
 script = ExtResource("3_msg")
@@ -90,6 +77,18 @@ script = ExtResource("3_msg")
 personagem = ExtResource("8_bruxa")
 texto = "Todo mundo tem medo de alguma coisa, menino."
 
+[sub_resource type="Resource" id="C_1_0"]
+script = ExtResource("4_cond")
+variavel = "missao01_resultado"
+operador = 4
+valor = 1.0
+
+[sub_resource type="Resource" id="C_1_1"]
+script = ExtResource("4_cond")
+variavel = "missao01_resultado"
+operador = 5
+valor = 3.0
+
 [sub_resource type="Resource" id="Pag_1"]
 script = ExtResource("1_pag")
 condicoes = Array[ExtResource("4_cond")]([SubResource("C_1_0"), SubResource("C_1_1")])
@@ -103,12 +102,6 @@ rota_velocidade = 70.0
 rota_raio = 90.0
 comandos = Array[ExtResource("2_cmd")]([SubResource("M_1_0"), SubResource("M_1_1"), SubResource("M_1_2")])
 
-[sub_resource type="Resource" id="C_2_0"]
-script = ExtResource("4_cond")
-variavel = "missao01_resultado"
-operador = 4
-valor = 3.0
-
 [sub_resource type="Resource" id="M_2_0"]
 script = ExtResource("3_msg")
 personagem = ExtResource("9_npc")
@@ -119,6 +112,12 @@ texto = "Corre, bruxa! Os guardas foram para aquele lado!"
 script = ExtResource("3_msg")
 personagem = ExtResource("8_bruxa")
 texto = "...Obrigada."
+
+[sub_resource type="Resource" id="C_2_0"]
+script = ExtResource("4_cond")
+variavel = "missao01_resultado"
+operador = 4
+valor = 4.0
 
 [sub_resource type="Resource" id="Pag_2"]
 script = ExtResource("1_pag")

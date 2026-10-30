@@ -162,7 +162,7 @@ metadata/_custom_type_script = "uid://7c1614u5xl4b"
 script = ExtResource("3_e6ii4")
 variavel = "missao01_resultado"
 operador = 4
-valor = 3.0
+valor = 4.0
 metadata/_custom_type_script = "uid://baglqudsvyyrb"
 
 [sub_resource type="Resource" id="R_veu0"]

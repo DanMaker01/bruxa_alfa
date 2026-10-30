@@ -1,0 +1,270 @@
+[gd_resource type="Resource" script_class="EventoData" format=3]
+
+[ext_resource type="SpriteFrames" path="res://animacoes/cidade_npc2.tres" id="Lx0"]
+[ext_resource type="Resource" path="res://dados/falantes/filho_mercador.tres" id="Lx1"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="Lx2"]
+[ext_resource type="Script" path="res://src/dados/comandos/comando.gd" id="Lx3"]
+[ext_resource type="Script" path="res://src/dados/pagina_data.gd" id="Lx4"]
+[ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="Lx5"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_mostrar_opcoes.gd" id="Lx6"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_label.gd" id="Lx7"]
+[ext_resource type="Script" path="res://src/dados/condicao.gd" id="Lx8"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_if.gd" id="Lx9"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_variavel.gd" id="Lx10"]
+[ext_resource type="Resource" path="res://dados/itens/agua.tres" id="Lx11"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_item.gd" id="Lx12"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_else.gd" id="Lx13"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_end.gd" id="Lx14"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_goto.gd" id="Lx15"]
+[ext_resource type="Resource" path="res://dados/itens/sal.tres" id="Lx16"]
+[ext_resource type="Resource" path="res://dados/itens/arroz.tres" id="Lx17"]
+[ext_resource type="Resource" path="res://dados/itens/maca.tres" id="Lx18"]
+[ext_resource type="Script" path="res://src/dados/evento_data.gd" id="Lx19"]
+
+[sub_resource type="Resource" id="L_1"]
+script = ExtResource("Lx2")
+personagem = ExtResource("Lx1")
+posicao = 100.0
+texto = "..."
+
+[sub_resource type="Resource" id="L_2"]
+script = ExtResource("Lx2")
+texto = "(Ele olha para o chão e não diz nada.)"
+
+[sub_resource type="Resource" id="L_3"]
+script = ExtResource("Lx4")
+sprite_frames = ExtResource("Lx0")
+colisao_scale = Vector2(9, 20.25)
+area_pos = Vector2(0, -10)
+area_scale = Vector2(16, 20.25)
+comandos = Array[ExtResource("Lx3")]([SubResource("L_1"), SubResource("L_2")])
+
+[sub_resource type="Resource" id="L_4"]
+script = ExtResource("Lx2")
+personagem = ExtResource("Lx1")
+posicao = 100.0
+texto = "Bem-vinda! O que a senhora vai levar?"
+
+[sub_resource type="Resource" id="L_5"]
+script = ExtResource("Lx6")
+personagem = ExtResource("Lx5")
+pergunta = "(O que eu compro?)"
+opcoes = Array[String](["Água (5 ouro)", "Sal (10 ouro)", "Arroz (10 ouro)", "Maçã (15 ouro)", "Nada, obrigada."])
+labels = Array[String](["agua", "sal", "arroz", "maca", "nada"])
+
+[sub_resource type="Resource" id="L_6"]
+script = ExtResource("Lx7")
+nome = "agua"
+
+[sub_resource type="Resource" id="L_7"]
+script = ExtResource("Lx8")
+variavel = "ouro"
+operador = 4
+valor = 5.0
+
+[sub_resource type="Resource" id="L_8"]
+script = ExtResource("Lx9")
+condicao = SubResource("L_7")
+
+[sub_resource type="Resource" id="L_9"]
+script = ExtResource("Lx10")
+variavel = "ouro"
+operacao = 2
+valor = 5.0
+
+[sub_resource type="Resource" id="L_10"]
+script = ExtResource("Lx12")
+item = ExtResource("Lx11")
+
+[sub_resource type="Resource" id="L_11"]
+script = ExtResource("Lx2")
+personagem = ExtResource("Lx1")
+posicao = 100.0
+texto = "Aqui está! Obrigado!"
+
+[sub_resource type="Resource" id="L_12"]
+script = ExtResource("Lx13")
+
+[sub_resource type="Resource" id="L_13"]
+script = ExtResource("Lx2")
+personagem = ExtResource("Lx1")
+posicao = 100.0
+texto = "Ah... a senhora não tem ouro suficiente."
+
+[sub_resource type="Resource" id="L_14"]
+script = ExtResource("Lx14")
+
+[sub_resource type="Resource" id="L_15"]
+script = ExtResource("Lx15")
+label = "fim"
+
+[sub_resource type="Resource" id="L_16"]
+script = ExtResource("Lx7")
+nome = "sal"
+
+[sub_resource type="Resource" id="L_17"]
+script = ExtResource("Lx8")
+variavel = "ouro"
+operador = 4
+valor = 10.0
+
+[sub_resource type="Resource" id="L_18"]
+script = ExtResource("Lx9")
+condicao = SubResource("L_17")
+
+[sub_resource type="Resource" id="L_19"]
+script = ExtResource("Lx10")
+variavel = "ouro"
+operacao = 2
+valor = 10.0
+
+[sub_resource type="Resource" id="L_20"]
+script = ExtResource("Lx12")
+item = ExtResource("Lx16")
+
+[sub_resource type="Resource" id="L_21"]
+script = ExtResource("Lx2")
+personagem = ExtResource("Lx1")
+posicao = 100.0
+texto = "Aqui está! Obrigado!"
+
+[sub_resource type="Resource" id="L_22"]
+script = ExtResource("Lx13")
+
+[sub_resource type="Resource" id="L_23"]
+script = ExtResource("Lx2")
+personagem = ExtResource("Lx1")
+posicao = 100.0
+texto = "Ah... a senhora não tem ouro suficiente."
+
+[sub_resource type="Resource" id="L_24"]
+script = ExtResource("Lx14")
+
+[sub_resource type="Resource" id="L_25"]
+script = ExtResource("Lx15")
+label = "fim"
+
+[sub_resource type="Resource" id="L_26"]
+script = ExtResource("Lx7")
+nome = "arroz"
+
+[sub_resource type="Resource" id="L_27"]
+script = ExtResource("Lx8")
+variavel = "ouro"
+operador = 4
+valor = 10.0
+
+[sub_resource type="Resource" id="L_28"]
+script = ExtResource("Lx9")
+condicao = SubResource("L_27")
+
+[sub_resource type="Resource" id="L_29"]
+script = ExtResource("Lx10")
+variavel = "ouro"
+operacao = 2
+valor = 10.0
+
+[sub_resource type="Resource" id="L_30"]
+script = ExtResource("Lx12")
+item = ExtResource("Lx17")
+
+[sub_resource type="Resource" id="L_31"]
+script = ExtResource("Lx2")
+personagem = ExtResource("Lx1")
+posicao = 100.0
+texto = "Aqui está! Obrigado!"
+
+[sub_resource type="Resource" id="L_32"]
+script = ExtResource("Lx13")
+
+[sub_resource type="Resource" id="L_33"]
+script = ExtResource("Lx2")
+personagem = ExtResource("Lx1")
+posicao = 100.0
+texto = "Ah... a senhora não tem ouro suficiente."
+
+[sub_resource type="Resource" id="L_34"]
+script = ExtResource("Lx14")
+
+[sub_resource type="Resource" id="L_35"]
+script = ExtResource("Lx15")
+label = "fim"
+
+[sub_resource type="Resource" id="L_36"]
+script = ExtResource("Lx7")
+nome = "maca"
+
+[sub_resource type="Resource" id="L_37"]
+script = ExtResource("Lx8")
+variavel = "ouro"
+operador = 4
+valor = 15.0
+
+[sub_resource type="Resource" id="L_38"]
+script = ExtResource("Lx9")
+condicao = SubResource("L_37")
+
+[sub_resource type="Resource" id="L_39"]
+script = ExtResource("Lx10")
+variavel = "ouro"
+operacao = 2
+valor = 15.0
+
+[sub_resource type="Resource" id="L_40"]
+script = ExtResource("Lx12")
+item = ExtResource("Lx18")
+
+[sub_resource type="Resource" id="L_41"]
+script = ExtResource("Lx2")
+personagem = ExtResource("Lx1")
+posicao = 100.0
+texto = "Aqui está! Obrigado!"
+
+[sub_resource type="Resource" id="L_42"]
+script = ExtResource("Lx13")
+
+[sub_resource type="Resource" id="L_43"]
+script = ExtResource("Lx2")
+personagem = ExtResource("Lx1")
+posicao = 100.0
+texto = "Ah... a senhora não tem ouro suficiente."
+
+[sub_resource type="Resource" id="L_44"]
+script = ExtResource("Lx14")
+
+[sub_resource type="Resource" id="L_45"]
+script = ExtResource("Lx15")
+label = "fim"
+
+[sub_resource type="Resource" id="L_46"]
+script = ExtResource("Lx7")
+nome = "nada"
+
+[sub_resource type="Resource" id="L_47"]
+script = ExtResource("Lx2")
+personagem = ExtResource("Lx1")
+posicao = 100.0
+texto = "Volte sempre!"
+
+[sub_resource type="Resource" id="L_48"]
+script = ExtResource("Lx7")
+nome = "fim"
+
+[sub_resource type="Resource" id="L_49"]
+script = ExtResource("Lx8")
+variavel = "mercador_quest"
+valor = 2.0
+
+[sub_resource type="Resource" id="L_50"]
+script = ExtResource("Lx4")
+condicoes = Array[ExtResource("Lx8")]([SubResource("L_49")])
+sprite_frames = ExtResource("Lx0")
+colisao_scale = Vector2(9, 20.25)
+area_pos = Vector2(0, -10)
+area_scale = Vector2(16, 20.25)
+comandos = Array[ExtResource("Lx3")]([SubResource("L_4"), SubResource("L_5"), SubResource("L_6"), SubResource("L_8"), SubResource("L_9"), SubResource("L_10"), SubResource("L_11"), SubResource("L_12"), SubResource("L_13"), SubResource("L_14"), SubResource("L_15"), SubResource("L_16"), SubResource("L_18"), SubResource("L_19"), SubResource("L_20"), SubResource("L_21"), SubResource("L_22"), SubResource("L_23"), SubResource("L_24"), SubResource("L_25"), SubResource("L_26"), SubResource("L_28"), SubResource("L_29"), SubResource("L_30"), SubResource("L_31"), SubResource("L_32"), SubResource("L_33"), SubResource("L_34"), SubResource("L_35"), SubResource("L_36"), SubResource("L_38"), SubResource("L_39"), SubResource("L_40"), SubResource("L_41"), SubResource("L_42"), SubResource("L_43"), SubResource("L_44"), SubResource("L_45"), SubResource("L_46"), SubResource("L_47"), SubResource("L_48")])
+
+[resource]
+script = ExtResource("Lx19")
+id = "cidadeA_in02_filho"
+paginas = Array[ExtResource("Lx4")]([SubResource("L_3"), SubResource("L_50")])

@@ -60,7 +60,7 @@ segundos = 0.5
 script = ExtResource("11_x")
 variavel = "missao01_resultado"
 operador = 3
-valor = 3.0
+valor = 4.0
 
 [sub_resource type="Resource" id="F_if_menor3"]
 script = ExtResource("x0")
@@ -131,7 +131,27 @@ area_pos = Vector2(0, -10)
 area_scale = Vector2(16, 20.25)
 comandos = Array[ExtResource("3_x")]([SubResource("R_199")])
 
+[sub_resource type="Resource" id="N3_1"]
+script = ExtResource("1_x")
+personagem = ExtResource("x2")
+posicao = 100.0
+texto = "Já mandei sair, bruxa."
+
+[sub_resource type="Resource" id="N3_2"]
+script = ExtResource("11_x")
+variavel = "missao01_resultado"
+valor = 3.0
+
+[sub_resource type="Resource" id="N3_3"]
+script = ExtResource("4_x")
+condicoes = Array[ExtResource("11_x")]([SubResource("N3_2")])
+sprite_frames = ExtResource("2_x")
+colisao_scale = Vector2(9, 20.25)
+area_pos = Vector2(0, -10)
+area_scale = Vector2(16, 20.25)
+comandos = Array[ExtResource("3_x")]([SubResource("N3_1")])
+
 [resource]
 script = ExtResource("21_x")
 id = "castelo_in01_rei"
-paginas = Array[ExtResource("4_x")]([SubResource("R_2"), SubResource("R_195"), SubResource("R_198"), SubResource("R_201")])
+paginas = Array[ExtResource("4_x")]([SubResource("R_2"), SubResource("R_195"), SubResource("R_198"), SubResource("R_201"), SubResource("N3_3")])

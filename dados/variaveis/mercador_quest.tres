@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="VariavelData" format=3]
+
+[ext_resource type="Script" uid="uid://cgrx3adgd06tf" path="res://src/dados/variavel_data.gd" id="1_var"]
+
+[resource]
+script = ExtResource("1_var")
+nome = "mercador_quest"
+descricao = "Quest do mercador (cidadeA_in02). 0 = não falou; 1 = pediu a poção; 2 = filho desinibido, loja aberta."

@@ -5,6 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://bnmnkd3s5yyn0" path="res://assets/mapa/mapa_cidadeA_in02/mapa_cidadeA_in02_frente.png" id="3_24be2"]
 [ext_resource type="Script" uid="uid://bjxlt3vqym72w" path="res://src/cena/evento_base.gd" id="4_3ogwk"]
 [ext_resource type="Resource" uid="uid://bay7tsbu78nwa" path="res://dados/eventos/cidadeA_in02_passagem.tres" id="ev_cidadeA_in02_passagem"]
+[ext_resource type="Resource" path="res://dados/eventos/cidadeA_in02_mercador.tres" id="ev_mercador"]
+[ext_resource type="Resource" path="res://dados/eventos/cidadeA_in02_filho.tres" id="ev_filho"]
 
 [node name="CidA_in02" type="Node2D" unique_id=231347479]
 script = ExtResource("1_e0hsi")
@@ -38,3 +40,15 @@ z_index = 3
 position = Vector2(992, 432)
 script = ExtResource("4_3ogwk")
 evento = ExtResource("ev_cidadeA_in02_passagem")
+
+[node name="Mercador" type="CharacterBody2D" parent="Eventos"]
+z_index = 3
+position = Vector2(1250, 464)
+script = ExtResource("4_3ogwk")
+evento = ExtResource("ev_mercador")
+
+[node name="Filho" type="CharacterBody2D" parent="Eventos"]
+z_index = 3
+position = Vector2(1450, 464)
+script = ExtResource("4_3ogwk")
+evento = ExtResource("ev_filho")

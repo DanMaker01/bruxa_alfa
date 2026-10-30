@@ -1,5 +1,4 @@
 [gd_scene format=3 uid="uid://c8pejctwkl60q"]
-[ext_resource type="Script" path="res://src/ui/lista_rolavel.gd" id="lista_rolavel"]
 
 [ext_resource type="Script" uid="uid://fvb7ymoc8e2o" path="res://src/core/cena_preparo.gd" id="1_mpeo2"]
 [ext_resource type="Texture2D" uid="uid://0256vrk8foeo" path="res://assets/game_caldeirao/bg.jpg" id="1_qpp4d"]
@@ -11,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://vw6asas7s3qq" path="res://assets/game_caldeirao/bolha2.png" id="6_ho8or"]
 [ext_resource type="Texture2D" uid="uid://rq6lloc2u06y" path="res://assets/game_caldeirao/botao_pocao.png" id="8_4huqc"]
 [ext_resource type="Texture2D" uid="uid://ccndjb1xd6pko" path="res://assets/game_caldeirao/botao_fogo.png" id="9_a20yi"]
+[ext_resource type="Script" uid="uid://d3rgd1vdjsoeo" path="res://src/ui/lista_rolavel.gd" id="lista_rolavel"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_stgn2"]
 particle_flag_disable_z = true
@@ -125,14 +125,14 @@ mouse_filter = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="PainelIngredientes" unique_id=46589984]
 layout_mode = 1
-script = ExtResource("lista_rolavel")
-horizontal = true
 offset_left = 160.0
 offset_top = 12.0
 offset_right = 480.0
 offset_bottom = 148.0
 follow_focus = true
 vertical_scroll_mode = 0
+script = ExtResource("lista_rolavel")
+horizontal = true
 
 [node name="ListaHorizontal" type="HBoxContainer" parent="PainelIngredientes/ScrollContainer" unique_id=721732789]
 layout_mode = 2
@@ -168,10 +168,10 @@ offset_left = 8.0
 offset_top = 8.0
 offset_right = 152.0
 offset_bottom = 152.0
-expand_icon = true
 size_flags_horizontal = 3
 size_flags_vertical = 0
 icon = ExtResource("8_4huqc")
+expand_icon = true
 
 [node name="BotaoFogo" type="Button" parent="PainelIngredientes" unique_id=1095812818]
 layout_mode = 0
@@ -179,10 +179,10 @@ offset_left = 488.0
 offset_top = 8.0
 offset_right = 632.0
 offset_bottom = 152.0
-expand_icon = true
 size_flags_horizontal = 3
 size_flags_vertical = 0
 icon = ExtResource("9_a20yi")
+expand_icon = true
 
 [node name="Indicadores" type="Label" parent="." unique_id=1632783899]
 z_index = 5

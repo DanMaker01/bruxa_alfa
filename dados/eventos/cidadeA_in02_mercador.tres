@@ -1,0 +1,418 @@
+[gd_resource type="Resource" script_class="EventoData" format=3]
+
+[ext_resource type="SpriteFrames" path="res://animacoes/cidade_npc3.tres" id="Mx0"]
+[ext_resource type="Resource" path="res://dados/falantes/mercador.tres" id="Mx1"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="Mx2"]
+[ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="Mx3"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_variavel.gd" id="Mx4"]
+[ext_resource type="Script" path="res://src/dados/comandos/comando.gd" id="Mx5"]
+[ext_resource type="Script" path="res://src/dados/pagina_data.gd" id="Mx6"]
+[ext_resource type="Script" path="res://src/dados/condicao.gd" id="Mx7"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_mostrar_opcoes.gd" id="Mx8"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_label.gd" id="Mx9"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_aplicar_pocao.gd" id="Mx10"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_if.gd" id="Mx11"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_esperar.gd" id="Mx12"]
+[ext_resource type="Resource" path="res://dados/personalidades/filho_mercador.tres" id="Mx13"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_classificar_personalidade.gd" id="Mx14"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_end.gd" id="Mx15"]
+[ext_resource type="Resource" path="res://dados/falantes/filho_mercador.tres" id="Mx16"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_fade.gd" id="Mx17"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_else.gd" id="Mx18"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_mudar_personalidade.gd" id="Mx19"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_goto.gd" id="Mx20"]
+[ext_resource type="Script" path="res://src/dados/evento_data.gd" id="Mx21"]
+
+[sub_resource type="Resource" id="M_1"]
+script = ExtResource("Mx2")
+personagem = ExtResource("Mx1")
+posicao = 100.0
+texto = "Bem-vinda, senhora. A loja está fechada, infelizmente."
+
+[sub_resource type="Resource" id="M_2"]
+script = ExtResource("Mx2")
+personagem = ExtResource("Mx1")
+posicao = 100.0
+texto = "Preciso viajar para buscar mercadoria, mas não tenho com quem deixar a loja."
+
+[sub_resource type="Resource" id="M_3"]
+script = ExtResource("Mx2")
+personagem = ExtResource("Mx1")
+posicao = 100.0
+texto = "Meu filho podia cuidar dela... mas ele mal consegue dar bom dia aos fregueses."
+
+[sub_resource type="Resource" id="M_4"]
+script = ExtResource("Mx2")
+personagem = ExtResource("Mx3")
+texto = "Hmm... Talvez uma poção ajude. Algo que solte a língua dele, sem mudar quem ele é."
+
+[sub_resource type="Resource" id="M_5"]
+script = ExtResource("Mx2")
+personagem = ExtResource("Mx1")
+posicao = 100.0
+texto = "A senhora faria isso? Se ele conseguir atender, a loja fica aberta para a senhora sempre que quiser."
+
+[sub_resource type="Resource" id="M_6"]
+script = ExtResource("Mx4")
+variavel = "mercador_quest"
+valor = 1.0
+
+[sub_resource type="Resource" id="M_7"]
+script = ExtResource("Mx6")
+sprite_frames = ExtResource("Mx0")
+colisao_scale = Vector2(9, 20.25)
+area_pos = Vector2(0, -10)
+area_scale = Vector2(16, 20.25)
+comandos = Array[ExtResource("Mx5")]([SubResource("M_1"), SubResource("M_2"), SubResource("M_3"), SubResource("M_4"), SubResource("M_5"), SubResource("M_6")])
+
+[sub_resource type="Resource" id="M_8"]
+script = ExtResource("Mx7")
+variavel = "mercador_aplicou"
+valor = 1.0
+
+[sub_resource type="Resource" id="M_9"]
+script = ExtResource("Mx7")
+variavel = "mercador_E"
+operador = 4
+valor = 1.0
+
+[sub_resource type="Resource" id="M_10"]
+script = ExtResource("Mx7")
+variavel = "mercador_extremo"
+valor = 0.0
+
+[sub_resource type="Resource" id="M_11"]
+script = ExtResource("Mx7")
+variavel = "mercador_N"
+operador = 5
+valor = 0.0
+
+[sub_resource type="Resource" id="M_12"]
+script = ExtResource("Mx7")
+variavel = "mercador_A"
+operador = 4
+valor = -1.0
+
+[sub_resource type="Resource" id="M_13"]
+script = ExtResource("Mx7")
+variavel = "mercador_O"
+operador = 4
+valor = -1.0
+
+[sub_resource type="Resource" id="M_14"]
+script = ExtResource("Mx7")
+variavel = "mercador_C"
+operador = 4
+valor = -1.0
+
+[sub_resource type="Resource" id="M_15"]
+script = ExtResource("Mx7")
+variavel = "mercador_ok"
+valor = 1.0
+
+[sub_resource type="Resource" id="M_16"]
+script = ExtResource("Mx7")
+variavel = "mercador_E"
+operador = 5
+valor = 0.0
+
+[sub_resource type="Resource" id="M_17"]
+script = ExtResource("Mx2")
+personagem = ExtResource("Mx1")
+posicao = 100.0
+texto = "E então, senhora? Tem alguma coisa para o meu filho?"
+
+[sub_resource type="Resource" id="M_18"]
+script = ExtResource("Mx8")
+personagem = ExtResource("Mx3")
+pergunta = "(Aplico uma poção no filho dele?)"
+opcoes = Array[String](["Aplicar uma poção nele.", "Ainda não."])
+labels = Array[String](["aplicar", "nao"])
+
+[sub_resource type="Resource" id="M_19"]
+script = ExtResource("Mx9")
+nome = "aplicar"
+
+[sub_resource type="Resource" id="M_20"]
+script = ExtResource("Mx10")
+personalidade = "filho_mercador"
+variavel = "mercador_aplicou"
+evento_alvo = "cidadeA_in02_filho"
+
+[sub_resource type="Resource" id="M_21"]
+script = ExtResource("Mx11")
+condicao = SubResource("M_8")
+
+[sub_resource type="Resource" id="M_22"]
+script = ExtResource("Mx12")
+segundos = 0.5
+
+[sub_resource type="Resource" id="M_23"]
+script = ExtResource("Mx14")
+personalidade = "filho_mercador"
+referencia = ExtResource("Mx13")
+prefixo = "mercador"
+
+[sub_resource type="Resource" id="M_24"]
+script = ExtResource("Mx4")
+variavel = "mercador_ok"
+valor = 0.0
+
+[sub_resource type="Resource" id="M_25"]
+script = ExtResource("Mx11")
+condicao = SubResource("M_9")
+
+[sub_resource type="Resource" id="M_26"]
+script = ExtResource("Mx11")
+condicao = SubResource("M_10")
+
+[sub_resource type="Resource" id="M_27"]
+script = ExtResource("Mx11")
+condicao = SubResource("M_11")
+
+[sub_resource type="Resource" id="M_28"]
+script = ExtResource("Mx11")
+condicao = SubResource("M_12")
+
+[sub_resource type="Resource" id="M_29"]
+script = ExtResource("Mx11")
+condicao = SubResource("M_13")
+
+[sub_resource type="Resource" id="M_30"]
+script = ExtResource("Mx11")
+condicao = SubResource("M_14")
+
+[sub_resource type="Resource" id="M_31"]
+script = ExtResource("Mx4")
+variavel = "mercador_ok"
+valor = 1.0
+
+[sub_resource type="Resource" id="M_32"]
+script = ExtResource("Mx15")
+
+[sub_resource type="Resource" id="M_33"]
+script = ExtResource("Mx15")
+
+[sub_resource type="Resource" id="M_34"]
+script = ExtResource("Mx15")
+
+[sub_resource type="Resource" id="M_35"]
+script = ExtResource("Mx15")
+
+[sub_resource type="Resource" id="M_36"]
+script = ExtResource("Mx15")
+
+[sub_resource type="Resource" id="M_37"]
+script = ExtResource("Mx15")
+
+[sub_resource type="Resource" id="M_38"]
+script = ExtResource("Mx11")
+condicao = SubResource("M_15")
+
+[sub_resource type="Resource" id="M_39"]
+script = ExtResource("Mx12")
+segundos = 0.5
+
+[sub_resource type="Resource" id="M_40"]
+script = ExtResource("Mx2")
+personagem = ExtResource("Mx16")
+posicao = 100.0
+texto = "B-bom dia, senhora! Quer dizer... Bom dia! Em que posso ajudar?"
+
+[sub_resource type="Resource" id="M_41"]
+script = ExtResource("Mx12")
+segundos = 0.3
+
+[sub_resource type="Resource" id="M_42"]
+script = ExtResource("Mx2")
+personagem = ExtResource("Mx1")
+posicao = 100.0
+texto = "Ele falou! E com uma freguesa!"
+
+[sub_resource type="Resource" id="M_43"]
+script = ExtResource("Mx2")
+personagem = ExtResource("Mx1")
+posicao = 100.0
+texto = "Obrigado, senhora bruxa. Agora posso viajar tranquilo. A loja fica com ele."
+
+[sub_resource type="Resource" id="M_44"]
+script = ExtResource("Mx2")
+personagem = ExtResource("Mx1")
+posicao = 100.0
+texto = "E para a senhora, sempre o preço justo."
+
+[sub_resource type="Resource" id="M_45"]
+script = ExtResource("Mx2")
+personagem = ExtResource("Mx3")
+texto = "Nem a mais, nem a menos."
+
+[sub_resource type="Resource" id="M_46"]
+script = ExtResource("Mx17")
+tempo = 0.6
+
+[sub_resource type="Resource" id="M_47"]
+script = ExtResource("Mx4")
+variavel = "mercador_quest"
+valor = 2.0
+
+[sub_resource type="Resource" id="M_48"]
+script = ExtResource("Mx12")
+segundos = 0.4
+
+[sub_resource type="Resource" id="M_49"]
+script = ExtResource("Mx17")
+tipo = 1
+tempo = 0.6
+
+[sub_resource type="Resource" id="M_50"]
+script = ExtResource("Mx18")
+
+[sub_resource type="Resource" id="M_51"]
+script = ExtResource("Mx11")
+condicao = SubResource("M_16")
+
+[sub_resource type="Resource" id="M_52"]
+script = ExtResource("Mx12")
+segundos = 0.5
+
+[sub_resource type="Resource" id="M_53"]
+script = ExtResource("Mx2")
+personagem = ExtResource("Mx16")
+posicao = 100.0
+texto = "..."
+
+[sub_resource type="Resource" id="M_54"]
+script = ExtResource("Mx2")
+personagem = ExtResource("Mx1")
+posicao = 100.0
+texto = "Nada mudou. Ele continua olhando para o chão."
+
+[sub_resource type="Resource" id="M_55"]
+script = ExtResource("Mx18")
+
+[sub_resource type="Resource" id="M_56"]
+script = ExtResource("Mx12")
+segundos = 0.5
+
+[sub_resource type="Resource" id="M_57"]
+script = ExtResource("Mx2")
+personagem = ExtResource("Mx16")
+posicao = 100.0
+texto = "BOM DIA! BOM DIA! A SENHORA QUER COMPRAR ALGUMA COISA? EU VENDO TUDO!"
+
+[sub_resource type="Resource" id="M_58"]
+script = ExtResource("Mx2")
+personagem = ExtResource("Mx1")
+posicao = 100.0
+texto = "Ele está falando... mas não parece ele mesmo."
+
+[sub_resource type="Resource" id="M_59"]
+script = ExtResource("Mx15")
+
+[sub_resource type="Resource" id="M_60"]
+script = ExtResource("Mx2")
+personagem = ExtResource("Mx3")
+texto = "Hmm. Não era bem essa poção. O efeito vai passar logo."
+
+[sub_resource type="Resource" id="M_61"]
+script = ExtResource("Mx2")
+personagem = ExtResource("Mx1")
+posicao = 100.0
+texto = "Tente de novo, senhora. Eu espero."
+
+[sub_resource type="Resource" id="M_62"]
+script = ExtResource("Mx19")
+personalidade = ExtResource("Mx13")
+traco = 0
+valor = 4.0
+
+[sub_resource type="Resource" id="M_63"]
+script = ExtResource("Mx19")
+personalidade = ExtResource("Mx13")
+traco = 1
+valor = 6.0
+
+[sub_resource type="Resource" id="M_64"]
+script = ExtResource("Mx19")
+personalidade = ExtResource("Mx13")
+traco = 2
+valor = 1.5
+
+[sub_resource type="Resource" id="M_65"]
+script = ExtResource("Mx19")
+personalidade = ExtResource("Mx13")
+traco = 3
+valor = 5.0
+
+[sub_resource type="Resource" id="M_66"]
+script = ExtResource("Mx19")
+personalidade = ExtResource("Mx13")
+traco = 4
+valor = 4.0
+
+[sub_resource type="Resource" id="M_67"]
+script = ExtResource("Mx15")
+
+[sub_resource type="Resource" id="M_68"]
+script = ExtResource("Mx18")
+
+[sub_resource type="Resource" id="M_69"]
+script = ExtResource("Mx2")
+personagem = ExtResource("Mx3")
+texto = "Hmm... melhor não."
+
+[sub_resource type="Resource" id="M_70"]
+script = ExtResource("Mx15")
+
+[sub_resource type="Resource" id="M_71"]
+script = ExtResource("Mx20")
+label = "fim"
+
+[sub_resource type="Resource" id="M_72"]
+script = ExtResource("Mx9")
+nome = "nao"
+
+[sub_resource type="Resource" id="M_73"]
+script = ExtResource("Mx2")
+personagem = ExtResource("Mx3")
+texto = "Ainda não. Volto quando tiver a poção certa."
+
+[sub_resource type="Resource" id="M_74"]
+script = ExtResource("Mx2")
+personagem = ExtResource("Mx1")
+posicao = 100.0
+texto = "Está bem. Ele não vai a lugar nenhum, mesmo."
+
+[sub_resource type="Resource" id="M_75"]
+script = ExtResource("Mx9")
+nome = "fim"
+
+[sub_resource type="Resource" id="M_76"]
+script = ExtResource("Mx7")
+variavel = "mercador_quest"
+valor = 1.0
+
+[sub_resource type="Resource" id="M_77"]
+script = ExtResource("Mx6")
+condicoes = Array[ExtResource("Mx7")]([SubResource("M_76")])
+sprite_frames = ExtResource("Mx0")
+colisao_scale = Vector2(9, 20.25)
+area_pos = Vector2(0, -10)
+area_scale = Vector2(16, 20.25)
+comandos = Array[ExtResource("Mx5")]([SubResource("M_17"), SubResource("M_18"), SubResource("M_19"), SubResource("M_20"), SubResource("M_21"), SubResource("M_22"), SubResource("M_23"), SubResource("M_24"), SubResource("M_25"), SubResource("M_26"), SubResource("M_27"), SubResource("M_28"), SubResource("M_29"), SubResource("M_30"), SubResource("M_31"), SubResource("M_32"), SubResource("M_33"), SubResource("M_34"), SubResource("M_35"), SubResource("M_36"), SubResource("M_37"), SubResource("M_38"), SubResource("M_39"), SubResource("M_40"), SubResource("M_41"), SubResource("M_42"), SubResource("M_43"), SubResource("M_44"), SubResource("M_45"), SubResource("M_46"), SubResource("M_47"), SubResource("M_48"), SubResource("M_49"), SubResource("M_50"), SubResource("M_51"), SubResource("M_52"), SubResource("M_53"), SubResource("M_54"), SubResource("M_55"), SubResource("M_56"), SubResource("M_57"), SubResource("M_58"), SubResource("M_59"), SubResource("M_60"), SubResource("M_61"), SubResource("M_62"), SubResource("M_63"), SubResource("M_64"), SubResource("M_65"), SubResource("M_66"), SubResource("M_67"), SubResource("M_68"), SubResource("M_69"), SubResource("M_70"), SubResource("M_71"), SubResource("M_72"), SubResource("M_73"), SubResource("M_74"), SubResource("M_75")])
+
+[sub_resource type="Resource" id="M_78"]
+script = ExtResource("Mx7")
+variavel = "mercador_quest"
+valor = 2.0
+
+[sub_resource type="Resource" id="M_79"]
+script = ExtResource("Mx6")
+condicoes = Array[ExtResource("Mx7")]([SubResource("M_78")])
+area_scale = Vector2(0.1, 0.1)
+comandos = Array[ExtResource("Mx5")]([])
+
+[resource]
+script = ExtResource("Mx21")
+id = "cidadeA_in02_mercador"
+paginas = Array[ExtResource("Mx6")]([SubResource("M_7"), SubResource("M_77"), SubResource("M_79")])

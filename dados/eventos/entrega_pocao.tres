@@ -589,15 +589,7 @@ segundos = 0.3
 script = ExtResource("4_x")
 personagem = ExtResource("x1")
 posicao = 100.0
-texto = "Você zombou de mim e da minha filha, bruxa?!"
-
-[sub_resource type="Resource" id="R_ira_esp"]
-script = ExtResource("2_x")
-segundos = 0.4
-
-[sub_resource type="Resource" id="R_chamar_fuga"]
-script = ExtResource("x_chamar")
-evento = ExtResource("x_fuga")
+texto = "Hmpf. Não esperava nada melhor de uma bruxa. Saia."
 
 [sub_resource type="Resource" id="R_147"]
 script = ExtResource("14_x")
@@ -626,6 +618,14 @@ script = ExtResource("4_x")
 personagem = ExtResource("x1")
 posicao = 100.0
 texto = "Você piorou tudo!"
+
+[sub_resource type="Resource" id="R_ira_esp"]
+script = ExtResource("2_x")
+segundos = 0.4
+
+[sub_resource type="Resource" id="R_chamar_fuga"]
+script = ExtResource("x_chamar")
+evento = ExtResource("x_fuga")
 
 [sub_resource type="Resource" id="R_153"]
 script = ExtResource("14_x")
@@ -737,7 +737,7 @@ nome = "end"
 
 [sub_resource type="Resource" id="P_entrega"]
 script = ExtResource("23_x")
-comandos = Array[ExtResource("22_x")]([SubResource("R_25"), SubResource("R_26"), SubResource("R_27"), SubResource("R_28"), SubResource("R_29"), SubResource("R_30"), SubResource("R_31"), SubResource("R_32"), SubResource("R_33"), SubResource("R_34"), SubResource("R_35"), SubResource("R_36"), SubResource("R_37"), SubResource("R_38"), SubResource("R_39"), SubResource("R_40"), SubResource("R_41"), SubResource("R_42"), SubResource("R_43"), SubResource("R_44"), SubResource("R_45"), SubResource("R_46"), SubResource("R_47"), SubResource("R_48"), SubResource("R_49"), SubResource("R_50"), SubResource("R_51"), SubResource("R_52"), SubResource("R_54"), SubResource("R_55"), SubResource("R_56"), SubResource("R_57"), SubResource("R_58"), SubResource("R_59"), SubResource("R_60"), SubResource("R_61"), SubResource("R_62"), SubResource("R_64"), SubResource("R_65"), SubResource("R_67"), SubResource("R_68"), SubResource("R_69"), SubResource("R_71"), SubResource("R_72"), SubResource("R_73"), SubResource("R_75"), SubResource("R_76"), SubResource("R_77"), SubResource("R_79"), SubResource("R_80"), SubResource("R_81"), SubResource("R_83"), SubResource("R_84"), SubResource("R_85"), SubResource("R_87"), SubResource("R_88"), SubResource("R_89"), SubResource("R_91"), SubResource("R_92"), SubResource("R_93"), SubResource("R_95"), SubResource("R_96"), SubResource("R_97"), SubResource("R_98"), SubResource("R_100"), SubResource("R_101"), SubResource("R_102"), SubResource("R_104"), SubResource("R_105"), SubResource("R_106"), SubResource("R_108"), SubResource("R_109"), SubResource("R_110"), SubResource("R_111"), SubResource("R_112"), SubResource("R_113"), SubResource("R_114"), SubResource("R_115"), SubResource("R_116"), SubResource("R_117"), SubResource("R_118"), SubResource("R_119"), SubResource("R_120"), SubResource("R_121"), SubResource("R_122"), SubResource("R_123"), SubResource("R_124"), SubResource("R_125"), SubResource("R_126"), SubResource("R_127"), SubResource("R_128"), SubResource("R_129"), SubResource("R_131"), SubResource("R_132"), SubResource("R_133"), SubResource("R_134"), SubResource("R_135"), SubResource("R_136"), SubResource("R_137"), SubResource("R_138"), SubResource("R_139"), SubResource("R_141"), SubResource("R_142"), SubResource("R_143"), SubResource("R_144"), SubResource("R_145"), SubResource("R_ira3"), SubResource("R_ira_esp"), SubResource("R_chamar_fuga"), SubResource("R_147"), SubResource("R_149"), SubResource("R_150"), SubResource("R_151"), SubResource("R_152"), SubResource("R_ira_esp"), SubResource("R_chamar_fuga"), SubResource("R_153"), SubResource("R_155"), SubResource("R_156"), SubResource("R_157"), SubResource("R_158"), SubResource("R_159"), SubResource("R_160"), SubResource("R_161"), SubResource("R_162"), SubResource("R_163"), SubResource("R_164"), SubResource("R_165"), SubResource("R_166"), SubResource("R_167"), SubResource("R_168"), SubResource("R_169"), SubResource("R_170"), SubResource("R_171"), SubResource("R_172"), SubResource("R_173"), SubResource("R_chamar_fuga"), SubResource("R_207"), SubResource("R_fim_end")])
+comandos = Array[ExtResource("22_x")]([SubResource("R_25"), SubResource("R_26"), SubResource("R_27"), SubResource("R_28"), SubResource("R_29"), SubResource("R_30"), SubResource("R_31"), SubResource("R_32"), SubResource("R_33"), SubResource("R_34"), SubResource("R_35"), SubResource("R_36"), SubResource("R_37"), SubResource("R_38"), SubResource("R_39"), SubResource("R_40"), SubResource("R_41"), SubResource("R_42"), SubResource("R_43"), SubResource("R_44"), SubResource("R_45"), SubResource("R_46"), SubResource("R_47"), SubResource("R_48"), SubResource("R_49"), SubResource("R_50"), SubResource("R_51"), SubResource("R_52"), SubResource("R_54"), SubResource("R_55"), SubResource("R_56"), SubResource("R_57"), SubResource("R_58"), SubResource("R_59"), SubResource("R_60"), SubResource("R_61"), SubResource("R_62"), SubResource("R_64"), SubResource("R_65"), SubResource("R_67"), SubResource("R_68"), SubResource("R_69"), SubResource("R_71"), SubResource("R_72"), SubResource("R_73"), SubResource("R_75"), SubResource("R_76"), SubResource("R_77"), SubResource("R_79"), SubResource("R_80"), SubResource("R_81"), SubResource("R_83"), SubResource("R_84"), SubResource("R_85"), SubResource("R_87"), SubResource("R_88"), SubResource("R_89"), SubResource("R_91"), SubResource("R_92"), SubResource("R_93"), SubResource("R_95"), SubResource("R_96"), SubResource("R_97"), SubResource("R_98"), SubResource("R_100"), SubResource("R_101"), SubResource("R_102"), SubResource("R_104"), SubResource("R_105"), SubResource("R_106"), SubResource("R_108"), SubResource("R_109"), SubResource("R_110"), SubResource("R_111"), SubResource("R_112"), SubResource("R_113"), SubResource("R_114"), SubResource("R_115"), SubResource("R_116"), SubResource("R_117"), SubResource("R_118"), SubResource("R_119"), SubResource("R_120"), SubResource("R_121"), SubResource("R_122"), SubResource("R_123"), SubResource("R_124"), SubResource("R_125"), SubResource("R_126"), SubResource("R_127"), SubResource("R_128"), SubResource("R_129"), SubResource("R_131"), SubResource("R_132"), SubResource("R_133"), SubResource("R_134"), SubResource("R_135"), SubResource("R_136"), SubResource("R_137"), SubResource("R_138"), SubResource("R_139"), SubResource("R_141"), SubResource("R_142"), SubResource("R_143"), SubResource("R_144"), SubResource("R_145"), SubResource("R_ira3"), SubResource("R_147"), SubResource("R_149"), SubResource("R_150"), SubResource("R_151"), SubResource("R_152"), SubResource("R_ira_esp"), SubResource("R_chamar_fuga"), SubResource("R_153"), SubResource("R_155"), SubResource("R_156"), SubResource("R_157"), SubResource("R_158"), SubResource("R_159"), SubResource("R_160"), SubResource("R_161"), SubResource("R_162"), SubResource("R_163"), SubResource("R_164"), SubResource("R_165"), SubResource("R_166"), SubResource("R_167"), SubResource("R_168"), SubResource("R_169"), SubResource("R_170"), SubResource("R_171"), SubResource("R_172"), SubResource("R_173"), SubResource("R_chamar_fuga"), SubResource("R_207"), SubResource("R_fim_end")])
 
 [resource]
 script = ExtResource("24_x")

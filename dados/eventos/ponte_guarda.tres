@@ -250,7 +250,7 @@ comandos = Array[ExtResource("12_x")]([SubResource("R_35")])
 script = ExtResource("1_x")
 variavel = "missao01_resultado"
 operador = 4
-valor = 3.0
+valor = 4.0
 
 [sub_resource type="Resource" id="F_trava"]
 script = ExtResource("21_player")

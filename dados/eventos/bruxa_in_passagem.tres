@@ -249,6 +249,11 @@ script = ExtResource("9_knu6e")
 personagem = ExtResource("x2")
 texto = "Deixe eu me lembrar... "
 
+[sub_resource type="Resource" id="B_receita2"]
+script = ExtResource("9_knu6e")
+personagem = ExtResource("x2")
+texto = "São oito ervas, que nascem no final da floresta..."
+
 [sub_resource type="Resource" id="Resource_6i5r4"]
 script = ExtResource("9_knu6e")
 personagem = ExtResource("x3")
@@ -297,6 +302,12 @@ script = ExtResource("9_knu6e")
 personagem = ExtResource("x3")
 posicao = 100.0
 texto = "Ah! O rei já avisou os guardas sobre você. Mas só vão te deixar passar se tiver a poção em mãos."
+
+[sub_resource type="Resource" id="B_adeus"]
+script = ExtResource("9_knu6e")
+personagem = ExtResource("x3")
+posicao = 100.0
+texto = "Adeus, senhora bruxa!"
 
 [sub_resource type="Resource" id="Resource_ramt2"]
 script = ExtResource("5_0jff4")
@@ -420,17 +431,6 @@ nome = "fim"
 script = ExtResource("15_epkn7")
 variavel = "missao01_aceita"
 valor = 1.0
-
-[sub_resource type="Resource" id="B_receita2"]
-script = ExtResource("9_knu6e")
-personagem = ExtResource("x2")
-texto = "São oito ervas, que nascem no final da floresta..."
-
-[sub_resource type="Resource" id="B_adeus"]
-script = ExtResource("9_knu6e")
-personagem = ExtResource("x3")
-posicao = 100.0
-texto = "Adeus, senhora bruxa!"
 
 [sub_resource type="Resource" id="Resource_pxwyc"]
 script = ExtResource("1_gahnm")

@@ -42,13 +42,13 @@ z_index = 1
 
 [node name="Porta_out" type="CharacterBody2D" parent="Eventos" unique_id=516211611]
 z_index = 2
-position = Vector2(330, 512)
+position = Vector2(336, 496)
 script = ExtResource("4_0fnqg")
 evento = ExtResource("5_frvun")
 
 [node name="Porta_in02" type="CharacterBody2D" parent="Eventos" unique_id=1082950876]
 z_index = 2
-position = Vector2(1200, 528)
+position = Vector2(1200, 512)
 script = ExtResource("4_0fnqg")
 evento = ExtResource("6_kv2c0")
 
