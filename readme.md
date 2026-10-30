@@ -30,14 +30,13 @@
             	Pode pegar musgo e flor.
 		[] Resultado: 2: 
         		fica livre. 
-            	Pode pegar musgo e flor.
+            	Pode pegar musgo e flor. e fazer a quest da cidade_in02
 		[] Resultado: 3,4,5: 
         		FUGA
             	termina em casa com o véu
-            	não pode chegar próximo ao castelo.
+            	não pode chegar próximo ao castelo, perde acesso à flor e musgo.
 		[.] Resultado: 
         		enrolar para entregar - não consegue avançar (ok? sim 2/3)
-
 ```
 
 ## Terminar até o Cap. 1 (1)
