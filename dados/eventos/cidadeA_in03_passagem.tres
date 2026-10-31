@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="7_wt2we"]
 [ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="8_kjj3d"]
 [ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="9_wbnob"]
+[ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="Sx0"]
 [ext_resource type="Script" uid="uid://bchvbuxgicj1n" path="res://src/dados/comandos/cmd_evento_animacao.gd" id="x0"]
 [ext_resource type="Script" uid="uid://bm6rsgpqii0pt" path="res://src/dados/comandos/cmd_som.gd" id="x1"]
 
@@ -52,7 +53,31 @@ area_pos = Vector2(0, -10)
 area_scale = Vector2(9, 36)
 comandos = Array[ExtResource("2_pqatu")]([SubResource("F_porta_abre1"), SubResource("F_porta_som1"), SubResource("F_porta_esp1"), SubResource("Resource_f6h2j"), SubResource("Resource_vd5a3"), SubResource("Resource_yt2qv"), SubResource("Resource_u746w")])
 
+[sub_resource type="Resource" id="S_1"]
+script = ExtResource("Sx0")
+variavel = "missao01_casamento"
+valor = 3.0
+
+[sub_resource type="Resource" id="S_2"]
+script = ExtResource("8_kjj3d")
+variavel = "missao01_resultado"
+valor = 1.0
+
+[sub_resource type="Resource" id="S_3"]
+script = ExtResource("8_kjj3d")
+variavel = "missao01_casamento"
+valor = 2.0
+
+[sub_resource type="Resource" id="S_4"]
+script = ExtResource("1_kin04")
+condicoes = Array[ExtResource("8_kjj3d")]([SubResource("S_2"), SubResource("S_3")])
+sprite_frames = ExtResource("6_wbnob")
+animacao = "parado"
+area_pos = Vector2(0, -10)
+area_scale = Vector2(9, 36)
+comandos = Array[ExtResource("2_pqatu")]([SubResource("F_porta_abre1"), SubResource("F_porta_som1"), SubResource("F_porta_esp1"), SubResource("Resource_f6h2j"), SubResource("Resource_vd5a3"), SubResource("Resource_yt2qv"), SubResource("S_1"), SubResource("Resource_u746w")])
+
 [resource]
 script = ExtResource("7_wt2we")
 id = "cidadeA_in03_passagem"
-paginas = Array[ExtResource("1_kin04")]([SubResource("Resource_7gbm8")])
+paginas = Array[ExtResource("1_kin04")]([SubResource("Resource_7gbm8"), SubResource("S_4")])

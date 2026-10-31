@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://dyon2un0s6fg3"]
+
+[ext_resource type="Texture2D" uid="uid://uj0degxd7ncf2" path="res://assets/eventos/mercador1/npc.png" id="1_5ivab"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_5ivab")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

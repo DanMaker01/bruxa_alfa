@@ -285,7 +285,7 @@ acao = 1
 script = ExtResource("1_x")
 variavel = "missao01_resultado"
 operador = 4
-valor = 4.0
+valor = 3.0
 
 [sub_resource type="Resource" id="F_pag"]
 script = ExtResource("13_x")

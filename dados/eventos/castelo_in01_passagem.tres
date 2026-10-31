@@ -17,7 +17,7 @@
 [ext_resource type="Script" uid="uid://phmwdet0nd7d" path="res://src/dados/comandos/cmd_end.gd" id="Tx5"]
 [ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="Tx6"]
 [ext_resource type="Script" uid="uid://c8c7nvlca7oyd" path="res://src/dados/comandos/cmd_legenda.gd" id="Tx7"]
-[ext_resource type="Resource" uid="uid://dxfehf8j2wj0b" path="res://dados/eventos/casamento_cena.tres" id="Tx8"]
+[ext_resource type="Resource" uid="uid://cxxlax3w1qhuq" path="res://dados/eventos/casamento_cena.tres" id="Tx8"]
 [ext_resource type="Script" uid="uid://dvii04cb4qtqa" path="res://src/dados/comandos/cmd_chamar_evento.gd" id="Tx9"]
 [ext_resource type="Script" uid="uid://bchvbuxgicj1n" path="res://src/dados/comandos/cmd_evento_animacao.gd" id="x0"]
 [ext_resource type="Script" uid="uid://bm6rsgpqii0pt" path="res://src/dados/comandos/cmd_som.gd" id="x1"]
@@ -69,6 +69,19 @@ script = ExtResource("Tx0")
 script = ExtResource("5_23ca8")
 segundos = 0.3
 
+[sub_resource type="Resource" id="T_14"]
+script = ExtResource("x0")
+evento = "castelo_in01_passagem"
+animacao = "aberta"
+
+[sub_resource type="Resource" id="T_15"]
+script = ExtResource("x1")
+arquivo = "res://audio/se/porta_abre.mp3"
+
+[sub_resource type="Resource" id="T_16"]
+script = ExtResource("5_23ca8")
+segundos = 0.25
+
 [sub_resource type="Resource" id="T_5"]
 script = ExtResource("6_t7kwy")
 variavel = "missao01_resultado"
@@ -94,22 +107,25 @@ texto = "Que dia... vou para casa descansar."
 [sub_resource type="Resource" id="T_12"]
 script = ExtResource("Tx5")
 
-[sub_resource type="Resource" id="T_13"]
-script = ExtResource("5_23ca8")
-segundos = 0.3
+[sub_resource type="Resource" id="X_1"]
+script = ExtResource("Tx0")
+acao = 3
 
-[sub_resource type="Resource" id="T_14"]
+[sub_resource type="Resource" id="X_2"]
+script = ExtResource("5_23ca8")
+segundos = 0.4
+
+[sub_resource type="Resource" id="X_3"]
 script = ExtResource("x0")
 evento = "castelo_in01_passagem"
-animacao = "aberta"
 
-[sub_resource type="Resource" id="T_15"]
+[sub_resource type="Resource" id="X_4"]
 script = ExtResource("x1")
-arquivo = "res://audio/se/porta_abre.mp3"
+arquivo = "res://audio/se/porta_fecha.mp3"
 
-[sub_resource type="Resource" id="T_16"]
+[sub_resource type="Resource" id="X_5"]
 script = ExtResource("5_23ca8")
-segundos = 0.25
+segundos = 0.5
 
 [sub_resource type="Resource" id="T_17"]
 script = ExtResource("3_ub07r")
@@ -141,6 +157,10 @@ direcao = 2
 
 [sub_resource type="Resource" id="T_23"]
 script = ExtResource("Tx5")
+
+[sub_resource type="Resource" id="X_6"]
+script = ExtResource("Tx0")
+acao = 2
 
 [sub_resource type="Resource" id="T_24"]
 script = ExtResource("5_23ca8")
@@ -180,7 +200,7 @@ valor = 1.0
 script = ExtResource("6_t7kwy")
 variavel = "missao01_resultado"
 operador = 5
-valor = 3.0
+valor = 2.0
 
 [sub_resource type="Resource" id="T_4"]
 script = ExtResource("6_t7kwy")
@@ -193,7 +213,7 @@ sprite_frames = ExtResource("6_3io24")
 animacao = "parado"
 area_pos = Vector2(0, -10)
 area_scale = Vector2(9, 36)
-comandos = Array[ExtResource("2_t7kwy")]([SubResource("T_6"), SubResource("T_7"), SubResource("T_8"), SubResource("T_9"), SubResource("T_10"), SubResource("T_11"), SubResource("T_12"), SubResource("T_13"), SubResource("T_14"), SubResource("T_15"), SubResource("T_16"), SubResource("T_17"), SubResource("T_18"), SubResource("T_19"), SubResource("T_20"), SubResource("T_21"), SubResource("T_22"), SubResource("T_23"), SubResource("T_24"), SubResource("T_25"), SubResource("T_26"), SubResource("T_27"), SubResource("T_28"), SubResource("T_29"), SubResource("T_30")])
+comandos = Array[ExtResource("2_t7kwy")]([SubResource("T_6"), SubResource("T_7"), SubResource("T_14"), SubResource("T_15"), SubResource("T_16"), SubResource("T_8"), SubResource("T_9"), SubResource("T_10"), SubResource("T_11"), SubResource("T_12"), SubResource("X_1"), SubResource("X_2"), SubResource("X_3"), SubResource("X_4"), SubResource("X_5"), SubResource("T_17"), SubResource("T_18"), SubResource("T_19"), SubResource("T_20"), SubResource("T_21"), SubResource("T_22"), SubResource("T_23"), SubResource("X_6"), SubResource("T_24"), SubResource("T_25"), SubResource("T_26"), SubResource("T_27"), SubResource("T_28"), SubResource("T_29"), SubResource("T_30")])
 
 [resource]
 script = ExtResource("7_pqqer")

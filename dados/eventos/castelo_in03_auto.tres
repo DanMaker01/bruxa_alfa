@@ -338,7 +338,7 @@ variavel = "missao01_guardas_perseguem"
 script = ExtResource("3_kfwn1")
 variavel = "missao01_resultado"
 operador = 4
-valor = 4.0
+valor = 3.0
 metadata/_custom_type_script = "uid://baglqudsvyyrb"
 
 [sub_resource type="Resource" id="R_veu0"]

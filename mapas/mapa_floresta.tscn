@@ -43,7 +43,7 @@ script = ExtResource("area_spawn")
 evento = ExtResource("ev_spawn_erva")
 quantidade = 5
 largura = 3399.9999999998913
-espalhamento_min = 0.1
+espalhamento_min = 0.2
 espalhamento_max = 1.0
 
 [node name="Borboleta" type="CharacterBody2D" parent="Eventos" unique_id=722555934]

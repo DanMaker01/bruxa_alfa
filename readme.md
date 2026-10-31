@@ -24,22 +24,50 @@
 
 [.] v3
 [ ] História / missão: 
-	[?]	Verificação de diálogos e de todos os caminhos possíveis do Cap. 1 (resultados 1 a 5, caso você enrole e chege o dia do casamento, com e sem poção no bolso, voltar à ponte/estradaB depois da fuga, véu pego ou não). Colocar um contador de tempo a partir de quando fala com o Rei para chegar o dia do casamento? Como evitar algo de corrida contra o tempo? Porque ela tem que pegar o véu para continuar o jogo, o que muda é o convite, se não ocorre ou se o rei manda prender a bruxa.
+	[] Usar trações:
+		[] O
+		[] C
+		[!] E (cidade_in02, mercador)
+		[] A
+		[!] N (cap 1, princesa)
+	[] Quest Principe Zigmund
+		[] personalidade
+		[] situação
+			[] casamento
+		[] plano
+			[] objetivo
+		[!] sumiu na floresta
+		[!] pediu para a bruxa ajudar a princesa
+	
+	[] Quest Bosque Goblin
+	[?] (Cap.1) Quest Casamento 
+		Feito ([?]): nova variável missao01_casamento (0 nada, 1 dia do casamento, 2 aconteceu).
+			Sair pela porta do castelo_in01 com resultado 1 ou 2 (casamento 0): a porta abre, ela comenta, ela sai, a porta fecha, fade, legenda "No dia seguinte...". casamento = 1. (Feito.)
+			1: aparece na igreja (cidadeA_in03, 360) e chama casamento_cena.tres.
+				Cena: câmera começa perto da porta, faz pan, para no altar, padre fala, "Aceito" da princesa (balão coração nela e no principe) e do príncipe, "marido e mulher!" (coração nela e nele), convidados comemoram, "Vivam os noivos!",
+				câmera volta, princesa agradece de longe, rei "Hmpf... Obrigado, bruxa." casamento = 2 e ela fica livre; dá para falar com todos (falas pós-casamento).
+				Ao sair da igreja: casamento = 3 e a igreja fica vazia.
+				Verificar e corrigir se necessário: Sprites provisórios (cópia do npc): assets/eventos/padre, principe, convidado1..3 + animacoes/*.tres. Falantes novos sem face: padre, principe, convidada, convidado.
+				Verificado: padre, principe e convidados ok (uid próprio). Corrigido: cidade_npc3, mercador1 e mercador2 tinham o MESMO uid no .import (pasta copiada); mercador1/2 ganharam uid novo.
+				E animacoes/mercador1.tres apontava para a pasta mercador2 e vice-versa: agora mercador2 = pai (mercador), mercador1 = filho.
+				Feito: câmera começa na porta (400) e faz pan de 4 s até o altar (980); corações na princesa e no príncipe no "Aceito" e no "marido e mulher" (saiu o brilho). O pensamento "promovida a mulher" continua depois de "Vivam os noivos!".
+			2: aparece em casa. Castelo fechado durante o casamento (casamento = 1), abre de novo depois. Porta do castelo (castelo_out) com cartaz "estão todos na igreja".
+			Igreja (2): dois gatilhos de toque, IgrejaBarulhoEsq (2820) e IgrejaBarulhoDir (3330), mesmo evento cidadeA_igreja_barulho.
+				Antes não disparava: a área era larga, mas o toque só vale a até 200 px do centro do evento (DIST_MAX_TOQUE).
+				Cena: câmera vai até a porta, vozes abafadas lá dentro (falante "VOZ LÁ DENTRO"), câmera volta, a bruxa anda até a porta, está trancada, reclama,
+				fica ouvindo ("cale-se para sempre", "marido e mulher!"), barulho de festa, ela comenta "espero que ela esteja sendo ela mesma".
+				Se ainda não pegou o véu (missao01_veu = 0): comenta que, com o casamento acabado, o castelo abre de novo e ela ainda precisa buscar o véu. Depois casamento = 2 e fica livre.
+				Vale com resultado 2 e casamento 0 ou 1 (funciona mesmo testando pelo debug sem passar pelo timelapse).
+			Som provisório: batida02.mp3 (falta um som de festa/igreja).
 		[] Resultado: 1: 
-        		recebe o convite
-                tem acesso ao castelo
-            	Pode pegar musgo e flor. e fazer a quest da cidade_in02
-		[] Resultado: 2: 
-        		fica livre. 
-                tem acesso ao castelo
-            	Pode pegar musgo e flor. e fazer a quest da cidade_in02
-		[] Resultado: 3,4,5: 
-        		FUGA
-            	termina em casa com o véu
-            	não pode chegar próximo ao castelo, perde acesso à flor e musgo e quest da cidade_in02
-            
+				recebe o convite e fica livre. acontecerá o casamento na igreja. assim que você sair do castelo ela fala que vai pra casa se preparar para o casamento e dá um timelapse para casa. depois para a igreja e ocorre o casamento.
+				Depois do casamento algumas falas mudam e tem consequencias: ...o que mais? (bonus? até agora não teve bonus por acertar), realeza deve um favor, eles tem que pagar em dinheiro no mínimo.
+				Fica livre
+				Castelo acessível, pode pegar musgo e flor. e fazer a quest da cidade_in02
 		[.] Resultado: 
-        		enrolar para entregar - não consegue avançar (ok? sim 2/3)
+				caso 
+				enrolar para entregar - não consegue avançar (ok? sim 2/3) dá pra fazer a quest cidade_in02 e depois só sobra o castelo, alguma poção tem que levar.
+[?] Loja do mercador: com 5 opções o texto quebrava em 2 linhas e o nome do item era cortado. option_box.gd: se não cabe nem na fonte mínima, vira uma linha só (com "..." se precisar).
 ```
 
 ## Terminar até o Cap. 1 (1)
@@ -69,6 +97,8 @@
 			[] neutro
 		[] Goblin
 			[] neutro
+		[] Padre
+			[] neutro
 	[] Sprites
 		[] Bruxa
 			[] parada
@@ -88,6 +118,8 @@
 			[] parado
 			[] andando
 		[] NPC3 - Adulto
+			[] parado
+		[] Padre
 			[] parado
 		[] Portas
 			[] porta padrão
@@ -154,9 +186,12 @@
 		[] vidro02
 
 
+[] Cena mercado
 
 
-
+[] caldeirão, balancear dificuldade, peso de cada erro: tempo, temp, cozimento, explorar os tipos de matrizes. explorar o que é posível nesse sistema térmico.
+[] os circulos em volta dos ingredientes devem começar com cor branca, ir mostrando sua cor amarelando(mais cedo do que o atual), alaranjando, avermelhando e ficando verde ao chegar perto do ideal, ao passar do ideal ele deve ir avermelhando, alaranjando, amarelando, esbranquecendo.
+[] no resultado, após listar os ingredientes e curvas. deve fazer como o produtório, os aproveitamentos se juntam à cada matriz, e ocorre a multiplicação de matrizes uma a uma. ficando a matriz resultado. (ver como vai ser essa animação nos detalhes para evitar retrabalho)
 
 [ ]	Menus 100%
 	[] estilo de cartas

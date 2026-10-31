@@ -1,38 +1,306 @@
-[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://dxfehf8j2wj0b"]
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://cxxlax3w1qhuq"]
 
-[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="6_bs1ox"]
-[ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="7_60tcb"]
-[ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="Cx0"]
-[ext_resource type="Script" uid="uid://c8c7nvlca7oyd" path="res://src/dados/comandos/cmd_legenda.gd" id="Cx1"]
-[ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="Cx2"]
-[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="Cx3"]
-[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="Cx4"]
-[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="Cx5"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="20_tbv27"]
+[ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="21_2lkus"]
+[ext_resource type="Script" uid="uid://u1lexc30s8be" path="res://src/dados/comandos/cmd_player.gd" id="Cx0"]
+[ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="Cx1"]
+[ext_resource type="Script" uid="uid://ugvh8ya5s1gp" path="res://src/dados/comandos/cmd_camera.gd" id="Cx2"]
+[ext_resource type="Resource" path="res://dados/falantes/padre.tres" id="Cx3"]
+[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="Cx4"]
+[ext_resource type="Resource" path="res://dados/falantes/princesa.tres" id="Cx5"]
+[ext_resource type="Script" uid="uid://b4qulgg7vsh20" path="res://src/dados/comandos/cmd_balao.gd" id="Cx6"]
+[ext_resource type="Resource" path="res://dados/falantes/principe.tres" id="Cx7"]
+[ext_resource type="Script" uid="uid://bm6rsgpqii0pt" path="res://src/dados/comandos/cmd_som.gd" id="Cx9"]
+[ext_resource type="Resource" path="res://dados/falantes/convidado.tres" id="Cx10"]
+[ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="Cx11"]
+[ext_resource type="Resource" path="res://dados/falantes/rei.tres" id="Cx12"]
+[ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="Cx13"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="Cx14"]
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="Cx15"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="Cx16"]
+[ext_resource type="Resource" uid="uid://chrkm8ylgh7e1" path="res://dados/eventos/pensamento_inicio.tres" id="Px0"]
+[ext_resource type="Script" uid="uid://dvii04cb4qtqa" path="res://src/dados/comandos/cmd_chamar_evento.gd" id="Px1"]
+[ext_resource type="Resource" uid="uid://b0vf54xwaodp7" path="res://dados/eventos/pensamento_fim.tres" id="Px2"]
 
 [sub_resource type="Resource" id="C_1"]
 script = ExtResource("Cx0")
 
 [sub_resource type="Resource" id="C_2"]
 script = ExtResource("Cx1")
-texto = "A princesa atravessou a igreja de cabeça erguida.
-O casamento aconteceu."
-segundos = 4.0
+segundos = 0.8
 
-[sub_resource type="Resource" id="C_3"]
-script = ExtResource("Cx1")
-texto = "(cena provisória do casamento)"
-segundos = 2.0
-
-[sub_resource type="Resource" id="C_4"]
+[sub_resource type="Resource" id="Y_1"]
 script = ExtResource("Cx2")
-variavel = "missao01_casamento"
-valor = 2.0
+posicao = Vector2(400, 480)
+
+[sub_resource type="Resource" id="Y_2"]
+script = ExtResource("Cx1")
+segundos = 0.5
+
+[sub_resource type="Resource" id="Y_3"]
+script = ExtResource("Cx2")
+posicao = Vector2(980, 480)
+tempo = 4.0
+
+[sub_resource type="Resource" id="Y_4"]
+script = ExtResource("Cx1")
+segundos = 4.3
 
 [sub_resource type="Resource" id="C_5"]
 script = ExtResource("Cx4")
-comandos = Array[ExtResource("Cx3")]([SubResource("C_1"), SubResource("C_2"), SubResource("C_3"), SubResource("C_4")])
+personagem = ExtResource("Cx3")
+posicao = 100.0
+texto = "Estamos reunidos hoje, diante de Deus e de todo o reino, para unir esta princesa e este príncipe."
+
+[sub_resource type="Resource" id="C_6"]
+script = ExtResource("Cx1")
+segundos = 0.4
+
+[sub_resource type="Resource" id="C_7"]
+script = ExtResource("Cx4")
+personagem = ExtResource("Cx3")
+posicao = 100.0
+texto = "Vossa Alteza, aceita este homem como esposo, na saúde e na doença, na alegria e na tristeza?"
+
+[sub_resource type="Resource" id="C_8"]
+script = ExtResource("Cx1")
+segundos = 0.6
+
+[sub_resource type="Resource" id="C_9"]
+script = ExtResource("Cx4")
+personagem = ExtResource("Cx5")
+posicao = 100.0
+texto = "..."
+
+[sub_resource type="Resource" id="C_10"]
+script = ExtResource("Cx1")
+segundos = 0.5
+
+[sub_resource type="Resource" id="C_11"]
+script = ExtResource("Cx4")
+personagem = ExtResource("Cx5")
+posicao = 100.0
+texto = "Aceito."
+
+[sub_resource type="Resource" id="Y_5"]
+script = ExtResource("Cx6")
+alvo = 1
+evento = "cidadeA_in03_principe"
+emocao = 3
+esperar = false
+
+[sub_resource type="Resource" id="C_12"]
+script = ExtResource("Cx6")
+alvo = 1
+evento = "cidadeA_in03_princesa"
+emocao = 3
+
+[sub_resource type="Resource" id="C_13"]
+script = ExtResource("Cx4")
+personagem = ExtResource("Cx3")
+posicao = 100.0
+texto = "E Vossa Alteza, aceita esta mulher como esposa, na saúde e na doença, na alegria e na tristeza?"
+
+[sub_resource type="Resource" id="C_14"]
+script = ExtResource("Cx4")
+personagem = ExtResource("Cx7")
+posicao = 100.0
+texto = "Aceito, com todo o coração."
+
+[sub_resource type="Resource" id="C_15"]
+script = ExtResource("Cx1")
+segundos = 0.4
+
+[sub_resource type="Resource" id="C_16"]
+script = ExtResource("Cx4")
+personagem = ExtResource("Cx3")
+posicao = 100.0
+texto = "Então, pelo poder que me foi dado, eu vos declaro marido e mulher!"
+
+[sub_resource type="Resource" id="Y_6"]
+script = ExtResource("Cx6")
+alvo = 1
+evento = "cidadeA_in03_principe"
+emocao = 3
+duracao = 1.6
+esperar = false
+
+[sub_resource type="Resource" id="Y_7"]
+script = ExtResource("Cx6")
+alvo = 1
+evento = "cidadeA_in03_princesa"
+emocao = 3
+duracao = 1.6
+esperar = false
+
+[sub_resource type="Resource" id="Y_8"]
+script = ExtResource("Cx1")
+
+[sub_resource type="Resource" id="C_18"]
+script = ExtResource("Cx9")
+arquivo = "res://audio/se/batida02.mp3"
+
+[sub_resource type="Resource" id="C_19"]
+script = ExtResource("Cx6")
+alvo = 1
+evento = "cidadeA_in03_convidado1"
+emocao = 5
+esperar = false
+
+[sub_resource type="Resource" id="C_20"]
+script = ExtResource("Cx1")
+segundos = 0.25
+
+[sub_resource type="Resource" id="C_21"]
+script = ExtResource("Cx9")
+arquivo = "res://audio/se/batida02.mp3"
+
+[sub_resource type="Resource" id="C_22"]
+script = ExtResource("Cx6")
+alvo = 1
+evento = "cidadeA_in03_convidado2"
+emocao = 5
+esperar = false
+
+[sub_resource type="Resource" id="C_23"]
+script = ExtResource("Cx1")
+segundos = 0.25
+
+[sub_resource type="Resource" id="C_24"]
+script = ExtResource("Cx9")
+arquivo = "res://audio/se/batida02.mp3"
+
+[sub_resource type="Resource" id="C_25"]
+script = ExtResource("Cx6")
+alvo = 1
+evento = "cidadeA_in03_convidado3"
+emocao = 5
+esperar = false
+
+[sub_resource type="Resource" id="C_26"]
+script = ExtResource("Cx1")
+segundos = 0.25
+
+[sub_resource type="Resource" id="C_27"]
+script = ExtResource("Cx9")
+arquivo = "res://audio/se/batida02.mp3"
+
+[sub_resource type="Resource" id="C_28"]
+script = ExtResource("Cx6")
+alvo = 1
+evento = "cidadeA_in03_rei"
+emocao = 2
+esperar = false
+
+[sub_resource type="Resource" id="C_29"]
+script = ExtResource("Cx1")
+segundos = 0.25
+
+[sub_resource type="Resource" id="C_30"]
+script = ExtResource("Cx1")
+segundos = 0.6
+
+[sub_resource type="Resource" id="C_31"]
+script = ExtResource("Cx4")
+personagem = ExtResource("Cx10")
+posicao = 100.0
+texto = "Vivam os noivos!"
+
+[sub_resource type="Resource" id="C_32"]
+script = ExtResource("Cx1")
+segundos = 0.5
+
+[sub_resource type="Resource" id="P_1"]
+script = ExtResource("Px1")
+evento = ExtResource("Px0")
+
+[sub_resource type="Resource" id="P_2"]
+script = ExtResource("Cx4")
+personagem = ExtResource("Cx11")
+face = "pensando"
+texto = "\"Marido e mulher\"... Agora ela foi promovida a \"mulher\"."
+
+[sub_resource type="Resource" id="P_3"]
+script = ExtResource("Cx4")
+personagem = ExtResource("Cx11")
+face = "pensando"
+texto = "Que cultura bizarra. Hahaha."
+
+[sub_resource type="Resource" id="P_4"]
+script = ExtResource("Px1")
+evento = ExtResource("Px2")
+
+[sub_resource type="Resource" id="P_5"]
+script = ExtResource("Cx1")
+segundos = 0.3
+
+[sub_resource type="Resource" id="C_33"]
+script = ExtResource("Cx2")
+acao = 1
+tempo = 1.5
+
+[sub_resource type="Resource" id="C_34"]
+script = ExtResource("Cx1")
+segundos = 1.6
+
+[sub_resource type="Resource" id="C_35"]
+script = ExtResource("Cx4")
+personagem = ExtResource("Cx5")
+posicao = 100.0
+texto = "Senhora bruxa! A senhora veio!"
+
+[sub_resource type="Resource" id="C_36"]
+script = ExtResource("Cx4")
+personagem = ExtResource("Cx5")
+posicao = 100.0
+texto = "Obrigada. Sem a senhora eu nem teria saído do quarto."
+
+[sub_resource type="Resource" id="C_37"]
+script = ExtResource("Cx4")
+personagem = ExtResource("Cx11")
+texto = "Foi um prazer, Alteza."
+
+[sub_resource type="Resource" id="C_38"]
+script = ExtResource("Cx1")
+segundos = 0.4
+
+[sub_resource type="Resource" id="C_39"]
+script = ExtResource("Cx6")
+alvo = 1
+evento = "cidadeA_in03_rei"
+emocao = 2
+duracao = 1.4
+
+[sub_resource type="Resource" id="C_40"]
+script = ExtResource("Cx4")
+personagem = ExtResource("Cx12")
+posicao = 100.0
+texto = "Hmpf."
+
+[sub_resource type="Resource" id="C_41"]
+script = ExtResource("Cx4")
+personagem = ExtResource("Cx12")
+posicao = 100.0
+texto = "...Obrigado, bruxa."
+
+[sub_resource type="Resource" id="C_42"]
+script = ExtResource("Cx1")
+segundos = 0.3
+
+[sub_resource type="Resource" id="C_43"]
+script = ExtResource("Cx13")
+variavel = "missao01_casamento"
+valor = 2.0
+
+[sub_resource type="Resource" id="C_44"]
+script = ExtResource("Cx0")
+acao = 1
+
+[sub_resource type="Resource" id="C_45"]
+script = ExtResource("Cx15")
+comandos = Array[ExtResource("Cx14")]([SubResource("C_1"), SubResource("C_2"), SubResource("Y_1"), SubResource("Y_2"), SubResource("Y_3"), SubResource("Y_4"), SubResource("C_5"), SubResource("C_6"), SubResource("C_7"), SubResource("C_8"), SubResource("C_9"), SubResource("C_10"), SubResource("C_11"), SubResource("Y_5"), SubResource("C_12"), SubResource("C_13"), SubResource("C_14"), SubResource("C_15"), SubResource("C_16"), SubResource("Y_6"), SubResource("Y_7"), SubResource("Y_8"), SubResource("C_18"), SubResource("C_19"), SubResource("C_20"), SubResource("C_21"), SubResource("C_22"), SubResource("C_23"), SubResource("C_24"), SubResource("C_25"), SubResource("C_26"), SubResource("C_27"), SubResource("C_28"), SubResource("C_29"), SubResource("C_30"), SubResource("C_31"), SubResource("C_32"), SubResource("P_1"), SubResource("P_2"), SubResource("P_3"), SubResource("P_4"), SubResource("P_5"), SubResource("C_33"), SubResource("C_34"), SubResource("C_35"), SubResource("C_36"), SubResource("C_37"), SubResource("C_38"), SubResource("C_39"), SubResource("C_40"), SubResource("C_41"), SubResource("C_42"), SubResource("C_43"), SubResource("C_44")])
 
 [resource]
-script = ExtResource("Cx5")
+script = ExtResource("Cx16")
 id = "casamento_cena"
-paginas = Array[ExtResource("Cx4")]([SubResource("C_5")])
+paginas = Array[ExtResource("Cx15")]([SubResource("C_45")])

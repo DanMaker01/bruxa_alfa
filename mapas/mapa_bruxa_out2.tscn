@@ -32,8 +32,8 @@ centered = false
 
 [node name="casa" type="Sprite2D" parent="Meio" unique_id=1468445260]
 z_index = 1
-position = Vector2(231, -32)
-scale = Vector2(0.49946064, 1)
+position = Vector2(295.99997, -32)
+scale = Vector2(0.29018342, 1)
 texture = ExtResource("4_gxuuu")
 centered = false
 

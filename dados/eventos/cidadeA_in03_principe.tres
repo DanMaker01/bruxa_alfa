@@ -1,0 +1,58 @@
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://ddfs43jmpqo63"]
+
+[ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="4_pkd7p"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="Gx0"]
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="Gx1"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="Gx2"]
+[ext_resource type="Resource" path="res://dados/falantes/principe.tres" id="Gx3"]
+[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="Gx4"]
+[ext_resource type="SpriteFrames" path="res://animacoes/principe.tres" id="Gx5"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="Gx6"]
+
+[sub_resource type="Resource" id="G_1"]
+script = ExtResource("Gx1")
+area_scale = Vector2(0.1, 0.1)
+
+[sub_resource type="Resource" id="G_5"]
+script = ExtResource("Gx4")
+personagem = ExtResource("Gx3")
+posicao = 100.0
+texto = "A senhora é a bruxa de quem minha esposa tanto fala?"
+
+[sub_resource type="Resource" id="G_6"]
+script = ExtResource("Gx4")
+personagem = ExtResource("Gx3")
+posicao = 100.0
+texto = "Na minha terra, ninguém teria feito isso por nós. Obrigado."
+
+[sub_resource type="Resource" id="G_2"]
+script = ExtResource("Gx2")
+variavel = "missao01_resultado"
+valor = 1.0
+
+[sub_resource type="Resource" id="G_3"]
+script = ExtResource("Gx2")
+variavel = "missao01_casamento"
+operador = 4
+valor = 1.0
+
+[sub_resource type="Resource" id="G_4"]
+script = ExtResource("Gx2")
+variavel = "missao01_casamento"
+operador = 5
+valor = 2.0
+
+[sub_resource type="Resource" id="G_7"]
+script = ExtResource("Gx1")
+condicoes = Array[ExtResource("Gx2")]([SubResource("G_2"), SubResource("G_3"), SubResource("G_4")])
+sprite_frames = ExtResource("Gx5")
+direcao = 2
+colisao_scale = Vector2(9, 20.25)
+area_pos = Vector2(0, -10)
+area_scale = Vector2(16, 20.25)
+comandos = Array[ExtResource("Gx0")]([SubResource("G_5"), SubResource("G_6")])
+
+[resource]
+script = ExtResource("Gx6")
+id = "cidadeA_in03_principe"
+paginas = Array[ExtResource("Gx1")]([SubResource("G_1"), SubResource("G_7")])

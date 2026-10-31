@@ -103,7 +103,7 @@ texto = "Melhor a senhora seguir o seu caminho."
 script = ExtResource("4_cond")
 variavel = "missao01_resultado"
 operador = 4
-valor = 4.0
+valor = 3.0
 
 [sub_resource type="Resource" id="Pag_3"]
 script = ExtResource("1_pag")

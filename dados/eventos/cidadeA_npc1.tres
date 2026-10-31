@@ -84,7 +84,7 @@ valor = 1.0
 script = ExtResource("4_cond")
 variavel = "missao01_resultado"
 operador = 5
-valor = 3.0
+valor = 2.0
 
 [sub_resource type="Resource" id="Pag_1"]
 script = ExtResource("1_pag")
@@ -120,7 +120,7 @@ texto = "Shhh. Volte a brincar."
 script = ExtResource("4_cond")
 variavel = "missao01_resultado"
 operador = 4
-valor = 4.0
+valor = 3.0
 
 [sub_resource type="Resource" id="Pag_2"]
 script = ExtResource("1_pag")

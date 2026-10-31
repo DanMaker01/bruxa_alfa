@@ -1,25 +1,26 @@
-[gd_resource type="Resource" script_class="EventoData" format=3]
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://d2mdqfp2py25p"]
 
-[ext_resource type="SpriteFrames" path="res://animacoes/cidade_npc2.tres" id="Lx0"]
+[ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="6_n8jrx"]
+[ext_resource type="SpriteFrames" uid="uid://dyon2un0s6fg3" path="res://animacoes/mercador1.tres" id="7_n8jrx"]
 [ext_resource type="Resource" path="res://dados/falantes/filho_mercador.tres" id="Lx1"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="Lx2"]
-[ext_resource type="Script" path="res://src/dados/comandos/comando.gd" id="Lx3"]
-[ext_resource type="Script" path="res://src/dados/pagina_data.gd" id="Lx4"]
+[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="Lx2"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="Lx3"]
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="Lx4"]
 [ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="Lx5"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_mostrar_opcoes.gd" id="Lx6"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_label.gd" id="Lx7"]
-[ext_resource type="Script" path="res://src/dados/condicao.gd" id="Lx8"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_if.gd" id="Lx9"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_variavel.gd" id="Lx10"]
-[ext_resource type="Resource" path="res://dados/itens/agua.tres" id="Lx11"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_item.gd" id="Lx12"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_else.gd" id="Lx13"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_end.gd" id="Lx14"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_goto.gd" id="Lx15"]
-[ext_resource type="Resource" path="res://dados/itens/sal.tres" id="Lx16"]
-[ext_resource type="Resource" path="res://dados/itens/arroz.tres" id="Lx17"]
-[ext_resource type="Resource" path="res://dados/itens/maca.tres" id="Lx18"]
-[ext_resource type="Script" path="res://src/dados/evento_data.gd" id="Lx19"]
+[ext_resource type="Script" uid="uid://btdlgkphiqan1" path="res://src/dados/comandos/cmd_mostrar_opcoes.gd" id="Lx6"]
+[ext_resource type="Script" uid="uid://crwb7mjauibuo" path="res://src/dados/comandos/cmd_label.gd" id="Lx7"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="Lx8"]
+[ext_resource type="Script" uid="uid://cwdgcnn30o052" path="res://src/dados/comandos/cmd_if.gd" id="Lx9"]
+[ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="Lx10"]
+[ext_resource type="Resource" uid="uid://7ntrrw342v7r" path="res://dados/itens/agua.tres" id="Lx11"]
+[ext_resource type="Script" uid="uid://bg82uh5klkyf6" path="res://src/dados/comandos/cmd_item.gd" id="Lx12"]
+[ext_resource type="Script" uid="uid://b2vy54pculhyg" path="res://src/dados/comandos/cmd_else.gd" id="Lx13"]
+[ext_resource type="Script" uid="uid://phmwdet0nd7d" path="res://src/dados/comandos/cmd_end.gd" id="Lx14"]
+[ext_resource type="Script" uid="uid://b3yty8028fcf2" path="res://src/dados/comandos/cmd_goto.gd" id="Lx15"]
+[ext_resource type="Resource" uid="uid://bskh34u4r8np1" path="res://dados/itens/sal.tres" id="Lx16"]
+[ext_resource type="Resource" uid="uid://v0l52k86clk5" path="res://dados/itens/arroz.tres" id="Lx17"]
+[ext_resource type="Resource" uid="uid://bkpyaw7owkkb1" path="res://dados/itens/maca.tres" id="Lx18"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="Lx19"]
 
 [sub_resource type="Resource" id="L_1"]
 script = ExtResource("Lx2")
@@ -33,7 +34,7 @@ texto = "(Ele olha para o chão e não diz nada.)"
 
 [sub_resource type="Resource" id="L_3"]
 script = ExtResource("Lx4")
-sprite_frames = ExtResource("Lx0")
+sprite_frames = ExtResource("7_n8jrx")
 colisao_scale = Vector2(9, 20.25)
 area_pos = Vector2(0, -10)
 area_scale = Vector2(16, 20.25)
@@ -258,7 +259,7 @@ valor = 2.0
 [sub_resource type="Resource" id="L_50"]
 script = ExtResource("Lx4")
 condicoes = Array[ExtResource("Lx8")]([SubResource("L_49")])
-sprite_frames = ExtResource("Lx0")
+sprite_frames = ExtResource("7_n8jrx")
 colisao_scale = Vector2(9, 20.25)
 area_pos = Vector2(0, -10)
 area_scale = Vector2(16, 20.25)

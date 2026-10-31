@@ -239,11 +239,21 @@ func _caber(lbl: Label, fonte: int) -> void:
 		return
 	var f: Font = lbl.get_theme_font("font")
 	var tam := fonte
+	var alt: float = 0.0
 	while tam > FONTE_MIN:
-		var alt: float = f.get_multiline_string_size(lbl.text, HORIZONTAL_ALIGNMENT_CENTER, lbl.size.x, tam).y
+		alt = f.get_multiline_string_size(lbl.text, HORIZONTAL_ALIGNMENT_CENTER, lbl.size.x, tam).y
 		if alt <= lbl.size.y:
 			break
 		tam -= 1
+	alt = f.get_multiline_string_size(lbl.text, HORIZONTAL_ALIGNMENT_CENTER, lbl.size.x, tam).y
+	if alt > lbl.size.y:
+		# muitas opções (botões baixos): quebrando linha, o começo do texto era cortado
+		# (sumia o nome do item). Uma linha só, com "..." no fim se não couber.
+		lbl.autowrap_mode = TextServer.AUTOWRAP_OFF
+		lbl.offset_top = 0.0
+		lbl.offset_bottom = 0.0
+		while tam > 10 and f.get_height(tam) > lbl.size.y + 2.0 * margem_texto:
+			tam -= 1
 	lbl.add_theme_font_size_override("font_size", tam)
 
 func _limpar_opcoes() -> void:

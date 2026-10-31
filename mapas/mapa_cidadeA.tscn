@@ -101,8 +101,14 @@ position = Vector2(2440, 544)
 script = ExtResource("4_ka47h")
 evento = ExtResource("ev_npc3")
 
-[node name="IgrejaBarulho" type="CharacterBody2D" parent="Eventos"]
+[node name="IgrejaBarulhoEsq" type="CharacterBody2D" parent="Eventos"]
 z_index = 3
-position = Vector2(3072, 544)
+position = Vector2(2820, 544)
+script = ExtResource("4_ka47h")
+evento = ExtResource("ev_igreja_barulho")
+
+[node name="IgrejaBarulhoDir" type="CharacterBody2D" parent="Eventos"]
+z_index = 3
+position = Vector2(3330, 544)
 script = ExtResource("4_ka47h")
 evento = ExtResource("ev_igreja_barulho")

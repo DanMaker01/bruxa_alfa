@@ -1,72 +1,69 @@
-[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://d0q6gs042651n"]
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://uffe8xlk7min"]
 
-[ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="4_2bpuw"]
-[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="Ix0"]
-[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="Ix1"]
-[ext_resource type="Script" uid="uid://u1lexc30s8be" path="res://src/dados/comandos/cmd_player.gd" id="Ix2"]
-[ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="Ix3"]
+[ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="4_8edrb"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="Ix0"]
+[ext_resource type="Script" uid="uid://u1lexc30s8be" path="res://src/dados/comandos/cmd_player.gd" id="Ix1"]
+[ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="Ix2"]
+[ext_resource type="Script" uid="uid://ugvh8ya5s1gp" path="res://src/dados/comandos/cmd_camera.gd" id="Ix3"]
 [ext_resource type="Script" uid="uid://bm6rsgpqii0pt" path="res://src/dados/comandos/cmd_som.gd" id="Ix4"]
 [ext_resource type="Script" uid="uid://7xxa8u611ha0" path="res://src/dados/comandos/cmd_mostrar_efeito.gd" id="Ix5"]
-[ext_resource type="Script" uid="uid://b4qulgg7vsh20" path="res://src/dados/comandos/cmd_balao.gd" id="Ix6"]
-[ext_resource type="Resource" uid="uid://chrkm8ylgh7e1" path="res://dados/eventos/pensamento_inicio.tres" id="Ix7"]
-[ext_resource type="Script" uid="uid://dvii04cb4qtqa" path="res://src/dados/comandos/cmd_chamar_evento.gd" id="Ix8"]
+[ext_resource type="Resource" path="res://dados/falantes/voz_igreja.tres" id="Ix6"]
+[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="Ix7"]
+[ext_resource type="Script" uid="uid://dp3mfol3wf88y" path="res://src/dados/comandos/cmd_mover.gd" id="Ix8"]
 [ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="Ix9"]
-[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="Ix10"]
-[ext_resource type="Resource" uid="uid://b0vf54xwaodp7" path="res://dados/eventos/pensamento_fim.tres" id="Ix11"]
-[ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="Ix12"]
-[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="Ix13"]
-[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="Ix14"]
+[ext_resource type="Script" uid="uid://b4qulgg7vsh20" path="res://src/dados/comandos/cmd_balao.gd" id="Ix10"]
+[ext_resource type="Resource" uid="uid://chrkm8ylgh7e1" path="res://dados/eventos/pensamento_inicio.tres" id="Ix11"]
+[ext_resource type="Script" uid="uid://dvii04cb4qtqa" path="res://src/dados/comandos/cmd_chamar_evento.gd" id="Ix12"]
+[ext_resource type="Script" uid="uid://cwdgcnn30o052" path="res://src/dados/comandos/cmd_if.gd" id="Ix13"]
+[ext_resource type="Script" uid="uid://phmwdet0nd7d" path="res://src/dados/comandos/cmd_end.gd" id="Ix14"]
+[ext_resource type="Resource" uid="uid://b0vf54xwaodp7" path="res://dados/eventos/pensamento_fim.tres" id="Ix15"]
+[ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="Ix16"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="Ix17"]
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="Ix18"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="Ix19"]
 
-[sub_resource type="Resource" id="I_1"]
-script = ExtResource("Ix1")
+[sub_resource type="Resource" id="I_56"]
+script = ExtResource("Ix18")
 area_scale = Vector2(0.1, 0.1)
 
 [sub_resource type="Resource" id="I_2"]
-script = ExtResource("Ix2")
+script = ExtResource("Ix1")
 
 [sub_resource type="Resource" id="I_3"]
-script = ExtResource("Ix3")
-segundos = 0.2
+script = ExtResource("Ix2")
+segundos = 0.3
 
 [sub_resource type="Resource" id="I_4"]
-script = ExtResource("Ix4")
-arquivo = "res://audio/se/batida02.mp3"
+script = ExtResource("Ix3")
+posicao = Vector2(3072, 480)
+tempo = 1.5
 
 [sub_resource type="Resource" id="I_5"]
-script = ExtResource("Ix5")
-alvo = 1
-evento = "cidadeA_passagem_in03"
-tipo = 4
-cor = Color(1, 1, 1, 1)
-altura = 120.0
-esperar = false
+script = ExtResource("Ix2")
+segundos = 1.8
 
 [sub_resource type="Resource" id="I_6"]
-script = ExtResource("Ix3")
-segundos = 0.5
+script = ExtResource("Ix4")
+arquivo = "res://audio/se/batida02.mp3"
 
 [sub_resource type="Resource" id="I_7"]
-script = ExtResource("Ix4")
-arquivo = "res://audio/se/batida02.mp3"
+script = ExtResource("Ix5")
+alvo = 1
+evento = "cidadeA_passagem_in03"
+tipo = 4
+cor = Color(1, 1, 1, 1)
+altura = 120.0
+esperar = false
 
 [sub_resource type="Resource" id="I_8"]
-script = ExtResource("Ix5")
-alvo = 1
-evento = "cidadeA_passagem_in03"
-tipo = 4
-cor = Color(1, 1, 1, 1)
-altura = 120.0
-esperar = false
+script = ExtResource("Ix2")
+segundos = 0.35
 
 [sub_resource type="Resource" id="I_9"]
-script = ExtResource("Ix3")
-segundos = 0.5
-
-[sub_resource type="Resource" id="I_10"]
 script = ExtResource("Ix4")
 arquivo = "res://audio/se/batida02.mp3"
 
-[sub_resource type="Resource" id="I_11"]
+[sub_resource type="Resource" id="I_10"]
 script = ExtResource("Ix5")
 alvo = 1
 evento = "cidadeA_passagem_in03"
@@ -75,56 +72,262 @@ cor = Color(1, 1, 1, 1)
 altura = 120.0
 esperar = false
 
+[sub_resource type="Resource" id="I_11"]
+script = ExtResource("Ix2")
+segundos = 0.35
+
 [sub_resource type="Resource" id="I_12"]
-script = ExtResource("Ix3")
-segundos = 0.5
+script = ExtResource("Ix7")
+personagem = ExtResource("Ix6")
+posicao = 100.0
+texto = "...amados irmãos... hmm... mm... estamos reunidos..."
 
 [sub_resource type="Resource" id="I_13"]
-script = ExtResource("Ix6")
-emocao = 1
+script = ExtResource("Ix2")
+segundos = 0.4
 
 [sub_resource type="Resource" id="I_14"]
-script = ExtResource("Ix8")
-evento = ExtResource("Ix7")
+script = ExtResource("Ix7")
+personagem = ExtResource("Ix6")
+posicao = 100.0
+texto = "...mm... na saúde e na doença... hm... na alegria..."
 
 [sub_resource type="Resource" id="I_15"]
-script = ExtResource("Ix10")
-personagem = ExtResource("Ix9")
-face = "pensando"
-texto = "Vozes, palmas... Parece que o casamento começou."
+script = ExtResource("Ix2")
+segundos = 0.5
 
 [sub_resource type="Resource" id="I_16"]
-script = ExtResource("Ix10")
-personagem = ExtResource("Ix9")
-face = "pensando"
-texto = "Sem mim."
+script = ExtResource("Ix3")
+acao = 1
+tempo = 1.0
 
 [sub_resource type="Resource" id="I_17"]
-script = ExtResource("Ix8")
-evento = ExtResource("Ix11")
+script = ExtResource("Ix2")
+segundos = 0.6
 
 [sub_resource type="Resource" id="I_18"]
-script = ExtResource("Ix12")
-variavel = "missao01_casamento"
-valor = 2.0
+script = ExtResource("Ix8")
+destino = 1
+ate_evento = "cidadeA_passagem_in03"
+velocidade = 150.0
 
 [sub_resource type="Resource" id="I_19"]
 script = ExtResource("Ix2")
-acao = 1
+segundos = 0.3
 
 [sub_resource type="Resource" id="I_20"]
-script = ExtResource("Ix13")
-variavel = "missao01_casamento"
-valor = 1.0
+script = ExtResource("Ix4")
+arquivo = "res://audio/se/porta_fecha.mp3"
 
 [sub_resource type="Resource" id="I_21"]
+script = ExtResource("Ix3")
+acao = 2
+intensidade = 3.0
+velocidade = 0.05
+duracao = 0.3
+
+[sub_resource type="Resource" id="I_22"]
+script = ExtResource("Ix2")
+segundos = 0.5
+
+[sub_resource type="Resource" id="I_23"]
+script = ExtResource("Ix7")
+personagem = ExtResource("Ix9")
+texto = "Trancada."
+
+[sub_resource type="Resource" id="I_24"]
+script = ExtResource("Ix7")
+personagem = ExtResource("Ix9")
+texto = "Hunf. Fecham a porta na cara da bruxa e depois vêm bater na minha."
+
+[sub_resource type="Resource" id="I_25"]
+script = ExtResource("Ix2")
+segundos = 0.4
+
+[sub_resource type="Resource" id="I_26"]
+script = ExtResource("Ix10")
+emocao = 2
+duracao = 1.6
+
+[sub_resource type="Resource" id="I_27"]
+script = ExtResource("Ix7")
+personagem = ExtResource("Ix6")
+posicao = 100.0
+texto = "...se alguém tiver algo contra esta união... hm... fale agora..."
+
+[sub_resource type="Resource" id="I_28"]
+script = ExtResource("Ix2")
+segundos = 1.2
+
+[sub_resource type="Resource" id="I_29"]
+script = ExtResource("Ix7")
+personagem = ExtResource("Ix6")
+posicao = 100.0
+texto = "...ou cale-se para sempre."
+
+[sub_resource type="Resource" id="I_30"]
+script = ExtResource("Ix2")
+segundos = 0.8
+
+[sub_resource type="Resource" id="I_31"]
+script = ExtResource("Ix7")
+personagem = ExtResource("Ix6")
+posicao = 100.0
+texto = "...eu vos declaro... mm... marido e mulher!"
+
+[sub_resource type="Resource" id="I_32"]
+script = ExtResource("Ix2")
+segundos = 0.2
+
+[sub_resource type="Resource" id="I_33"]
+script = ExtResource("Ix4")
+arquivo = "res://audio/se/batida02.mp3"
+
+[sub_resource type="Resource" id="I_34"]
+script = ExtResource("Ix5")
+alvo = 1
+evento = "cidadeA_passagem_in03"
+tipo = 4
+cor = Color(1, 1, 1, 1)
+altura = 120.0
+esperar = false
+
+[sub_resource type="Resource" id="I_35"]
+script = ExtResource("Ix2")
+segundos = 0.25
+
+[sub_resource type="Resource" id="I_36"]
+script = ExtResource("Ix4")
+arquivo = "res://audio/se/batida02.mp3"
+
+[sub_resource type="Resource" id="I_37"]
+script = ExtResource("Ix5")
+alvo = 1
+evento = "cidadeA_passagem_in03"
+tipo = 4
+cor = Color(1, 1, 1, 1)
+altura = 120.0
+esperar = false
+
+[sub_resource type="Resource" id="I_38"]
+script = ExtResource("Ix2")
+segundos = 0.25
+
+[sub_resource type="Resource" id="I_39"]
+script = ExtResource("Ix4")
+arquivo = "res://audio/se/batida02.mp3"
+
+[sub_resource type="Resource" id="I_40"]
+script = ExtResource("Ix5")
+alvo = 1
+evento = "cidadeA_passagem_in03"
+tipo = 4
+cor = Color(1, 1, 1, 1)
+altura = 120.0
+esperar = false
+
+[sub_resource type="Resource" id="I_41"]
+script = ExtResource("Ix2")
+segundos = 0.25
+
+[sub_resource type="Resource" id="I_42"]
+script = ExtResource("Ix4")
+arquivo = "res://audio/se/batida02.mp3"
+
+[sub_resource type="Resource" id="I_43"]
+script = ExtResource("Ix5")
+alvo = 1
+evento = "cidadeA_passagem_in03"
+tipo = 4
+cor = Color(1, 1, 1, 1)
+altura = 120.0
+esperar = false
+
+[sub_resource type="Resource" id="I_44"]
+script = ExtResource("Ix2")
+segundos = 0.25
+
+[sub_resource type="Resource" id="I_45"]
+script = ExtResource("Ix2")
+segundos = 0.6
+
+[sub_resource type="Resource" id="I_46"]
+script = ExtResource("Ix12")
+evento = ExtResource("Ix11")
+
+[sub_resource type="Resource" id="I_47"]
+script = ExtResource("Ix7")
+personagem = ExtResource("Ix9")
+face = "pensando"
+texto = "Pronto. Casaram."
+
+[sub_resource type="Resource" id="Z_1"]
+script = ExtResource("Ix7")
+personagem = ExtResource("Ix9")
+face = "pensando"
+texto = "E eu nem fui convidada."
+
+[sub_resource type="Resource" id="I_48"]
+script = ExtResource("Ix7")
+personagem = ExtResource("Ix9")
+face = "pensando"
+texto = "Espero que ela esteja sendo ela mesma lá dentro."
+
+[sub_resource type="Resource" id="I_1"]
+script = ExtResource("Ix0")
+variavel = "missao01_veu"
+
+[sub_resource type="Resource" id="I_49"]
+script = ExtResource("Ix13")
+condicao = SubResource("I_1")
+
+[sub_resource type="Resource" id="I_50"]
+script = ExtResource("Ix7")
+personagem = ExtResource("Ix9")
+face = "pensando"
+texto = "Agora que o casamento acabou, o castelo deve abrir de novo."
+
+[sub_resource type="Resource" id="I_51"]
+script = ExtResource("Ix7")
+personagem = ExtResource("Ix9")
+face = "pensando"
+texto = "Ainda preciso buscar aquele véu."
+
+[sub_resource type="Resource" id="I_52"]
+script = ExtResource("Ix14")
+
+[sub_resource type="Resource" id="I_53"]
+script = ExtResource("Ix12")
+evento = ExtResource("Ix15")
+
+[sub_resource type="Resource" id="I_54"]
+script = ExtResource("Ix16")
+variavel = "missao01_casamento"
+valor = 2.0
+
+[sub_resource type="Resource" id="I_55"]
 script = ExtResource("Ix1")
-condicoes = Array[ExtResource("Ix13")]([SubResource("I_20")])
+acao = 1
+
+[sub_resource type="Resource" id="I_57"]
+script = ExtResource("Ix0")
+variavel = "missao01_resultado"
+valor = 2.0
+
+[sub_resource type="Resource" id="I_58"]
+script = ExtResource("Ix0")
+variavel = "missao01_casamento"
+operador = 5
+valor = 1.0
+
+[sub_resource type="Resource" id="I_59"]
+script = ExtResource("Ix18")
+condicoes = Array[ExtResource("Ix0")]([SubResource("I_57"), SubResource("I_58")])
 gatilho = 1
-area_scale = Vector2(40, 30)
-comandos = Array[ExtResource("Ix0")]([SubResource("I_2"), SubResource("I_3"), SubResource("I_4"), SubResource("I_5"), SubResource("I_6"), SubResource("I_7"), SubResource("I_8"), SubResource("I_9"), SubResource("I_10"), SubResource("I_11"), SubResource("I_12"), SubResource("I_13"), SubResource("I_14"), SubResource("I_15"), SubResource("I_16"), SubResource("I_17"), SubResource("I_18"), SubResource("I_19")])
+area_scale = Vector2(6, 30)
+comandos = Array[ExtResource("Ix17")]([SubResource("I_2"), SubResource("I_3"), SubResource("I_4"), SubResource("I_5"), SubResource("I_6"), SubResource("I_7"), SubResource("I_8"), SubResource("I_9"), SubResource("I_10"), SubResource("I_11"), SubResource("I_12"), SubResource("I_13"), SubResource("I_14"), SubResource("I_15"), SubResource("I_16"), SubResource("I_17"), SubResource("I_18"), SubResource("I_19"), SubResource("I_20"), SubResource("I_21"), SubResource("I_22"), SubResource("I_23"), SubResource("I_24"), SubResource("I_25"), SubResource("I_26"), SubResource("I_27"), SubResource("I_28"), SubResource("I_29"), SubResource("I_30"), SubResource("I_31"), SubResource("I_32"), SubResource("I_33"), SubResource("I_34"), SubResource("I_35"), SubResource("I_36"), SubResource("I_37"), SubResource("I_38"), SubResource("I_39"), SubResource("I_40"), SubResource("I_41"), SubResource("I_42"), SubResource("I_43"), SubResource("I_44"), SubResource("I_45"), SubResource("I_46"), SubResource("I_47"), SubResource("Z_1"), SubResource("I_48"), SubResource("I_49"), SubResource("I_50"), SubResource("I_51"), SubResource("I_52"), SubResource("I_53"), SubResource("I_54"), SubResource("I_55")])
 
 [resource]
-script = ExtResource("Ix14")
+script = ExtResource("Ix19")
 id = "cidadeA_igreja_barulho"
-paginas = Array[ExtResource("Ix1")]([SubResource("I_1"), SubResource("I_21")])
+paginas = Array[ExtResource("Ix18")]([SubResource("I_56"), SubResource("I_59")])
