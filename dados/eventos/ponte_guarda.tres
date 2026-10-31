@@ -144,7 +144,7 @@ texto = "Aqui está."
 script = ExtResource("3_x")
 personagem = ExtResource("x0")
 posicao = 100.0
-texto = "Está certo. Fui avisado de que uma bruxa viria. As ordens são claras, e sou leal à vontade do Rei. Pode passar."
+texto = "Está certo. A princesa avisou que uma bruxa viria. São ordens da família real. Pode passar."
 
 [sub_resource type="Resource" id="R_20"]
 script = ExtResource("4_x")

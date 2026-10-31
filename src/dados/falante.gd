@@ -30,7 +30,11 @@ static func do_texto(msg: String) -> Dictionary:
 	var fim := msg.find("]")
 	if fim < 1:
 		return {"falante": null, "texto": msg}
-	var campos := msg.substr(1, fim - 1).split(";")
+	# "[color=red]..." / "[shake]..." no começo é BBCode da fala, não o cabeçalho [nome;foto;pos]
+	var dentro := msg.substr(1, fim - 1)
+	if not dentro.contains(";") and dentro.trim_prefix("/").split("=")[0].split(" ")[0] in DialogueBox.TAGS_BBCODE:
+		return {"falante": null, "texto": msg}
+	var campos := dentro.split(";")
 	var f := Falante.new()
 	if campos.size() >= 4:
 		# formato antigo: [nome;pos_nome;foto;pos_foto]

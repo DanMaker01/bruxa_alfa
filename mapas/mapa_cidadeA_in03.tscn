@@ -12,7 +12,6 @@
 [ext_resource type="Resource" uid="uid://dksqbx7v326bt" path="res://dados/eventos/cidadeA_in03_princesa.tres" id="ev_princesa"]
 [ext_resource type="Resource" uid="uid://ddfs43jmpqo63" path="res://dados/eventos/cidadeA_in03_principe.tres" id="ev_principe"]
 [ext_resource type="Resource" uid="uid://bel4aygvrcuad" path="res://dados/eventos/cidadeA_in03_rei.tres" id="ev_rei"]
-[ext_resource type="Resource" path="res://dados/eventos/cidadeA_in03_vazia.tres" id="ev_vazia"]
 
 [node name="CidA_in03" type="Node2D" unique_id=231347479]
 script = ExtResource("1_160eo")
@@ -88,9 +87,3 @@ z_index = 3
 position = Vector2(720, 480)
 script = ExtResource("4_lru5l")
 evento = ExtResource("ev_convidado3")
-
-[node name="IgrejaVazia" type="CharacterBody2D" parent="Eventos"]
-z_index = 3
-position = Vector2(200, 480)
-script = ExtResource("4_lru5l")
-evento = ExtResource("ev_vazia")

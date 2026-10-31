@@ -19,7 +19,7 @@ const CORES := [Color(0.85, 0.1, 0.1), Color(0.15, 0.3, 0.8), Color(0.2, 0.2, 0.
 @export var emocao: Emocao = Emocao.EXCLAMACAO
 @export var duracao: float = 1.2
 ## Altura do balão acima dos pés do alvo (px).
-@export var altura: float = 150.0
+@export var altura: float = 120.0
 ## Ligado: o evento espera o balão sumir.
 @export var esperar: bool = true
 
@@ -41,7 +41,7 @@ func executar(interp, ev) -> int:
 	return MANTER
 
 ## Mostra um balão em "no" (também usado pela rota dos eventos). Devolve o tween.
-static func mostrar(no: Node2D, emocao_: int, duracao_: float = 1.2, altura_: float = 150.0) -> Tween:
+static func mostrar(no: Node2D, emocao_: int, duracao_: float = 1.2, altura_: float = 120.0) -> Tween:
 	var balao := _criar_balao(emocao_)
 	no.add_child(balao)
 	balao.position = Vector2(0, -altura_)

@@ -107,6 +107,7 @@ script = ExtResource("Mx14")
 personalidade = "filho_mercador"
 referencia = ExtResource("Mx13")
 prefixo = "mercador"
+limite_muito = 0.3
 
 [sub_resource type="Resource" id="M_24"]
 script = ExtResource("Mx4")
@@ -116,7 +117,7 @@ variavel = "mercador_ok"
 script = ExtResource("Mx7")
 variavel = "mercador_E"
 operador = 4
-valor = 1.0
+valor = 2.0
 
 [sub_resource type="Resource" id="M_25"]
 script = ExtResource("Mx11")
@@ -142,8 +143,6 @@ condicao = SubResource("M_11")
 [sub_resource type="Resource" id="M_12"]
 script = ExtResource("Mx7")
 variavel = "mercador_A"
-operador = 4
-valor = -1.0
 
 [sub_resource type="Resource" id="M_28"]
 script = ExtResource("Mx11")
@@ -152,8 +151,6 @@ condicao = SubResource("M_12")
 [sub_resource type="Resource" id="M_13"]
 script = ExtResource("Mx7")
 variavel = "mercador_O"
-operador = 4
-valor = -1.0
 
 [sub_resource type="Resource" id="M_29"]
 script = ExtResource("Mx11")
@@ -162,8 +159,6 @@ condicao = SubResource("M_13")
 [sub_resource type="Resource" id="M_14"]
 script = ExtResource("Mx7")
 variavel = "mercador_C"
-operador = 4
-valor = -1.0
 
 [sub_resource type="Resource" id="M_30"]
 script = ExtResource("Mx11")
@@ -287,6 +282,34 @@ texto = "Nada mudou. Ele continua olhando para o chão."
 [sub_resource type="Resource" id="M_55"]
 script = ExtResource("Mx18")
 
+[sub_resource type="Resource" id="B_1"]
+script = ExtResource("Mx7")
+variavel = "mercador_E"
+valor = 1.0
+
+[sub_resource type="Resource" id="B_2"]
+script = ExtResource("Mx11")
+condicao = SubResource("B_1")
+
+[sub_resource type="Resource" id="B_3"]
+script = ExtResource("Mx12")
+segundos = 0.5
+
+[sub_resource type="Resource" id="B_4"]
+script = ExtResource("Mx2")
+personagem = ExtResource("Mx16")
+posicao = 100.0
+texto = "B-bom... dia."
+
+[sub_resource type="Resource" id="B_5"]
+script = ExtResource("Mx2")
+personagem = ExtResource("Mx1")
+posicao = 100.0
+texto = "Melhorou um pouco, mas ainda não dá para deixar a loja com ele."
+
+[sub_resource type="Resource" id="B_6"]
+script = ExtResource("Mx18")
+
 [sub_resource type="Resource" id="M_56"]
 script = ExtResource("Mx12")
 segundos = 0.5
@@ -302,6 +325,9 @@ script = ExtResource("Mx2")
 personagem = ExtResource("Mx1")
 posicao = 100.0
 texto = "Ele está falando... mas não parece ele mesmo."
+
+[sub_resource type="Resource" id="B_7"]
+script = ExtResource("Mx15")
 
 [sub_resource type="Resource" id="M_59"]
 script = ExtResource("Mx15")
@@ -395,7 +421,7 @@ sprite_frames = ExtResource("9_3y2ys")
 colisao_scale = Vector2(9, 20.25)
 area_pos = Vector2(0, -10)
 area_scale = Vector2(16, 20.25)
-comandos = Array[ExtResource("Mx5")]([SubResource("M_17"), SubResource("M_18"), SubResource("M_19"), SubResource("M_20"), SubResource("M_21"), SubResource("M_22"), SubResource("M_23"), SubResource("M_24"), SubResource("M_25"), SubResource("M_26"), SubResource("M_27"), SubResource("M_28"), SubResource("M_29"), SubResource("M_30"), SubResource("M_31"), SubResource("M_32"), SubResource("M_33"), SubResource("M_34"), SubResource("M_35"), SubResource("M_36"), SubResource("M_37"), SubResource("M_38"), SubResource("M_39"), SubResource("M_40"), SubResource("M_41"), SubResource("M_42"), SubResource("M_43"), SubResource("M_44"), SubResource("M_45"), SubResource("M_46"), SubResource("M_47"), SubResource("M_48"), SubResource("M_49"), SubResource("M_50"), SubResource("M_51"), SubResource("M_52"), SubResource("M_53"), SubResource("M_54"), SubResource("M_55"), SubResource("M_56"), SubResource("M_57"), SubResource("M_58"), SubResource("M_59"), SubResource("M_60"), SubResource("M_61"), SubResource("M_62"), SubResource("M_63"), SubResource("M_64"), SubResource("M_65"), SubResource("M_66"), SubResource("M_67"), SubResource("M_68"), SubResource("M_69"), SubResource("M_70"), SubResource("M_71"), SubResource("M_72"), SubResource("M_73"), SubResource("M_74"), SubResource("M_75")])
+comandos = Array[ExtResource("Mx5")]([SubResource("M_17"), SubResource("M_18"), SubResource("M_19"), SubResource("M_20"), SubResource("M_21"), SubResource("M_22"), SubResource("M_23"), SubResource("M_24"), SubResource("M_25"), SubResource("M_26"), SubResource("M_27"), SubResource("M_28"), SubResource("M_29"), SubResource("M_30"), SubResource("M_31"), SubResource("M_32"), SubResource("M_33"), SubResource("M_34"), SubResource("M_35"), SubResource("M_36"), SubResource("M_37"), SubResource("M_38"), SubResource("M_39"), SubResource("M_40"), SubResource("M_41"), SubResource("M_42"), SubResource("M_43"), SubResource("M_44"), SubResource("M_45"), SubResource("M_46"), SubResource("M_47"), SubResource("M_48"), SubResource("M_49"), SubResource("M_50"), SubResource("M_51"), SubResource("M_52"), SubResource("M_53"), SubResource("M_54"), SubResource("M_55"), SubResource("B_2"), SubResource("B_3"), SubResource("B_4"), SubResource("B_5"), SubResource("B_6"), SubResource("M_56"), SubResource("M_57"), SubResource("M_58"), SubResource("B_7"), SubResource("M_59"), SubResource("M_60"), SubResource("M_61"), SubResource("M_62"), SubResource("M_63"), SubResource("M_64"), SubResource("M_65"), SubResource("M_66"), SubResource("M_67"), SubResource("M_68"), SubResource("M_69"), SubResource("M_70"), SubResource("M_71"), SubResource("M_72"), SubResource("M_73"), SubResource("M_74"), SubResource("M_75")])
 
 [sub_resource type="Resource" id="M_78"]
 script = ExtResource("Mx7")

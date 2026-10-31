@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="1_pag"]
 [ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_cmd"]
-[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="3_msg"]
 [ext_resource type="Resource" path="res://dados/itens/musgo_recato.tres" id="4_cogu"]
 [ext_resource type="Script" uid="uid://bg82uh5klkyf6" path="res://src/dados/comandos/cmd_item.gd" id="5_item"]
 [ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="6_self"]
@@ -10,10 +9,21 @@
 [ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="8_cond"]
 [ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="8_ludc1"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="9_ev"]
+[ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="Sx0"]
+[ext_resource type="Script" uid="uid://btdlgkphiqan1" path="res://src/dados/comandos/cmd_mostrar_opcoes.gd" id="Sx1"]
+[ext_resource type="Script" uid="uid://crwb7mjauibuo" path="res://src/dados/comandos/cmd_label.gd" id="Sx2"]
+[ext_resource type="Script" uid="uid://b3yty8028fcf2" path="res://src/dados/comandos/cmd_goto.gd" id="Sx3"]
 
-[sub_resource type="Resource" id="Resource_msg"]
-script = ExtResource("3_msg")
-texto = "Musgo-do-recato. Vou levar um pouco."
+[sub_resource type="Resource" id="S_1"]
+script = ExtResource("Sx1")
+personagem = ExtResource("Sx0")
+pergunta = "Musgo-do-recato. Levo um pouco?"
+opcoes = Array[String](["Pegar", "Deixar"])
+labels = Array[String](["pegar", "deixar"])
+
+[sub_resource type="Resource" id="S_2"]
+script = ExtResource("Sx2")
+nome = "pegar"
 
 [sub_resource type="Resource" id="Resource_item"]
 script = ExtResource("5_item")
@@ -24,13 +34,25 @@ script = ExtResource("6_self")
 escopo = 1
 valor = 1.0
 
+[sub_resource type="Resource" id="S_3"]
+script = ExtResource("Sx3")
+label = "fim"
+
+[sub_resource type="Resource" id="S_4"]
+script = ExtResource("Sx2")
+nome = "deixar"
+
+[sub_resource type="Resource" id="S_5"]
+script = ExtResource("Sx2")
+nome = "fim"
+
 [sub_resource type="Resource" id="Resource_pag0"]
 script = ExtResource("1_pag")
 sprite_frames = ExtResource("7_anim")
 direcao = 2
 area_pos = Vector2(-2.5, -6)
 area_scale = Vector2(6.25, 6.25)
-comandos = Array[ExtResource("2_cmd")]([SubResource("Resource_msg"), SubResource("Resource_item"), SubResource("Resource_self")])
+comandos = Array[ExtResource("2_cmd")]([SubResource("S_1"), SubResource("S_2"), SubResource("Resource_item"), SubResource("Resource_self"), SubResource("S_3"), SubResource("S_4"), SubResource("S_5")])
 
 [sub_resource type="Resource" id="Resource_cond"]
 script = ExtResource("8_cond")

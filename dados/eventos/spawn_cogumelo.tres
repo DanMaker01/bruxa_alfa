@@ -10,6 +10,10 @@
 [ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="8_cond"]
 [ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="8_j287l"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="9_ev"]
+[ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="Sx0"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_mostrar_opcoes.gd" id="Sx1"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_label.gd" id="Sx2"]
+[ext_resource type="Script" path="res://src/dados/comandos/cmd_goto.gd" id="Sx3"]
 
 [sub_resource type="Resource" id="Resource_msg"]
 script = ExtResource("3_msg")
@@ -24,6 +28,29 @@ script = ExtResource("6_self")
 escopo = 1
 valor = 1.0
 
+[sub_resource type="Resource" id="S_1"]
+script = ExtResource("Sx1")
+personagem = ExtResource("Sx0")
+pergunta = "Um cogumelo brilhante. Levo?"
+opcoes = Array[String](["Pegar", "Deixar"])
+labels = Array[String](["pegar", "deixar"])
+
+[sub_resource type="Resource" id="S_2"]
+script = ExtResource("Sx2")
+nome = "pegar"
+
+[sub_resource type="Resource" id="S_3"]
+script = ExtResource("Sx3")
+label = "fim"
+
+[sub_resource type="Resource" id="S_4"]
+script = ExtResource("Sx2")
+nome = "deixar"
+
+[sub_resource type="Resource" id="S_5"]
+script = ExtResource("Sx2")
+nome = "fim"
+
 [sub_resource type="Resource" id="Resource_pag0"]
 script = ExtResource("1_pag")
 sprite_frames = ExtResource("7_anim")
@@ -32,7 +59,7 @@ colisao_pos = Vector2(-25, -25)
 colisao_scale = Vector2(16, 36)
 area_pos = Vector2(-2.5, -6)
 area_scale = Vector2(6.25, 6.25)
-comandos = Array[ExtResource("2_cmd")]([SubResource("Resource_msg"), SubResource("Resource_item"), SubResource("Resource_self")])
+comandos = Array[ExtResource("2_cmd")]([SubResource("S_1"), SubResource("S_2"), SubResource("Resource_item"), SubResource("Resource_self"), SubResource("S_3"), SubResource("S_4"), SubResource("S_5")])
 
 [sub_resource type="Resource" id="Resource_cond"]
 script = ExtResource("8_cond")

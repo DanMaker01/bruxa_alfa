@@ -156,10 +156,12 @@ func _show_current_message():
 		var texto: String = fala["texto"]
 		if _estilo.get("parenteses", false):
 			texto = "(" + texto.strip_edges() + ")"
-		_texto_puro = texto
+		# BBCode do Godot nas falas: só as tags de TAGS_BBCODE valem; qualquer outro "["
+		# aparece como texto. _texto_puro = texto sem as tags (é o que a escrita conta).
+		var preparado := _preparar_bbcode(texto)
+		_texto_puro = preparado[1]
 		_aplicar_estilo_fala()
-		# "[" vira "[lb]" para o texto do diálogo nunca ser lido como bbcode
-		var corpo := _texto_puro.replace("[", "[lb]")
+		var corpo: String = preparado[0]
 		match str(_estilo.get("efeito", "")):
 			"onda": corpo = "[wave amp=18.0 freq=4.0]" + corpo + "[/wave]"
 			"tremor": corpo = "[shake rate=18.0 level=4]" + corpo + "[/shake]"
@@ -167,6 +169,35 @@ func _show_current_message():
 			corpo = "[i]" + corpo + "[/i]"
 		text_label.text = "[escrita]" + corpo + "[/escrita]"
 		_iniciar_escrita()
+
+## Tags de BBCode que podem ser usadas no texto das falas (Mostrar mensagem / opções).
+## Ex.: "Isso é [color=red]perigoso[/color]!", "[shake]Socorro![/shake]", "[wave]lá lá lá[/wave]".
+const TAGS_BBCODE := ["color", "b", "i", "u", "s", "wave", "shake", "rainbow", "tornado", "fade",
+	"bgcolor", "font_size", "outline_color", "outline_size"]
+var _re_tag: RegEx = null
+
+## Devolve [bbcode para o RichTextLabel, texto puro sem tags].
+func _preparar_bbcode(texto: String) -> Array:
+	if _re_tag == null:
+		_re_tag = RegEx.new()
+		_re_tag.compile("\\[(/?)([a-z_]+)([^\\]]*)\\]")
+	var corpo := ""
+	var puro := ""
+	var i := 0
+	while i < texto.length():
+		var c := texto[i]
+		if c == "[":
+			var m := _re_tag.search(texto, i)
+			if m and m.get_start() == i and m.get_string(2) in TAGS_BBCODE:
+				corpo += m.get_string()
+				i = m.get_end()
+				continue
+			corpo += "[lb]"
+		else:
+			corpo += c
+		puro += c
+		i += 1
+	return [corpo, puro]
 
 func _iniciar_escrita() -> void:
 	_pausa = 0.0

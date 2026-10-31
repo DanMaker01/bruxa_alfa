@@ -5,4 +5,4 @@
 [resource]
 script = ExtResource("1_var")
 nome = "missao01_casamento"
-descricao = "0 = ainda não; 1 = dia do casamento (depois do timelapse, resultados 1 e 2); 2 = o casamento aconteceu; 3 = (resultado 1) saiu da igreja depois da festa, igreja vazia."
+descricao = "0 = ainda não; 1 = dia do casamento (depois do timelapse, resultados 1 e 2); 2 = o casamento aconteceu (resultado 2: igreja ainda trancada até sair do mapa da cidade); 3 = igreja normal, com o padre (resultado 1: depois de sair da igreja; resultado 2: depois de sair do mapa da cidade)."

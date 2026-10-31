@@ -18,61 +18,36 @@
   ==============================
 ```
 
-## Terminar logo (0)
-
-```
-
-[.] v3
-[ ] História / missão: 
-	[] Usar trações:
-		[] O
-		[] C
-		[!] E (cidade_in02, mercador)
-		[] A
-		[!] N (cap 1, princesa)
-	[] Quest Principe Zigmund
-		[] personalidade
-		[] situação
-			[] casamento
-		[] plano
-			[] objetivo
-		[!] sumiu na floresta
-		[!] pediu para a bruxa ajudar a princesa
-	
-	[] Quest Bosque Goblin
-	[?] (Cap.1) Quest Casamento 
-		Feito ([?]): nova variável missao01_casamento (0 nada, 1 dia do casamento, 2 aconteceu).
-			Sair pela porta do castelo_in01 com resultado 1 ou 2 (casamento 0): a porta abre, ela comenta, ela sai, a porta fecha, fade, legenda "No dia seguinte...". casamento = 1. (Feito.)
-			1: aparece na igreja (cidadeA_in03, 360) e chama casamento_cena.tres.
-				Cena: câmera começa perto da porta, faz pan, para no altar, padre fala, "Aceito" da princesa (balão coração nela e no principe) e do príncipe, "marido e mulher!" (coração nela e nele), convidados comemoram, "Vivam os noivos!",
-				câmera volta, princesa agradece de longe, rei "Hmpf... Obrigado, bruxa." casamento = 2 e ela fica livre; dá para falar com todos (falas pós-casamento).
-				Ao sair da igreja: casamento = 3 e a igreja fica vazia.
-				Verificar e corrigir se necessário: Sprites provisórios (cópia do npc): assets/eventos/padre, principe, convidado1..3 + animacoes/*.tres. Falantes novos sem face: padre, principe, convidada, convidado.
-				Verificado: padre, principe e convidados ok (uid próprio). Corrigido: cidade_npc3, mercador1 e mercador2 tinham o MESMO uid no .import (pasta copiada); mercador1/2 ganharam uid novo.
-				E animacoes/mercador1.tres apontava para a pasta mercador2 e vice-versa: agora mercador2 = pai (mercador), mercador1 = filho.
-				Feito: câmera começa na porta (400) e faz pan de 4 s até o altar (980); corações na princesa e no príncipe no "Aceito" e no "marido e mulher" (saiu o brilho). O pensamento "promovida a mulher" continua depois de "Vivam os noivos!".
-			2: aparece em casa. Castelo fechado durante o casamento (casamento = 1), abre de novo depois. Porta do castelo (castelo_out) com cartaz "estão todos na igreja".
-			Igreja (2): dois gatilhos de toque, IgrejaBarulhoEsq (2820) e IgrejaBarulhoDir (3330), mesmo evento cidadeA_igreja_barulho.
-				Antes não disparava: a área era larga, mas o toque só vale a até 200 px do centro do evento (DIST_MAX_TOQUE).
-				Cena: câmera vai até a porta, vozes abafadas lá dentro (falante "VOZ LÁ DENTRO"), câmera volta, a bruxa anda até a porta, está trancada, reclama,
-				fica ouvindo ("cale-se para sempre", "marido e mulher!"), barulho de festa, ela comenta "espero que ela esteja sendo ela mesma".
-				Se ainda não pegou o véu (missao01_veu = 0): comenta que, com o casamento acabado, o castelo abre de novo e ela ainda precisa buscar o véu. Depois casamento = 2 e fica livre.
-				Vale com resultado 2 e casamento 0 ou 1 (funciona mesmo testando pelo debug sem passar pelo timelapse).
-			Som provisório: batida02.mp3 (falta um som de festa/igreja).
-		[] Resultado: 1: 
-				recebe o convite e fica livre. acontecerá o casamento na igreja. assim que você sair do castelo ela fala que vai pra casa se preparar para o casamento e dá um timelapse para casa. depois para a igreja e ocorre o casamento.
-				Depois do casamento algumas falas mudam e tem consequencias: ...o que mais? (bonus? até agora não teve bonus por acertar), realeza deve um favor, eles tem que pagar em dinheiro no mínimo.
-				Fica livre
-				Castelo acessível, pode pegar musgo e flor. e fazer a quest da cidade_in02
-		[.] Resultado: 
-				caso 
-				enrolar para entregar - não consegue avançar (ok? sim 2/3) dá pra fazer a quest cidade_in02 e depois só sobra o castelo, alguma poção tem que levar.
-[?] Loja do mercador: com 5 opções o texto quebrava em 2 linhas e o nome do item era cortado. option_box.gd: se não cabe nem na fonte mínima, vira uma linha só (com "..." se precisar).
-```
-
 ## Terminar até o Cap. 1 (1)
 
 ```
+
+[] Usar trações:
+	[] O
+	[] C
+	[!] E (cidade_in02, mercador)
+	[] A
+	[!] N (cap 1, princesa)
+
+[] Quest Principe Zigmund
+	[] personalidade
+	[] situação
+		[] casamento
+	[] plano
+		[] objetivo
+	[!] sumiu na floresta
+	[!] pediu para a bruxa ajudar a princesa
+	
+[] Quest Bosque Goblin
+	
+[] após o casamento as falas no castelo_in01 devem mudar
+
+[] ervas muito escondidas na floresta
+
+[] entrando em portas sem querer com o touch
+
+[] receitas
+
 
 [ ] BETA / DEMO:
 [ ]		Caldeirão 100%
@@ -148,6 +123,7 @@
 
 [ ]	Audio 100%
 	[] BGM
+		[] intro (xxxHolic opening)
 		[] floresta
 		[] bruxa_out1
 		[] bruxa_out2
@@ -186,7 +162,39 @@
 		[] vidro02
 
 
-[] Cena mercado
+[] Próximos passos (anotado em 31/10, falta definir/fazer):
+	[] Cena mercado completa: você me dizer o que imagina (vendedores, falas, o que muda).
+	[] Intro: melhorar texto (tempo e ritmo).
+	[] Quando o HUD abre a primeira vez (bruxa_out1 na intro? bruxa_in antes do diálogo?).
+	[] Balão de expressão por sprite: precisa da arte (1 PNG por emoção: !, ?, ..., coração, raiva, nota, !?).
+	[] Caldeirão: anéis branco > amarelo > laranja > vermelho > verde no ideal, e volta ao passar.
+	[] Caldeirão: animação do produtório das matrizes no resultado.
+	[] Caldeirão: balancear dificuldade (peso de cada erro).
+	[] "Casamento cancelado" (igreja vazia, padre no castelo): ainda não existe; definir quando acontece.
+	[] Resultado 1: o que muda depois do casamento (falas, bônus, realeza deve um favor/dinheiro).
+	[] Som de festa/igreja e de palmas (hoje o casamento usa batida02.mp3 nas palmas).
+	[] Faces: padre, príncipe, convidados, mercador, filho, crianças, morador (falantes sem face).
+	[] Pode apagar: dados/eventos/cidadeA_in03_vazia.tres, dados/falantes/bruxa_pensando.tres.
+	[] Testar tudo que está [?].
+
+[] Cena mercado completa
+
+[] intro melhorar texto na questão de tempo e ritmo.
+[] definir quando o hud abre a primeira vez, bruxa_out1 na intro? bruxa_in logo antes de iniciar o diálogo?
+[] balão de expressão por sprite, o atual está montando na hora, não está bom.
+[?] cor nas palavras/frases, efeito nas palavras/frases no comando mostrarmsg.
+	Feito: BBCode do Godot no texto: [color=red]..[/color], [b], [i], [u], [s], [wave], [shake], [rainbow], [tornado], [fade], [bgcolor=..], [font_size=..], [outline_color=..], [outline_size=..].
+	Outros "[" continuam aparecendo como texto. A escrita letra a letra conta só as letras (sem as tags). O cabeçalho antigo [nome;foto;pos] continua valendo.
+	Anotar comandos
+[?] balancear o resultado da poção de extroversão. pois um cogumelo já está sendo suficiente para o melhor resultado, entender o pq.
+	Por quê: o cogumelo multiplica E por 1,16 (+16%) e o critério do filho do mercador aceitava qualquer E que subisse 10% (e aceitava C/A/O mudando até "pouco").
+	Ajuste: E precisa subir "muito" (>= +30%; a desenvoltura dá +40%) e O, C, A não podem mudar (menos de 10%); N não pode subir; nenhum traço extremo.
+	Com 1 cogumelo agora: "B-bom... dia." / "Melhorou um pouco, mas ainda não dá para deixar a loja com ele."
+[?] normalmente o padre está na igreja, só não quando o casamento é cancelado, momentaneamente.
+	Feito: padre no altar por padrão ("Bem-vinda à casa de Deus, senhora. ...Mesmo sendo quem a senhora é."). Na fuga (3-5) a bruxa não entra: na porta ela pensa "Melhor não. Se o padre me vir, me entrega aos guardas."
+	Saiu o evento IgrejaVazia do mapa (dados/eventos/cidadeA_in03_vazia.tres ficou sem uso: pode apagar). Ainda não existe "casamento cancelado".
+[.] brilho na porta, da mesma cor do véu, ao trocar o véu.
+	Feito: ao clicar no véu, brilhos também na porta (bruxa_in_passagem), na cor nova. Retire o brilho só da porta. Mas adicione também um flash da cor do véu no sprite da porta, para que ele pisque da cor.
 
 
 [] caldeirão, balancear dificuldade, peso de cada erro: tempo, temp, cozimento, explorar os tipos de matrizes. explorar o que é posível nesse sistema térmico.
@@ -245,9 +253,6 @@
 
 [?] melhorar visual do balão de expressões.
 	Feito: balão desenhado (sombra, contorno escuro, miolo creme, rabicho, brilho no canto); entra com pop, flutua para cima e o símbolo dá um pulinho.
-
-[?] toctoc, a bruxa tem expressão, a camera vai até a porta e dá o segundo toc toc e mostra a mensagem do "Toc toc..."
-	Feito: batidas 1 (com efeito) -> balão "!" na bruxa -> câmera na porta (espera 1.2) -> batidas 2 (com efeito) -> "TOC! TOC! TOC!" -> "Ei. Tem alguém em casa!?" -> câmera volta.
 
 [ ]	Escrita/Estilo:
 [ ]		Diálogos devem condizer com a época

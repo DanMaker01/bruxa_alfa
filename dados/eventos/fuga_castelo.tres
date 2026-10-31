@@ -60,12 +60,16 @@ texto = "Melhor fugir... e aproveitar para pegar o véu."
 
 [sub_resource type="Resource" id="G_esp_pensa"]
 script = ExtResource("2_x")
-segundos = 0.4
+segundos = 1.2
 
 [sub_resource type="Resource" id="G_cam"]
 script = ExtResource("18_x")
 acao = 1
 tempo = 0.3
+
+[sub_resource type="Resource" id="Q_1"]
+script = ExtResource("2_x")
+segundos = 0.4
 
 [sub_resource type="Resource" id="G_corre"]
 script = ExtResource("x2")
@@ -135,7 +139,7 @@ tempo = 0.5
 
 [sub_resource type="Resource" id="P_fuga"]
 script = ExtResource("23_x")
-comandos = Array[ExtResource("22_x")]([SubResource("R_174"), SubResource("R_175"), SubResource("R_176"), SubResource("R_177"), SubResource("R_178"), SubResource("R_179"), SubResource("R_180"), SubResource("G_pensa"), SubResource("G_esp_pensa"), SubResource("G_cam"), SubResource("G_corre"), SubResource("G_abre"), SubResource("G_som_abre"), SubResource("G_esp1"), SubResource("G_some"), SubResource("G_esp2"), SubResource("G_fecha"), SubResource("G_som_fecha"), SubResource("G_esp3"), SubResource("R_181"), SubResource("R_182"), SubResource("R_fuga_tele"), SubResource("G_mostra"), SubResource("R_fuga_esp"), SubResource("R_fuga_fade")])
+comandos = Array[ExtResource("22_x")]([SubResource("R_174"), SubResource("R_175"), SubResource("R_176"), SubResource("R_177"), SubResource("R_178"), SubResource("R_179"), SubResource("R_180"), SubResource("G_pensa"), SubResource("G_esp_pensa"), SubResource("G_cam"), SubResource("Q_1"), SubResource("G_corre"), SubResource("G_abre"), SubResource("G_som_abre"), SubResource("G_esp1"), SubResource("G_some"), SubResource("G_esp2"), SubResource("G_fecha"), SubResource("G_som_fecha"), SubResource("G_esp3"), SubResource("R_181"), SubResource("R_182"), SubResource("R_fuga_tele"), SubResource("G_mostra"), SubResource("R_fuga_esp"), SubResource("R_fuga_fade")])
 
 [resource]
 script = ExtResource("24_x")

@@ -9,6 +9,7 @@
 [ext_resource type="SpriteFrames" uid="uid://nipt5oq20nr3" path="res://animacoes/portal.tres" id="6_hd78q"]
 [ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="7_d61ya"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="7_glxm4"]
+[ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="Kx0"]
 [ext_resource type="Script" uid="uid://bm6rsgpqii0pt" path="res://src/dados/comandos/cmd_som.gd" id="x0"]
 
 [sub_resource type="Resource" id="F_som_passos1"]
@@ -43,7 +44,32 @@ area_pos = Vector2(0, -10)
 area_scale = Vector2(9, 36)
 comandos = Array[ExtResource("2_fbyl6")]([SubResource("F_som_passos1"), SubResource("Resource_wys2t"), SubResource("Resource_usbbu"), SubResource("Resource_f43ti"), SubResource("Resource_0mnrd")])
 
+[sub_resource type="Resource" id="K_3"]
+script = ExtResource("Kx0")
+variavel = "missao01_casamento"
+valor = 3.0
+
+[sub_resource type="Resource" id="K_1"]
+script = ExtResource("6_fbyl6")
+variavel = "missao01_resultado"
+valor = 2.0
+
+[sub_resource type="Resource" id="K_2"]
+script = ExtResource("6_fbyl6")
+variavel = "missao01_casamento"
+valor = 2.0
+
+[sub_resource type="Resource" id="K_4"]
+script = ExtResource("1_wksw1")
+condicoes = Array[ExtResource("6_fbyl6")]([SubResource("K_1"), SubResource("K_2")])
+gatilho = 1
+sprite_frames = ExtResource("6_hd78q")
+animacao = "parado"
+area_pos = Vector2(0, -10)
+area_scale = Vector2(9, 36)
+comandos = Array[ExtResource("2_fbyl6")]([SubResource("K_3"), SubResource("F_som_passos1"), SubResource("Resource_wys2t"), SubResource("Resource_usbbu"), SubResource("Resource_f43ti"), SubResource("Resource_0mnrd")])
+
 [resource]
 script = ExtResource("7_glxm4")
 id = "cidadeA_passagem1"
-paginas = Array[ExtResource("1_wksw1")]([SubResource("Resource_rrvda")])
+paginas = Array[ExtResource("1_wksw1")]([SubResource("Resource_rrvda"), SubResource("K_4")])

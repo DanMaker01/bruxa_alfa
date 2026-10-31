@@ -8,10 +8,30 @@
 [ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="Gx4"]
 [ext_resource type="SpriteFrames" path="res://animacoes/padre.tres" id="Gx5"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="Gx6"]
+[ext_resource type="Script" uid="uid://cwdgcnn30o052" path="res://src/dados/comandos/cmd_if.gd" id="Kx0"]
+[ext_resource type="Script" uid="uid://b2vy54pculhyg" path="res://src/dados/comandos/cmd_else.gd" id="Kx1"]
+[ext_resource type="Script" uid="uid://phmwdet0nd7d" path="res://src/dados/comandos/cmd_end.gd" id="Kx2"]
+
+[sub_resource type="Resource" id="D_1"]
+script = ExtResource("Gx4")
+personagem = ExtResource("Gx3")
+posicao = 100.0
+texto = "Bem-vinda à casa de Deus, senhora."
+
+[sub_resource type="Resource" id="D_2"]
+script = ExtResource("Gx4")
+personagem = ExtResource("Gx3")
+posicao = 100.0
+texto = "...Mesmo sendo quem a senhora é."
 
 [sub_resource type="Resource" id="G_1"]
 script = ExtResource("Gx1")
-area_scale = Vector2(0.1, 0.1)
+sprite_frames = ExtResource("Gx5")
+direcao = 1
+colisao_scale = Vector2(9, 20.25)
+area_pos = Vector2(0, -10)
+area_scale = Vector2(16, 20.25)
+comandos = Array[ExtResource("Gx0")]([SubResource("D_1"), SubResource("D_2")])
 
 [sub_resource type="Resource" id="G_5"]
 script = ExtResource("Gx4")
@@ -52,7 +72,67 @@ area_pos = Vector2(0, -10)
 area_scale = Vector2(16, 20.25)
 comandos = Array[ExtResource("Gx0")]([SubResource("G_5"), SubResource("G_6")])
 
+[sub_resource type="Resource" id="K_1"]
+script = ExtResource("Gx2")
+variavel = "missao01_resultado"
+valor = 1.0
+
+[sub_resource type="Resource" id="K_2"]
+script = ExtResource("Kx0")
+condicao = SubResource("K_1")
+
+[sub_resource type="Resource" id="K_3"]
+script = ExtResource("Gx4")
+personagem = ExtResource("Gx3")
+posicao = 100.0
+texto = "A senhora de novo."
+
+[sub_resource type="Resource" id="K_4"]
+script = ExtResource("Gx4")
+personagem = ExtResource("Gx3")
+posicao = 100.0
+texto = "Que Deus abençoe aquele casamento... e perdoe a presença de uma bruxa nele."
+
+[sub_resource type="Resource" id="K_5"]
+script = ExtResource("Kx1")
+
+[sub_resource type="Resource" id="K_6"]
+script = ExtResource("Gx4")
+personagem = ExtResource("Gx3")
+posicao = 100.0
+texto = "Se veio para o casamento, chegou tarde. Os noivos já partiram."
+
+[sub_resource type="Resource" id="K_7"]
+script = ExtResource("Gx4")
+personagem = ExtResource("Gx3")
+posicao = 100.0
+texto = "Mas a casa de Deus está sempre aberta. Até para a senhora."
+
+[sub_resource type="Resource" id="K_8"]
+script = ExtResource("Kx2")
+
+[sub_resource type="Resource" id="K_9"]
+script = ExtResource("Gx2")
+variavel = "missao01_casamento"
+valor = 3.0
+
+[sub_resource type="Resource" id="K_10"]
+script = ExtResource("Gx2")
+variavel = "missao01_resultado"
+operador = 5
+valor = 2.0
+
+[sub_resource type="Resource" id="K_11"]
+script = ExtResource("Gx1")
+condicoes = Array[ExtResource("Gx2")]([SubResource("K_9"), SubResource("K_10")])
+sprite_frames = ExtResource("Gx5")
+direcao = 1
+colisao_scale = Vector2(9, 20.25)
+area_pos = Vector2(0, -10)
+area_scale = Vector2(16, 20.25)
+comandos = Array[ExtResource("Gx0")]([SubResource("K_2"), SubResource("K_3"), SubResource("K_4"), SubResource("K_5"), SubResource("K_6"), SubResource("K_7"), SubResource("K_8")])
+
 [resource]
 script = ExtResource("Gx6")
 id = "cidadeA_in03_padre"
-paginas = Array[ExtResource("Gx1")]([SubResource("G_1"), SubResource("G_7")])
+paginas = Array[ExtResource("Gx1")]([SubResource("G_1"), SubResource("G_7"), SubResource("K_11")])

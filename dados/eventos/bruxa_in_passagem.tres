@@ -301,7 +301,7 @@ texto = "Está bem. Obrigado. Obrigado mesmo."
 script = ExtResource("9_knu6e")
 personagem = ExtResource("x3")
 posicao = 100.0
-texto = "Ah! O rei já avisou os guardas sobre você. Mas só vão te deixar passar se tiver a poção em mãos."
+texto = "Ah! A princesa já avisou os guardas sobre você. Mas só vão te deixar passar se tiver a poção em mãos."
 
 [sub_resource type="Resource" id="B_adeus"]
 script = ExtResource("9_knu6e")

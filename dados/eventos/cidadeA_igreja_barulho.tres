@@ -5,8 +5,6 @@
 [ext_resource type="Script" uid="uid://u1lexc30s8be" path="res://src/dados/comandos/cmd_player.gd" id="Ix1"]
 [ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="Ix2"]
 [ext_resource type="Script" uid="uid://ugvh8ya5s1gp" path="res://src/dados/comandos/cmd_camera.gd" id="Ix3"]
-[ext_resource type="Script" uid="uid://bm6rsgpqii0pt" path="res://src/dados/comandos/cmd_som.gd" id="Ix4"]
-[ext_resource type="Script" uid="uid://7xxa8u611ha0" path="res://src/dados/comandos/cmd_mostrar_efeito.gd" id="Ix5"]
 [ext_resource type="Resource" path="res://dados/falantes/voz_igreja.tres" id="Ix6"]
 [ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="Ix7"]
 [ext_resource type="Script" uid="uid://dp3mfol3wf88y" path="res://src/dados/comandos/cmd_mover.gd" id="Ix8"]
@@ -26,6 +24,11 @@
 script = ExtResource("Ix18")
 area_scale = Vector2(0.1, 0.1)
 
+[sub_resource type="Resource" id="Resource_8edrb"]
+script = ExtResource("Ix8")
+destino = 3
+metadata/_custom_type_script = "uid://dp3mfol3wf88y"
+
 [sub_resource type="Resource" id="I_2"]
 script = ExtResource("Ix1")
 
@@ -42,35 +45,9 @@ tempo = 1.5
 script = ExtResource("Ix2")
 segundos = 1.8
 
-[sub_resource type="Resource" id="I_6"]
-script = ExtResource("Ix4")
-arquivo = "res://audio/se/batida02.mp3"
-
-[sub_resource type="Resource" id="I_7"]
-script = ExtResource("Ix5")
-alvo = 1
-evento = "cidadeA_passagem_in03"
-tipo = 4
-cor = Color(1, 1, 1, 1)
-altura = 120.0
-esperar = false
-
 [sub_resource type="Resource" id="I_8"]
 script = ExtResource("Ix2")
 segundos = 0.35
-
-[sub_resource type="Resource" id="I_9"]
-script = ExtResource("Ix4")
-arquivo = "res://audio/se/batida02.mp3"
-
-[sub_resource type="Resource" id="I_10"]
-script = ExtResource("Ix5")
-alvo = 1
-evento = "cidadeA_passagem_in03"
-tipo = 4
-cor = Color(1, 1, 1, 1)
-altura = 120.0
-esperar = false
 
 [sub_resource type="Resource" id="I_11"]
 script = ExtResource("Ix2")
@@ -114,17 +91,6 @@ velocidade = 150.0
 [sub_resource type="Resource" id="I_19"]
 script = ExtResource("Ix2")
 segundos = 0.3
-
-[sub_resource type="Resource" id="I_20"]
-script = ExtResource("Ix4")
-arquivo = "res://audio/se/porta_fecha.mp3"
-
-[sub_resource type="Resource" id="I_21"]
-script = ExtResource("Ix3")
-acao = 2
-intensidade = 3.0
-velocidade = 0.05
-duracao = 0.3
 
 [sub_resource type="Resource" id="I_22"]
 script = ExtResource("Ix2")
@@ -179,69 +145,17 @@ texto = "...eu vos declaro... mm... marido e mulher!"
 script = ExtResource("Ix2")
 segundos = 0.2
 
-[sub_resource type="Resource" id="I_33"]
-script = ExtResource("Ix4")
-arquivo = "res://audio/se/batida02.mp3"
-
-[sub_resource type="Resource" id="I_34"]
-script = ExtResource("Ix5")
-alvo = 1
-evento = "cidadeA_passagem_in03"
-tipo = 4
-cor = Color(1, 1, 1, 1)
-altura = 120.0
-esperar = false
-
 [sub_resource type="Resource" id="I_35"]
 script = ExtResource("Ix2")
 segundos = 0.25
-
-[sub_resource type="Resource" id="I_36"]
-script = ExtResource("Ix4")
-arquivo = "res://audio/se/batida02.mp3"
-
-[sub_resource type="Resource" id="I_37"]
-script = ExtResource("Ix5")
-alvo = 1
-evento = "cidadeA_passagem_in03"
-tipo = 4
-cor = Color(1, 1, 1, 1)
-altura = 120.0
-esperar = false
 
 [sub_resource type="Resource" id="I_38"]
 script = ExtResource("Ix2")
 segundos = 0.25
 
-[sub_resource type="Resource" id="I_39"]
-script = ExtResource("Ix4")
-arquivo = "res://audio/se/batida02.mp3"
-
-[sub_resource type="Resource" id="I_40"]
-script = ExtResource("Ix5")
-alvo = 1
-evento = "cidadeA_passagem_in03"
-tipo = 4
-cor = Color(1, 1, 1, 1)
-altura = 120.0
-esperar = false
-
 [sub_resource type="Resource" id="I_41"]
 script = ExtResource("Ix2")
 segundos = 0.25
-
-[sub_resource type="Resource" id="I_42"]
-script = ExtResource("Ix4")
-arquivo = "res://audio/se/batida02.mp3"
-
-[sub_resource type="Resource" id="I_43"]
-script = ExtResource("Ix5")
-alvo = 1
-evento = "cidadeA_passagem_in03"
-tipo = 4
-cor = Color(1, 1, 1, 1)
-altura = 120.0
-esperar = false
 
 [sub_resource type="Resource" id="I_44"]
 script = ExtResource("Ix2")
@@ -325,7 +239,7 @@ script = ExtResource("Ix18")
 condicoes = Array[ExtResource("Ix0")]([SubResource("I_57"), SubResource("I_58")])
 gatilho = 1
 area_scale = Vector2(6, 30)
-comandos = Array[ExtResource("Ix17")]([SubResource("I_2"), SubResource("I_3"), SubResource("I_4"), SubResource("I_5"), SubResource("I_6"), SubResource("I_7"), SubResource("I_8"), SubResource("I_9"), SubResource("I_10"), SubResource("I_11"), SubResource("I_12"), SubResource("I_13"), SubResource("I_14"), SubResource("I_15"), SubResource("I_16"), SubResource("I_17"), SubResource("I_18"), SubResource("I_19"), SubResource("I_20"), SubResource("I_21"), SubResource("I_22"), SubResource("I_23"), SubResource("I_24"), SubResource("I_25"), SubResource("I_26"), SubResource("I_27"), SubResource("I_28"), SubResource("I_29"), SubResource("I_30"), SubResource("I_31"), SubResource("I_32"), SubResource("I_33"), SubResource("I_34"), SubResource("I_35"), SubResource("I_36"), SubResource("I_37"), SubResource("I_38"), SubResource("I_39"), SubResource("I_40"), SubResource("I_41"), SubResource("I_42"), SubResource("I_43"), SubResource("I_44"), SubResource("I_45"), SubResource("I_46"), SubResource("I_47"), SubResource("Z_1"), SubResource("I_48"), SubResource("I_49"), SubResource("I_50"), SubResource("I_51"), SubResource("I_52"), SubResource("I_53"), SubResource("I_54"), SubResource("I_55")])
+comandos = Array[ExtResource("Ix17")]([SubResource("Resource_8edrb"), SubResource("I_2"), SubResource("I_3"), SubResource("I_4"), SubResource("I_5"), SubResource("I_8"), SubResource("I_11"), SubResource("I_12"), SubResource("I_13"), SubResource("I_14"), SubResource("I_15"), SubResource("I_16"), SubResource("I_17"), SubResource("I_18"), SubResource("I_19"), SubResource("I_22"), SubResource("I_23"), SubResource("I_24"), SubResource("I_25"), SubResource("I_26"), SubResource("I_27"), SubResource("I_28"), SubResource("I_29"), SubResource("I_30"), SubResource("I_31"), SubResource("I_32"), SubResource("I_35"), SubResource("I_38"), SubResource("I_41"), SubResource("I_44"), SubResource("I_45"), SubResource("I_46"), SubResource("I_47"), SubResource("Z_1"), SubResource("I_48"), SubResource("I_49"), SubResource("I_50"), SubResource("I_51"), SubResource("I_52"), SubResource("I_53"), SubResource("I_54"), SubResource("I_55")])
 
 [resource]
 script = ExtResource("Ix19")
