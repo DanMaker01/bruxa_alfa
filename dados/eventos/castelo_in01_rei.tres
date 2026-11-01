@@ -24,9 +24,6 @@ texto = "Quem deixou essa bruxa entrar?"
 [sub_resource type="Resource" id="R_2"]
 script = ExtResource("4_x")
 sprite_frames = ExtResource("2_x")
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
 comandos = Array[ExtResource("3_x")]([SubResource("R_1")])
 
 [sub_resource type="Resource" id="R_3"]
@@ -86,9 +83,6 @@ variavel = "missao01_resultado"
 script = ExtResource("4_x")
 condicoes = Array[ExtResource("11_x")]([SubResource("R_193"), SubResource("R_194")])
 sprite_frames = ExtResource("2_x")
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
 comandos = Array[ExtResource("3_x")]([SubResource("R_3"), SubResource("R_4"), SubResource("R_5"), SubResource("R_6"), SubResource("R_chamar_entrega"), SubResource("R_191"), SubResource("F_if_menor3"), SubResource("R_192"), SubResource("F_end_menor3")])
 
 [sub_resource type="Resource" id="R_196"]
@@ -106,9 +100,6 @@ valor = 1.0
 script = ExtResource("4_x")
 condicoes = Array[ExtResource("11_x")]([SubResource("R_197")])
 sprite_frames = ExtResource("2_x")
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
 comandos = Array[ExtResource("3_x")]([SubResource("R_196")])
 
 [sub_resource type="Resource" id="R_199"]
@@ -126,12 +117,67 @@ valor = 2.0
 script = ExtResource("4_x")
 condicoes = Array[ExtResource("11_x")]([SubResource("R_200")])
 sprite_frames = ExtResource("2_x")
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
 comandos = Array[ExtResource("3_x")]([SubResource("R_199")])
+
+[sub_resource type="Resource" id="P1_3"]
+script = ExtResource("1_x")
+personagem = ExtResource("x2")
+posicao = 100.0
+texto = "Minha filha está casada e feliz. Não sei se agradeço a Deus ou a você, bruxa."
+
+[sub_resource type="Resource" id="P1_4"]
+script = ExtResource("1_x")
+personagem = ExtResource("x2")
+posicao = 100.0
+texto = "...Agradeço aos dois. Mas não conte a ninguém."
+
+[sub_resource type="Resource" id="P1_1"]
+script = ExtResource("11_x")
+variavel = "missao01_resultado"
+valor = 1.0
+
+[sub_resource type="Resource" id="P1_2"]
+script = ExtResource("11_x")
+variavel = "missao01_casamento"
+operador = 4
+valor = 2.0
+
+[sub_resource type="Resource" id="P1_5"]
+script = ExtResource("4_x")
+condicoes = Array[ExtResource("11_x")]([SubResource("P1_1"), SubResource("P1_2")])
+sprite_frames = ExtResource("2_x")
+comandos = Array[ExtResource("3_x")]([SubResource("P1_3"), SubResource("P1_4")])
+
+[sub_resource type="Resource" id="P2_3"]
+script = ExtResource("1_x")
+personagem = ExtResource("x2")
+posicao = 100.0
+texto = "O casamento aconteceu. Sem a sua presença, como deveria ser."
+
+[sub_resource type="Resource" id="P2_4"]
+script = ExtResource("1_x")
+personagem = ExtResource("x2")
+posicao = 100.0
+texto = "Minha filha está calma. Calma demais, às vezes."
+
+[sub_resource type="Resource" id="P2_1"]
+script = ExtResource("11_x")
+variavel = "missao01_resultado"
+valor = 2.0
+
+[sub_resource type="Resource" id="P2_2"]
+script = ExtResource("11_x")
+variavel = "missao01_casamento"
+operador = 4
+valor = 2.0
+
+[sub_resource type="Resource" id="P2_5"]
+script = ExtResource("4_x")
+condicoes = Array[ExtResource("11_x")]([SubResource("P2_1"), SubResource("P2_2")])
+sprite_frames = ExtResource("2_x")
+comandos = Array[ExtResource("3_x")]([SubResource("P2_3"), SubResource("P2_4")])
 
 [resource]
 script = ExtResource("21_x")
 id = "castelo_in01_rei"
-paginas = Array[ExtResource("4_x")]([SubResource("R_2"), SubResource("R_195"), SubResource("R_198"), SubResource("R_201")])
+paginas = Array[ExtResource("4_x")]([SubResource("R_2"), SubResource("R_195"), SubResource("R_198"), SubResource("R_201"), SubResource("P1_5"), SubResource("P2_5")])

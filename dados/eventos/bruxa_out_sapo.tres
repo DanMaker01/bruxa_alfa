@@ -62,7 +62,6 @@ chance = 0.6
 [sub_resource type="Resource" id="Pag_1"]
 script = ExtResource("1_pag")
 sprite_frames = ExtResource("6_anim")
-area_scale = Vector2(6, 5)
 movimento = 1
 rota = Array[ExtResource("5_passo")]([SubResource("P_esp1"), SubResource("P_olhar"), SubResource("P_pulo1"), SubResource("P_esp2"), SubResource("P_olhar2"), SubResource("P_pulo2"), SubResource("P_esp3"), SubResource("P_coaxar"), SubResource("P_olhar3")])
 rota_velocidade = 120.0

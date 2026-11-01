@@ -100,9 +100,8 @@ esperar = false
 script = ExtResource("8_efeito")
 alvo = 1
 evento = "bruxa_in_passagem"
-tipo = 1
+tipo = 5
 cor = Color(0.627451, 0.9019608, 1, 1)
-altura = 60.0
 esperar = false
 
 [sub_resource type="Resource" id="PCor_var0"]
@@ -124,7 +123,6 @@ variavel = "porta_cor"
 script = ExtResource("2_pg")
 condicoes = Array[ExtResource("4_cond")]([SubResource("PCor_veu"), SubResource("PCor_c0")])
 sprite_frames = ExtResource("x0")
-area_scale = Vector2(8, 8)
 comandos = Array[ExtResource("3_cmd")]([SubResource("PCor_brilho0"), SubResource("W0_1"), SubResource("PCor_var0")])
 
 [sub_resource type="Resource" id="PCor_brilho1"]
@@ -140,9 +138,8 @@ esperar = false
 script = ExtResource("8_efeito")
 alvo = 1
 evento = "bruxa_in_passagem"
-tipo = 1
+tipo = 5
 cor = Color(1, 0.8156863, 0.8784314, 1)
-altura = 60.0
 esperar = false
 
 [sub_resource type="Resource" id="PCor_var1"]
@@ -159,7 +156,6 @@ valor = 1.0
 script = ExtResource("2_pg")
 condicoes = Array[ExtResource("4_cond")]([SubResource("PCor_veu"), SubResource("PCor_c1")])
 sprite_frames = ExtResource("x1")
-area_scale = Vector2(8, 8)
 comandos = Array[ExtResource("3_cmd")]([SubResource("PCor_brilho1"), SubResource("W1_1"), SubResource("PCor_var1")])
 
 [sub_resource type="Resource" id="PCor_brilho2"]
@@ -175,9 +171,8 @@ esperar = false
 script = ExtResource("8_efeito")
 alvo = 1
 evento = "bruxa_in_passagem"
-tipo = 1
+tipo = 5
 cor = Color(0.84313726, 0.6666667, 1, 1)
-altura = 60.0
 esperar = false
 
 [sub_resource type="Resource" id="PCor_var2"]
@@ -193,7 +188,6 @@ valor = 2.0
 script = ExtResource("2_pg")
 condicoes = Array[ExtResource("4_cond")]([SubResource("PCor_veu"), SubResource("PCor_c2")])
 sprite_frames = ExtResource("x2")
-area_scale = Vector2(8, 8)
 comandos = Array[ExtResource("3_cmd")]([SubResource("PCor_brilho2"), SubResource("W2_1"), SubResource("PCor_var2")])
 
 [resource]

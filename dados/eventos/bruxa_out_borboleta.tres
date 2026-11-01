@@ -51,7 +51,6 @@ olhar = 2
 [sub_resource type="Resource" id="Pag_1"]
 script = ExtResource("1_pag")
 sprite_frames = ExtResource("6_anim")
-area_scale = Vector2(5, 5)
 movimento = 1
 rota = Array[ExtResource("5_passo")]([SubResource("P_voo1"), SubResource("P_voo2"), SubResource("P_olhar"), SubResource("P_voo3"), SubResource("P_paira"), SubResource("P_volta")])
 rota_velocidade = 70.0

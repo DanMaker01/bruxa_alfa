@@ -77,6 +77,10 @@ const BOCA_OFFSET := Vector2(0, 0)
 
 var caldeirao: AnimatedSprite2D
 var fogo: AnimatedSprite2D
+## Tamanho das partículas do caldeirão (1 = como era). As bolhas não mudam.
+const ESCALA_PARTICULAS: float = 1.8
+## Partículas do abanar o fogo (labaredas e brasas): ainda maiores.
+const ESCALA_ABANAR: float = 2.6
 var bolhas: GPUParticles2D
 var brilhos: GPUParticles2D
 
@@ -130,10 +134,12 @@ func configurar(p_caldeirao: AnimatedSprite2D, p_fogo: AnimatedSprite2D, p_bolha
 	if bolhas and bolhas.process_material:
 		_mat_bolhas = bolhas.process_material.duplicate()
 		bolhas.process_material = _mat_bolhas
-		_bolha_escala_base = Vector2(_mat_bolhas.scale_min, _mat_bolhas.scale_max)
+		_bolha_escala_base = Vector2(_mat_bolhas.scale_min, _mat_bolhas.scale_max)   # bolhas: tamanho original
 	if brilhos and brilhos.process_material:
 		_mat_brilhos = brilhos.process_material.duplicate()
 		brilhos.process_material = _mat_brilhos
+		_mat_brilhos.scale_min *= ESCALA_PARTICULAS
+		_mat_brilhos.scale_max *= ESCALA_PARTICULAS
 	_criar_vapor()
 	resetar()
 
@@ -390,8 +396,8 @@ func _criar_vapor() -> void:
 	_vapor.initial_velocity_max = 60.0
 	_vapor.damping_min = 5.0
 	_vapor.damping_max = 15.0
-	_vapor.scale_amount_min = 8.0
-	_vapor.scale_amount_max = 16.0
+	_vapor.scale_amount_min = (8.0) * ESCALA_PARTICULAS
+	_vapor.scale_amount_max = (16.0) * ESCALA_PARTICULAS
 	var curva := Curve.new()
 	curva.add_point(Vector2(0, 0.4))
 	curva.add_point(Vector2(1, 1.8))
@@ -449,8 +455,8 @@ func _atualizar_fumaca_fraca(sistema: SistemaTermico) -> void:
 		p.initial_velocity_min = 20.0
 		p.initial_velocity_max = 45.0
 		p.gravity = Vector2(0, -15)
-		p.scale_amount_min = 5.0
-		p.scale_amount_max = 10.0
+		p.scale_amount_min = (5.0) * ESCALA_PARTICULAS
+		p.scale_amount_max = (10.0) * ESCALA_PARTICULAS
 		var rampa := Gradient.new()
 		rampa.set_color(0, Color(0.4, 0.4, 0.4, 0.6))
 		rampa.set_color(1, Color(0.25, 0.25, 0.25, 0.0))
@@ -497,8 +503,8 @@ func _labaredas() -> void:
 	p.gravity = Vector2(0, -60)
 	p.damping_min = 30.0
 	p.damping_max = 60.0
-	p.scale_amount_min = 3.0
-	p.scale_amount_max = 7.0
+	p.scale_amount_min = (3.0) * ESCALA_ABANAR
+	p.scale_amount_max = (7.0) * ESCALA_ABANAR
 	var curva := Curve.new()
 	curva.add_point(Vector2(0, 1.0))
 	curva.add_point(Vector2(1, 0.2))
@@ -531,8 +537,8 @@ func _brasas(forca: float) -> void:
 	p.damping_max = 25.0
 	p.tangential_accel_min = -45.0   # balanço de lado, como brasa no ar quente
 	p.tangential_accel_max = 45.0
-	p.scale_amount_min = 1.5
-	p.scale_amount_max = 3.2
+	p.scale_amount_min = (1.5) * ESCALA_ABANAR
+	p.scale_amount_max = (3.2) * ESCALA_ABANAR
 	var curva := Curve.new()
 	curva.add_point(Vector2(0, 1.0))
 	curva.add_point(Vector2(0.7, 0.8))
@@ -563,8 +569,8 @@ func _baforada() -> void:
 	p.initial_velocity_min = 30.0
 	p.initial_velocity_max = 60.0
 	p.gravity = Vector2(0, -20)
-	p.scale_amount_min = 4.0
-	p.scale_amount_max = 8.0
+	p.scale_amount_min = (4.0) * ESCALA_PARTICULAS
+	p.scale_amount_max = (8.0) * ESCALA_PARTICULAS
 	var rampa := Gradient.new()
 	rampa.set_color(0, Color(0.5, 0.5, 0.5, 0.55))
 	rampa.set_color(1, Color(0.3, 0.3, 0.3, 0.0))
@@ -593,8 +599,8 @@ func _fumaca_apagar() -> void:
 	p.gravity = Vector2(0, -30)
 	p.damping_min = 10.0
 	p.damping_max = 25.0
-	p.scale_amount_min = 6.0
-	p.scale_amount_max = 12.0
+	p.scale_amount_min = (6.0) * ESCALA_PARTICULAS
+	p.scale_amount_max = (12.0) * ESCALA_PARTICULAS
 	var curva := Curve.new()
 	curva.add_point(Vector2(0, 0.5))
 	curva.add_point(Vector2(1, 1.6))
@@ -661,8 +667,8 @@ func _faiscas(qtd: int, forca: float, sucesso: float) -> void:
 	p.gravity = Vector2(0, -220)
 	p.damping_min = 20.0
 	p.damping_max = 60.0
-	p.scale_amount_min = 2.0 * forca
-	p.scale_amount_max = 4.0 * forca
+	p.scale_amount_min = (2.0 * forca) * ESCALA_PARTICULAS
+	p.scale_amount_max = (4.0 * forca) * ESCALA_PARTICULAS
 	var rampa := Gradient.new()
 	rampa = _rampa_fogo(0.35)
 	if sucesso > 0.0:
@@ -687,8 +693,8 @@ func respingo(onde: Node) -> void:
 	gotas.initial_velocity_min = 90.0
 	gotas.initial_velocity_max = 190.0
 	gotas.gravity = Vector2(0, 520)
-	gotas.scale_amount_min = 3.0
-	gotas.scale_amount_max = 6.0
+	gotas.scale_amount_min = (3.0) * ESCALA_PARTICULAS
+	gotas.scale_amount_max = (6.0) * ESCALA_PARTICULAS
 	gotas.color = Color(0.75, 0.9, 1.0, 0.9)
 	gotas.z_index = 40
 	onde.add_child(gotas)

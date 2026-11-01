@@ -51,9 +51,6 @@ segundos_max = 1.2
 [sub_resource type="Resource" id="Pag_0"]
 script = ExtResource("1_pag")
 sprite_frames = ExtResource("7_anim")
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
 movimento = 1
 rota = Array[ExtResource("5_passo")]([SubResource("P_0"), SubResource("P_1"), SubResource("P_2"), SubResource("P_3"), SubResource("P_4")])
 rota_velocidade = 70.0
@@ -93,9 +90,6 @@ valor = 2.0
 script = ExtResource("1_pag")
 condicoes = Array[ExtResource("4_cond")]([SubResource("C_1_0"), SubResource("C_1_1")])
 sprite_frames = ExtResource("7_anim")
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
 movimento = 1
 rota = Array[ExtResource("5_passo")]([SubResource("P_0"), SubResource("P_1"), SubResource("P_2"), SubResource("P_3"), SubResource("P_4")])
 rota_velocidade = 70.0
@@ -113,6 +107,12 @@ script = ExtResource("3_msg")
 personagem = ExtResource("8_bruxa")
 texto = "...Obrigada."
 
+[sub_resource type="Resource" id="Y_1"]
+script = ExtResource("3_msg")
+personagem = ExtResource("9_npc")
+posicao = 100.0
+texto = "Sabia que o casamento foi cancelado? O padre foi correndo pro castelo."
+
 [sub_resource type="Resource" id="C_2_0"]
 script = ExtResource("4_cond")
 variavel = "missao01_resultado"
@@ -123,14 +123,11 @@ valor = 3.0
 script = ExtResource("1_pag")
 condicoes = Array[ExtResource("4_cond")]([SubResource("C_2_0")])
 sprite_frames = ExtResource("7_anim")
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
 movimento = 1
 rota = Array[ExtResource("5_passo")]([SubResource("P_0"), SubResource("P_1"), SubResource("P_2"), SubResource("P_3"), SubResource("P_4")])
 rota_velocidade = 70.0
 rota_raio = 90.0
-comandos = Array[ExtResource("2_cmd")]([SubResource("M_2_0"), SubResource("M_2_1")])
+comandos = Array[ExtResource("2_cmd")]([SubResource("M_2_0"), SubResource("M_2_1"), SubResource("Y_1")])
 
 [resource]
 script = ExtResource("6_ev")

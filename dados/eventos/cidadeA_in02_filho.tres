@@ -35,9 +35,6 @@ texto = "(Ele olha para o chão e não diz nada.)"
 [sub_resource type="Resource" id="L_3"]
 script = ExtResource("Lx4")
 sprite_frames = ExtResource("7_n8jrx")
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
 comandos = Array[ExtResource("Lx3")]([SubResource("L_1"), SubResource("L_2")])
 
 [sub_resource type="Resource" id="L_4"]
@@ -260,9 +257,6 @@ valor = 2.0
 script = ExtResource("Lx4")
 condicoes = Array[ExtResource("Lx8")]([SubResource("L_49")])
 sprite_frames = ExtResource("7_n8jrx")
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
 comandos = Array[ExtResource("Lx3")]([SubResource("L_4"), SubResource("L_5"), SubResource("L_6"), SubResource("L_8"), SubResource("L_9"), SubResource("L_10"), SubResource("L_11"), SubResource("L_12"), SubResource("L_13"), SubResource("L_14"), SubResource("L_15"), SubResource("L_16"), SubResource("L_18"), SubResource("L_19"), SubResource("L_20"), SubResource("L_21"), SubResource("L_22"), SubResource("L_23"), SubResource("L_24"), SubResource("L_25"), SubResource("L_26"), SubResource("L_28"), SubResource("L_29"), SubResource("L_30"), SubResource("L_31"), SubResource("L_32"), SubResource("L_33"), SubResource("L_34"), SubResource("L_35"), SubResource("L_36"), SubResource("L_38"), SubResource("L_39"), SubResource("L_40"), SubResource("L_41"), SubResource("L_42"), SubResource("L_43"), SubResource("L_44"), SubResource("L_45"), SubResource("L_46"), SubResource("L_47"), SubResource("L_48")])
 
 [resource]

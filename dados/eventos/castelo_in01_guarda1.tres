@@ -18,12 +18,55 @@ texto = "O Rei não gosta de esperar."
 [sub_resource type="Resource" id="R_2"]
 script = ExtResource("4_x")
 sprite_frames = ExtResource("2_x")
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
 comandos = Array[ExtResource("3_x")]([SubResource("R_1")])
+
+[sub_resource type="Resource" id="P1_3"]
+script = ExtResource("1_x")
+personagem = ExtResource("x0")
+posicao = 100.0
+texto = "A senhora de novo? Dizem que foi convidada de honra no casamento."
+
+[sub_resource type="Resource" id="P1_1"]
+script = ExtResource("4_wg811")
+variavel = "missao01_resultado"
+valor = 1.0
+
+[sub_resource type="Resource" id="P1_2"]
+script = ExtResource("4_wg811")
+variavel = "missao01_casamento"
+operador = 4
+valor = 2.0
+
+[sub_resource type="Resource" id="P1_4"]
+script = ExtResource("4_x")
+condicoes = Array[ExtResource("4_wg811")]([SubResource("P1_1"), SubResource("P1_2")])
+sprite_frames = ExtResource("2_x")
+comandos = Array[ExtResource("3_x")]([SubResource("P1_3")])
+
+[sub_resource type="Resource" id="P2_3"]
+script = ExtResource("1_x")
+personagem = ExtResource("x0")
+posicao = 100.0
+texto = "O Rei não chamou a senhora. Seja breve."
+
+[sub_resource type="Resource" id="P2_1"]
+script = ExtResource("4_wg811")
+variavel = "missao01_resultado"
+valor = 2.0
+
+[sub_resource type="Resource" id="P2_2"]
+script = ExtResource("4_wg811")
+variavel = "missao01_casamento"
+operador = 4
+valor = 2.0
+
+[sub_resource type="Resource" id="P2_4"]
+script = ExtResource("4_x")
+condicoes = Array[ExtResource("4_wg811")]([SubResource("P2_1"), SubResource("P2_2")])
+sprite_frames = ExtResource("2_x")
+comandos = Array[ExtResource("3_x")]([SubResource("P2_3")])
 
 [resource]
 script = ExtResource("5_x")
 id = "castelo_in01_guarda1"
-paginas = Array[ExtResource("4_x")]([SubResource("R_2")])
+paginas = Array[ExtResource("4_x")]([SubResource("R_2"), SubResource("P1_4"), SubResource("P2_4")])

@@ -50,8 +50,6 @@ nome = "fim"
 script = ExtResource("1_pag")
 sprite_frames = ExtResource("7_anim")
 direcao = 2
-area_pos = Vector2(-2.5, -6)
-area_scale = Vector2(6.25, 6.25)
 comandos = Array[ExtResource("2_cmd")]([SubResource("S_1"), SubResource("S_2"), SubResource("Resource_item"), SubResource("Resource_self"), SubResource("S_3"), SubResource("S_4"), SubResource("S_5")])
 
 [sub_resource type="Resource" id="Resource_cond"]
@@ -63,7 +61,6 @@ valor = 1.0
 script = ExtResource("1_pag")
 condicoes = Array[ExtResource("8_cond")]([SubResource("Resource_cond")])
 direcao = 2
-area_scale = Vector2(0.1, 0.1)
 
 [resource]
 script = ExtResource("9_ev")

@@ -55,7 +55,6 @@ acao = 1
 [sub_resource type="Resource" id="P_veu"]
 script = ExtResource("1_djp1k")
 sprite_frames = ExtResource("11_djp1k")
-area_scale = Vector2(14, 16)
 comandos = Array[ExtResource("2_ph5fu")]([SubResource("C_trava"), SubResource("C_m1"), SubResource("C_m2"), SubResource("C_efeito"), SubResource("C_esp0"), SubResource("C_var"), SubResource("C_esp"), SubResource("C_m3"), SubResource("C_destrava")])
 
 [sub_resource type="Resource" id="C_m_pego"]
@@ -72,7 +71,6 @@ valor = 1.0
 [sub_resource type="Resource" id="P_pego"]
 script = ExtResource("1_djp1k")
 condicoes = Array[ExtResource("3_g6eiw")]([SubResource("C_cond_pego")])
-area_scale = Vector2(14, 16)
 comandos = Array[ExtResource("2_ph5fu")]([SubResource("C_m_pego")])
 
 [resource]

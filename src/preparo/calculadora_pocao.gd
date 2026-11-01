@@ -276,6 +276,7 @@ static func estado_ao_vivo(acc: Dictionary, item: ItemData, t_agora: float, T_ag
 	d["progresso"] = progresso
 	d["no_ponto"] = no_ponto
 	d["niveis"] = niveis
+	d["T_agora"] = T_agora   # temperatura do caldeirão agora (o ícone usa para o aviso de quente/frio)
 	# Fase para o gráfico: cru → cozido; "estragou" = já perdeu algo; "punindo" = perdendo agora.
 	var punindo_agora := false
 	for k in niveis:

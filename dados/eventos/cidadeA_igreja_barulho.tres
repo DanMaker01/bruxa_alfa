@@ -22,7 +22,6 @@
 
 [sub_resource type="Resource" id="I_56"]
 script = ExtResource("Ix18")
-area_scale = Vector2(0.1, 0.1)
 
 [sub_resource type="Resource" id="Resource_8edrb"]
 script = ExtResource("Ix8")
@@ -238,7 +237,6 @@ valor = 1.0
 script = ExtResource("Ix18")
 condicoes = Array[ExtResource("Ix0")]([SubResource("I_57"), SubResource("I_58")])
 gatilho = 1
-area_scale = Vector2(6, 30)
 comandos = Array[ExtResource("Ix17")]([SubResource("Resource_8edrb"), SubResource("I_2"), SubResource("I_3"), SubResource("I_4"), SubResource("I_5"), SubResource("I_8"), SubResource("I_11"), SubResource("I_12"), SubResource("I_13"), SubResource("I_14"), SubResource("I_15"), SubResource("I_16"), SubResource("I_17"), SubResource("I_18"), SubResource("I_19"), SubResource("I_22"), SubResource("I_23"), SubResource("I_24"), SubResource("I_25"), SubResource("I_26"), SubResource("I_27"), SubResource("I_28"), SubResource("I_29"), SubResource("I_30"), SubResource("I_31"), SubResource("I_32"), SubResource("I_35"), SubResource("I_38"), SubResource("I_41"), SubResource("I_44"), SubResource("I_45"), SubResource("I_46"), SubResource("I_47"), SubResource("Z_1"), SubResource("I_48"), SubResource("I_49"), SubResource("I_50"), SubResource("I_51"), SubResource("I_52"), SubResource("I_53"), SubResource("I_54"), SubResource("I_55")])
 
 [resource]

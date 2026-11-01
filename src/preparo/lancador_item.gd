@@ -6,7 +6,7 @@ extends Node
 
 signal caiu(item_id: String)
 
-const DURACAO: float = 0.6
+const DURACAO: float = 0.35   # voo do item até o caldeirão (era 0.6)
 ## Altura extra do arco acima do ponto mais alto entre origem e destino (px).
 const ALTURA: float = 140.0
 const TAMANHO := Vector2(56, 56)

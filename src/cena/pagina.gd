@@ -73,14 +73,10 @@ func configure(data: PaginaData):
 		collision_shape.position = Vector2(colisao_pos[0], colisao_pos[1])
 		# collision_shape.scale = Vector2(colisao_scale[0], colisao_scale[1])
 
-		# 🔥 CRIA O SHAPE SE NÃO EXISTIR
-		if collision_shape.shape == null:
-			collision_shape.shape = RectangleShape2D.new()
-			collision_shape.shape.size = Vector2(10, 10)
-
-		# 🔥 REDIMENSIONA O SHAPE BASEADO NA ESCALA
-		var base_size = collision_shape.shape.size
-		var new_size = Vector2(base_size.x * colisao_scale[0], base_size.y * colisao_scale[1])
+		# Tamanho = tamanho do sprite x escala (64x64 sem sprite).
+		# Shape novo sempre: não acumula se configure() rodar de novo.
+		var new_size = tamanho_base() * colisao_scale
+		collision_shape.shape = RectangleShape2D.new()
 		collision_shape.shape.size = new_size
 
 		print("[Pagina] ✅ Colisão StaticBody2D: pos=", colisao_pos, " scale=", colisao_scale, " shape=", new_size)
@@ -93,31 +89,16 @@ func configure(data: PaginaData):
 		interaction_zone.position = pos
 		debug_data["area_pos_aplicado"] = pos
 		
-		# 📏 ESCALA DA ÁREA (tamanho = 10 px x escala)
-		if true:
-			var scale_factor: Vector2 = data.area_scale
-			# interaction_zone.scale = scale_factor
-			print("[Pagina] ✅ Área ESCALA aplicada: ", scale_factor)
-			debug_data["area_scale_aplicado"] = scale_factor
-			
-			# 🔥 REDIMENSIONA O SHAPE BASEADO NA ESCALA
-			var shape_node = interaction_zone.get_node_or_null("CollisionShape2D")
-			if shape_node:
-				# 🔥 SE O SHAPE FOR NULL, CRIA UM
-				if shape_node.shape == null:
-					shape_node.shape = RectangleShape2D.new()
-					shape_node.shape.size = Vector2(10, 10)  # TAMANHO BASE
-					print("[Pagina] ✅ CollisionShape2D criado")
-				
-				# REDIMENSIONA O SHAPE
-				var base_size = shape_node.shape.size
-				var new_size = Vector2(base_size.x * scale_factor.x, base_size.y * scale_factor.y)
-				shape_node.shape.size = new_size
-				print("[Pagina] ✅ Shape redimensionado: ", base_size, " -> ", new_size)
-				debug_data["shape_size_final"] = new_size
-			else:
-				print("[Pagina] ⚠️ CollisionShape2D não encontrado!")
-		
+		# 📏 ÁREA (tamanho = tamanho do sprite x escala; 64x64 sem sprite)
+		var shape_node = interaction_zone.get_node_or_null("CollisionShape2D")
+		if shape_node:
+			var area_size = tamanho_base() * data.area_scale
+			shape_node.shape = RectangleShape2D.new()
+			shape_node.shape.size = area_size
+			debug_data["shape_size_final"] = area_size
+		else:
+			print("[Pagina] ⚠️ CollisionShape2D não encontrado!")
+
 		# ⚡ TRIGGER
 		trigger_type = data.get_trigger()
 		interaction_zone.trigger_type = trigger_type
@@ -147,6 +128,20 @@ func configure(data: PaginaData):
 	print("\n🔍 [Pagina] configure() FINALIZADO para: ", name)
 	print("[Pagina] Dados debug: ", debug_data)
 	print("=".repeat(50))
+
+const TAMANHO_SEM_SPRITE := Vector2(64, 64)
+
+## Tamanho base da colisão e da área: o 1º quadro da animação atual
+## (x escala do sprite). Sem sprite: 64x64.
+func tamanho_base() -> Vector2:
+	if animated_sprite and animated_sprite.sprite_frames:
+		var anim: StringName = animated_sprite.animation
+		var sf := animated_sprite.sprite_frames
+		if sf.has_animation(anim) and sf.get_frame_count(anim) > 0:
+			var tex := sf.get_frame_texture(anim, 0)
+			if tex:
+				return tex.get_size() * animated_sprite.scale.abs()
+	return TAMANHO_SEM_SPRITE
 
 # ===== MÉTODOS PÚBLICOS =====
 

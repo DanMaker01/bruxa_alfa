@@ -29,9 +29,6 @@ metadata/_custom_type_script = "uid://8liac65hmnnq"
 [sub_resource type="Resource" id="Pag_0"]
 script = ExtResource("1_pag")
 sprite_frames = ExtResource("7_anim")
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
 comandos = Array[ExtResource("2_cmd")]([SubResource("M_0_0"), SubResource("M_0_1"), SubResource("Resource_i5dmh")])
 
 [sub_resource type="Resource" id="M_1_0"]
@@ -55,9 +52,6 @@ valor = 1.0
 script = ExtResource("1_pag")
 condicoes = Array[ExtResource("4_cond")]([SubResource("C_1_0")])
 sprite_frames = ExtResource("7_anim")
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
 comandos = Array[ExtResource("2_cmd")]([SubResource("M_1_0"), SubResource("M_1_1")])
 
 [sub_resource type="Resource" id="M_2_0"]
@@ -82,9 +76,6 @@ valor = 2.0
 script = ExtResource("1_pag")
 condicoes = Array[ExtResource("4_cond")]([SubResource("C_2_0")])
 sprite_frames = ExtResource("7_anim")
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
 comandos = Array[ExtResource("2_cmd")]([SubResource("M_2_0"), SubResource("M_2_1")])
 
 [sub_resource type="Resource" id="M_3_0"]
@@ -99,6 +90,12 @@ personagem = ExtResource("9_npc")
 posicao = 100.0
 texto = "Melhor a senhora seguir o seu caminho."
 
+[sub_resource type="Resource" id="Y_1"]
+script = ExtResource("3_msg")
+personagem = ExtResource("9_npc")
+posicao = 100.0
+texto = "E o casamento foi cancelado. A igreja está vazia, o padre foi falar com o Rei."
+
 [sub_resource type="Resource" id="C_3_0"]
 script = ExtResource("4_cond")
 variavel = "missao01_resultado"
@@ -109,10 +106,7 @@ valor = 3.0
 script = ExtResource("1_pag")
 condicoes = Array[ExtResource("4_cond")]([SubResource("C_3_0")])
 sprite_frames = ExtResource("7_anim")
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
-comandos = Array[ExtResource("2_cmd")]([SubResource("M_3_0"), SubResource("M_3_1")])
+comandos = Array[ExtResource("2_cmd")]([SubResource("M_3_0"), SubResource("M_3_1"), SubResource("Y_1")])
 
 [resource]
 script = ExtResource("6_ev")

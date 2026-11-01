@@ -50,8 +50,6 @@ tempo = 0.5
 script = ExtResource("1_yv6gu")
 sprite_frames = ExtResource("6_c73iu")
 animacao = "parado"
-area_pos = Vector2(0, -10)
-area_scale = Vector2(9, 36)
 comandos = Array[ExtResource("2_emph2")]([SubResource("F_porta_abre1"), SubResource("F_porta_som1"), SubResource("F_porta_esp1"), SubResource("Resource_gtgoe"), SubResource("Resource_nu856"), SubResource("Resource_w3dfx"), SubResource("Resource_ir5gl")])
 
 [sub_resource type="Resource" id="T_1"]
@@ -73,8 +71,6 @@ script = ExtResource("1_yv6gu")
 condicoes = Array[ExtResource("6_emph2")]([SubResource("T_3")])
 sprite_frames = ExtResource("6_c73iu")
 animacao = "parado"
-area_pos = Vector2(0, -10)
-area_scale = Vector2(9, 36)
 comandos = Array[ExtResource("2_emph2")]([SubResource("T_1"), SubResource("T_2")])
 
 [resource]

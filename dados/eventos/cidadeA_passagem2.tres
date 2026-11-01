@@ -40,8 +40,6 @@ script = ExtResource("1_ygoc3")
 gatilho = 1
 sprite_frames = ExtResource("6_yargi")
 animacao = "parado"
-area_pos = Vector2(0, -10)
-area_scale = Vector2(9, 36)
 comandos = Array[ExtResource("2_v4au0")]([SubResource("F_som_passos1"), SubResource("Resource_aesf1"), SubResource("Resource_l2i1s"), SubResource("Resource_f60oj"), SubResource("Resource_gr58p")])
 
 [sub_resource type="Resource" id="K_3"]
@@ -65,8 +63,6 @@ condicoes = Array[ExtResource("6_v4au0")]([SubResource("K_1"), SubResource("K_2"
 gatilho = 1
 sprite_frames = ExtResource("6_yargi")
 animacao = "parado"
-area_pos = Vector2(0, -10)
-area_scale = Vector2(9, 36)
 comandos = Array[ExtResource("2_v4au0")]([SubResource("K_3"), SubResource("F_som_passos1"), SubResource("Resource_aesf1"), SubResource("Resource_l2i1s"), SubResource("Resource_f60oj"), SubResource("Resource_gr58p")])
 
 [resource]

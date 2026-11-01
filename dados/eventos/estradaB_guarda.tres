@@ -170,9 +170,6 @@ nome = "fim"
 script = ExtResource("13_x")
 passavel = false
 sprite_frames = ExtResource("11_x")
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
 comandos = Array[ExtResource("12_x")]([SubResource("R_2"), SubResource("R_3"), SubResource("R_4"), SubResource("R_5"), SubResource("R_6"), SubResource("R_7"), SubResource("R_8"), SubResource("R_9"), SubResource("R_10"), SubResource("R_11"), SubResource("R_12"), SubResource("R_13"), SubResource("R_14"), SubResource("R_15"), SubResource("R_17"), SubResource("R_18"), SubResource("R_19"), SubResource("R_20"), SubResource("R_21"), SubResource("R_22"), SubResource("R_23"), SubResource("R_24"), SubResource("R_25"), SubResource("R_26"), SubResource("R_27"), SubResource("R_28"), SubResource("R_29"), SubResource("R_30")])
 
 [sub_resource type="Resource" id="G_cond"]
@@ -221,9 +218,6 @@ valor = 1.0
 script = ExtResource("13_x")
 condicoes = Array[ExtResource("1_x")]([SubResource("R_33")])
 sprite_frames = ExtResource("11_x")
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
 comandos = Array[ExtResource("12_x")]([SubResource("G_if"), SubResource("G_m1"), SubResource("G_m2"), SubResource("G_var"), SubResource("G_else"), SubResource("R_32"), SubResource("G_end")])
 
 [sub_resource type="Resource" id="R_35"]
@@ -242,9 +236,6 @@ valor = 1.0
 script = ExtResource("13_x")
 condicoes = Array[ExtResource("1_x")]([SubResource("R_36")])
 sprite_frames = ExtResource("11_x")
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
 comandos = Array[ExtResource("12_x")]([SubResource("R_35")])
 
 [sub_resource type="Resource" id="F_trava"]
@@ -293,9 +284,6 @@ condicoes = Array[ExtResource("1_x")]([SubResource("F_cond")])
 gatilho = 1
 passavel = false
 sprite_frames = ExtResource("11_x")
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
 comandos = Array[ExtResource("12_x")]([SubResource("F_trava"), SubResource("F_m1"), SubResource("F_m2"), SubResource("F_m3"), SubResource("F_corre"), SubResource("F_passa"), SubResource("F_solta")])
 
 [resource]

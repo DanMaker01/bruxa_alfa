@@ -10,8 +10,6 @@
 [sub_resource type="Resource" id="Resource_rgxbv"]
 script = ExtResource("1_fopm2")
 sprite_frames = ExtResource("3_7rdd7")
-area_pos = Vector2(0, -10)
-area_scale = Vector2(9, 36)
 
 [resource]
 script = ExtResource("4_bkpq8")

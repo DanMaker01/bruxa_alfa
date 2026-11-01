@@ -58,8 +58,6 @@ tempo = 0.5
 script = ExtResource("1_5ek33")
 sprite_frames = ExtResource("6_3io24")
 animacao = "parado"
-area_pos = Vector2(0, -10)
-area_scale = Vector2(9, 36)
 comandos = Array[ExtResource("2_t7kwy")]([SubResource("F_porta_abre1"), SubResource("F_porta_som1"), SubResource("F_porta_esp1"), SubResource("Resource_1hk6o"), SubResource("Resource_dcu0w"), SubResource("Resource_2kfn5"), SubResource("Resource_mpele")])
 
 [sub_resource type="Resource" id="T_6"]
@@ -211,8 +209,6 @@ script = ExtResource("1_5ek33")
 condicoes = Array[ExtResource("6_t7kwy")]([SubResource("T_2"), SubResource("T_3"), SubResource("T_4")])
 sprite_frames = ExtResource("6_3io24")
 animacao = "parado"
-area_pos = Vector2(0, -10)
-area_scale = Vector2(9, 36)
 comandos = Array[ExtResource("2_t7kwy")]([SubResource("T_6"), SubResource("T_7"), SubResource("T_14"), SubResource("T_15"), SubResource("T_16"), SubResource("T_8"), SubResource("T_9"), SubResource("T_10"), SubResource("T_11"), SubResource("T_12"), SubResource("X_1"), SubResource("X_2"), SubResource("X_3"), SubResource("X_4"), SubResource("X_5"), SubResource("T_17"), SubResource("T_18"), SubResource("T_19"), SubResource("T_20"), SubResource("T_21"), SubResource("T_22"), SubResource("T_23"), SubResource("X_6"), SubResource("T_24"), SubResource("T_25"), SubResource("T_26"), SubResource("T_27"), SubResource("T_28"), SubResource("T_29"), SubResource("T_30")])
 
 [resource]

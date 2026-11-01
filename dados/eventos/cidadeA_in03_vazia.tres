@@ -16,7 +16,6 @@
 
 [sub_resource type="Resource" id="V_1"]
 script = ExtResource("Vx1")
-area_scale = Vector2(0.1, 0.1)
 
 [sub_resource type="Resource" id="V_2"]
 script = ExtResource("Vx2")
@@ -58,7 +57,6 @@ valor = 3.0
 script = ExtResource("Vx1")
 condicoes = Array[ExtResource("Vx10")]([SubResource("V_9")])
 gatilho = 2
-area_scale = Vector2(0.1, 0.1)
 comandos = Array[ExtResource("Vx0")]([SubResource("V_2"), SubResource("V_3"), SubResource("V_4"), SubResource("V_5"), SubResource("V_6"), SubResource("V_7"), SubResource("V_8")])
 
 [sub_resource type="Resource" id="V_11"]
@@ -69,7 +67,6 @@ valor = 1.0
 [sub_resource type="Resource" id="V_12"]
 script = ExtResource("Vx1")
 condicoes = Array[ExtResource("Vx10")]([SubResource("V_11")])
-area_scale = Vector2(0.1, 0.1)
 
 [resource]
 script = ExtResource("Vx11")

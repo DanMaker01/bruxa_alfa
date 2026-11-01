@@ -48,8 +48,6 @@ tempo = 0.5
 script = ExtResource("1_bslht")
 sprite_frames = ExtResource("6_6v2cq")
 animacao = "parado"
-area_pos = Vector2(0, -10)
-area_scale = Vector2(10, 24)
 comandos = Array[ExtResource("2_lu52n")]([SubResource("F_porta_abre1"), SubResource("F_porta_som1"), SubResource("F_porta_esp1"), SubResource("Resource_6b0rx"), SubResource("Resource_5aign"), SubResource("Resource_sc8wo"), SubResource("Resource_jtlne")])
 
 [resource]

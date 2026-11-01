@@ -49,8 +49,6 @@ tempo = 0.5
 script = ExtResource("1_7gb2b")
 sprite_frames = ExtResource("6_51t7j")
 animacao = "parado"
-area_pos = Vector2(0, -10)
-area_scale = Vector2(9, 22)
 comandos = Array[ExtResource("2_lnv5y")]([SubResource("F_porta_abre1"), SubResource("F_porta_som1"), SubResource("F_porta_esp1"), SubResource("Resource_q1265"), SubResource("Resource_4vqc2"), SubResource("Resource_gous4"), SubResource("Resource_sur2u")])
 
 [sub_resource type="Resource" id="K_3"]
@@ -73,8 +71,6 @@ script = ExtResource("1_7gb2b")
 condicoes = Array[ExtResource("6_lnv5y")]([SubResource("K_1"), SubResource("K_2")])
 sprite_frames = ExtResource("6_51t7j")
 animacao = "parado"
-area_pos = Vector2(0, -10)
-area_scale = Vector2(9, 22)
 comandos = Array[ExtResource("2_lnv5y")]([SubResource("K_3"), SubResource("F_porta_abre1"), SubResource("F_porta_som1"), SubResource("F_porta_esp1"), SubResource("Resource_q1265"), SubResource("Resource_4vqc2"), SubResource("Resource_gous4"), SubResource("Resource_sur2u")])
 
 [resource]

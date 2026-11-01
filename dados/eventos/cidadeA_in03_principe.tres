@@ -11,7 +11,6 @@
 
 [sub_resource type="Resource" id="G_1"]
 script = ExtResource("Gx1")
-area_scale = Vector2(0.1, 0.1)
 
 [sub_resource type="Resource" id="G_5"]
 script = ExtResource("Gx4")
@@ -33,8 +32,7 @@ valor = 1.0
 [sub_resource type="Resource" id="G_3"]
 script = ExtResource("Gx2")
 variavel = "missao01_casamento"
-operador = 4
-valor = 1.0
+valor = 2.0
 
 [sub_resource type="Resource" id="G_4"]
 script = ExtResource("Gx2")
@@ -47,12 +45,25 @@ script = ExtResource("Gx1")
 condicoes = Array[ExtResource("Gx2")]([SubResource("G_2"), SubResource("G_3"), SubResource("G_4")])
 sprite_frames = ExtResource("Gx5")
 direcao = 2
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
 comandos = Array[ExtResource("Gx0")]([SubResource("G_5"), SubResource("G_6")])
+
+[sub_resource type="Resource" id="L_1"]
+script = ExtResource("Gx2")
+variavel = "missao01_resultado"
+valor = 1.0
+
+[sub_resource type="Resource" id="L_2"]
+script = ExtResource("Gx2")
+variavel = "missao01_casamento"
+valor = 1.0
+
+[sub_resource type="Resource" id="L_3"]
+script = ExtResource("Gx1")
+condicoes = Array[ExtResource("Gx2")]([SubResource("L_1"), SubResource("L_2")])
+sprite_frames = ExtResource("Gx5")
+direcao = 2
 
 [resource]
 script = ExtResource("Gx6")
 id = "cidadeA_in03_principe"
-paginas = Array[ExtResource("Gx1")]([SubResource("G_1"), SubResource("G_7")])
+paginas = Array[ExtResource("Gx1")]([SubResource("G_1"), SubResource("G_7"), SubResource("L_3")])

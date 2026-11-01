@@ -25,10 +25,10 @@ const DIRECOES := ["centro", "esq", "dir"]
 
 @export_group("Colisão e área")
 @export var colisao_pos: Vector2 = Vector2.ZERO
-## Tamanho da colisão = 10 px x escala.
+## Tamanho da colisão = tamanho do sprite x escala (64x64 sem sprite).
 @export var colisao_scale: Vector2 = Vector2.ONE
 @export var area_pos: Vector2 = Vector2.ZERO
-## Tamanho da área de interação = 10 px x escala.
+## Tamanho da área de interação = tamanho do sprite x escala (64x64 sem sprite).
 @export var area_scale: Vector2 = Vector2.ONE
 
 @export_group("Movimento autônomo")

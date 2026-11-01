@@ -3,14 +3,15 @@
 #   BRILHOS = só os brilhos subindo no alvo
 #   CLARAO  = só a tela piscando na cor escolhida
 #   FUMACA  = nuvem cinza que se espalha (ex.: alguém sumindo)
+#   PISCAR  = o sprite do alvo pisca na cor escolhida (ex.: porta ao trocar o véu)
 #   SOM     = três risquinhos saindo do alvo num cone de 30° (ex.: batida na porta); se o alvo estiver fora
 #             da tela, aparecem na beira da tela do lado dele
 class_name CmdMostrarEfeito
 extends Comando
 
 enum Alvo { BRUXA, EVENTO, TELA }
-enum Tipo { MAGICO, BRILHOS, CLARAO, FUMACA, SOM }
-const TIPOS := ["magico", "brilhos", "clarao", "fumaca", "som"]
+enum Tipo { MAGICO, BRILHOS, CLARAO, FUMACA, SOM, PISCAR }
+const TIPOS := ["magico", "brilhos", "clarao", "fumaca", "som", "piscar"]
 const COR_PADRAO := Color(0.85, 0.7, 1.0)
 
 @export var alvo: Alvo = Alvo.BRUXA:
@@ -71,6 +72,8 @@ static func mostrar(interp, no, qual: int = Tipo.MAGICO, c: Color = COR_PADRAO, 
 		Tipo.SOM:
 			_som(tree, no, c, alt)
 			await tree.create_timer(Ondas.DURACAO).timeout
+		Tipo.PISCAR:
+			await _piscar(no, c)
 
 static func _brilhos(tree: SceneTree, no, c: Color, alt: float) -> void:
 	if not (no is Node2D):
@@ -131,6 +134,18 @@ static func _fumaca(tree: SceneTree, no, alt: float) -> void:
 	_por_no_mapa(p, no, Vector2(0, -alt * 0.6))
 	p.emitting = true
 	tree.create_timer(p.lifetime + 0.3).timeout.connect(p.queue_free)
+
+## O alvo inteiro (sprite) fica com a cor por um instante e volta ao normal, duas vezes.
+static func _piscar(no, c: Color) -> void:
+	if not (no is CanvasItem):
+		return
+	var original: Color = no.modulate
+	var forte := Color(c.r * 1.8, c.g * 1.8, c.b * 1.8, original.a)
+	var tw: Tween = no.create_tween()
+	for i in 2:
+		tw.tween_property(no, "modulate", forte, 0.1)
+		tw.tween_property(no, "modulate", original, 0.3)
+	await tw.finished
 
 static func _clarao(tree: SceneTree, c: Color) -> void:
 	var camada := CanvasLayer.new()

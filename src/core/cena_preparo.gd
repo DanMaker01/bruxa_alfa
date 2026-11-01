@@ -6,8 +6,9 @@
 #   VisualCaldeirao  - cor, fogo, partículas, tremor, respingo
 #   LancadorItem     - item voando do inventário até o caldeirão
 #   IconesCaldeirao  - ingredientes flutuando dentro do caldeirão (estado no ícone)
-#   PainelPanela     - coluna "Na panela" (barras, frase, tags)  ┐ só aparecem com
-#   Gráfico / Indicadores (texto)                                ┘ o debug do caldeirão
+#   DebugCaldeirao   - camada de debug: modos de teste + indicadores (esq.),
+#                      PainelPanela "Na panela" (dir.) e gráfico (embaixo).
+#                      Liga pelo menu de debug ou pelo botão "debug" (canto sup. dir.)
 #   FeedbackPreparo  - textos flutuantes, cores de estado
 #   ReacaoBruxa      - retratinho da Bruxa reagindo, com balão de fala
 #   SomCaldeirao     - borbulhar / chiado / estalos gerados na hora
@@ -67,6 +68,10 @@ var _avisou_apagando: bool = false
 var _fogo_ja_forte: bool = false
 var janela_resultado: JanelaResultado
 var som: SomCaldeirao
+var debug_ui: DebugCaldeirao
+var botao_debug: Button
+## Sem GameManager (cena aberta sozinha): o botão liga/desliga só aqui.
+var _debug_local: bool = false
 
 # =============================================================================
 # ESTADO
@@ -205,20 +210,64 @@ func _criar_componentes() -> void:
 	janela_resultado.name = "JanelaResultado"
 	add_child(janela_resultado)
 	janela_resultado.fechou.connect(_on_resultado_fechado)
+
+	debug_ui = DebugCaldeirao.new()
+	add_child(debug_ui)
+	move_child(debug_ui, janela_resultado.get_index())   # debaixo da janela do resultado
+	debug_ui.configurar(indicadores_label, grafico, painel)
+	_criar_botao_debug()
 	_aplicar_debug()
 
-## Gráfico, painel "Na panela", texto dos indicadores e a área da bola só aparecem
-## com "Caldeirão (debug)" ligado no menu de debug (aba Mapa).
+## Botão fixo no canto superior direito: liga/desliga o debug do caldeirão
+## (o mesmo do menu de debug, aba Mapa).
+func _criar_botao_debug() -> void:
+	botao_debug = Button.new()
+	botao_debug.name = "BotaoDebug"
+	botao_debug.text = "debug"
+	botao_debug.toggle_mode = true
+	botao_debug.focus_mode = Control.FOCUS_NONE
+	botao_debug.position = Vector2(566, 6)
+	botao_debug.size = Vector2(70, 32)
+	botao_debug.z_index = 30
+	botao_debug.add_theme_font_size_override("font_size", 13)
+	botao_debug.add_theme_color_override("font_color", Color(0.75, 0.75, 0.8))
+	botao_debug.add_theme_color_override("font_hover_color", Color(0.9, 0.9, 0.95))
+	botao_debug.add_theme_color_override("font_pressed_color", DebugCaldeirao.COR_TITULO)
+	botao_debug.add_theme_color_override("font_hover_pressed_color", DebugCaldeirao.COR_TITULO)
+	for estado in ["normal", "hover", "pressed", "hover_pressed"]:
+		var st := StyleBoxFlat.new()
+		st.bg_color = Color(0.04, 0.04, 0.08, 0.55 if estado in ["normal", "hover"] else 0.85)
+		st.set_corner_radius_all(6)
+		st.set_border_width_all(1)
+		st.border_color = DebugCaldeirao.COR_TITULO if "pressed" in estado else Color(1, 1, 1, 0.15)
+		botao_debug.add_theme_stylebox_override(estado, st)
+	botao_debug.toggled.connect(_set_debug_caldeirao)
+	add_child(botao_debug)
+
+func _set_debug_caldeirao(v: bool) -> void:
+	var ft = game_manager.get("debug_tools") if game_manager else null
+	if ft != null:
+		ft.caldeirao_debug = v
+	else:
+		_debug_local = v
+	_aplicar_debug()
+
+## A camada de debug (gráfico, "Na panela", indicadores, modos) e a área da bola só
+## aparecem com o debug do caldeirão ligado (menu de debug, aba Mapa, ou botão "debug").
 func _aplicar_debug() -> void:
 	var dbg: bool = _debug_caldeirao()
-	if grafico: grafico.visible = dbg
-	if indicadores_label: indicadores_label.visible = dbg
-	if painel: painel.visible = dbg
+	if debug_ui:
+		debug_ui.visible = dbg
+		debug_ui.atualizar_modos()
+	if botao_debug and botao_debug.button_pressed != dbg:
+		botao_debug.set_pressed_no_signal(dbg)
 	if icones and icones.mostrar_area != dbg: icones.mostrar_area = dbg
 
 func _debug_caldeirao() -> bool:
 	var ft = game_manager.get("debug_tools") if game_manager else null
-	return ft != null and bool(ft.get("caldeirao_debug"))
+	if ft != null:
+		return bool(ft.get("caldeirao_debug"))
+	return _debug_local
 
 func _configurar_grafico() -> void:
 	if grafico and grafico.has_method("configurar"):
@@ -285,6 +334,7 @@ func _criar_botao_item(item_name: String, item: ItemData, quantidade: int) -> Bu
 	btn.set_meta("item", item_name)
 	btn.mouse_filter = Control.MOUSE_FILTER_PASS   # arrastar rola a lista (ListaRolavel); tocar aperta o botão
 	btn.pressed.connect(_on_item_selecionado.bind(item_name, btn))
+	BotaoSegurar.efeito_clique(btn)   # afunda e clareia ao encostar (o item só é lançado ao soltar)
 	return btn
 
 func _on_linha_tocada(linha: Control) -> void:
@@ -597,13 +647,25 @@ func get_ingredientes() -> Array:
 func is_preparando() -> bool:
 	return preparo_ativo
 
-## TESTE da régua do anel/vela: tecla M troca o modo (punição / proporcional / absoluto).
+## TESTE do anel/vela: M troca a régua (punição / proporcional / absoluto), P troca as cores, C liga o anel já colorido, T troca o aviso de quente/frio do ícone.
 func _unhandled_input(event: InputEvent) -> void:
 	if not visible or not (event is InputEventKey) or not event.pressed or event.echo:
 		return
 	if event.keycode == KEY_M:
 		IconesCaldeirao.modo = (IconesCaldeirao.modo + 1) % IconesCaldeirao.ModoRegua.size()
 		feedback.texto_flutuante("régua: " + IconesCaldeirao.NOMES_MODO[IconesCaldeirao.modo], Color(0.85, 0.85, 1.0))
+		get_viewport().set_input_as_handled()
+	elif event.keycode == KEY_P:
+		IconesCaldeirao.paleta = (IconesCaldeirao.paleta + 1) % IconesCaldeirao.Paleta.size()
+		feedback.texto_flutuante("cores: " + IconesCaldeirao.NOMES_PALETA[IconesCaldeirao.paleta], Color(0.85, 0.85, 1.0))
+		get_viewport().set_input_as_handled()
+	elif event.keycode == KEY_T:
+		IconesCaldeirao.modo_temp = (IconesCaldeirao.modo_temp + 1) % IconesCaldeirao.ModoTemp.size()
+		feedback.texto_flutuante("aviso quente/frio: " + IconesCaldeirao.NOMES_MODO_TEMP[IconesCaldeirao.modo_temp], Color(0.85, 0.85, 1.0))
+		get_viewport().set_input_as_handled()
+	elif event.keycode == KEY_C:
+		IconesCaldeirao.precolorido = not IconesCaldeirao.precolorido
+		feedback.texto_flutuante("anel já colorido: " + ("sim" if IconesCaldeirao.precolorido else "não"), Color(0.85, 0.85, 1.0))
 		get_viewport().set_input_as_handled()
 
 func _notification(what: int) -> void:

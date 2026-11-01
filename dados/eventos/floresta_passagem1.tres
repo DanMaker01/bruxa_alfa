@@ -39,8 +39,6 @@ script = ExtResource("1_6mshj")
 gatilho = 1
 sprite_frames = ExtResource("6_63tpe")
 animacao = "parado"
-area_pos = Vector2(0, -10)
-area_scale = Vector2(9, 36)
 comandos = Array[ExtResource("2_50r0n")]([SubResource("F_som_passos1"), SubResource("Resource_1c0bm"), SubResource("Resource_m5flp"), SubResource("Resource_meont"), SubResource("Resource_fosqy")])
 
 [resource]

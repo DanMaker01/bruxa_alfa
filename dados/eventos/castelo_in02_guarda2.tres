@@ -21,9 +21,6 @@ metadata/_custom_type_script = "uid://baglqudsvyyrb"
 script = ExtResource("1_ocqxq")
 condicoes = Array[ExtResource("3_xn2jb")]([SubResource("Resource_8xqd3")])
 sprite_frames = ExtResource("4_u837t")
-colisao_scale = Vector2(9, 20.25)
-area_pos = Vector2(0, -10)
-area_scale = Vector2(16, 20.25)
 
 [resource]
 script = ExtResource("5_8546x")

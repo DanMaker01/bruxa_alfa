@@ -6,6 +6,8 @@
 
 ![1793375398241](image/readme/1793375398241.png)
 
+MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
+
 # Coisas a fazer
 
 ```
@@ -22,195 +24,230 @@
 
 ```
 
-[] Usar trações:
-	[] O
-	[] C
-	[!] E (cidade_in02, mercador)
-	[] A
-	[!] N (cap 1, princesa)
-
-[] Quest Principe Zigmund
-	[] personalidade
-	[] situação
-		[] casamento
-	[] plano
-		[] objetivo
-	[!] sumiu na floresta
-	[!] pediu para a bruxa ajudar a princesa
-	
-[] Quest Bosque Goblin
-	
-[] após o casamento as falas no castelo_in01 devem mudar
-
-[] ervas muito escondidas na floresta
-
-[] entrando em portas sem querer com o touch
-
-[] receitas
-
-
-[ ] BETA / DEMO:
-[ ]		Caldeirão 100%
-[ ]		Diálogos 100%
-[ ]		Sprites 100%
-	[] Faces
-		[] Bruxa
-			[] neutro
-			[] pensando
-		[] Rei
-			[] neutro
-			[] furioso
-		[] Princesa
-			[] neutro
-		[] Guarda1
-		[] Guarda2
-		[] NPC1 - Criança
-			[] neutro
-		[] NPC2 - Criança
-			[] neutro
-		[] NPC3 - Adulto
-			[] neutro
-		[] Goblin
-			[] neutro
-		[] Padre
-			[] neutro
-	[] Sprites
-		[] Bruxa
-			[] parada
-			[] andando
-		[] Rei
-		[] Princesa
-		[] Guarda1
-			[] parado
-			[] andando
-		[] Guarda2
-			[] parado
-			[] andando
-		[] NPC1 - Criança
-			[] parado
-			[] andando
-		[] NPC2 - Criança
-			[] parado
-			[] andando
-		[] NPC3 - Adulto
-			[] parado
-		[] Padre
-			[] parado
-		[] Portas
-			[] porta padrão
-			[] porta bruxa
-			[] portão castelo
-		[] Objetos
-			[] 
-	[] Cenários
-		[] floresta
-		[] bruxa_in
-		[] bruxa_out1
-		[] bruxa_out2
-		[] bruxa_out3
-		[] bosque
-		[] cidade
-		[] cidade_in01
-		[] cidade_in02
-		[] cidade_in03
-		[] estrada_a
-		[] ponte
-		[] castelo
-		[] castelo_in01
-		[] castelo_in02
-		[] castelo_in03
-		[] estrada_b
+[ ] Sprites 100%
+	[ ] Faces
+		[ ] Bruxa
+			[ ] neutro
+			[ ] pensando
+		[ ] Rei
+			[ ] neutro
+			[ ] furioso
+		[ ] Princesa
+			[ ] neutro
+		[ ] Guarda1
+		[ ] Guarda2
+		[ ] NPC1 - Criança
+			[ ] neutro
+		[ ] NPC2 - Criança
+			[ ] neutro
+		[ ] NPC3 - Adulto
+			[ ] neutro
+		[ ] Goblin
+			[ ] neutro
+		[ ] Padre
+			[ ] neutro
+	[ ] Sprites
+		[ ] Bruxa
+			[ ] parada
+			[ ] andando
+		[ ] Rei
+		[ ] Princesa
+		[ ] Guarda1
+			[ ] parado
+			[ ] andando
+		[ ] Guarda2
+			[ ] parado
+			[ ] andando
+		[ ] NPC1 - Criança
+			[ ] parado
+			[ ] andando
+		[ ] NPC2 - Criança
+			[ ] parado
+			[ ] andando
+		[ ] NPC3 - Adulto
+			[ ] parado
+		[ ] Mercador pai
+			[ ] parado
+		[ ] Mercador filho
+			[ ] parado
+		[ ] Padre
+			[ ] parado
+		[ ] Portas
+			[ ] porta padrão
+			[ ] porta bruxa
+			[ ] portão castelo
+		[ ] Objetos
+			[ ] 
+	[ ] Cenários
+		[ ] floresta
+		[ ] bruxa_in
+		[ ] bruxa_out1
+		[ ] bruxa_out2
+		[ ] bruxa_out3
+		[ ] bosque
+		[ ] cidade
+		[ ] cidade_in01
+		[ ] cidade_in02
+		[ ] cidade_in03
+		[ ] estrada_a
+		[ ] ponte
+		[ ] castelo
+		[ ] castelo_in01
+		[ ] castelo_in02
+		[ ] castelo_in03
+		[ ] estrada_b
 
 [ ]	Audio 100%
-	[] BGM
-		[] intro (xxxHolic opening)
-		[] floresta
-		[] bruxa_out1
-		[] bruxa_out2
-		[] bruxa_out3
-		[] bruxa_in
-		[] bosque
-		[] cidade
-		[] cidade_in01
-		[] cidade_in02
-		[] cidade_in03
-		[] estrada_a
-		[] ponte
-		[] castelo
-		[] castelo_in01
-		[] castelo_in02
-		[] castelo_in03
-		[] estrada_b
-	[] BGS
-		[] tremor
-		[] passaros
-		[] grilo
-	[] SE
-		[] porta01
-		[] porta02
-		[] passos
-		[] pulo
-		[] dash
-		[] magia01
-		[] magia02
-		[] magia03
-		[] pancada01
-		[] pancada02
-		[] corte01
-		[] corte02
-		[] vidro01
-		[] vidro02
+	[ ] BGM
+		[ ] intro (xxxHolic opening)
+		[ ] floresta
+		[ ] bruxa_out1
+		[ ] bruxa_out2
+		[ ] bruxa_out3
+		[ ] bruxa_in
+		[ ] bosque
+		[ ] cidade
+		[ ] cidade_in01
+		[ ] cidade_in02
+		[ ] cidade_in03
+		[ ] estrada_a
+		[ ] ponte
+		[ ] castelo
+		[ ] castelo_in01
+		[ ] castelo_in02
+		[ ] castelo_in03
+		[ ] estrada_b
+	[ ] BGS
+		[ ] tremor
+		[ ] passaros
+		[ ] grilo
+	[ ] SE
+		[ ] porta01
+		[ ] porta02
+		[ ] passos
+		[ ] pulo
+		[ ] dash
+		[ ] magia01
+		[ ] magia02
+		[ ] magia03
+		[ ] pancada01
+		[ ] pancada02
+		[ ] corte01
+		[ ] corte02
+		[ ] vidro01
+		[ ] vidro02
+		[ ] flip card
+		[ ] aplausos
+		
+[ ]	Menus 100%
+	[ ] estilo de cartas
+	[ ] inicial
+		[ ] start, load, config, sair
+	[ ] pause
+		[ ] continuar, save, load, menu principal
+	[ ] caldeirão
+		[ ] bruxa, caldeirão, botões, inventário
+	[ ] loja
+		[ ] completa
 
 
-[] Próximos passos (anotado em 31/10, falta definir/fazer):
-	[] Cena mercado completa: você me dizer o que imagina (vendedores, falas, o que muda).
-	[] Intro: melhorar texto (tempo e ritmo).
-	[] Quando o HUD abre a primeira vez (bruxa_out1 na intro? bruxa_in antes do diálogo?).
-	[] Balão de expressão por sprite: precisa da arte (1 PNG por emoção: !, ?, ..., coração, raiva, nota, !?).
-	[] Caldeirão: anéis branco > amarelo > laranja > vermelho > verde no ideal, e volta ao passar.
-	[] Caldeirão: animação do produtório das matrizes no resultado.
-	[] Caldeirão: balancear dificuldade (peso de cada erro).
-	[] "Casamento cancelado" (igreja vazia, padre no castelo): ainda não existe; definir quando acontece.
-	[] Resultado 1: o que muda depois do casamento (falas, bônus, realeza deve um favor/dinheiro).
-	[] Som de festa/igreja e de palmas (hoje o casamento usa batida02.mp3 nas palmas).
-	[] Faces: padre, príncipe, convidados, mercador, filho, crianças, morador (falantes sem face).
-	[] Pode apagar: dados/eventos/cidadeA_in03_vazia.tres, dados/falantes/bruxa_pensando.tres.
-	[] Testar tudo que está [?].
+[ ] clicar onde há um mais de um evento com trigger click deve ter cuidado. atualmente o evento da frente bloqueia o de trás. se há um evento trigger click vazio por cima de outro evento trigger click com comandos, quero que atinja o de trás e ignore os sem comando.
 
-[] Cena mercado completa
 
-[] intro melhorar texto na questão de tempo e ritmo.
-[] definir quando o hud abre a primeira vez, bruxa_out1 na intro? bruxa_in logo antes de iniciar o diálogo?
-[] balão de expressão por sprite, o atual está montando na hora, não está bom.
+
+[ ] DEMO:
+	[ ] Caldeirão 100%
+		[ ] Menus, botões
+			[?] Botão de ingrediente: afunda e clareia ao encostar o dedo (antes não reagia). Continua lançando ao soltar, para não atrapalhar a rolagem da lista.
+		[ ] Poções balanceadas
+		[ ] Feedback bom pra temperatura do caldeirão, tanto frio quanto quente
+			[?] Ícone do ingrediente quente/frio: antes eram degraus (nada até 5% do limite; 30% de cor até o limite; 65% depois), por isso ficava vermelho de repente.
+				Agora (padrão FOLGA): a cor começa antes do limite na distância da folga do ingrediente ((1 − k_max)·T_max no quente, (1 + k_min)·T_min no frio),
+				cresce sem degraus até 45% no limite e até 80% na punição total. Tecla T no preparo (só testes): folga / porcentagem 80% / 25 °C fixos / degraus (antigo).
+				Gelo no frio continua igual.
+			[?] Partículas maiores (menos as bolhas, que ficam do tamanho original): x1,8 (ESCALA_PARTICULAS) e as do abanar o fogo (labaredas e brasas) x2,6 (ESCALA_ABANAR), em visual_caldeirao.gd.
+		[ ] Receitas 
+		[?] Caldeirão: anéis branco > amarelo > laranja > vermelho > verde no ideal, e volta ao passar.
+			Modos para testar no preparo (teclado):
+				M = régua (punição / proporcional / absoluto), já existia.
+				P = cores: FAIXA (padrão: anéis contínuos, cada trecho com a cor do aproveitamento naquele ponto: vermelho > amarelo > verde no ideal > amarelo > vermelho; o anel começa vazio e vai revelando a cor; anel de fora = cozimento, de dentro = tempo) · dourado (antiga) · aproxima (branco > amarelo > laranja > vermelho > VERDE no ideal; passando: vermelho > laranja > amarelo > branco) · semáforo (cinza > amarelo > verde; passando: amarelo > laranja > vermelho > preto) · cor única (o anel inteiro na cor do estado atual).
+				C = anel já colorido (as bolhinhas apagadas já mostram a cor do trecho, fraquinhas, e a "barra" vai acendendo).
+				A vela usa as mesmas cores. Começa em "faixa". Outras ideias de feedback: me diga e eu ponho como mais um modo.
+		[?] Debug do caldeirão organizado: caixas com fundo (esq.: modos M/P/T/C + indicadores; dir.: "Na panela"; embaixo: gráfico). Liga no menu de debug (aba Mapa) ou no botão "debug" fixo no canto superior direito do preparo (src/preparo/debug_caldeirao.gd).
+		[ ] Resultado Caldeirão: animação do produtório das matrizes no resultado.
+		[ ] Caldeirão: balancear dificuldade (peso de cada erro).
+	[ ] Diálogos 100%
+		[ ] Intro: melhorar texto (tempo e ritmo).
+		[ ] revisar todos
+	
+
+
+[ ] Próximos decisões:
+	[ ] Quando o HUD abre a primeira vez (bruxa_out1 na intro? bruxa_in antes do diálogo?).
+	[ ] Balão de expressão por sprite: precisa da arte (1 sprite de balão, se der pra fazer sem deformar as quinas seria ideal)
+	[ ] Resultado 1: o que muda depois do casamento (falas, bônus, realeza deve um favor/dinheiro).
+	[ ] Som de festa/igreja e de palmas (hoje o casamento usa batida02.mp3 nas palmas).
+	[ ] Pode apagar: dados/eventos/cidadeA_in03_vazia.tres, dados/falantes/bruxa_pensando.tres.
+  	[ ] Convidados muito apertados na igreja -> aumentar igreja
+	[?] Lock interação da bruxa antes da cena da igreja, pq tá dando pra clicar nos convidados. não é por variável é por travar o player.
+		Feito: durante a cena (casamento = 1) noivos, rei, padre e convidados aparecem mas não respondem ao clique; só depois (casamento = 2).
+
+[ ] Usar traços na história:
+	[ ] O
+	[ ] C
+	[!] E (cidade_in02, mercador)
+	[ ] A
+	[!] N (cap 1, princesa)
+
+[ ] Roteiro/Estilo/Personagens
+	[ ] Princípios
+		[ ]	Diálogos devem condizer com a época
+		[ ] Cada personagem tem seu linguajar próprio e manias.
+
+	[ ] Quest Zigmund
+		[ ] personalidade
+		[ ] situação
+			[ ] problema
+			[ ] objetivo
+			[ ] plano
+			[!] sumiu na floresta
+			[!] pediu para a bruxa ajudar a princesa
+			[!] casamento
+		
+	[ ] Quest Bosque Goblin
+		[ ] ???
+	[ ] Cap. 1 Casamento
+		[?] após o casamento as falas no castelo_in01 devem mudar
+			Feito: rei, princesa e os dois guardas têm falas novas depois do casamento, diferentes para resultado 1 (convidada, grata) e 2 (não convidada, princesa "calma demais").
+
+
+[!] Padrão dos eventos: retângulo de colisão e retângulo de interação do tamanho do sprite (escala x = 1, y = 1).
+	Feito: tamanho = 1º quadro da animação da página x escala; sem sprite = 64x64. Todas as páginas foram convertidas (mesmo tamanho de antes).
+[?] Editor de eventos em Python (_/editor_eventos, abrir com abrir_editor.bat; precisa de PySide6): páginas, condições, comandos, diálogo em texto (Ctrl+T), labels (F12), várias páginas/eventos de uma vez, buscar/substituir, desfazer, backup ao salvar. Ver _/editor_eventos/README.md.
+[ ] ervas muito escondidas na floresta. mudar o sprite da erva para destacar mais na floresta.
+[ ] entrando em portas sem querer com o touch, feedback quando clicar em eventos
+[ ] definir quando o hud abre a primeira vez, bruxa_out1 na intro? bruxa_in logo antes de iniciar o diálogo?
+[ ] balão de expressão: o atual está montando na hora e dá pra ver a ligação do cabo com o fundo, mudar por sprite?
 [?] cor nas palavras/frases, efeito nas palavras/frases no comando mostrarmsg.
 	Feito: BBCode do Godot no texto: [color=red]..[/color], [b], [i], [u], [s], [wave], [shake], [rainbow], [tornado], [fade], [bgcolor=..], [font_size=..], [outline_color=..], [outline_size=..].
 	Outros "[" continuam aparecendo como texto. A escrita letra a letra conta só as letras (sem as tags). O cabeçalho antigo [nome;foto;pos] continua valendo.
-	Anotar comandos
+	Anotado: lista de comandos (e BBCode) no fim do readme, em "Comandos de evento (referência)".
 [?] balancear o resultado da poção de extroversão. pois um cogumelo já está sendo suficiente para o melhor resultado, entender o pq.
 	Por quê: o cogumelo multiplica E por 1,16 (+16%) e o critério do filho do mercador aceitava qualquer E que subisse 10% (e aceitava C/A/O mudando até "pouco").
 	Ajuste: E precisa subir "muito" (>= +30%; a desenvoltura dá +40%) e O, C, A não podem mudar (menos de 10%); N não pode subir; nenhum traço extremo.
 	Com 1 cogumelo agora: "B-bom... dia." / "Melhorou um pouco, mas ainda não dá para deixar a loja com ele."
-[?] normalmente o padre está na igreja, só não quando o casamento é cancelado, momentaneamente.
-	Feito: padre no altar por padrão ("Bem-vinda à casa de Deus, senhora. ...Mesmo sendo quem a senhora é."). Na fuga (3-5) a bruxa não entra: na porta ela pensa "Melhor não. Se o padre me vir, me entrega aos guardas."
-	Saiu o evento IgrejaVazia do mapa (dados/eventos/cidadeA_in03_vazia.tres ficou sem uso: pode apagar). Ainda não existe "casamento cancelado".
 [.] brilho na porta, da mesma cor do véu, ao trocar o véu.
-	Feito: ao clicar no véu, brilhos também na porta (bruxa_in_passagem), na cor nova. Retire o brilho só da porta. Mas adicione também um flash da cor do véu no sprite da porta, para que ele pisque da cor.
+	Feito: ao clicar no véu adicione um flash da cor do véu no sprite da porta, para que ele pisque da cor.
+	Feito: saiu o brilho da porta (o do véu continua); a porta pisca 2 vezes na cor nova. Novo tipo de efeito PISCAR no Mostrar efeito (serve para qualquer evento)
+	Correção: tingiu, mas como a cor do objeto não era branca misturou as cores do objeto mais a tintura. quero que leve em consideração isso e pinte da cor que eu pedi. preciso mandar o mesmo sprite com tons de branco para isso?
 
 
-[] caldeirão, balancear dificuldade, peso de cada erro: tempo, temp, cozimento, explorar os tipos de matrizes. explorar o que é posível nesse sistema térmico.
-[] os circulos em volta dos ingredientes devem começar com cor branca, ir mostrando sua cor amarelando(mais cedo do que o atual), alaranjando, avermelhando e ficando verde ao chegar perto do ideal, ao passar do ideal ele deve ir avermelhando, alaranjando, amarelando, esbranquecendo.
-[] no resultado, após listar os ingredientes e curvas. deve fazer como o produtório, os aproveitamentos se juntam à cada matriz, e ocorre a multiplicação de matrizes uma a uma. ficando a matriz resultado. (ver como vai ser essa animação nos detalhes para evitar retrabalho)
-
-[ ]	Menus 100%
-	[] estilo de cartas
-	[] inicial
-		[] start, load, config, sair
-	[] pause
-		[]
-	[] caldeirão
+[ ] caldeirão, balancear dificuldade, peso de cada erro: tempo, temp, cozimento, explorar os tipos de matrizes. explorar o que é posível nesse sistema térmico.
+[ ] os circulos em volta dos ingredientes devem começar com cor branca, ir mostrando sua cor amarelando(mais cedo do que o atual), alaranjando, avermelhando e ficando verde ao chegar perto do ideal, ao passar do ideal ele deve ir avermelhando, alaranjando, amarelando, esbranquecendo.
+[ ] no resultado, após listar os ingredientes e curvas. deve fazer como o produtório, os aproveitamentos se juntam à cada matriz, e ocorre a multiplicação de matrizes uma a uma. ficando a matriz resultado. (ver como vai ser essa animação nos detalhes para evitar retrabalho)
 
 
-[] organização da pasta Graphics(está sendo chamada de assets neste projeto) estilo rpgmaker:
+[ ] organização da pasta Graphics(está sendo chamada de assets neste projeto) estilo rpgmaker:
 	Animations (efeitos especiais, magias, etc)
 	Characters (eventos)
 	Icons
@@ -219,13 +256,13 @@
 	Transitions
 	Windowskins
 
-[] Casamento/História:
+[ ] Casamento/História:
 	Decidido: sem prazo no Cap. 1. O casamento só acontece depois que ela entrega a poção e pega o véu; ninguém perde por demorar (sem contador de tempo).
 	Não mexi (decidir depois):
 	missao01_convite é gravada e nunca lida: fica para o Cap. 2 (convite do casamento).
 
 
-[] 2ª receita:  - desenvoltura
+[ ] 2ª receita:  - desenvoltura
 	Ajustado: musgo t_max 12 → 35 (aguenta os ~30 s finais); flor m 2400 → 5000, s−/s+ 900/1400 → 1900/2900 (Q de 60 s a ~85 °C ≈ 5100). Juntos dão diag(1,1,1.4,1,1) se o musgo entra depois.
 	balanceat tempo, u,s-,s+, Tmin,Tmax,tmin,tmax, etc de cada item. infusao
 
@@ -237,26 +274,25 @@
 	Nome: poção de um item só agora usa "Poção de [item] [qualidade]" antes de procurar no catálogo (senão um pó mal cozido virava "Concentrada").
 
 
-[ ] Bugs/Revisão:
+[ ]	Save/Load (DEPOIS: muita coisa ainda pode mudar)
+[ ]		Game_Temp deve ter save e load de arquivo_unico de titulo "save"+time_stamp
+[ ]		GameTemp, posição player, mapa, etc
+
 [ ]		Tutorial do caldeirão na 1ª vez.
+
+[ ] Bugs/Revisão:
 [!]		Faces em .tres: dados/falantes/*.tres são Personagem (src/dados/personagem.gd): nome + faces com nome ({"normal": ..., "pensando": ...}; a primeira é a padrão). O lado da tela não fica no personagem.
 			Mostrar mensagem / Mostrar opções: personagem, face ("" = a primeira) e posicao (0 = esquerda, 100 = direita) em cada fala. As 201 falas convertidas (bruxa 0, os outros 100, guarda2 50 numa fala; pensamentos da bruxa com face "pensando").
 			Posição: menu "(padrão)" / "escolher posição" no inspetor (no arquivo, posicao -1 = padrão). (padrão) repete a última posição em que aquele personagem falou (0 na primeira vez); qualquer outro valor vira a nova posição lembrada dele. Cada personagem lembra a sua.
 			[nome;foto;pos] no começo do texto continua valendo, com prioridade.
 			Personagens: bruxa (normal, pensando), campones, desconhecido (???), guarda1, guarda2, princesa, rei. bruxa_pensando.tres ficou sem uso: pode apagar.
-[ ]		Variações no flip card. (depois) Sorteadas: normal = 1 flip diagonal; variações no mesmo tempo: 5 flips com velocidade decrescente; flip mudando a dimensão horizontal, com 1 ou 5 flips.
+[ ]		Variações no flip card. (depois) Sorteadas: normal = 1 flip diagonal; variações no mesmo tempo: 5 flips com velocidade decrescente; flip mudando a dimensão horizontal, com 1 ou 5 flips. 
 
 
 [ ]	Representação de poções visual com matriz/grafo. (feito, versão simples: no pentágono cada ponta sai do traço que mais contribui e gira até a sua; diagonal = só escala com um pulo)
 [ ]		(Cap. 2) Mostrar o pentagrama, cada aresta representa um componente. Pensei em relacionar as arestas com a_ij e criar um feedback útil visualmente.
 [ ]		(Cap. 2) O pentagrama deve ter animações a depender da matriz. Por exemplo, matriz diagonal (ou próxima de diagonal a menos de ruído) só escala, então a animação do pentagram é escalar. Matriz que troca dois componentes deve trocar duas pontas do pentagrama suavemente, como uma permutação ou rotação.
 
-[?] melhorar visual do balão de expressões.
-	Feito: balão desenhado (sombra, contorno escuro, miolo creme, rabicho, brilho no canto); entra com pop, flutua para cima e o símbolo dá um pulinho.
-
-[ ]	Escrita/Estilo:
-[ ]		Diálogos devem condizer com a época
-[ ]		Cada personagem tem seu linguajar próprio e manias.
 
 [ ]	Cena Livro de Receitas: (DEPOIS DO CAP. 1)
 [ ]		Ao criar uma poção nova a bruxa tem opção de anotar a receita no livro. Caso escolha anotar: Abre a cena do livro de receitas já anotando.
@@ -304,44 +340,15 @@
 	Por camada: bosque (Meio chão 1.0, Frente árvores 1.1, scale 1.07); bruxa_out (Fundo 0.2, casa no Meio); castelo_in03 (Fundo 0.2, Frente 1.1, scale 1.051); castelo_out (Fundo 0.2, Frente 1.1); cidadeA, estradaA, estradaB (Fundo 0.2); ponte (Fundo4 céu, Fundo3 nuvens longe pan -6, Fundo2 montanha, Fundo nuvens pan -12, todos 0.2; Meio/Meio2/Meio3 1.0; Frente nuvens 1.1 pan -40).
 
 
+
 [ ]     Fazer sprite:
 [ ]         inventário e status de costas (card que gira)
-
-
-[ ] Audio:
-[ ]     Fazer músicas: 
-[ ]         intro, 
-[ ]         casa bruxa, 
-[?]         floresta, 
-[ ]         estradas, 
-[ ]			ponte (ouvir ost: ragnarok, pokemon, nobuo uematsu)
-[ ]         castelo, 
-[ ]         ...
-[ ]	Fazer sons:
-[ ]		Teleport entre mapas
-[ ]		Flip card
-[ ]		Efeitos (...)
-
-[ ]	Animações:
-[ ]
-
 
 [ ] Estilo:
 [ ] 	organizar o layout e textura dialogo/opções
 [ ]		Ajuste estético, borda, cor, fonte, etc.
 [ ]		Criação de estilos padronizados para cada coisa. (?) tipo estilo texto, estilo menu, ...?
 [ ]
-
-
-[ ]	Estudar se vale:
-[ ]		- Definir posição dos eventos no mapa, tudo por código
-
-
-[ ]	Menu Principal e Pausa (DEPOIS DO CAP. 1)
-[ ]	Save/Load (DEPOIS: muita coisa ainda pode mudar)
-[ ]		Game_Temp deve ter save e load de arquivo_unico de titulo "save"+time_stamp
-[ ]		GameTemp, posição player, mapa
-[?]	Animações do player e eventos melhor organizada e testes.
 
 [ ]	Core:
 [ ]		Modularizar evento_base (ainda precisa?)
@@ -355,4 +362,73 @@
 [ ]	Sistema de mercado/valor dinâmico
 [ ]	Sistema de fama
 [ ]	Sistema de compra/venda
+```
+
+## Comandos de evento (referência)
+
+```
+Cada página (PaginaData) tem: condições (todas valem), gatilho (CLIQUE / TOQUE / PARALELO), aparência,
+colisão/área (tamanho = sprite x escala; sem sprite = 64x64), movimento (FIXO / ROTA) e a lista de comandos.
+Vale a ÚLTIMA página cujas condições são todas verdadeiras. Página sem sprite e área bem pequena (ex. 0.015) = evento "some".
+
+CONDIÇÃO (páginas, if, while)
+	tipo: VARIAVEL (variavel op valor) · ITEM (quantidade no inventário) · PERSONALIDADE (traço O/C/E/A/N)
+		  POSICAO_X / POSICAO_Y (bruxa, px) · DIRECAO_PLAYER (== / !=) · SELF_VAR (A/B/C/D deste evento)
+		  ITEM_NOME (itens com esse nome; "Poção*" = começa com)
+	operador: == != > < >= <=     · variáveis são sempre número (0 e 1 para não/sim)
+
+FLUXO
+	if (condicao) ... else ... end      blocos podem ser aninhados
+	while (condicao) ... end            break sai do while mais interno
+	label (nome) / goto (label)         pular para um ponto da lista
+	esperar (segundos)
+	chamar_evento (evento .tres, esperar)        roda a página válida de outro evento como se estivesse aqui
+												 (labels/if/goto valem só dentro dele)
+	pular_com_toque (label)             daqui em diante, tocar na tela pula para o label (ex.: pular intro)
+	apagar_evento (evento, parar)       some até sair do mapa; parar = interrompe o que ele estiver rodando
+
+DIÁLOGO
+	mostrar_msg (personagem, face, posicao 0-100 ou padrão, texto)
+		padrão = última posição em que esse personagem falou
+		"[nome;foto;pos] texto" no começo ainda funciona e tem prioridade
+		BBCode no texto: [color=red]..[/color] [b] [i] [u] [s] [wave] [shake] [rainbow] [tornado] [fade]
+						 [bgcolor=..] [font_size=..] [outline_color=..] [outline_size=..]
+						 ex.: "Isso é [color=red]perigoso[/color]!"   "[shake]Socorro![/shake]"
+		texto igual ao nome de uma variável = mostra o valor dela
+	mostrar_opcoes (personagem, face, posicao, pergunta, opcoes[ ], labels[ ])   cada opção pula para o seu label (até 5)
+	estilo_dialogo (restaurar, fonte, cor, itálico, efeito NENHUM/ONDA/TREMOR, transparência, fundo, pensamento...)
+		(pensamento da bruxa: chamar_evento pensamento_inicio ... pensamento_fim. (futuramente quero remover esse negócio de pensamento_inicio, pensamento_fim como um comando. pode ser feito só com BBCode)
+	legenda (texto, segundos 0 = espera toque, fonte, altura, fade)       narração no meio da tela
+	balao (alvo BRUXA/EVENTO, evento, emocao ! ? ... coração raiva nota !?, duracao, altura 120, esperar)
+
+BRUXA E EVENTOS
+	player (TRAVAR / DESTRAVAR / MOSTRAR / SUMIR)
+	mover (alvo BRUXA/EVENTO, destino X / ATE_EVENTO / DESLOCAR / PARAR, x, y, manter_y, velocidade, direcao, esperar)
+		bruxa: velocidade 0 = normal (acelera); > 0 = fixa (use a mesma dos eventos que acompanham)
+		evento: velocidade 0 = 100 px/s
+	direcao (alvo, evento, ESQ / DIR / INVERTER / CENTRO / OLHAR_PARA, olhar_para)
+	passavel (alvo BRUXA/EVENTO, evento, passavel)
+	evento_animacao (evento, animacao; vazio = a da página)
+	teleportar (mapa, posicao, direcao)
+
+TELA, CÂMERA, SOM
+	fade (FADE_OUT / FADE_IN, tempo, esperar)
+	camera (MOVER posicao+tempo / VOLTAR tempo / TREMER intensidade+velocidade+duracao)   não espera: use esperar
+	mostrar_efeito (alvo BRUXA/EVENTO/TELA, evento, tipo, cor, altura, esperar)
+		MAGICO · BRILHOS · CLARAO · FUMACA · SOM (três risquinhos) · PISCAR (sprite pisca na cor)
+	som (canal BGM/BGS/SE, arquivo, volume)
+	hud (mostrar)
+
+VARIÁVEIS, ITENS, POÇÕES
+	variavel (escopo GLOBAL/DO_EVENTO, variavel ou letra+evento, DEFINIR/SOMAR/SUBTRAIR/MULTIPLICAR/DIVIDIR/ALEATORIO, valor, valor_max)
+		variáveis novas: um .tres em dados/variaveis/ (entram sozinhas)
+	item (ADICIONAR / REMOVER / LIMPAR, item, quantidade)
+	preparo (abrir)                      abre o caldeirão e espera fechar
+	aplicar_pocao (personalidade, variavel 1/0, texto_botao, evento_alvo)   bruxa escolhe um item e aplica
+	classificar_personalidade (personalidade, referencia, prefixo, limite_neutro, limite_muito, ...)
+		grava <prefixo>_O/_C/_E/_A/_N (-2..+2) e <prefixo>_extremo
+	mudar_personalidade (personalidade, traco, valor)
+
+ROTA (movimento autônomo da página): MOVER, FRENTE, TRAS, ALEATORIO, PULAR, OLHAR, FIXAR_DIRECAO,
+	ESPERAR (segundos, segundos_max), BALAO, VELOCIDADE, ANIMACAO · chance, rota_repetir, rota_raio
 ```

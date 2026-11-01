@@ -805,7 +805,7 @@ func _atualizar_mapa() -> void:
 	_lista_mapa.add_child(atravessa)
 
 	var cald := CheckBox.new()
-	cald.text = "Caldeirão: gráfico e painel (debug)"
+	cald.text = "Caldeirão: debug (também pelo botão na cena)"
 	cald.button_pressed = ferramentas.caldeirao_debug
 	cald.toggled.connect(func(v: bool): ferramentas.caldeirao_debug = v)
 	_lista_mapa.add_child(cald)
