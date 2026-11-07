@@ -173,11 +173,15 @@ func _show_current_message():
 ## Tags de BBCode que podem ser usadas no texto das falas (Mostrar mensagem / opções).
 ## Ex.: "Isso é [color=red]perigoso[/color]!", "[shake]Socorro![/shake]", "[wave]lá lá lá[/wave]".
 const TAGS_BBCODE := ["color", "b", "i", "u", "s", "wave", "shake", "rainbow", "tornado", "fade",
-	"bgcolor", "font_size", "outline_color", "outline_size"]
+	"bgcolor", "font_size", "outline_color", "outline_size", "item"]
+## [item]erva[/item] = nome de item ou poção: roxo e negrito.
+const COR_ITEM := Color("#c9a0ff")
 var _re_tag: RegEx = null
 
 ## Devolve [bbcode para o RichTextLabel, texto puro sem tags].
 func _preparar_bbcode(texto: String) -> Array:
+	# [item]...[/item] vira negrito + COR_ITEM
+	texto = texto.replace("[item]", "[b][color=#" + COR_ITEM.to_html(false) + "]").replace("[/item]", "[/color][/b]")
 	if _re_tag == null:
 		_re_tag = RegEx.new()
 		_re_tag.compile("\\[(/?)([a-z_]+)([^\\]]*)\\]")

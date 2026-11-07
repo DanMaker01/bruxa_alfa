@@ -169,7 +169,7 @@ func _validate_property(property: Dictionary) -> void:
 		property.usage = PROPERTY_USAGE_STORAGE
 
 # =============================================================================
-# SOM: três risquinhos num cone de 30°, virados para o meio da tela
+# SOM: três risquinhos num cone de 30°, sempre para a esquerda
 # =============================================================================
 static func _som(_tree: SceneTree, no, c: Color, alt: float) -> void:
 	if not (no is Node2D):
@@ -181,7 +181,7 @@ static func _som(_tree: SceneTree, no, c: Color, alt: float) -> void:
 		var centro: Vector2 = cam.get_screen_center_position()
 		var meia: Vector2 = no.get_viewport_rect().size * 0.5 / cam.zoom
 		const MARGEM := 48.0
-		dir = -1.0 if pos.x > centro.x else 1.0
+		# sempre para a esquerda (dentro ou fora da tela)
 		pos.x = clampf(pos.x, centro.x - meia.x + MARGEM, centro.x + meia.x - MARGEM)
 		pos.y = clampf(pos.y, centro.y - meia.y + MARGEM, centro.y + meia.y - MARGEM)
 	var o := Ondas.new()

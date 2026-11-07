@@ -181,11 +181,14 @@ script = ExtResource("8_b0yjd")
 script = ExtResource("9_8cojv")
 acao = 2
 
+[sub_resource type="Resource" id="Resource_73kuf"]
+script = ExtResource("8_b0yjd")
+
 [sub_resource type="Resource" id="Resource_r8f8t"]
 script = ExtResource("1_4j387")
 gatilho = 2
 sprite_frames = ExtResource("16_fundo")
-comandos = Array[ExtResource("2_ku1uc")]([SubResource("Resource_4j387"), SubResource("Resource_pular"), SubResource("Resource_subir"), SubResource("Resource_ghp5v"), SubResource("Resource_leg0"), SubResource("Resource_leg1"), SubResource("Resource_leg2"), SubResource("Resource_leg3"), SubResource("Resource_6xfj1"), SubResource("Resource_leg4"), SubResource("Resource_7qo38"), SubResource("Resource_uw0a6"), SubResource("Resource_sauaa"), SubResource("Resource_fim"), SubResource("Resource_82dll"), SubResource("Resource_qvtfd"), SubResource("Resource_0fsx2"), SubResource("I_tp_out"), SubResource("I_sumir"), SubResource("I_pular2"), SubResource("I_cam0"), SubResource("Resource_5hi55"), SubResource("I_cam1"), SubResource("I_fin1"), SubResource("I_esp1"), SubResource("I_lab_casa"), SubResource("I_fout1"), SubResource("I_esp2"), SubResource("Resource_cy5o6"), SubResource("Resource_cdvw3"), SubResource("Resource_d27pl")])
+comandos = Array[ExtResource("2_ku1uc")]([SubResource("Resource_4j387"), SubResource("Resource_pular"), SubResource("Resource_subir"), SubResource("Resource_ghp5v"), SubResource("Resource_leg0"), SubResource("Resource_leg1"), SubResource("Resource_leg2"), SubResource("Resource_leg3"), SubResource("Resource_6xfj1"), SubResource("Resource_leg4"), SubResource("Resource_7qo38"), SubResource("Resource_uw0a6"), SubResource("Resource_sauaa"), SubResource("Resource_fim"), SubResource("Resource_82dll"), SubResource("Resource_qvtfd"), SubResource("Resource_0fsx2"), SubResource("Resource_73kuf"), SubResource("I_tp_out"), SubResource("I_sumir"), SubResource("I_pular2"), SubResource("I_cam0"), SubResource("Resource_5hi55"), SubResource("I_cam1"), SubResource("I_fin1"), SubResource("I_esp1"), SubResource("I_lab_casa"), SubResource("I_fout1"), SubResource("I_esp2"), SubResource("Resource_cy5o6"), SubResource("Resource_cdvw3"), SubResource("Resource_d27pl")])
 
 [sub_resource type="Resource" id="Resource_1rxl6"]
 script = ExtResource("11_m57lc")

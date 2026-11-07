@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="1_x"]
 [ext_resource type="Script" uid="uid://cwdgcnn30o052" path="res://src/dados/comandos/cmd_if.gd" id="2_x"]
 [ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="3_x"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_variavel.gd" id="4_x"]
+[ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="4_x"]
 [ext_resource type="Script" uid="uid://b2vy54pculhyg" path="res://src/dados/comandos/cmd_else.gd" id="5_x"]
 [ext_resource type="Script" uid="uid://phmwdet0nd7d" path="res://src/dados/comandos/cmd_end.gd" id="6_x"]
 [ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="7_x"]
@@ -14,43 +14,13 @@
 [ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="12_x"]
 [ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="13_x"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="14_x"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_mover.gd" id="20_mover"]
+[ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="15_6bvne"]
+[ext_resource type="Script" uid="uid://dp3mfol3wf88y" path="res://src/dados/comandos/cmd_mover.gd" id="20_mover"]
 [ext_resource type="Script" uid="uid://u1lexc30s8be" path="res://src/dados/comandos/cmd_player.gd" id="21_player"]
-[ext_resource type="Script" path="res://src/dados/comandos/cmd_chamar_evento.gd" id="22_chamar"]
-[ext_resource type="Resource" path="res://dados/eventos/ponte_passagem1.tres" id="23_passagem"]
+[ext_resource type="Script" uid="uid://dvii04cb4qtqa" path="res://src/dados/comandos/cmd_chamar_evento.gd" id="22_chamar"]
+[ext_resource type="Resource" uid="uid://fc2uuctrk6wd" path="res://dados/eventos/ponte_passagem1.tres" id="23_passagem"]
 [ext_resource type="Resource" path="res://dados/falantes/guarda1.tres" id="x0"]
 [ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="x1"]
-
-[sub_resource type="Resource" id="G_cond"]
-script = ExtResource("1_x")
-variavel = "ponte_guarda_conhece"
-
-[sub_resource type="Resource" id="G_if"]
-script = ExtResource("2_x")
-condicao = SubResource("G_cond")
-
-[sub_resource type="Resource" id="G_m1"]
-script = ExtResource("3_x")
-personagem = ExtResource("x0")
-posicao = 100.0
-texto = "Você é a moça do chapéu? O guarda da estrada me avisou de você."
-
-[sub_resource type="Resource" id="G_m2"]
-script = ExtResource("3_x")
-personagem = ExtResource("x0")
-posicao = 100.0
-texto = "Pode passar. O castelo fica logo adiante."
-
-[sub_resource type="Resource" id="G_var"]
-script = ExtResource("4_x")
-variavel = "ponte_guarda_conhece"
-valor = 1.0
-
-[sub_resource type="Resource" id="G_else"]
-script = ExtResource("5_x")
-
-[sub_resource type="Resource" id="G_end"]
-script = ExtResource("6_x")
 
 [sub_resource type="Resource" id="R_1"]
 script = ExtResource("1_x")
@@ -202,11 +172,42 @@ passavel = false
 sprite_frames = ExtResource("11_x")
 comandos = Array[ExtResource("12_x")]([SubResource("R_2"), SubResource("R_3"), SubResource("R_4"), SubResource("R_5"), SubResource("R_6"), SubResource("R_7"), SubResource("R_8"), SubResource("R_9"), SubResource("R_10"), SubResource("R_11"), SubResource("R_12"), SubResource("R_13"), SubResource("R_14"), SubResource("R_15"), SubResource("R_17"), SubResource("R_18"), SubResource("R_19"), SubResource("R_20"), SubResource("R_21"), SubResource("R_22"), SubResource("R_23"), SubResource("R_24"), SubResource("R_25"), SubResource("R_26"), SubResource("R_27"), SubResource("R_28"), SubResource("R_29"), SubResource("R_30")])
 
+[sub_resource type="Resource" id="G_cond"]
+script = ExtResource("1_x")
+variavel = "ponte_guarda_conhece"
+
+[sub_resource type="Resource" id="G_if"]
+script = ExtResource("2_x")
+condicao = SubResource("G_cond")
+
+[sub_resource type="Resource" id="G_m1"]
+script = ExtResource("3_x")
+personagem = ExtResource("x0")
+posicao = 100.0
+texto = "Você é a moça do chapéu? O guarda da estrada me avisou de você."
+
+[sub_resource type="Resource" id="G_m2"]
+script = ExtResource("3_x")
+personagem = ExtResource("x0")
+posicao = 100.0
+texto = "Pode passar. O castelo fica logo adiante."
+
+[sub_resource type="Resource" id="G_var"]
+script = ExtResource("4_x")
+variavel = "ponte_guarda_conhece"
+valor = 1.0
+
+[sub_resource type="Resource" id="G_else"]
+script = ExtResource("5_x")
+
 [sub_resource type="Resource" id="R_32"]
 script = ExtResource("3_x")
 personagem = ExtResource("x0")
 posicao = 100.0
 texto = "Pode passar, moça do chapéu. O castelo fica logo adiante."
+
+[sub_resource type="Resource" id="G_end"]
+script = ExtResource("6_x")
 
 [sub_resource type="Resource" id="R_33"]
 script = ExtResource("1_x")
@@ -237,12 +238,6 @@ condicoes = Array[ExtResource("1_x")]([SubResource("R_36")])
 sprite_frames = ExtResource("11_x")
 comandos = Array[ExtResource("12_x")]([SubResource("R_35")])
 
-[sub_resource type="Resource" id="F_cond"]
-script = ExtResource("1_x")
-variavel = "missao01_resultado"
-operador = 4
-valor = 3.0
-
 [sub_resource type="Resource" id="F_trava"]
 script = ExtResource("21_player")
 
@@ -265,9 +260,9 @@ texto = "Melhor voltar outra hora!"
 
 [sub_resource type="Resource" id="F_corre"]
 script = ExtResource("20_mover")
-direcao = 1
 x = 140.0
 velocidade = 360.0
+direcao = 1
 
 [sub_resource type="Resource" id="F_passa"]
 script = ExtResource("22_chamar")
@@ -276,6 +271,12 @@ evento = ExtResource("23_passagem")
 [sub_resource type="Resource" id="F_solta"]
 script = ExtResource("21_player")
 acao = 1
+
+[sub_resource type="Resource" id="F_cond"]
+script = ExtResource("1_x")
+variavel = "missao01_resultado"
+operador = 4
+valor = 3.0
 
 [sub_resource type="Resource" id="F_pag"]
 script = ExtResource("13_x")

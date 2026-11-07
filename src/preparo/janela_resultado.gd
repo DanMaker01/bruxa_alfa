@@ -1,9 +1,9 @@
 # janela_resultado.gd
 # Janela que aparece quando a poção fica pronta (por cima da cena de preparo):
-#   1. ENTRADA: a tela escurece e a poção surge no meio com um estouro de brilhos.
-#   2. MEIO:    a poção desliza para a esquerda e à direita aparecem as informações:
-#               nome, pentágono O-C-E-A-N (efeito numa personalidade neutra), a matriz
-#               em miniatura e os ingredientes (com o aproveitamento de cada um).
+#   1. ENTRADA: a tela escurece e o produtório (AnimacaoProdutorio): os ingredientes viram a
+#               matriz da poção, que fica no lugar da grade. A poção só aparece ao confirmar.
+#   2. MEIO:    as informações (ResultadoVistas): nome e nota, matriz e pentágono
+#               O-C-E-A-N lado a lado, e os ingredientes com o anel de aproveitamento.
 #   3. NOME:    1) parecida com uma conhecida (CatalogoPocoes) → esse nome;
 #               2) feita de um item só → "Poção de [item] [adjetivo]" (qualidade);
 #               3) senão aparece "Poção desconhecida" e, depois das informações, pede um
@@ -19,21 +19,7 @@ signal _nome_definido
 const ICONE_POCAO := "res://assets/game_caldeirao/pocao.png"
 const ALFA_FUNDO: float = 0.85
 const TAM_POCAO := Vector2(160, 160)
-# Layout (640x960) em 2 colunas:
-#   título (largura toda)
-#   esquerda: curva T(t) e ingredientes (compactos), lista rolável | dica embaixo
-#   direita:  poção, pentágono O-C-E-A-N, grade da matriz
-# (layout antigo, 1 coluna: TITULO 20,30,600,70 · PENTAGONO 220,105,400,350 ·
-#  GRADE 40,310,150,150 · INGREDIENTES 30,490,580,400 · POCAO_ESQUERDA_X 30)
-const CENTRO_POCAO := Vector2(320, 220)       # onde a poção surge
-const POCAO_ESQUERDA_X: float = 431.0         # para onde ela desliza (posição x; agora à direita)
-const TITULO_RECT := Rect2(20, 25, 600, 60)
-const PENTAGONO_RECT := Rect2(388, 305, 244, 225)
-const GRADE_RECT := Rect2(436, 545, 150, 150)
-const INGREDIENTES_RECT := Rect2(12, 100, 362, 790)
-## Ingredientes compactos (coluna da esquerda).
-const FONTE_NOME: int = 17
-const LARGURA_BARRA: float = 110.0
+const CENTRO_POCAO := Vector2(320, 220)       # posição inicial da poção (ela surge no lugar da matriz)
 ## Para onde a poção voa ao sair (fallback, se a carta do inventário não for achada).
 const DESTINO_INVENTARIO := Vector2(192, 800)
 const NOME_DESCONHECIDO := "Poção desconhecida"
@@ -44,7 +30,9 @@ const BRILHOS: int = 28
 ## z_index absoluto da janela (acima da CenaPreparo, do Fade e das notificações).
 const Z_JANELA: int = 1000
 
-enum Estado { FECHADA, ENTRANDO, NOMEANDO, MOSTRANDO, PRONTA, SAINDO }
+enum Estado { FECHADA, ENTRANDO, NOMEANDO, MOSTRANDO, PRONTA, SAINDO, PRODUTORIO }
+## De onde os ingredientes saem na animação do produtório (boca do caldeirão).
+const ORIGEM_PRODUTORIO := Vector2(320, 300)
 
 var _estado: int = Estado.FECHADA
 var _res: Dictionary = {}
@@ -57,17 +45,14 @@ var _texto: Label
 var _faixa_nome: ColorRect
 var _caixa_nome: VBoxContainer
 var _campo_nome: LineEdit
-var _painel: Control
-var _titulo: Label
-var _pentagono: PentagonoOcean
-var _grade: GradeMatriz
-var _ingredientes: VBoxContainer
-## Curva principal T(t) e, de cada ingrediente, [LinhaTempo, [nós que aparecem junto]].
-var _curva: LinhaTempo
-var _linhas_tempo: Array = []
-var _lista: ListaRolavel
+## Nome mostrado no título (a tela em si é o ResultadoVistas).
+var _nome_atual: String = ""
 var _dica: Label
 var _t: float = 0.0
+var _produtorio: AnimacaoProdutorio
+## A tela de informações (nome, nota, matriz, pentágono, ingredientes).
+var _vistas: ResultadoVistas
+var _aperto_pos := Vector2.ZERO
 
 
 func _ready() -> void:
@@ -83,7 +68,7 @@ func _process(delta: float) -> void:
 	if not visible:
 		return
 	_t += delta
-	if _pocao and _estado != Estado.SAINDO:
+	if _pocao and _estado != Estado.SAINDO and _pocao.modulate.a > 0.01:
 		_pocao.rotation = sin(_t * 1.6) * 0.04          # balança de leve
 		_halo.modulate.a = 0.35 + 0.2 * sin(_t * 3.0)   # brilho pulsando
 	if _dica.visible:
@@ -103,6 +88,10 @@ func _construir() -> void:
 	_fundo.size = tela
 	_fundo.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(_fundo)
+
+	_produtorio = AnimacaoProdutorio.new()
+	_produtorio.name = "Produtorio"
+	add_child(_produtorio)
 
 	var tex: Texture2D = load(ICONE_POCAO) if ResourceLoader.exists(ICONE_POCAO) else null
 	_halo = TextureRect.new()
@@ -161,44 +150,10 @@ func _construir() -> void:
 	_caixa_nome.add_child(botoes)
 	_caixa_nome.visible = false
 
-	# informações: um Control da tela toda (entra junto, com fade e um leve deslize)
-	_painel = Control.new()
-	_painel.size = tela
-	_painel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_painel.modulate.a = 0.0
-	_titulo = _label(32, HORIZONTAL_ALIGNMENT_CENTER)
-	_titulo.autowrap_mode = TextServer.AUTOWRAP_WORD
-	_titulo.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_titulo.position = TITULO_RECT.position
-	_titulo.size = TITULO_RECT.size
-	_titulo.add_theme_color_override("font_color", Color(1.0, 0.88, 0.55))
-	_painel.add_child(_titulo)
-	_pentagono = PentagonoOcean.new()
-	_pentagono.position = PENTAGONO_RECT.position
-	_pentagono.size = PENTAGONO_RECT.size
-	_painel.add_child(_pentagono)
-	_grade = GradeMatriz.new()
-	_grade.position = GRADE_RECT.position
-	_grade.size = GRADE_RECT.size
-	_painel.add_child(_grade)
-	# separador fininho acima dos ingredientes
-	var linha := ColorRect.new()
-	linha.color = Color(1, 1, 1, 0.15)
-	# separador vertical entre as colunas
-	linha.position = Vector2(INGREDIENTES_RECT.end.x + 6, INGREDIENTES_RECT.position.y)
-	linha.size = Vector2(2, INGREDIENTES_RECT.size.y)
-	_painel.add_child(linha)
-	# lista rolável: cabem quantos ingredientes houver (arrastar para ver o resto)
-	_lista = ListaRolavel.new()
-	_lista.position = INGREDIENTES_RECT.position
-	_lista.size = INGREDIENTES_RECT.size
-	_painel.add_child(_lista)
-	_ingredientes = VBoxContainer.new()
-	_ingredientes.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_ingredientes.custom_minimum_size = Vector2(INGREDIENTES_RECT.size.x - 8.0, 0)
-	_ingredientes.add_theme_constant_override("separation", 5)
-	_lista.add_child(_ingredientes)
-	add_child(_painel)
+	_vistas = ResultadoVistas.new()
+	_vistas.name = "Vistas"
+	_vistas.visible = false
+	add_child(_vistas)
 
 	add_child(_faixa_nome)
 	add_child(_texto)
@@ -206,7 +161,7 @@ func _construir() -> void:
 
 	_dica = _label(20, HORIZONTAL_ALIGNMENT_CENTER)
 	_dica.text = "toque para continuar"
-	_dica.position = Vector2(0, 900)
+	_dica.position = Vector2(0, 868)
 	_dica.size = Vector2(640, 40)
 	_dica.visible = false
 	add_child(_dica)
@@ -238,15 +193,18 @@ func abrir(resultado: Dictionary) -> void:
 	visible = true
 	_estado = Estado.ENTRANDO
 
-	# 1. entrada: escurece e a poção surge com um estouro de brilhos
+	# 1. entrada: escurece e o produtório: os ingredientes se alinham, o aproveitamento
+	#    vira B_i e os B_i se combinam até a matriz final, que fica no lugar da grade
+	#    (a poção só aparece quando confirma, em _fechar)
 	var tw := create_tween()
 	tw.tween_property(_fundo, "color:a", ALFA_FUNDO, 0.8)
 	await tw.finished
-	_estourar_brilhos(CENTRO_POCAO)
-	tw = create_tween().set_parallel(true)
-	tw.tween_property(_pocao, "scale", Vector2.ONE, 0.55).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tw.tween_property(_pocao, "modulate:a", 1.0, 0.25)
-	await tw.finished
+	var diags: Array = resultado.get("diagnosticos", [])
+	_vistas.montar(resultado, A)
+	var destino: Rect2 = _vistas.rect_grade()
+	_estado = Estado.PRODUTORIO
+	await _produtorio.tocar(diags, ORIGEM_PRODUTORIO, destino.get_center(), destino.size.x)
+	_estado = Estado.ENTRANDO
 
 	# 2. meio: poção para a esquerda, informações à direita
 	var achada := CatalogoPocoes.procurar(A)
@@ -263,23 +221,19 @@ func abrir(resultado: Dictionary) -> void:
 	else:
 		pedir_nome = true
 	_estado = Estado.MOSTRANDO
-	_preencher_parametros(A)
-	if pedir_nome:
-		_titulo.text = NOME_DESCONHECIDO
-	tw = create_tween().set_parallel(true)
-	tw.tween_property(_pocao, "position:x", POCAO_ESQUERDA_X, 0.6).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
-	tw.tween_property(_halo, "position:x", POCAO_ESQUERDA_X - TAM_POCAO.x * 0.15, 0.6).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
-	await tw.finished
-	_painel.position.x = 40.0
-	tw = create_tween().set_parallel(true)
-	tw.tween_property(_painel, "modulate:a", 1.0, 0.8)
-	tw.tween_property(_painel, "position:x", 0.0, 0.4).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	await tw.finished
-	_pentagono.mostrar(A)
-	_grade.mostrar(A)
-	_lista.ao_inicio()   # a lista pode ter ficado rolada da poção anterior
-	await _animar_curvas()
+	_nome_atual = NOME_DESCONHECIDO if pedir_nome else (_pocao_item.get_nome() if _pocao_item else "Poção")
+	# moldura → matriz troca → pentágono → ingredientes
+	_vistas.titulo(_nome_atual)
+	await _vistas.entrar()
+	_vistas.mostrar_grade()
+	_produtorio.limpar()
+	await _vistas.mostrar_pentagono()
+	await _vistas.mostrar_ingredientes()
 	await get_tree().create_timer(0.5, true).timeout
+	await _depois_das_informacoes(pedir_nome)
+
+func _depois_das_informacoes(pedir_nome: bool) -> void:
+	var tw: Tween
 
 	# 3. nome: poção nova → pergunta o nome e já coloca nas informações
 	if pedir_nome:
@@ -325,20 +279,17 @@ func _resetar() -> void:
 	_texto.visible = false
 	_faixa_nome.visible = false
 	_caixa_nome.visible = false
-	_titulo.scale = Vector2.ONE
 	_campo_nome.text = ""
-	_painel.modulate = Color(1, 1, 1, 0)
-	_lista.ao_inicio()
+	_nome_atual = ""
+	_produtorio.limpar()
+	_vistas.limpar()
+	_vistas.visible = false
 	_dica.visible = false
 
 ## Troca o título com um "pop" (o nome acabou de ser dado).
 func _atualizar_titulo(nome: String) -> void:
-	_titulo.pivot_offset = _titulo.size * 0.5
-	var tw := create_tween()
-	tw.tween_property(_titulo, "scale", Vector2(0.6, 0.6), 0.12)
-	tw.tween_callback(func(): _titulo.text = nome)
-	tw.tween_property(_titulo, "scale", Vector2.ONE, 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	await tw.finished
+	_nome_atual = nome
+	await _vistas.titulo_pop(nome)
 
 func _aparecer(c: CanvasItem) -> void:
 	var tw := create_tween()
@@ -359,147 +310,6 @@ func _definir_nome(nome: String) -> void:
 	if _pocao_item:
 		_pocao_item.nome = nome
 		_pocao_item.efeito = CatalogoPocoes.efeito_de(nome)
-
-func _preencher_parametros(_A: Array) -> void:
-	_titulo.text = _pocao_item.get_nome() if _pocao_item else "Poção"
-	for c in _ingredientes.get_children():
-		c.queue_free()
-	var cab := _label(20, HORIZONTAL_ALIGNMENT_LEFT)
-	cab.text = "Ingredientes"
-	cab.add_theme_color_override("font_color", Color(1, 1, 1, 0.6))
-	_ingredientes.add_child(cab)
-	_linhas_tempo.clear()
-	_curva = LinhaTempo.new()
-	_curva.compacto = true
-	_curva.configurar_principal(_res.get("historico_T", []), float(_res.get("t_final", 1.0)), _inicio_receita())
-	_curva.z_index = 1   # as áreas saem de trás dela
-	_curva.esconder()
-	_ingredientes.add_child(_curva)
-	var diags: Array = _res.get("diagnosticos", [])
-	if diags.is_empty():
-		var nada := _label(20, HORIZONTAL_ALIGNMENT_LEFT)
-		nada.text = "—"
-		_ingredientes.add_child(nada)
-	for d in diags:
-		_ingredientes.add_child(_linha_ingrediente(d))
-
-## Uma linha: nome | barra do aproveitamento + % | tags do que deu errado.
-func _linha_ingrediente(d: Dictionary) -> Control:
-	var a: float = clampf(float(d.get("a", 0.0)), 0.0, 1.0)
-	var linha := VBoxContainer.new()
-	linha.add_theme_constant_override("separation", 1)
-	var topo := HBoxContainer.new()
-	topo.add_theme_constant_override("separation", 8)
-	var nome := _label(FONTE_NOME, HORIZONTAL_ALIGNMENT_LEFT)
-	nome.text = str(d.get("nome_exibicao", d.get("nome", "?")))
-	nome.custom_minimum_size = Vector2(0, 0)
-	nome.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	nome.clip_text = true
-	topo.add_child(nome)
-	# barra
-	var fundo_barra := ColorRect.new()
-	fundo_barra.color = Color(1, 1, 1, 0.12)
-	fundo_barra.custom_minimum_size = Vector2(LARGURA_BARRA, 10)
-	fundo_barra.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	var cheio := ColorRect.new()
-	cheio.color = _cor_aproveitamento(a)
-	cheio.size = Vector2(LARGURA_BARRA * a, 10)
-	fundo_barra.add_child(cheio)
-	topo.add_child(fundo_barra)
-	var pct := _label(FONTE_NOME - 2, HORIZONTAL_ALIGNMENT_RIGHT)
-	pct.text = "%d%%" % roundi(100.0 * a)
-	pct.custom_minimum_size = Vector2(52, 0)
-	topo.add_child(pct)
-	linha.add_child(topo)
-	# tags
-	var tags := HFlowContainer.new()
-	tags.add_theme_constant_override("h_separation", 4)
-	tags.add_theme_constant_override("v_separation", 2)
-	var problemas: Array = d.get("problemas", [])
-	if problemas.is_empty():
-		tags.add_child(_tag("no ponto ✓", Color(0.85, 0.7, 0.25)))
-	else:
-		for t in problemas:
-			var perda: float = float(t.get("perda", 0.0))
-			var cor := Color(0.8, 0.25, 0.2) if perda >= 0.5 else Color(0.85, 0.5, 0.15)
-			tags.add_child(_tag("%s  −%d%%" % [t.get("texto", "?"), roundi(100.0 * perda)], cor))
-	linha.add_child(tags)
-	# quando entrou e a temperatura do caldo ao longo do preparo
-	var lt := LinhaTempo.new()
-	lt.compacto = true
-	lt.numero = _linhas_tempo.size() + 1
-	lt.configurar(_res.get("historico_T", []), float(d.get("t0", 0.0)), float(_res.get("t_final", 1.0)), _inicio_receita())
-	if _curva:
-		_curva.adicionar_marca(float(d.get("t0", 0.0)), lt.numero)
-	nome.text = "%d. %s" % [lt.numero, nome.text]
-	linha.add_child(lt)
-	lt.esconder()
-	topo.modulate.a = 0.0
-	tags.modulate.a = 0.0
-	_linhas_tempo.append([lt, [topo, tags]])
-	return linha
-
-## Uma curva só: ela se desenha e fica um tempo em foco (o resto apagadinho);
-## depois as áreas dos ingredientes saem de trás dela, uma por uma, e descem até o lugar.
-func _animar_curvas() -> void:
-	if _curva == null:
-		return
-	var resto: Array = [_pentagono, _grade]
-	var tw := create_tween().set_parallel(true)
-	for c in resto:
-		if c:
-			tw.tween_property(c, "modulate:a", 0.3, 0.4)
-	await _curva.revelar(1.4).finished
-	await get_tree().create_timer(1.2, true).timeout    # foco na curva
-	var ultimo: Tween = null
-	for i in _linhas_tempo.size():
-		var par: Array = _linhas_tempo[i]
-		var lt: LinhaTempo = par[0]
-		ultimo = lt.sair_da_principal(_curva, 0.9)
-		var tw_o := create_tween().set_parallel(true)
-		for o in par[1]:
-			tw_o.tween_property(o, "modulate:a", 1.0, 0.4).set_delay(0.6)
-		await get_tree().create_timer(0.45, true).timeout
-	if ultimo:
-		await ultimo.finished
-	tw = create_tween().set_parallel(true)
-	for c in resto:
-		if c:
-			tw.tween_property(c, "modulate:a", 1.0, 0.4)
-	await tw.finished
-
-## A receita começa quando o primeiro ingrediente entra.
-func _inicio_receita() -> float:
-	var t := INF
-	for d in _res.get("diagnosticos", []):
-		t = minf(t, float(d.get("t0", 0.0)))
-	return 0.0 if t == INF else t
-
-func _tag(texto: String, cor: Color) -> Control:
-	var p := PanelContainer.new()
-	var st := StyleBoxFlat.new()
-	st.bg_color = Color(cor, 0.85)
-	st.set_corner_radius_all(10)
-	st.content_margin_left = 7
-	st.content_margin_right = 7
-	st.content_margin_top = 0
-	st.content_margin_bottom = 0
-	p.add_theme_stylebox_override("panel", st)
-	p.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var l := _label(13, HORIZONTAL_ALIGNMENT_CENTER)
-	l.text = texto
-	l.add_theme_color_override("font_color", Color.WHITE)
-	p.add_child(l)
-	return p
-
-func _cor_aproveitamento(a: float) -> Color:
-	if a >= 0.95:
-		return Color(1.0, 0.82, 0.3)     # dourado
-	if a >= 0.6:
-		return Color(0.55, 0.8, 0.4)     # verde
-	if a >= 0.3:
-		return Color(0.9, 0.55, 0.2)     # laranja
-	return Color(0.85, 0.25, 0.2)        # vermelho
 
 ## Estouro de brilhinhos saindo do centro (entrada da poção).
 func _estourar_brilhos(centro: Vector2) -> void:
@@ -523,16 +333,30 @@ func _estourar_brilhos(centro: Vector2) -> void:
 # SAÍDA
 # =============================================================================
 func _input(event: InputEvent) -> void:
+	if visible and _estado == Estado.PRODUTORIO:
+		var aperto: bool = (event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT) \
+			or (event is InputEventScreenTouch and event.pressed)
+		if aperto:
+			get_viewport().set_input_as_handled()
+			_produtorio.tocou()
+		return
 	if not visible or _estado != Estado.PRONTA:
+		return
+	var aperto2: bool = (event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT) \
+		or (event is InputEventScreenTouch and event.pressed)
+	if aperto2:
+		_aperto_pos = event.position
 		return
 	# fecha ao SOLTAR o toque, em qualquer lugar. Se arrastou a lista de ingredientes,
 	# a ListaRolavel já marcou o evento como tratado e ele não chega aqui.
 	var toque: bool = (event is InputEventMouseButton and not event.pressed and event.button_index == MOUSE_BUTTON_LEFT) \
 		or (event is InputEventScreenTouch and not event.pressed)
 	if toque:
-		# toque na grade mostra o valor da célula (não fecha)
 		var pos: Vector2 = event.position
-		if _grade and _grade.get_global_rect().has_point(pos):
+		# arrastou, ou tocou em algo da tela (ícone, detalhe, grade): não fecha
+		if pos.distance_to(_aperto_pos) > 40.0:
+			return
+		if _vistas.consumir_toque(pos):
 			return
 		get_viewport().set_input_as_handled()
 		_fechar()
@@ -547,6 +371,7 @@ func _input(event: InputEvent) -> void:
 func _fechar() -> void:
 	_estado = Estado.SAINDO
 	_dica.visible = false
+	await _matriz_vira_pocao()
 	var hud = get_node_or_null("/root/Main/CanvasLayer/HUD")
 	var carta = hud.get("carta_inventario") if hud else null
 	var gt = get_node_or_null("/root/Main/GameManager/GameTemp")
@@ -655,6 +480,26 @@ func _copia_pocao(camada_n: int) -> TextureRect:
 	p.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	camada.add_child(p)
 	return p
+
+## Confirmou: a matriz final encolhe até o lugar da poção e a poção surge ali.
+func _matriz_vira_pocao() -> void:
+	var g: GradeMatriz = _vistas.grade
+	# a poção surge no lugar da própria matriz
+	_pocao.position = g.get_global_rect().get_center() - TAM_POCAO * 0.5
+	_halo.position = _pocao.position - TAM_POCAO * 0.15
+	var centro := _pocao.position + TAM_POCAO * 0.5
+	g.pivot_offset = g.size * 0.5
+	var tw := create_tween().set_parallel(true)
+	tw.tween_property(g, "global_position", centro - g.size * 0.5, 0.45).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	tw.tween_property(g, "scale", Vector2(0.15, 0.15), 0.45).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	tw.tween_property(g, "modulate:a", 0.0, 0.2).set_delay(0.3)
+	await tw.finished
+	_estourar_brilhos(centro)
+	tw = create_tween().set_parallel(true)
+	tw.tween_property(_pocao, "scale", Vector2.ONE, 0.5).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tw.tween_property(_pocao, "modulate:a", 1.0, 0.2)
+	await tw.finished
+	await _esperar(0.4)
 
 ## Espera que roda mesmo com o jogo pausado.
 func _esperar(s: float) -> void:

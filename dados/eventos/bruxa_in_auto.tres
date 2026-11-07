@@ -87,7 +87,7 @@ emocao = 2
 [sub_resource type="Resource" id="A_m1"]
 script = ExtResource("6_kgd5i")
 personagem = ExtResource("x1")
-texto = "Hmm... Poção de Pó de Retorno Concentrada."
+texto = "Hmm... [item]Poção de Pó de Retorno Concentrada[/item]."
 
 [sub_resource type="Resource" id="A_m2"]
 script = ExtResource("6_kgd5i")
@@ -558,13 +558,13 @@ evento = ExtResource("94_pensa_fim")
 [sub_resource type="Resource" id="Resource_s0kd1"]
 script = ExtResource("6_kgd5i")
 personagem = ExtResource("x1")
-texto = "Eu acho que uma Poção da Calma Profunda deve resolver."
+texto = "Eu acho que uma [item]Poção da Calma Profunda[/item] deve resolver."
 
 [sub_resource type="Resource" id="Resource_rgmyk"]
 script = ExtResource("6_kgd5i")
 personagem = ExtResource("x3")
 posicao = 100.0
-texto = "Calma profunda?"
+texto = "[item]Calma profunda[/item]?"
 
 [sub_resource type="Resource" id="Resource_7fgmm"]
 script = ExtResource("6_kgd5i")
@@ -579,7 +579,7 @@ texto = "Deixe eu me lembrar... "
 [sub_resource type="Resource" id="Resource_c04db"]
 script = ExtResource("6_kgd5i")
 personagem = ExtResource("x1")
-texto = "São oito ervas, que nascem no final da floresta..."
+texto = "São oito [item]ervas[/item], que nascem no final da floresta..."
 metadata/_custom_type_script = "uid://8liac65hmnnq"
 
 [sub_resource type="Resource" id="Resource_1dger"]
@@ -596,7 +596,7 @@ texto = "Entendo... Mas deixe-me lembrar a receita."
 [sub_resource type="Resource" id="Resource_ajdrk"]
 script = ExtResource("6_kgd5i")
 personagem = ExtResource("x1")
-texto = "Oito ervas... ok... e quatro cogumelos, que crescem logo depois da cidade."
+texto = "Oito [item]ervas[/item]... ok... e quatro [item]cogumelos[/item], que crescem logo depois da cidade."
 
 [sub_resource type="Resource" id="Resource_e4tah"]
 script = ExtResource("6_kgd5i")
@@ -725,7 +725,7 @@ texto = "Se eu ouvi direito, ele ia chamar a Princesa de irmã...?"
 script = ExtResource("6_kgd5i")
 personagem = ExtResource("x1")
 face = "pensando"
-texto = "Enfim... Oito ervas, no final da floresta, e quatro cogumelos, logo depois da cidade."
+texto = "Enfim... Oito [item]ervas[/item], no final da floresta, e quatro [item]cogumelos[/item], logo depois da cidade."
 
 [sub_resource type="Resource" id="T_resumo2"]
 script = ExtResource("6_kgd5i")

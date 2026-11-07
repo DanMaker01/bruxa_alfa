@@ -17,7 +17,7 @@
 [sub_resource type="Resource" id="S_1"]
 script = ExtResource("Sx1")
 personagem = ExtResource("Sx0")
-pergunta = "Uma flor-de-farra. Cheira a festa. Levo uma?"
+pergunta = "Uma [item]flor-de-farra[/item]. Cheira a festa. Levo uma?"
 opcoes = Array[String](["Pegar", "Deixar"])
 labels = Array[String](["pegar", "deixar"])
 

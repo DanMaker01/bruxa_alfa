@@ -35,13 +35,13 @@ z_index = 1
 
 [node name="Passagem2" type="CharacterBody2D" parent="Eventos" unique_id=1043341573]
 z_index = 3
-position = Vector2(1952, 512)
+position = Vector2(1984, 512)
 script = ExtResource("3_ofmjg")
 evento = ExtResource("ev_bosque_passagem2")
 
 [node name="Passagem1" type="CharacterBody2D" parent="Eventos" unique_id=693460388]
 z_index = 3
-position = Vector2(32, 496)
+position = Vector2(16, 480)
 script = ExtResource("3_ofmjg")
 evento = ExtResource("ev_bosque_passagem1")
 

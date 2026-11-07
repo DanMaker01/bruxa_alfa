@@ -160,7 +160,10 @@ func move_player_to_event(event_node: Node2D) -> bool:
 	var player = get_player()
 	if not player or not is_instance_valid(event_node):
 		return false
-	return abs(player.global_position.x - alvo.x) < 20.0
+	if abs(player.global_position.x - alvo.x) < 20.0:
+		return true
+	# evento sólido: a bruxa para encostada nele (o ponto alvo fica dentro da colisão)
+	return event_node.has_method("player_encostado") and event_node.player_encostado()
 
 func try_activate_event(event_node: Node2D) -> bool:
 	if not is_instance_valid(event_node) or not event_node.has_method("_activate"):

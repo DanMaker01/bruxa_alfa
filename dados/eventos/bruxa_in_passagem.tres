@@ -230,13 +230,13 @@ evento = ExtResource("94_pensa_fim")
 [sub_resource type="Resource" id="Resource_y11e0"]
 script = ExtResource("9_knu6e")
 personagem = ExtResource("x2")
-texto = "Eu acho que uma Poção da Calma Profunda deve resolver."
+texto = "Eu acho que uma [item]Poção da Calma Profunda[/item] deve resolver."
 
 [sub_resource type="Resource" id="Resource_ut354"]
 script = ExtResource("9_knu6e")
 personagem = ExtResource("x3")
 posicao = 100.0
-texto = "Calma profunda?"
+texto = "[item]Calma profunda[/item]?"
 
 [sub_resource type="Resource" id="Resource_50d2e"]
 script = ExtResource("9_knu6e")
@@ -251,7 +251,7 @@ texto = "Deixe eu me lembrar... "
 [sub_resource type="Resource" id="B_receita2"]
 script = ExtResource("9_knu6e")
 personagem = ExtResource("x2")
-texto = "São oito ervas, que nascem no final da floresta..."
+texto = "São oito [item]ervas[/item], que nascem no final da floresta..."
 
 [sub_resource type="Resource" id="Resource_6i5r4"]
 script = ExtResource("9_knu6e")
@@ -267,7 +267,7 @@ texto = "Entendo... Mas deixe-me lembrar a receita."
 [sub_resource type="Resource" id="Resource_3682x"]
 script = ExtResource("9_knu6e")
 personagem = ExtResource("x2")
-texto = "Oito ervas... ok... e quatro cogumelos, que crescem logo depois da cidade."
+texto = "Oito [item]ervas[/item]... ok... e quatro [item]cogumelos[/item], que crescem logo depois da cidade."
 
 [sub_resource type="Resource" id="Resource_oixjs"]
 script = ExtResource("9_knu6e")
@@ -319,7 +319,6 @@ x = 944
 y = 464
 manter_y = false
 velocidade = 150.0
-direcao = 2
 esperar = false
 
 [sub_resource type="Resource" id="Resource_yivqu"]
@@ -385,7 +384,7 @@ texto = "Se eu ouvi direito, ele ia chamar a Princesa de irmã...?"
 script = ExtResource("9_knu6e")
 personagem = ExtResource("x2")
 face = "pensando"
-texto = "Enfim... Oito ervas, no final da floresta, e quatro cogumelos, logo depois da cidade."
+texto = "Enfim... Oito [item]ervas[/item], no final da floresta, e quatro [item]cogumelos[/item], logo depois da cidade."
 
 [sub_resource type="Resource" id="T_resumo2"]
 script = ExtResource("9_knu6e")

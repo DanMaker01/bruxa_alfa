@@ -135,6 +135,8 @@ func configurar(p_caldeirao: AnimatedSprite2D, p_fogo: AnimatedSprite2D, p_bolha
 		_mat_bolhas = bolhas.process_material.duplicate()
 		bolhas.process_material = _mat_bolhas
 		_bolha_escala_base = Vector2(_mat_bolhas.scale_min, _mat_bolhas.scale_max)   # bolhas: tamanho original
+	if bolhas:
+		bolhas.emitting = false   # sem fogo, sem bolhas (acende junto com o fogo)
 	if brilhos and brilhos.process_material:
 		_mat_brilhos = brilhos.process_material.duplicate()
 		brilhos.process_material = _mat_brilhos
@@ -155,6 +157,8 @@ func resetar() -> void:
 		caldeirao.position = _caldeirao_pos_base
 		caldeirao.modulate = Color.WHITE
 	_aplicar_particulas(0.0)
+	if bolhas:
+		bolhas.emitting = false
 
 ## Ponto onde os itens lançados caem.
 func boca() -> Vector2:
@@ -185,6 +189,9 @@ func atualizar(sistema: SistemaTermico, delta: float, perda_media: float, _punin
 		_fogo_escala_F = lerpf(_fogo_escala_F, escala_por_F(sistema.F), clampf(delta * FOGO_SUAVIZACAO, 0.0, 1.0))
 		_aplicar_escala_fogo()
 	_atualizar_particulas(sistema.T)
+	# bolhas só com o fogo aceso (as que já subiram terminam sozinhas)
+	if bolhas and bolhas.emitting != sistema.fogo_ligado:
+		bolhas.emitting = sistema.fogo_ligado
 	_atualizar_vapor(sistema.T)
 	_atualizar_fumaca_fraca(sistema)
 	_aplicar_turvo(delta, perda_media)

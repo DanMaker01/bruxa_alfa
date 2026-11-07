@@ -19,7 +19,7 @@ script = ExtResource("7_player")
 [sub_resource type="Resource" id="C_m1"]
 script = ExtResource("6_msg")
 personagem = ExtResource("x0")
-texto = "Aqui está o véu. Fino como névoa, igual contavam."
+texto = "Aqui está o [item]véu[/item]. Fino como névoa, igual contavam."
 
 [sub_resource type="Resource" id="C_m2"]
 script = ExtResource("6_msg")

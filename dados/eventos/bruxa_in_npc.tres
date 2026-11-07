@@ -19,6 +19,8 @@ valor = 1.0
 script = ExtResource("1_whluh")
 condicoes = Array[ExtResource("3_p18u5")]([SubResource("Resource_063t1")])
 sprite_frames = ExtResource("4_s6b36")
+direcao = 1
+sprite_olha_esquerda = true
 
 [resource]
 script = ExtResource("5_gdd6y")

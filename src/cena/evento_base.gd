@@ -56,18 +56,18 @@ func _update_page():
 		_activate_page(new_index)
 
 func _ready():
-	print("\n🔍 [EventoBase] _ready() CHAMADO para: ", name)
-	print("[EventoBase] evento: ", get_event_name())
+	pass
+	pass
 	
 	var endereco = "res://scenes/core/pagina.tscn"
-	print("[EventoBase] tentando carregar cena da página: ",endereco)
+	pass
 	# CARREGA A CENA DA PÁGINA
 	pagina_scene = load(endereco)
 	if not pagina_scene:
-		print("[EventoBase] ❌ ERRO:",endereco," não encontrado!")
+		pass
 		return
 	
-	print("[EventoBase] ✅",endereco," carregado!")
+	pass
 	
 	_load_event_data()
 	_update_page()
@@ -75,24 +75,24 @@ func _ready():
 	# 🔥 CONECTA SINAIS DO EVENTO COM O GAME_MANAGER
 	call_deferred("_connect_to_game_manager")
 	
-	print("[EventoBase] ✅ _ready() FINALIZADO para: ", name)
-	print("=".repeat(50))
+	pass
+	pass
 
 # evento_base.gd - Remova _connect_to_game_manager() ou modifique
 
 func _connect_to_game_manager():
 	"""Conecta o evento ao GameManager após o carregamento"""
-	print("\n🔍 [EventoBase] _connect_to_game_manager() CHAMADO para: ", name)
+	pass
 	
 	game_manager = get_node("/root/Main/GameManager")
 	if game_manager:
-		print("[EventoBase] ✅ GameManager encontrado!")
+		pass
 		# 🔥 NÃO CONECTA O SINAL AQUI - O MapaBase já faz isso!
 		# if not event_triggered.is_connected(_on_event_triggered):
 		#	 event_triggered.connect(_on_event_triggered)
 		#	 print("[EventoBase] ✅ event_triggered conectado ao GameManager")
 	else:
-		print("[EventoBase] ❌ GameManager NÃO encontrado!")
+		pass
 
 
 func _process(_delta):
@@ -102,27 +102,27 @@ func _process(_delta):
 
 
 func _load_event_data():
-	print("\n🔍 [EventoBase] _load_event_data() CHAMADO para: ", name)
+	pass
 	
 	game_manager = get_node("/root/Main/GameManager")
 	if not game_manager:
-		print("[EventoBase] ❌ GameManager não encontrado!")
+		pass
 		return
 	
 	interpreter = game_manager.get_node("Interpeter")
 	if not interpreter:
-		print("[EventoBase] ❌ Interpreter não encontrado!")
+		pass
 		return
 	
 	if evento == null:
-		print("[EventoBase] ⚠️ Aviso: nó ", name, " sem EventoData")
+		pass
 		return
 	
 	var pages: Array = evento.paginas
-	print("[EventoBase] Evento '", evento.id, "' páginas: ", pages.size())
+	pass
 	
 	if pages.is_empty():
-		print("[EventoBase] ❌ ERRO: Evento '", evento.id, "' sem páginas!")
+		pass
 		return
 	
 	# CRIA AS PÁGINAS USANDO A CENA
@@ -131,13 +131,13 @@ func _load_event_data():
 	# SELECIONA A PÁGINA ATIVA
 	# _select_active_page(pages)
 	
-	print("[EventoBase] ✅ _load_event_data() FINALIZADO para: ", name)
+	pass
 
 # ===== _create_pages() COM DEBUG =====
 func _create_pages(pages: Array):
 	"""Cria os nós de página usando a cena pagina.tscn"""
-	print("\n🔍 [EventoBase] _create_pages() CHAMADO para: ", name)
-	print("[EventoBase] Total de páginas: ", pages.size())
+	pass
+	pass
 	# REMOVE PÁGINAS ANTIGAS
 	for node in pages_nodes:
 		node.queue_free()
@@ -171,21 +171,21 @@ func _create_pages(pages: Array):
 		pages_nodes.append(page_node)
 		pages_data.append(page_data)
 		
-		print("  ✅ Página ", i, " criada e configurada!")
+		pass
 		
 		# POR PADRÃO, DESATIVA TODAS AS PÁGINAS
 		page_node.visible = false
-		print("  🔒 Página desativada (visible = false)")
+		pass
 	
-	print("\n✅ _create_pages() FINALIZADO para: ", name)
-	print("=".repeat(50))
+	pass
+	pass
 
 func _activate_page(index: int):
 	"""Ativa uma página e desativa as outras"""
-	print("\n🔍 [EventoBase] _activate_page() CHAMADO para: ", name, " - Índice: ", index)
+	pass
 	
 	if index < 0 or index >= pages_nodes.size():
-		print("[EventoBase] ❌ Índice inválido: ", index)
+		pass
 		return
 	
 	active_page_index = index
@@ -195,19 +195,19 @@ func _activate_page(index: int):
 		var is_active = (i == index)
 		node.visible = is_active
 		
-		print("  Página ", i, " - visible: ", is_active)
+		pass
 		
 		# ATIVA/DESATIVA O COLLISIONSHAPE2D (física) via página
 		if node.has_method("set_active"):
 			node.set_active(is_active)
-			print("	set_active(", is_active, ") chamado")
+			pass
 	
 	# 🔥 ATUALIZA O TRIGGER DA PÁGINA ATIVA
 	if index < pages_data.size():
 		trigger = pages_data[index].get_trigger()
-		print("[EventoBase] Trigger atualizado: ", trigger)
+		pass
 	
-	print("[EventoBase] ✅ Página ", index, " ativada para: ", name)
+	pass
 
 func _get_active_page_data() -> PaginaData:
 	if active_page_index >= 0 and active_page_index < pages_data.size():
@@ -223,13 +223,13 @@ func _get_active_page_node() -> Node2D:
 
 func refresh_event():
 	"""Reavalia a página ativa sem recriar tudo"""
-	print("[EventoBase] 🔄 refresh_event() chamado para: ", name)
+	pass
 	
 	# 🔥 SÓ REAVALIA A PÁGINA ATIVA
 	# _reevaluate_active_page()
 	_update_page()
 	
-	print("[EventoBase] ✅ refresh_event() concluído para: ", name)
+	pass
 
 # evento_base.gd - _reevaluate_active_page() CORRIGIDO
 
@@ -238,28 +238,28 @@ func refresh_event():
 
 func _connect_page_signals(page_node: Node):
 	"""Conecta direto na InteractionZone da página (sem relay pela Pagina)"""
-	print("\n🔍 [EventoBase] _connect_page_signals() CHAMADO para página: ", page_node.name)
+	pass
 	
 	if not page_node.has_method("get_interaction_zone"):
-		print("  ❌ Página não expõe get_interaction_zone()!")
+		pass
 		return
 	
 	var zone: InteractionZone = page_node.get_interaction_zone()
 	if not zone:
-		print("  ❌ InteractionZone NÃO encontrada na página!")
+		pass
 		return
 	
 	if not zone.interacted.is_connected(_on_zone_interacted):
 		zone.interacted.connect(_on_zone_interacted)
-		print("  ✅ interacted conectado!")
+		pass
 	
 	if not zone.player_entered.is_connected(_on_zone_player_entered):
 		zone.player_entered.connect(_on_zone_player_entered)
-		print("  ✅ player_entered conectado!")
+		pass
 	
 	if not zone.player_exited.is_connected(_on_zone_player_exited):
 		zone.player_exited.connect(_on_zone_player_exited)
-		print("  ✅ player_exited conectado!")
+		pass
 
 # ===== FUNÇÕES DE DETECÇÃO =====
 
@@ -274,14 +274,14 @@ func _on_zone_player_entered():
 	
 	var dist = global_position.distance_to(player.global_position)
 	
-	print("🚪🚪🚪 [PLAYER ENTROU] Evento: ", name)
-	print("  evento: ", get_event_name())
-	print("  Posição evento: ", global_position)
-	print("  Posição player: ", player.global_position)
-	print("  Distância: ", dist)
+	pass
+	pass
+	pass
+	pass
+	pass
 	
 	player_near = true
-	print("[EventoBase] ✅ Player entrou na área de: ", name)
+	pass
 	
 	# toque só vale com a bruxa perto de verdade (a física pode reportar a posição
 	# antiga logo depois de um teletransporte)
@@ -290,7 +290,7 @@ func _on_zone_player_entered():
 
 func _on_zone_player_exited():
 	player_near = false
-	print("[EventoBase] Player saiu da área de: ", name)
+	pass
 
 # evento_base.gd
 # evento_base.gd - Em _on_zone_interacted()
@@ -300,6 +300,8 @@ func _on_zone_player_exited():
 func _on_zone_interacted():
 	if not _can_activate():
 		return
+	if trigger == "click" and not _pagina_tem_comandos():
+		return   # página vazia: clique não faz nada (nem leva a bruxa até lá)
 	if trigger == "click":
 		_on_interaction()
 	else:
@@ -332,8 +334,21 @@ func _try_move_player_to_event():
 	# 🔥 CHEGOU: ativa o evento (antes o player andava e nada acontecia).
 	# Só se o player estiver mesmo na zona: se o evento andou (ex.: bos_goblin
 	# fugindo), chegar no ponto antigo não conta.
-	if arrived and _is_player_near() and _can_activate():
+	if arrived and (_is_player_near() or player_encostado()) and _can_activate():
 		_do_activate()
+
+
+## A bruxa está colada no evento (centro dela até ENCOSTO px da área de interação, na horizontal)?
+## Para eventos sólidos: a colisão segura a bruxa antes de ela entrar na área.
+const ENCOSTO: float = 90.0
+func player_encostado() -> bool:
+	var player = game_manager.get_player() if game_manager else null
+	if player == null:
+		return false
+	var r := _zone_global_rect()
+	if r.size == Vector2.ZERO:
+		return false
+	return player.global_position.x >= r.position.x - ENCOSTO and player.global_position.x <= r.end.x + ENCOSTO
 
 
 func _can_activate() -> bool:
@@ -362,7 +377,7 @@ func _activate():
 		_do_activate()
 
 func _do_activate():
-	print("🔥 [EVENTO ATIVADO] ", name, " | event: ", get_event_name(), " | pág: ", active_page_index, " | trigger: ", trigger)
+	pass
 	is_processing_activation = true
 	is_event_running = true
 	last_activation_time = Time.get_ticks_msec() / 1000.0
@@ -386,7 +401,7 @@ func _virar_player_para_mim() -> void:
 
 func on_event_finished():
 	"""Chamado quando o evento termina sua execução"""
-	print("\n📢 [EventoBase] on_event_finished() CHAMADO para: ", name)
+	pass
 	is_event_running = false
 	last_activation_time = Time.get_ticks_msec() / 1000.0
 	
@@ -394,11 +409,11 @@ func on_event_finished():
 	var player = get_node_or_null("/root/Main/Mundo/Player")
 	if player and player.has_method("on_event_finished"):
 		player.on_event_finished()
-		print("  ✅ Player.on_event_finished() chamado")
+		pass
 
 func reset_event_state():
 	"""Reseta completamente o estado do evento"""
-	print("[EventoBase] 🔄 reset_event_state() chamado para: ", name)
+	pass
 	is_event_running = false
 	is_processing_activation = false
 	last_activation_time = 0.0
@@ -419,7 +434,7 @@ func activate():
 
 func move_to(target_x: float, target_y: float, speed: float = 100.0, dir: String = "centro", callback: Callable = Callable()):
 	if is_moving:
-		print("[EventoBase] Já está em movimento!")
+		pass
 		if callback.is_valid(): callback.call(false)
 		return
 	
@@ -428,13 +443,16 @@ func move_to(target_x: float, target_y: float, speed: float = 100.0, dir: String
 	move_speed = speed
 	move_direction = dir
 	move_original_direction = "centro"
+	# andando, vira sozinho para o lado do movimento (a menos que a direção esteja travada)
+	if not direcao_travada and absf(target_x - global_position.x) >= 1.0:
+		_rota_set_dir("dir" if target_x > global_position.x else "esq")
 	move_timeout = 0.0
 	move_success = false
 	move_completed = false
 	move_callback = callback
 	is_moving = true
 	
-	print("[EventoBase] Movendo para (", target_x, ", ", target_y, ") a ", speed, "px/s")
+	pass
 
 func _physics_process(delta):
 	if is_moving:
@@ -448,7 +466,7 @@ func _process_movement(delta):
 	if move_max_time>0:
 		move_timeout += delta
 		if move_timeout > move_max_time:
-			print("[EventoBase] Timeout!")
+			pass
 			_stop_movement(false)
 			return
 
@@ -460,7 +478,7 @@ func _process_movement(delta):
 	
 	if distance < step:
 		global_position = move_target
-		print("[EventoBase] Chegou ao destino!")
+		pass
 		_stop_movement(true)
 		return
 	
@@ -475,8 +493,11 @@ func _stop_movement(success: bool):
 	move_success = success
 	move_completed = true
 	velocity = Vector2.ZERO
+	# ao chegar: para onde olhar (Mover > direção; "" = fica como está)
+	if move_direction != "" and not direcao_travada:
+		_rota_set_dir(move_direction)
 	
-	print("[EventoBase] Movimento finalizado: ", "✅" if success else "❌")
+	pass
 	move_finished.emit(success)
 	
 	if move_callback.is_valid():
@@ -515,33 +536,33 @@ func get_pages_count() -> int:
 # ===== DEBUG =====
 
 func debug():
-	print("\n=== EVENTO DEBUG: ", name, " ===")
-	print("  Nome do evento: ", get_event_name())
-	print("  Trigger: ", trigger)
-	print("  Movendo: ", is_moving)
-	print("  Player perto: ", _is_player_near())
-	print("  is_event_running: ", is_event_running)
-	print("  Páginas: ", pages_nodes.size())
-	print("  Página ativa: ", active_page_index)
+	pass
+	pass
+	pass
+	pass
+	pass
+	pass
+	pass
+	pass
 	if is_moving:
-		print("  Alvo: ", move_target)
-	print("=========================\n")
+		pass
+	pass
 
 func debug_signals():
 	"""Debug dos sinais das páginas"""
-	print("\n=== DEBUG SINAIS DO EVENTO: ", name, " ===")
+	pass
 	for page in pages_nodes:
-		print("  Página: ", page.name)
+		pass
 		if page.has_method("get_interaction_zone"):
 			var zone: InteractionZone = page.get_interaction_zone()
 			if zone:
-				print("	interacted conectado? ", zone.interacted.is_connected(_on_zone_interacted))
-				print("	player_entered conectado? ", zone.player_entered.is_connected(_on_zone_player_entered))
-				print("	player_exited conectado? ", zone.player_exited.is_connected(_on_zone_player_exited))
-		print("	visible: ", page.visible)
+				pass
+				pass
+				pass
+		pass
 		if page.has_method("is_player_near"):
-			print("	player near: ", page.is_player_near())
-	print("=========================\n")
+			pass
+	pass
 
 # ===== CLIQUE =====
 # Caminho ÚNICO de clique: _unhandled_input. Cliques consumidos pela UI
@@ -553,9 +574,16 @@ func _unhandled_input(event: InputEvent):
 		return
 	if trigger != "click" or not is_visible_in_tree():
 		return
+	# página sem comandos não segura o clique: ele passa para o evento de trás
+	if not _pagina_tem_comandos():
+		return
 	if _zone_global_rect().has_point(get_global_mouse_position()):
 		get_viewport().set_input_as_handled()
 		_on_zone_interacted()
+
+func _pagina_tem_comandos() -> bool:
+	var dados: PaginaData = _get_active_page_data()
+	return dados != null and not dados.comandos.is_empty()
 
 func _zone_global_rect() -> Rect2:
 	"""Retângulo da InteractionZone da página ativa em coordenadas globais
@@ -613,6 +641,8 @@ var _rota_andando: bool = false
 var _rota_alvo_x: float = 0.0
 var _rota_vel: float = 80.0
 var _rota_fixa: bool = false
+## Comando "Travar direção": andando (Mover ou rota), o evento não vira para o lado do movimento.
+var direcao_travada: bool = false
 var _rota_fim: bool = false          # rota sem repetir terminou
 var _rota_origem_x: float = NAN      # para o "rota_raio"
 var _rota_anim_base: String = ""     # animação parada (passo ANIMACAO)
@@ -723,7 +753,7 @@ func _rota_iniciar_andar(dx: float, virar: bool, p: PaginaData) -> bool:
 	dx = _rota_limitar(dx, p)
 	if absf(dx) < 1.0:
 		return false
-	if virar and not _rota_fixa:
+	if virar and not _rota_fixa and not direcao_travada:
 		_rota_set_dir("dir" if dx > 0.0 else "esq")
 	if p.rota_pular_se_bloqueado and _rota_bloqueado(signf(dx) * 2.0):
 		return false
@@ -749,7 +779,7 @@ func _rota_andar(delta: float, p: PaginaData) -> void:
 func _rota_iniciar_pulo(dx: float, h: float, p: PaginaData) -> bool:
 	dx = _rota_limitar(dx, p)
 	if absf(dx) >= 1.0:
-		if not _rota_fixa:
+		if not _rota_fixa and not direcao_travada:
 			_rota_set_dir("dir" if dx > 0.0 else "esq")
 		if _rota_bloqueado(dx):
 			if p.rota_pular_se_bloqueado:

@@ -18,7 +18,7 @@ texto = "Bom dia, senhora."
 [sub_resource type="Resource" id="M_0_1"]
 script = ExtResource("3_msg")
 personagem = ExtResource("9_npc")
-texto = "Se procura cogumelos, eles crescem ao redor desta cidade."
+texto = "Se procura [item]cogumelos[/item], eles crescem ao redor desta cidade."
 
 [sub_resource type="Resource" id="Resource_i5dmh"]
 script = ExtResource("3_msg")

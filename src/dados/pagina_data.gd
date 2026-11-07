@@ -22,13 +22,16 @@ const DIRECOES := ["centro", "esq", "dir"]
 @export var sprite_frames: SpriteFrames
 @export var animacao: String = "default"
 @export var direcao: Direcao = Direcao.CENTRO
+## Ligue se o desenho do sprite olha para a ESQUERDA (o padrão é desenhado olhando para a direita).
+## Aí "esq" mostra como está e "dir" espelha.
+@export var sprite_olha_esquerda: bool = false
 
 @export_group("Colisão e área")
 @export var colisao_pos: Vector2 = Vector2.ZERO
-## Tamanho da colisão = tamanho do sprite x escala (64x64 sem sprite).
+## Tamanho da colisão = tamanho do sprite x escala (32x32 sem sprite).
 @export var colisao_scale: Vector2 = Vector2.ONE
 @export var area_pos: Vector2 = Vector2.ZERO
-## Tamanho da área de interação = tamanho do sprite x escala (64x64 sem sprite).
+## Tamanho da área de interação = tamanho do sprite x escala (32x32 sem sprite).
 @export var area_scale: Vector2 = Vector2.ONE
 
 @export_group("Movimento autônomo")

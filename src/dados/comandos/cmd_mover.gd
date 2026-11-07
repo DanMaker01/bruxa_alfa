@@ -32,7 +32,8 @@ const DIRECOES := ["", "esq", "dir", "centro"]
 ## px/s. Bruxa: 0 = normal (acelera como no jogo); > 0 = fixa, sem aceleração.
 ## Evento: 0 = 100 px/s.
 @export var velocidade: float = 0.0
-## Bruxa: para onde olhar ao chegar. Evento: para onde olha enquanto anda.
+## Para onde olhar ao chegar (manter = fica como está). Andando, vira sozinho para o lado
+## do movimento; para não virar, use o comando "Travar direção" antes.
 @export var direcao: Direcao = Direcao.MANTER
 ## Ligado: este evento espera o movimento terminar.
 @export var esperar: bool = true
@@ -97,7 +98,7 @@ func _evento(interp, ev) -> int:
 		return AVANCAR
 	var alvo_y: float = no.global_position.y if (manter_y or destino != Destino.X) else y
 	var vel: float = velocidade if velocidade > 0.0 else 100.0
-	var dir: String = DIRECOES[direcao] if direcao != Direcao.MANTER else "centro"
+	var dir: String = DIRECOES[direcao]   # MANTER = "" (não vira)
 	if not esperar:
 		no.move_to(alvo_x, alvo_y, vel, dir, Callable())
 		return AVANCAR

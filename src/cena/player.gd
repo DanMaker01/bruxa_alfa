@@ -49,6 +49,8 @@ func virar(direcao: String) -> void:
 var movement_direction: int = 0	   # -1, 0, 1
 var is_moving_from_input: bool = false
 var is_event_running: bool = false
+## Comando "Travar direção": andando, a bruxa não vira para o lado do movimento.
+var direcao_travada: bool = false
 
 # ===== REFERÊNCIAS =====
 @onready var sprite: Sprite2D = $Sprite2D
@@ -122,9 +124,6 @@ func _physics_process(delta: float) -> void:
 		# Aplica aceleração
 		velocity.x = move_toward(velocity.x, direction_input * velocidade_max(), aceleracao() * delta)
 		
-	elif _andando_com_vel_fixa():
-		# comando Mover com velocidade fixa: sem fricção (senão anda ~10 px/s mais devagar que os eventos)
-		pass
 	else:
 		# PARANDO: aplica fricção
 		if is_moving_from_input:
@@ -152,20 +151,13 @@ func _physics_process(delta: float) -> void:
 	# 4. ATUALIZA A ANIMAÇÃO
 	_update_animation()
 
-## O InputManager está levando a bruxa numa velocidade fixa (cmd_mover com velocidade > 0)?
-func _andando_com_vel_fixa() -> bool:
-	if not game_manager or not game_manager.has_method("get_input_manager"):
-		return false
-	var im = game_manager.get_input_manager()
-	return im != null and im.is_moving and im._vel_fixa > 0.0
-
 # 🔥 MÉTODO CHAMADO PELO INPUT MANAGER (clique)
 func set_movement_direction(direction: int) -> void:
 	"""Define a direção do movimento (usado pelo InputManager)"""
 	movement_direction = direction
 	
 	# Atualiza o flip do sprite imediatamente
-	if sprite:
+	if sprite and not direcao_travada:
 		if direction > 0:
 			sprite.flip_h = false
 		elif direction < 0:
@@ -182,7 +174,7 @@ func set_target_velocity(target_x: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, FRICTION * get_process_delta_time())
 
 func _update_animation() -> void:
-	if sprite:
+	if sprite and not direcao_travada:
 		if velocity.x > FLIP_THRESHOLD:
 			sprite.flip_h = false
 		elif velocity.x < -FLIP_THRESHOLD:

@@ -8,7 +8,7 @@
 #   IconesCaldeirao  - ingredientes flutuando dentro do caldeirão (estado no ícone)
 #   DebugCaldeirao   - camada de debug: modos de teste + indicadores (esq.),
 #                      PainelPanela "Na panela" (dir.) e gráfico (embaixo).
-#                      Liga pelo menu de debug ou pelo botão "debug" (canto sup. dir.)
+#                      Liga pelo menu de debug ou pelo botão "debug grafico caldeirão" (canto sup. esq.)
 #   FeedbackPreparo  - textos flutuantes, cores de estado
 #   ReacaoBruxa      - retratinho da Bruxa reagindo, com balão de fala
 #   SomCaldeirao     - borbulhar / chiado / estalos gerados na hora
@@ -223,13 +223,14 @@ func _criar_componentes() -> void:
 func _criar_botao_debug() -> void:
 	botao_debug = Button.new()
 	botao_debug.name = "BotaoDebug"
-	botao_debug.text = "debug"
+	botao_debug.text = "debug grafico caldeirão"
 	botao_debug.toggle_mode = true
 	botao_debug.focus_mode = Control.FOCUS_NONE
-	botao_debug.position = Vector2(566, 6)
-	botao_debug.size = Vector2(70, 32)
+	# embaixo do botão DEBUG do menu (canto superior esquerdo, 96x64)
+	botao_debug.position = Vector2(0, 70)
+	botao_debug.size = Vector2(156, 32)
 	botao_debug.z_index = 30
-	botao_debug.add_theme_font_size_override("font_size", 13)
+	botao_debug.add_theme_font_size_override("font_size", 12)
 	botao_debug.add_theme_color_override("font_color", Color(0.75, 0.75, 0.8))
 	botao_debug.add_theme_color_override("font_hover_color", Color(0.9, 0.9, 0.95))
 	botao_debug.add_theme_color_override("font_pressed_color", DebugCaldeirao.COR_TITULO)
@@ -648,6 +649,7 @@ func is_preparando() -> bool:
 	return preparo_ativo
 
 ## TESTE do anel/vela: M troca a régua (punição / proporcional / absoluto), P troca as cores, C liga o anel já colorido, T troca o aviso de quente/frio do ícone.
+## TESTE do produtório (fim da poção): K troca o toque (acelera/pula).
 func _unhandled_input(event: InputEvent) -> void:
 	if not visible or not (event is InputEventKey) or not event.pressed or event.echo:
 		return
@@ -662,6 +664,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.keycode == KEY_T:
 		IconesCaldeirao.modo_temp = (IconesCaldeirao.modo_temp + 1) % IconesCaldeirao.ModoTemp.size()
 		feedback.texto_flutuante("aviso quente/frio: " + IconesCaldeirao.NOMES_MODO_TEMP[IconesCaldeirao.modo_temp], Color(0.85, 0.85, 1.0))
+		get_viewport().set_input_as_handled()
+	elif event.keycode == KEY_K:
+		AnimacaoProdutorio.toque = (AnimacaoProdutorio.toque + 1) % AnimacaoProdutorio.Toque.size()
+		feedback.texto_flutuante("produtório: " + AnimacaoProdutorio.NOMES_TOQUE[AnimacaoProdutorio.toque], Color(0.85, 0.85, 1.0))
 		get_viewport().set_input_as_handled()
 	elif event.keycode == KEY_C:
 		IconesCaldeirao.precolorido = not IconesCaldeirao.precolorido

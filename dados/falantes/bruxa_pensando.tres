@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="Falante" format=3]
-
-[ext_resource type="Script" path="res://src/dados/falante.gd" id="1_fal"]
-[ext_resource type="Texture2D" path="res://assets/faces/bruxa_pensando.png" id="2_foto"]
-
-[resource]
-script = ExtResource("1_fal")
-nome = "BRUXA"
-foto = ExtResource("2_foto")

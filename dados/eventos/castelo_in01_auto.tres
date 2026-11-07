@@ -125,7 +125,7 @@ texto = "Então você é a bruxa que está em minhas terras."
 script = ExtResource("4_x")
 personagem = ExtResource("x2")
 posicao = 100.0
-texto = "Não gosto de gente que mexe com ervas e conversa com os mortos."
+texto = "Não gosto de gente que mexe com [item]ervas[/item] e conversa com os mortos."
 
 [sub_resource type="Resource" id="R_18"]
 script = ExtResource("4_x")

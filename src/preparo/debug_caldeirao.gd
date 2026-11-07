@@ -1,8 +1,8 @@
 # debug_caldeirao.gd
 # Camada de debug da cena de preparo. Junta tudo num lugar só, cada coisa na sua
 # caixa com fundo, sem ficar solta por cima do caldeirão:
-#   esquerda: modos de teste (M / P / T / C) + indicadores do sistema térmico
-#   direita:  "Na panela" (PainelPanela)
+#   direita, em cima: modos de teste (M / P / T / C) + indicadores do sistema térmico
+#   direita, embaixo: "Na panela" (PainelPanela)
 #   embaixo:  gráfico T(t)
 # Nada aqui recebe toque (mouse_filter IGNORE), para não atrapalhar o preparo.
 class_name DebugCaldeirao
@@ -13,8 +13,9 @@ const COR_TITULO := Color(1.0, 0.85, 0.45)
 const COR_TEXTO := Color(0.85, 0.85, 0.9)
 const COR_SUAVE := Color(0.6, 0.6, 0.7)
 
-const CAIXA_ESQ := Rect2(4, 6, 152, 440)
-const CAIXA_DIR := Rect2(484, 44, 152, 508)
+## Tudo na direita: info em cima, "Na panela" embaixo.
+const CAIXA_INFO := Rect2(470, 6, 166, 400)
+const CAIXA_PANELA := Rect2(470, 412, 166, 140)
 
 var _modos: Label
 var _indicadores: Label
@@ -28,14 +29,14 @@ func _ready() -> void:
 
 ## Recebe os nós que já existem na cena e reorganiza dentro desta camada.
 func configurar(indicadores_label: Label, grafico: Control, painel: Control) -> void:
-	# ---- esquerda: modos + indicadores ----
-	var esq := _caixa(CAIXA_ESQ)
+	# ---- direita, em cima: modos + indicadores ----
+	var esq := _caixa(CAIXA_INFO)
 	var col := VBoxContainer.new()
 	col.add_theme_constant_override("separation", 2)
 	col.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	esq.add_child(col)
 	col.add_child(_titulo("Caldeirão (debug)"))
-	_modos = _texto(10, COR_TEXTO)
+	_modos = _texto(12, COR_TEXTO)
 	col.add_child(_modos)
 	col.add_child(_linha())
 	col.add_child(_titulo("Sistema"))
@@ -53,19 +54,19 @@ func configurar(indicadores_label: Label, grafico: Control, painel: Control) -> 
 		indicadores_label.z_index = 0
 		indicadores_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		indicadores_label.clip_text = true
-		indicadores_label.custom_minimum_size.x = 138
-		indicadores_label.add_theme_font_size_override("font_size", 10)
+		indicadores_label.custom_minimum_size.x = 150
+		indicadores_label.add_theme_font_size_override("font_size", 13)
 		indicadores_label.add_theme_color_override("font_color", COR_TEXTO)
 		indicadores_label.add_theme_constant_override("line_spacing", -2)
 		scroll.add_child(indicadores_label)
 
-	# ---- direita: Na panela ----
+	# ---- direita, embaixo: Na panela ----
 	if painel:
 		painel.get_parent().remove_child(painel)
 		add_child(painel)
-		painel.position = CAIXA_DIR.position
-		painel.custom_minimum_size = CAIXA_DIR.size
-		painel.size = CAIXA_DIR.size
+		painel.position = CAIXA_PANELA.position
+		painel.custom_minimum_size = CAIXA_PANELA.size
+		painel.size = CAIXA_PANELA.size
 
 	# ---- embaixo: gráfico (mantém a posição da cena, entre o caldeirão e os botões) ----
 	if grafico:
@@ -80,11 +81,12 @@ func configurar(indicadores_label: Label, grafico: Control, painel: Control) -> 
 func atualizar_modos() -> void:
 	if not _modos or not visible:
 		return
-	_modos.text = "M régua: %s\nP cores: %s\nT quente/frio: %s\nC anel já pintado: %s" % [
+	_modos.text = "M régua: %s\nP cores: %s\nT quente/frio: %s\nC anel já pintado: %s\nK %s" % [
 		_curto(IconesCaldeirao.NOMES_MODO[IconesCaldeirao.modo]),
 		_curto(IconesCaldeirao.NOMES_PALETA[IconesCaldeirao.paleta]),
 		_curto(IconesCaldeirao.NOMES_MODO_TEMP[IconesCaldeirao.modo_temp]),
-		"sim" if IconesCaldeirao.precolorido else "não"]
+		"sim" if IconesCaldeirao.precolorido else "não",
+		AnimacaoProdutorio.NOMES_TOQUE[AnimacaoProdutorio.toque]]
 
 
 # ---------------------------------------------------------------------------
@@ -109,7 +111,7 @@ func _caixa(r: Rect2) -> PanelContainer:
 	return p
 
 func _titulo(t: String) -> Label:
-	var l := _texto(12, COR_TITULO)
+	var l := _texto(14, COR_TITULO)
 	l.text = t
 	return l
 
@@ -118,7 +120,7 @@ func _texto(tam: int, cor: Color) -> Label:
 	l.add_theme_font_size_override("font_size", tam)
 	l.add_theme_color_override("font_color", cor)
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	l.custom_minimum_size.x = 138
+	l.custom_minimum_size.x = 150
 	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	return l
 

@@ -18,7 +18,7 @@
 
 [sub_resource type="Resource" id="Resource_vgahb"]
 script = ExtResource("3_lgb6n")
-texto = "🍎 Você encontrou uma maçã vermelha e brilhante."
+texto = "🍎 Você encontrou uma [item]maçã[/item] vermelha e brilhante."
 
 [sub_resource type="Resource" id="Resource_7gdpu"]
 script = ExtResource("4_symku")
@@ -32,7 +32,7 @@ nome = "label_pegar"
 
 [sub_resource type="Resource" id="Resource_0qb50"]
 script = ExtResource("3_lgb6n")
-texto = "🍎 Você pegou a maçã! Ela parece deliciosa."
+texto = "🍎 Você pegou a [item]maçã[/item]! Ela parece deliciosa."
 
 [sub_resource type="Resource" id="Resource_s7fnu"]
 script = ExtResource("7_4rhsc")
@@ -53,7 +53,7 @@ nome = "label_ignorar"
 
 [sub_resource type="Resource" id="Resource_qd3rd"]
 script = ExtResource("3_lgb6n")
-texto = "🍎 Você ignorou a maçã e seguiu seu caminho."
+texto = "🍎 Você ignorou a [item]maçã[/item] e seguiu seu caminho."
 
 [sub_resource type="Resource" id="Resource_ahh1k"]
 script = ExtResource("9_2plsw")

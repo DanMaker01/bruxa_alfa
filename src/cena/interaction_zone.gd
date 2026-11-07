@@ -25,9 +25,9 @@ func _ready():
 	monitorable = true
 	input_pickable = true  # 🔥 ESSENCIAL
 
-	print("[InteractionZone] _ready() - input_pickable: ", input_pickable)
-	print("[InteractionZone] _ready() - collision_layer: ", collision_layer)
-	print("[InteractionZone] _ready() - collision_mask: ", collision_mask)
+	pass
+	pass
+	pass
 
 	area_entered.connect(_on_enter)
 	body_entered.connect(_on_enter)
@@ -40,48 +40,8 @@ func _ready():
 # interaction_zone.gd - _on_enter() com debug completo
 
 func _on_enter(other):
-	# 🔥 DEBUG COMPLETO DO NÓ QUE ENTROU
-	print("\n" + "=".repeat(60))
-	print("🚪🚪🚪 [ZONA TOCADA]")
-	print("  📍 Zona do evento: ", str(get_parent().name) if get_parent() else "?")
-	print("  📍 Evento pai: ", str(get_parent().get_parent().name) if get_parent() and get_parent().get_parent() else "?")
-	print("  📍 trigger_type: ", trigger_type)
-	print("  📍 Posição da zona: ", global_position)
-	
-	# 🔥 INFORMAÇÕES DO NÓ QUE ENTROU
-	print("\n  📦 NÓ QUE ENTROU:")
-	print("	Nome: ", other.name)
-	print("	Classe: ", other.get_class())
-	print("	Posição: ", other.global_position if other.has_method("get_global_position") else "N/A")
-	
-	# 🔥 TENTA IDENTIFICAR O QUE É
-	if other is CharacterBody2D:
-		print("	✅ É um CharacterBody2D (provavelmente o Player)")
-	elif other is Area2D:
-		print("	⚠️ É uma Area2D (pode ser a InteractionZone do Player!)")
-		# 🔥 MOSTRA O PAI DA AREA
-		var parent = other.get_parent()
-		if parent:
-			print("	Pai da Area2D: ", parent.name, " (", parent.get_class(), ")")
-			if parent.name == "Player":
-				print("	✅ É a InteractionZone do PLAYER!")
-	elif other is CollisionShape2D:
-		print("	⚠️ É uma CollisionShape2D (estranho!)")
-	
-	# 🔥 DISTÂNCIA ENTRE PLAYER E ZONA
-	var player = get_node("/root/Main/Mundo/Player")
-	if player:
-		var dist = global_position.distance_to(player.global_position)
-		print("\n  📏 Distância Player-Zona: ", dist)
-		if dist > 100:
-			print("  ⚠️⚠️⚠️ PLAYER LONGE DA ZONA! (", dist, "px)")
-		else:
-			print("  ✅ Player perto da zona")
-	
-	print("=".repeat(60))
-	
 	if not _is_player(other):
-		print("  ❌ NÃO é o player, ignorando!")
+		pass
 		return
 	
 	player_near = true
@@ -99,18 +59,18 @@ func _on_exit(other):
 # interaction_zone.gd - Em _on_click()
 
 func _on_click(_viewport, event, _shape_idx):
-	print("[InteractionZone] 🖱️ _on_click() chamado! trigger_type: ", trigger_type)
-	print("  event: ", event)
+	pass
+	pass
 	
 	if trigger_type != "click":
-		print("  ⏭️ trigger_type não é click: ", trigger_type)
+		pass
 		return
 	
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		print("[InteractionZone] ✅ Clique válido, chamando _try_interact()")
+		pass
 		_try_interact()
 	else:
-		print("  ⏭️ Evento não é clique esquerdo pressionado")
+		pass
 
 func _is_player(other: Node) -> bool:
 	# other pode ser uma Area2D (ex: InteractionZone do Player) ou o próprio
@@ -127,7 +87,7 @@ func _is_player(other: Node) -> bool:
 func _try_interact() -> bool:
 	var now = Time.get_ticks_msec() / 1000.0
 	if now - _last_trigger_time < cooldown:
-		print("[InteractionZone] ⏭️ Cooldown ativo")
+		pass
 		return false
 	
 	# 🔥 VERIFICA DISTÂNCIA ANTES DE EMITIR O SINAL
@@ -135,11 +95,11 @@ func _try_interact() -> bool:
 	if player:
 		var dist = global_position.distance_to(player.global_position)
 		if dist > 200:
-			print("[InteractionZone] ⏭️ Player longe! (", dist, "px) - ignorando")
+			pass
 			return false
 	
 	_last_trigger_time = now
-	print("[InteractionZone] 🔥 EMITINDO interacted!")
+	pass
 	interacted.emit()
 	return true
 # ===== CONTROLE EXTERNO =====
@@ -160,7 +120,7 @@ func set_zone_active(active: bool):
 	if not active:
 		player_near = false
 	
-	print("[InteractionZone] set_zone_active(", active, ") - input_pickable: ", input_pickable)
+	pass
 
 
 func reset_cooldown():

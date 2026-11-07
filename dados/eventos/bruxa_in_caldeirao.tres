@@ -106,7 +106,7 @@ script = ExtResource("8_x")
 [sub_resource type="Resource" id="R_23"]
 script = ExtResource("2_x")
 personagem = ExtResource("x0")
-texto = "Isso não é Calma Profunda nem aqui nem no inferno. Melhor fazer de novo."
+texto = "Isso não é [item]Calma Profunda[/item] nem aqui nem no inferno. Melhor fazer de novo."
 
 [sub_resource type="Resource" id="R_24"]
 script = ExtResource("9_x")

@@ -140,7 +140,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] aplausos
 		
 [ ]	Menus 100%
-	[ ] estilo de cartas
+	[ ] estilo das cartas
 	[ ] inicial
 		[ ] start, load, config, sair
 	[ ] pause
@@ -150,35 +150,38 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 	[ ] loja
 		[ ] completa
 
+[ ] Diálogos 100%
+	[ ] Intro: melhorar texto (tempo e ritmo).
+	[ ] revisar todos
+		[?] camponês de vira antes de caminhar para a porta.
+			Feito: andando (Mover, rota), os eventos viram sozinhos para o lado do movimento, como a bruxa; a direção do Mover é para onde olhar ao chegar. Comando novo "Travar direção" (trava/destrava, bruxa ou evento) para as exceções. Página tem "sprite olha esquerda" para arte desenhada para a esquerda (ligado no camponês).
+	[?] sempre que falar de item, o texto deve estar da mesma cor COR_ITEM
+		Feito: [item]erva[/item] no texto = roxo (#c9a0ff) e negrito (DialogueBox.COR_ITEM). Vale para falas e perguntas das opções. Já marcados: ervas, cogumelos, maçã, véu, Poção da Calma Profunda / Calma Profunda, Poção de Pó de Retorno Concentrada, e as perguntas dos spawns (erva, cogumelo brilhante, flor-de-farra, musgo-do-recato).
 
-[ ] clicar onde há um mais de um evento com trigger click deve ter cuidado. atualmente o evento da frente bloqueia o de trás. se há um evento trigger click vazio por cima de outro evento trigger click com comandos, quero que atinja o de trás e ignore os sem comando.
+[ ] Caldeirão 100%
+	[ ] Menus, botões
+		[?] Botão de ingrediente: afunda e clareia ao encostar o dedo (antes não reagia). Continua lançando ao soltar, para não atrapalhar a rolagem da lista.
+	[ ] Poções balanceadas
+	[ ] Feedback bom pra temperatura do caldeirão, tanto frio quanto quente
+		[?] Ícone do ingrediente quente/frio: antes eram degraus (nada até 5% do limite; 30% de cor até o limite; 65% depois), por isso ficava vermelho de repente.
+			Agora (padrão FOLGA): a cor começa antes do limite na distância da folga do ingrediente ((1 − k_max)·T_max no quente, (1 + k_min)·T_min no frio),
+			cresce sem degraus até 45% no limite e até 80% na punição total. Tecla T no preparo (só testes): folga / porcentagem 80% / 25 °C fixos / degraus (antigo).
+			Gelo no frio continua igual.
+		[?] Partículas maiores (menos as bolhas, que ficam do tamanho original): x1,8 (ESCALA_PARTICULAS) e as do abanar o fogo (labaredas e brasas) x2,6 (ESCALA_ABANAR), em visual_caldeirao.gd.
+			Particulas de bolha e caldeirão não devem sofrer a escala. somente as fogo.
+	[ ] Receitas 
+	[?] Caldeirão: anéis branco > amarelo > laranja > vermelho > verde no ideal, e volta ao passar.
+		Modos para testar no preparo (teclado):
+			M = régua (punição / proporcional / absoluto), já existia.
+			P = cores: FAIXA (padrão: anéis contínuos, cada trecho com a cor do aproveitamento naquele ponto: vermelho > amarelo > verde no ideal > amarelo > vermelho; o anel começa vazio e vai revelando a cor; anel de fora = cozimento, de dentro = tempo) · dourado (antiga) · aproxima (branco > amarelo > laranja > vermelho > VERDE no ideal; passando: vermelho > laranja > amarelo > branco) · semáforo (cinza > amarelo > verde; passando: amarelo > laranja > vermelho > preto) · cor única (o anel inteiro na cor do estado atual).
+			C = anel já colorido (as bolhinhas apagadas já mostram a cor do trecho, fraquinhas, e a "barra" vai acendendo).
+			A vela usa as mesmas cores. Começa em "faixa". Outras ideias de feedback: me diga e eu ponho como mais um modo.
+	[?] Debug do caldeirão organizado: caixas com fundo (direita: modos M/P/T/C/K + indicadores em cima, "Na panela" embaixo; embaixo do caldeirão: gráfico). Liga no menu de debug (aba Mapa) ou no botão "debug grafico caldeirão" (embaixo do DEBUG, canto superior esquerdo) (src/preparo/debug_caldeirao.gd).
+	[?] Resultado Caldeirão: animação do produtório das matrizes no resultado.
+		Feito (src/preparo/animacao_produtorio.gd, antes da poção na JanelaResultado): ingredientes se alinham (A = B_n·…·B_1, o 1º à direita/embaixo), anel enche até a_i e a grade desbota de A_i para B_i, os B_i se combinam em ordem até a matriz final, que fica no lugar da grade da janela. Sem agrupar iguais. A poção só aparece ao confirmar (toque): a matriz encolhe e vira a poção, que vai para o inventário. Só em coluna; depois da 1ª combinação o cartão vira ícone de poção e o anel mostra a média do aproveitamento. Teste no preparo: K = toque acelera/pula.
+	[?] Tela de resultado: 3 visuais para testar (botões no rodapé quando a janela está pronta): "coluna" (nome + nota; matriz e pentágono lado a lado; ícones dos ingredientes com anel, tocar abre os detalhes e a curva), "páginas" (Efeito / Ingredientes / Preparo, arrastar ou setas) e "duas colunas" (o antigo). Nota: estrelas / porcentagem / sem nota. A poção surge no lugar da matriz ao confirmar. Ficou só o "coluna" (os outros foram apagados do código) (src/preparo/resultado_vistas.gd).
+	[ ] Caldeirão: balancear dificuldade (peso de cada erro).
 
-
-
-[ ] DEMO:
-	[ ] Caldeirão 100%
-		[ ] Menus, botões
-			[?] Botão de ingrediente: afunda e clareia ao encostar o dedo (antes não reagia). Continua lançando ao soltar, para não atrapalhar a rolagem da lista.
-		[ ] Poções balanceadas
-		[ ] Feedback bom pra temperatura do caldeirão, tanto frio quanto quente
-			[?] Ícone do ingrediente quente/frio: antes eram degraus (nada até 5% do limite; 30% de cor até o limite; 65% depois), por isso ficava vermelho de repente.
-				Agora (padrão FOLGA): a cor começa antes do limite na distância da folga do ingrediente ((1 − k_max)·T_max no quente, (1 + k_min)·T_min no frio),
-				cresce sem degraus até 45% no limite e até 80% na punição total. Tecla T no preparo (só testes): folga / porcentagem 80% / 25 °C fixos / degraus (antigo).
-				Gelo no frio continua igual.
-			[?] Partículas maiores (menos as bolhas, que ficam do tamanho original): x1,8 (ESCALA_PARTICULAS) e as do abanar o fogo (labaredas e brasas) x2,6 (ESCALA_ABANAR), em visual_caldeirao.gd.
-		[ ] Receitas 
-		[?] Caldeirão: anéis branco > amarelo > laranja > vermelho > verde no ideal, e volta ao passar.
-			Modos para testar no preparo (teclado):
-				M = régua (punição / proporcional / absoluto), já existia.
-				P = cores: FAIXA (padrão: anéis contínuos, cada trecho com a cor do aproveitamento naquele ponto: vermelho > amarelo > verde no ideal > amarelo > vermelho; o anel começa vazio e vai revelando a cor; anel de fora = cozimento, de dentro = tempo) · dourado (antiga) · aproxima (branco > amarelo > laranja > vermelho > VERDE no ideal; passando: vermelho > laranja > amarelo > branco) · semáforo (cinza > amarelo > verde; passando: amarelo > laranja > vermelho > preto) · cor única (o anel inteiro na cor do estado atual).
-				C = anel já colorido (as bolhinhas apagadas já mostram a cor do trecho, fraquinhas, e a "barra" vai acendendo).
-				A vela usa as mesmas cores. Começa em "faixa". Outras ideias de feedback: me diga e eu ponho como mais um modo.
-		[?] Debug do caldeirão organizado: caixas com fundo (esq.: modos M/P/T/C + indicadores; dir.: "Na panela"; embaixo: gráfico). Liga no menu de debug (aba Mapa) ou no botão "debug" fixo no canto superior direito do preparo (src/preparo/debug_caldeirao.gd).
-		[ ] Resultado Caldeirão: animação do produtório das matrizes no resultado.
-		[ ] Caldeirão: balancear dificuldade (peso de cada erro).
-	[ ] Diálogos 100%
-		[ ] Intro: melhorar texto (tempo e ritmo).
-		[ ] revisar todos
 	
 
 
@@ -187,11 +190,9 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 	[ ] Balão de expressão por sprite: precisa da arte (1 sprite de balão, se der pra fazer sem deformar as quinas seria ideal)
 	[ ] Resultado 1: o que muda depois do casamento (falas, bônus, realeza deve um favor/dinheiro).
 	[ ] Som de festa/igreja e de palmas (hoje o casamento usa batida02.mp3 nas palmas).
-	[ ] Pode apagar: dados/eventos/cidadeA_in03_vazia.tres, dados/falantes/bruxa_pensando.tres.
+	[ ] Pode apagar: dados/eventos/cidadeA_in03_vazia.tres, dados/falantes/bruxa_pensando.tres. (conferido: nada usa; o editor daqui não consegue apagar, apague pelo explorador)
   	[ ] Convidados muito apertados na igreja -> aumentar igreja
-	[?] Lock interação da bruxa antes da cena da igreja, pq tá dando pra clicar nos convidados. não é por variável é por travar o player.
-		Feito: durante a cena (casamento = 1) noivos, rei, padre e convidados aparecem mas não respondem ao clique; só depois (casamento = 2).
-
+	
 [ ] Usar traços na história:
 	[ ] O
 	[ ] C
@@ -222,13 +223,15 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 
 
 [!] Padrão dos eventos: retângulo de colisão e retângulo de interação do tamanho do sprite (escala x = 1, y = 1).
-	Feito: tamanho = 1º quadro da animação da página x escala; sem sprite = 64x64. Todas as páginas foram convertidas (mesmo tamanho de antes).
+	Feito: tamanho = 1º quadro da animação da página x escala; sem sprite = 32x32 (antes 64x64). Todas as páginas foram convertidas (mesmo tamanho de antes).
 [?] Editor de eventos em Python (_/editor_eventos, abrir com abrir_editor.bat; precisa de PySide6): páginas, condições, comandos, diálogo em texto (Ctrl+T), labels (F12), várias páginas/eventos de uma vez, buscar/substituir, desfazer, backup ao salvar. Ver _/editor_eventos/README.md.
 [ ] ervas muito escondidas na floresta. mudar o sprite da erva para destacar mais na floresta.
 [ ] entrando em portas sem querer com o touch, feedback quando clicar em eventos
 [ ] definir quando o hud abre a primeira vez, bruxa_out1 na intro? bruxa_in logo antes de iniciar o diálogo?
 [ ] balão de expressão: o atual está montando na hora e dá pra ver a ligação do cabo com o fundo, mudar por sprite?
 [?] cor nas palavras/frases, efeito nas palavras/frases no comando mostrarmsg.
+	Toc toc (efeito SOM): os risquinhos apontam sempre para a esquerda (dentro ou fora da tela).
+	Prints de debug tirados de interaction_zone.gd, pagina.gd e evento_base.gd (davam "output overflow").
 	Feito: BBCode do Godot no texto: [color=red]..[/color], [b], [i], [u], [s], [wave], [shake], [rainbow], [tornado], [fade], [bgcolor=..], [font_size=..], [outline_color=..], [outline_size=..].
 	Outros "[" continuam aparecendo como texto. A escrita letra a letra conta só as letras (sem as tags). O cabeçalho antigo [nome;foto;pos] continua valendo.
 	Anotado: lista de comandos (e BBCode) no fim do readme, em "Comandos de evento (referência)".
@@ -368,7 +371,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 
 ```
 Cada página (PaginaData) tem: condições (todas valem), gatilho (CLIQUE / TOQUE / PARALELO), aparência,
-colisão/área (tamanho = sprite x escala; sem sprite = 64x64), movimento (FIXO / ROTA) e a lista de comandos.
+colisão/área (tamanho = sprite x escala; sem sprite = 32x32), movimento (FIXO / ROTA) e a lista de comandos.
 Vale a ÚLTIMA página cujas condições são todas verdadeiras. Página sem sprite e área bem pequena (ex. 0.015) = evento "some".
 
 CONDIÇÃO (páginas, if, while)
@@ -403,10 +406,11 @@ DIÁLOGO
 
 BRUXA E EVENTOS
 	player (TRAVAR / DESTRAVAR / MOSTRAR / SUMIR)
-	mover (alvo BRUXA/EVENTO, destino X / ATE_EVENTO / DESLOCAR / PARAR, x, y, manter_y, velocidade, direcao, esperar)
+	mover (alvo BRUXA/EVENTO, destino X / ATE_EVENTO / DESLOCAR / PARAR, x, y, manter_y, velocidade, direcao, esperar)  · andando vira sozinho; direcao = para onde olhar ao chegar
 		bruxa: velocidade 0 = normal (acelera); > 0 = fixa (use a mesma dos eventos que acompanham)
 		evento: velocidade 0 = 100 px/s
 	direcao (alvo, evento, ESQ / DIR / INVERTER / CENTRO / OLHAR_PARA, olhar_para)
+	travar_direcao (alvo BRUXA/EVENTO, evento, travar) trava/destrava: andando não vira (Direção ainda vira)
 	passavel (alvo BRUXA/EVENTO, evento, passavel)
 	evento_animacao (evento, animacao; vazio = a da página)
 	teleportar (mapa, posicao, direcao)

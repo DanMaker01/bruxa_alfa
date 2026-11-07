@@ -37,7 +37,6 @@ tempo = 0.5
 [sub_resource type="Resource" id="Resource_vtuls"]
 script = ExtResource("1_xv7w2")
 gatilho = 1
-passavel = false
 sprite_frames = ExtResource("6_4gqgl")
 animacao = "parado"
 comandos = Array[ExtResource("2_bvnbx")]([SubResource("F_som_passos1"), SubResource("Resource_d5yqk"), SubResource("Resource_cdy7n"), SubResource("Resource_w0au8"), SubResource("Resource_uvl32")])

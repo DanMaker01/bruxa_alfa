@@ -14,7 +14,7 @@ config/name="bruxa_alfa"
 run/main_scene="uid://w01l2embks1u"
 config/features=PackedStringArray("4.6", "Mobile")
 boot_splash/show_image=false
-config/icon="uid://b5y665vmbym84"
+config/icon="uid://cixkmkhxtl40b"
 
 [audio]
 

@@ -204,7 +204,7 @@ texto = "Agora que o casamento acabou, o castelo deve abrir de novo."
 script = ExtResource("Ix7")
 personagem = ExtResource("Ix9")
 face = "pensando"
-texto = "Ainda preciso buscar aquele véu."
+texto = "Ainda preciso buscar aquele [item]véu[/item]."
 
 [sub_resource type="Resource" id="I_52"]
 script = ExtResource("Ix14")

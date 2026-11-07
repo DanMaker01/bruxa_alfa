@@ -7,6 +7,7 @@ var animacao: String = "idle"
 var animacao_padrao: String = "idle"   # a da página (set_animation("") volta para ela)
 var direcao: String = "centro"          # "centro", "esq" ou "dir"
 var passavel: bool = true
+var _arte_esquerda: bool = false   # PaginaData.sprite_olha_esquerda
 var trigger_type: String = "click"
 
 # ===== REFERÊNCIAS =====
@@ -18,23 +19,23 @@ var trigger_type: String = "click"
 var debug_data: Dictionary = {}
 
 func _ready():
-	print("\n🔍 [Pagina] _ready() CHAMADO para: ", name)
+	pass
 	_debug_zone_state("_ready_INICIO")
 	
 	if interaction_zone:
 		# CONFIGURA A ZONA (quem escuta os sinais dela agora é o evento_base
 		# diretamente, via get_interaction_zone() - pagina não faz mais relay)
 		interaction_zone.trigger_type = trigger_type
-		print("[Pagina] ✅ InteractionZone configurada!")
+		pass
 		_debug_zone_state("_ready_FIM")
 	else:
-		print("[Pagina] ❌ InteractionZone NÃO encontrada!")
-		print("[Pagina]   Filhos disponíveis: ", _list_children())
+		pass
+		pass
 
 func configure(data: PaginaData):
 	"""Configura a página com os dados do PaginaData"""
-	print("\n🔍 [Pagina] configure() CHAMADO para: ", name)
-	print("[Pagina] Dados recebidos: ", data)
+	pass
+	pass
 	
 	_debug_zone_state("configure_INICIO")
 	
@@ -43,9 +44,9 @@ func configure(data: PaginaData):
 	if frames:
 		if animated_sprite:
 			animated_sprite.sprite_frames = frames
-			print("[Pagina] ✅ SpriteFrames: ", frames.resource_path)
+			pass
 	else:
-		print("[Pagina] ⚠️ Página sem sprite_frames")
+		pass
 	
 	# ===== TOCA ANIMAÇÃO =====
 	animacao = data.animacao
@@ -53,16 +54,17 @@ func configure(data: PaginaData):
 	if animated_sprite and animated_sprite.sprite_frames:
 		if animated_sprite.sprite_frames.has_animation(animacao):
 			animated_sprite.play(animacao)
-			print("[Pagina] ✅ Animação: ", animacao)
+			pass
 		else:
 			var animations = animated_sprite.sprite_frames.get_animation_names()
 			if animations.size() > 0:
 				animated_sprite.play(animations[0])
-				print("[Pagina] ⚠️ Animação '", animacao, "' não encontrada. Usando: ", animations[0])
+				pass
 			else:
-				print("[Pagina] ❌ Nenhuma animação disponível!")
+				pass
 	
 	# ===== DIREÇÃO =====
+	_arte_esquerda = data.sprite_olha_esquerda
 	set_direcao(PaginaData.DIRECOES[data.direcao])
 
 	# ===== CONFIGURA COLISÃO (StaticBody2D) =====
@@ -73,15 +75,15 @@ func configure(data: PaginaData):
 		collision_shape.position = Vector2(colisao_pos[0], colisao_pos[1])
 		# collision_shape.scale = Vector2(colisao_scale[0], colisao_scale[1])
 
-		# Tamanho = tamanho do sprite x escala (64x64 sem sprite).
+		# Tamanho = tamanho do sprite x escala (32x32 sem sprite).
 		# Shape novo sempre: não acumula se configure() rodar de novo.
 		var new_size = tamanho_base() * colisao_scale
 		collision_shape.shape = RectangleShape2D.new()
 		collision_shape.shape.size = new_size
 
-		print("[Pagina] ✅ Colisão StaticBody2D: pos=", colisao_pos, " scale=", colisao_scale, " shape=", new_size)
+		pass
 	# ===== CONFIGURA INTERACTION ZONE =====
-	print("\n🔍 [Pagina] Configurando INTERACTION ZONE...")
+	pass
 
 	if interaction_zone:
 		# 📍 POSIÇÃO DA ÁREA
@@ -89,7 +91,7 @@ func configure(data: PaginaData):
 		interaction_zone.position = pos
 		debug_data["area_pos_aplicado"] = pos
 		
-		# 📏 ÁREA (tamanho = tamanho do sprite x escala; 64x64 sem sprite)
+		# 📏 ÁREA (tamanho = tamanho do sprite x escala; 32x32 sem sprite)
 		var shape_node = interaction_zone.get_node_or_null("CollisionShape2D")
 		if shape_node:
 			var area_size = tamanho_base() * data.area_scale
@@ -97,42 +99,42 @@ func configure(data: PaginaData):
 			shape_node.shape.size = area_size
 			debug_data["shape_size_final"] = area_size
 		else:
-			print("[Pagina] ⚠️ CollisionShape2D não encontrado!")
+			pass
 
 		# ⚡ TRIGGER
 		trigger_type = data.get_trigger()
 		interaction_zone.trigger_type = trigger_type
-		print("[Pagina] ✅ Trigger aplicado: ", trigger_type)
+		pass
 		
 		# 🔄 COOLDOWN
 		interaction_zone.cooldown = data.cooldown
-		print("[Pagina] ✅ Cooldown aplicado: ", interaction_zone.cooldown)
+		pass
 	
 	# ===== CONFIGURA PASSAVEL =====
 	passavel = data.passavel
 	if collision_shape:
 		collision_shape.disabled = passavel
-		print("[Pagina] ✅ passavel: ", passavel)
+		pass
 	
 	# ===== ATIVA ZONA =====
 	if interaction_zone:
 		interaction_zone.set_zone_active(true)
-		print("[Pagina] ✅ Zona ativada (monitoring, monitorable, input_pickable)")
+		pass
 	
 	if interaction_zone:
 		interaction_zone.set_zone_active(true)
-		print("[pagina] zona ativada com input_pickable=true")
+		pass
 
 	_debug_zone_state("configure_FIM")
 	
-	print("\n🔍 [Pagina] configure() FINALIZADO para: ", name)
-	print("[Pagina] Dados debug: ", debug_data)
-	print("=".repeat(50))
+	pass
+	pass
+	pass
 
-const TAMANHO_SEM_SPRITE := Vector2(64, 64)
+const TAMANHO_SEM_SPRITE := Vector2(32, 32)
 
 ## Tamanho base da colisão e da área: o 1º quadro da animação atual
-## (x escala do sprite). Sem sprite: 64x64.
+## (x escala do sprite). Sem sprite: 32x32.
 func tamanho_base() -> Vector2:
 	if animated_sprite and animated_sprite.sprite_frames:
 		var anim: StringName = animated_sprite.animation
@@ -152,7 +154,7 @@ func set_animation(anim_name: String) -> bool:
 	if animated_sprite and animated_sprite.sprite_frames and animated_sprite.sprite_frames.has_animation(anim_name):
 		animated_sprite.play(anim_name)
 		animacao = anim_name
-		print("[Pagina] Animação alterada: ", anim_name)
+		pass
 		return true
 	return false
 
@@ -161,7 +163,11 @@ func set_animation(anim_name: String) -> bool:
 func set_direcao(nova: String) -> void:
 	direcao = nova
 	if animated_sprite:
-		animated_sprite.flip_h = nova == "esq"
+		# arte olhando para a direita: "esq" espelha. Arte olhando para a esquerda: "dir" espelha.
+		if _arte_esquerda:
+			animated_sprite.flip_h = nova == "dir"
+		else:
+			animated_sprite.flip_h = nova == "esq"
 
 func get_direcao() -> String:
 	return direcao
@@ -170,7 +176,7 @@ func set_passavel(value: bool):
 	passavel = value
 	if collision_shape:
 		collision_shape.disabled = passavel
-		print("[Pagina] passavel alterado para ", passavel)
+		pass
 
 # pagina.gd - Em set_active()
 
@@ -179,16 +185,16 @@ func set_active(active: bool):
 	
 	if collision_shape:
 		collision_shape.disabled = passavel if active else true
-		print("[Pagina] set_active(", active, ") - passavel: ", passavel, " - collision.disabled: ", collision_shape.disabled)	
+		pass
 	else:
-		print("  ❌ shape é NULL!")
+		pass
 
 	if interaction_zone:
 		interaction_zone.set_zone_active(active)
 		# 🔥 GARANTE QUE input_pickable FICA TRUE PARA CLICK
 		if trigger_type == "click":
 			interaction_zone.input_pickable = true
-			print("[Pagina] set_active() - input_pickable forçado para true")
+			pass
 
 func is_passavel() -> bool:
 	return passavel
@@ -211,7 +217,7 @@ func get_interaction_zone() -> InteractionZone:
 
 func _debug_zone_state(label: String):
 	"""Debug do estado da zona"""
-	print("\n🔍 [DEBUG ZONE] ", label)
+	pass
 	if interaction_zone:
 		# print("  ✅ interaction_zone existe")
 		# print("  position: ", interaction_zone.position)
@@ -225,17 +231,17 @@ func _debug_zone_state(label: String):
 		
 		var shape = interaction_zone.get_node_or_null("CollisionShape2D")
 		if shape:
-			print("  CollisionShape2D existe: ", shape.name)
+			pass
 			if shape.shape:
-				print("	shape tipo: ", shape.shape.get_class())
+				pass
 				if shape.shape is RectangleShape2D:
-					print("	size: ", shape.shape.size)
+					pass
 			else:
-				print("	❌ shape é NULL!")
+				pass
 		else:
-			print("  ❌ CollisionShape2D NÃO encontrado!")
+			pass
 	else:
-		print("  ❌ interaction_zone é NULL!")
+		pass
 
 func _list_children() -> String:
 	"""Lista os filhos do nó"""
@@ -245,7 +251,7 @@ func _list_children() -> String:
 	return ", ".join(names)
 
 func debug():
-	print("\n=== PAGINA DEBUG ===")
+	pass
 	# print("  Nome: ", name)
 	# print("  Animação: ", animacao)
 	# print("  Passável: ", passavel)
@@ -260,10 +266,10 @@ func debug():
 	# 	print("  Zone player_near: ", interaction_zone.player_near)
 	# 	print("  Zone position: ", interaction_zone.position)
 	# 	print("  Zone scale: ", interaction_zone.scale)
-	print("=====================\n")
+	pass
 
 func debug_area():
-	print("\n=== PAGINA DEBUG ÁREA ===")
+	pass
 	# print("  Nome: ", name)
 	# print("  Visible: ", visible)
 	# print("  Trigger: ", trigger_type)
@@ -276,4 +282,4 @@ func debug_area():
 	# 	print("  Zone position: ", interaction_zone.position)
 	# 	print("  Zone scale: ", interaction_zone.scale)
 	# 	print("  Zone player_near: ", interaction_zone.player_near)
-	print("========================\n")
+	pass

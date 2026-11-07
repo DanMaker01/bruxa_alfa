@@ -32,7 +32,7 @@ script = ExtResource("3_0h868")
 evento = ExtResource("ev_floresta_passagem2")
 
 [node name="Passagem3" type="CharacterBody2D" parent="Eventos" unique_id=1985447023]
-position = Vector2(3729, 598)
+position = Vector2(3737, 590)
 script = ExtResource("3_0h868")
 evento = ExtResource("ev_floresta_passagem_bruxa_out")
 

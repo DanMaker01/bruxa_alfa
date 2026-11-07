@@ -56,7 +56,7 @@ segundos = 0.3
 script = ExtResource("4_x")
 personagem = ExtResource("x1")
 face = "pensando"
-texto = "Melhor fugir... e aproveitar para pegar o véu."
+texto = "Melhor fugir... e aproveitar para pegar o [item]véu[/item]."
 
 [sub_resource type="Resource" id="G_esp_pensa"]
 script = ExtResource("2_x")
