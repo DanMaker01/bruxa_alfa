@@ -43,6 +43,12 @@ func _process(delta: float) -> void:
 		queue_redraw()
 
 
+## Centro (local) da área dos pontos, sem as letras da margem.
+func centro_pontos() -> Vector2:
+	var margem := 14.0
+	var lado: float = minf(size.x, size.y) - margem
+	return Vector2(margem, margem) + Vector2(lado, lado) * 0.5
+
 func mostrar(A: Array) -> void:
 	_A = A
 	queue_redraw()

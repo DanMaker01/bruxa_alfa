@@ -208,13 +208,14 @@ func _criar_componentes() -> void:
 
 	janela_resultado = JanelaResultado.new()
 	janela_resultado.name = "JanelaResultado"
+	janela_resultado.z_index = 8   # acima do debug do caldeirão (7) e da bruxa chibi (6)
 	add_child(janela_resultado)
 	janela_resultado.fechou.connect(_on_resultado_fechado)
 
 	debug_ui = DebugCaldeirao.new()
 	add_child(debug_ui)
 	move_child(debug_ui, janela_resultado.get_index())   # debaixo da janela do resultado
-	debug_ui.configurar(indicadores_label, grafico, painel)
+	debug_ui.configurar(indicadores_label, grafico, painel, self)
 	_criar_botao_debug()
 	_aplicar_debug()
 
@@ -676,26 +677,32 @@ func is_preparando() -> bool:
 func _unhandled_input(event: InputEvent) -> void:
 	if not visible or not (event is InputEventKey) or not event.pressed or event.echo:
 		return
-	if event.keycode == KEY_M:
-		IconesCaldeirao.modo = (IconesCaldeirao.modo + 1) % IconesCaldeirao.ModoRegua.size()
-		feedback.texto_flutuante("régua: " + IconesCaldeirao.NOMES_MODO[IconesCaldeirao.modo], Color(0.85, 0.85, 1.0))
+	var tecla := OS.get_keycode_string(event.keycode)
+	if tecla in ["M", "P", "T", "K", "C"]:
+		trocar_modo(tecla)
 		get_viewport().set_input_as_handled()
-	elif event.keycode == KEY_P:
-		IconesCaldeirao.paleta = (IconesCaldeirao.paleta + 1) % IconesCaldeirao.Paleta.size()
-		feedback.texto_flutuante("cores: " + IconesCaldeirao.NOMES_PALETA[IconesCaldeirao.paleta], Color(0.85, 0.85, 1.0))
-		get_viewport().set_input_as_handled()
-	elif event.keycode == KEY_T:
-		IconesCaldeirao.modo_temp = (IconesCaldeirao.modo_temp + 1) % IconesCaldeirao.ModoTemp.size()
-		feedback.texto_flutuante("aviso quente/frio: " + IconesCaldeirao.NOMES_MODO_TEMP[IconesCaldeirao.modo_temp], Color(0.85, 0.85, 1.0))
-		get_viewport().set_input_as_handled()
-	elif event.keycode == KEY_K:
-		AnimacaoProdutorio.toque = (AnimacaoProdutorio.toque + 1) % AnimacaoProdutorio.Toque.size()
-		feedback.texto_flutuante("produtório: " + AnimacaoProdutorio.NOMES_TOQUE[AnimacaoProdutorio.toque], Color(0.85, 0.85, 1.0))
-		get_viewport().set_input_as_handled()
-	elif event.keycode == KEY_C:
-		IconesCaldeirao.precolorido = not IconesCaldeirao.precolorido
-		feedback.texto_flutuante("anel já colorido: " + ("sim" if IconesCaldeirao.precolorido else "não"), Color(0.85, 0.85, 1.0))
-		get_viewport().set_input_as_handled()
+
+## Modos de teste (teclas M / P / T / K / C, ou tocando no debug do caldeirão).
+func trocar_modo(tecla: String) -> void:
+	var cor := Color(0.85, 0.85, 1.0)
+	match tecla:
+		"M":
+			IconesCaldeirao.modo = (IconesCaldeirao.modo + 1) % IconesCaldeirao.ModoRegua.size()
+			feedback.texto_flutuante("régua: " + IconesCaldeirao.NOMES_MODO[IconesCaldeirao.modo], cor)
+		"P":
+			IconesCaldeirao.paleta = (IconesCaldeirao.paleta + 1) % IconesCaldeirao.Paleta.size()
+			feedback.texto_flutuante("cores: " + IconesCaldeirao.NOMES_PALETA[IconesCaldeirao.paleta], cor)
+		"T":
+			IconesCaldeirao.modo_temp = (IconesCaldeirao.modo_temp + 1) % IconesCaldeirao.ModoTemp.size()
+			feedback.texto_flutuante("aviso quente/frio: " + IconesCaldeirao.NOMES_MODO_TEMP[IconesCaldeirao.modo_temp], cor)
+		"K":
+			AnimacaoProdutorio.toque = (AnimacaoProdutorio.toque + 1) % AnimacaoProdutorio.Toque.size()
+			feedback.texto_flutuante("produtório: " + AnimacaoProdutorio.NOMES_TOQUE[AnimacaoProdutorio.toque], cor)
+		"C":
+			IconesCaldeirao.precolorido = not IconesCaldeirao.precolorido
+			feedback.texto_flutuante("anel já colorido: " + ("sim" if IconesCaldeirao.precolorido else "não"), cor)
+	if debug_ui:
+		debug_ui.atualizar_modos()
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:

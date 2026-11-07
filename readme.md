@@ -167,6 +167,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 			Gelo no frio continua igual.
 		[?] Partículas maiores (menos as bolhas, que ficam do tamanho original): x1,8 (ESCALA_PARTICULAS) e as do abanar o fogo (labaredas e brasas) x2,6 (ESCALA_ABANAR), em visual_caldeirao.gd.
 			Particulas de bolha e caldeirão não devem sofrer a escala. somente as fogo.
+			No abanar as faíscas estão subindo muito alto.
 		[?] Bolhas e estrelas pela temperatura em curva exponencial (quase nada no começo, máximo em 200 °C): quantidade, velocidade e giro das estrelas. Limites baixos em visual_caldeirao.gd (PARTICULAS_CURVA, BOLHAS_*_MAX, ESTRELAS_*_MAX).
 		[?] Vermelho do caldeirão por pontos (GRADIENTE_VERMELHO em visual_caldeirao.gd): 100 °C só o fundinho, 160 °C todo vermelho claro, 200 °C bem vermelho. Para mudar, edite os pontos (°C, progresso).
 		[?]  anéis branco > amarelo > laranja > vermelho > verde no ideal, e volta ao passar.
@@ -183,14 +184,13 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 			Por quê: o cogumelo multiplica E por 1,16 (+16%) e o critério do filho do mercador aceitava qualquer E que subisse 10% (e aceitava C/A/O mudando até "pouco").
 			Ajuste: E precisa subir "muito" (>= +30%; a desenvoltura dá +40%) e O, C, A não podem mudar (menos de 10%); N não pode subir; nenhum traço extremo.
 			Com 1 cogumelo agora: "B-bom... dia." / "Melhorou um pouco, mas ainda não dá para deixar a loja com ele."
+	
+	
+[?] Menu de debug mais leve: escuro translúcido, linhas finas, fonte 18 (toque continua 56 px). Só monta a aba aberta (abria tudo de uma vez). Busca geral no topo filtra a aba atual. Aba nova "Estados": salva/carrega variáveis, personalidades, inventário e self-vars em slots (user://debug_estados.json).
+	Estado deve virar Save/Load futuramente.
 
-	[?] Resultado Caldeirão: animação do produtório das matrizes no resultado.
-		Feito (src/preparo/animacao_produtorio.gd, antes da poção na JanelaResultado): ingredientes se alinham (A = B_n·…·B_1, o 1º à direita/embaixo), anel enche até a_i e a grade desbota de A_i para B_i, os B_i se combinam em ordem até a matriz final, que fica no lugar da grade da janela. Sem agrupar iguais. A poção só aparece ao confirmar (toque): a matriz encolhe e vira a poção, que vai para o inventário. Só em coluna; depois da 1ª combinação o cartão vira ícone de poção e o anel mostra a média do aproveitamento. Teste no preparo: K = toque acelera/pula.
-		Ao finalizar: os cartões saem dos ícones dos ingredientes no caldeirão (perdidos não), a tela vai ao preto puro e a cena do caldeirão fica escondida e parada (CenaPreparo.cobrir_cena) até a janela fechar. Mais leve.
 
-
-
-[ ] Roteiro/Estilo/Personagens
+[ ] Roteiro/Estilo/Personagens/Quests
 	[ ] Princípios
 		[ ]	Diálogos devem condizer com a época
 		[ ] Cada personagem tem seu linguajar próprio e manias.
@@ -210,11 +210,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 	[ ] Cap. 1 Casamento
 		[?] após o casamento as falas no castelo_in01 devem mudar
 			Feito: rei, princesa e os dois guardas têm falas novas depois do casamento, diferentes para resultado 1 (convidada, grata) e 2 (não convidada, princesa "calma demais").
-	
-	
-
-[ ] Quando o HUD abre a primeira vez (bruxa_out1 na intro? bruxa_in antes do diálogo?).
-[ ] Pode apagar: dados/eventos/cidadeA_in03_vazia.tres, dados/falantes/bruxa_pensando.tres. (conferido: nada usa; o editor daqui não consegue apagar, apague pelo explorador)
+	[ ] cidadeA_in01 não tem quest?
 
 [ ] Usar traços na história:
 	[ ] O
@@ -222,6 +218,11 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 	[!] E (cidade_in02, mercador)
 	[ ] A
 	[!] N (cap 1, princesa)
+	
+
+[ ] Quando o HUD abre a primeira vez (bruxa_out1 na intro? bruxa_in antes do diálogo?).
+
+[ ] Pode apagar: dados/eventos/cidadeA_in03_vazia.tres, dados/falantes/bruxa_pensando.tres. (conferido: nada usa; o editor daqui não consegue apagar, apague pelo explorador)
 
 [ ] ervas muito escondidas na floresta. mudar o sprite da erva para destacar mais na floresta.
 
@@ -304,6 +305,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 
 [ ]	Caldeirão:
 [ ]		Tutorial(leve) na primeira vez. (DEPOIS DO CAP. 1) (cozinhar apenas 1 ou 2 itens.)
+[ ] 	Poder retirar item (com punição: cozimento? fragil? etc)
 
 [ ] Mapa:
 [.]         Remover todos eventos placeholders de item dos mapas

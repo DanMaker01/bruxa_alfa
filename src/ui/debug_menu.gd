@@ -3,18 +3,25 @@
 # e roda comandos de evento na hora (aba "Comandos", ver debug_comandos.gd)
 # em tempo de jogo. Construído todo por código; o GameManager cria na primeira vez.
 # Também abre/fecha pelo botão "DBG" no canto (0,0) da tela.
+# Visual leve (escuro translúcido, linhas finas). Só monta a aba que está aberta
+# (as outras ficam "sujas" e montam quando forem abertas). Busca no topo filtra a aba atual.
+# Aba "Estados": salva/carrega variáveis, personalidades, inventário e self-vars em slots
+# de teste (user://debug_estados.json).
 extends Control
 class_name DebugMenu
 
 const TRACOS := ["O", "C", "E", "A", "N"]
-const FONTE: int = 22            # fonte do menu
+const FONTE: int = 18            # fonte do menu
 ## Altura mínima de botões, campos e caixas de marcar (bom para o dedo no celular).
 const ALTURA_TOQUE: float = 56.0
 const COR_TEXTO := Color(0.95, 0.93, 0.88)
 const BOTAO_DBG := Vector2(96, 64)
-const COR_FUNDO := Color(0.32, 0.32, 0.34, 0.98)       # cinza do painel
-const COR_FUNDO_FICHA := Color(0.26, 0.26, 0.28, 0.99)
-const COR_CELULA := Color(0.38, 0.38, 0.4)
+const COR_FUNDO := Color(0.07, 0.07, 0.09, 0.93)       # painel escuro translúcido
+const COR_FUNDO_FICHA := Color(0.1, 0.1, 0.12, 0.98)
+const COR_CELULA := Color(0.17, 0.17, 0.19)
+const COR_LINHA := Color(1, 1, 1, 0.08)                 # bordas finas
+const COR_DESTAQUE := Color(1.0, 0.8, 0.3)
+const ARQ_ESTADOS := "user://debug_estados.json"
 const TAM_CHECK: int = 40                              # caixa de marcar (px)
 const COR_CHECK := Color(1.0, 0.8, 0.3)
 
@@ -38,6 +45,10 @@ var _titulo: Label
 var _filtro_vars: String = ""
 var _so_alteradas: bool = false
 static var _ultima_aba: int = 0   # reabre na aba onde parou
+var _busca: LineEdit               # busca geral (filtra a aba atual)
+var _pronto: bool = false          # _ready terminou (antes disso a janela ainda está visível)
+var _sujas: Dictionary = {}        # nome da aba -> precisa remontar
+var _lista_estados: VBoxContainer
 var _botao: Button          # botão fixo no canto (0,0)
 
 
@@ -53,6 +64,7 @@ func _ready() -> void:
 	_montar()
 	_montar_botao()
 	_janela.hide()
+	_pronto = true
 
 ## Tema próprio do menu: o tema do jogo tem Label preto (some no fundo escuro) e fonte 24.
 func _criar_tema() -> Theme:
@@ -78,7 +90,44 @@ func _criar_tema() -> Theme:
 	t.set_icon("unchecked_disabled", "CheckBox", vazio)
 	t.set_icon("checked_disabled", "CheckBox", marcado)
 	t.set_constant("h_separation", "CheckBox", 8)
+	# estilos planos e finos
+	for tipo in ["Button", "OptionButton"]:
+		t.set_stylebox("normal", tipo, _caixa_estilo(Color(1, 1, 1, 0.06)))
+		t.set_stylebox("hover", tipo, _caixa_estilo(Color(1, 1, 1, 0.12)))
+		t.set_stylebox("pressed", tipo, _caixa_estilo(Color(COR_DESTAQUE, 0.25)))
+		t.set_stylebox("focus", tipo, StyleBoxEmpty.new())
+		t.set_stylebox("disabled", tipo, _caixa_estilo(Color(1, 1, 1, 0.02)))
+	t.set_stylebox("normal", "LineEdit", _caixa_estilo(Color(0, 0, 0, 0.35)))
+	t.set_stylebox("focus", "LineEdit", _caixa_estilo(Color(0, 0, 0, 0.35), Color(COR_DESTAQUE, 0.5)))
+	t.set_stylebox("panel", "TabContainer", _caixa_estilo(Color(0, 0, 0, 0.0)))
+	t.set_stylebox("tab_selected", "TabContainer", _aba_estilo(true))
+	t.set_stylebox("tab_unselected", "TabContainer", _aba_estilo(false))
+	t.set_stylebox("tab_hovered", "TabContainer", _aba_estilo(false))
 	return t
+
+static func _caixa_estilo(fundo: Color, borda: Color = COR_LINHA) -> StyleBoxFlat:
+	var st := StyleBoxFlat.new()
+	st.bg_color = fundo
+	st.border_color = borda
+	st.set_border_width_all(1)
+	st.set_corner_radius_all(4)
+	st.content_margin_left = 10
+	st.content_margin_right = 10
+	st.content_margin_top = 4
+	st.content_margin_bottom = 4
+	return st
+
+## Aba: só um traço dourado embaixo da selecionada.
+static func _aba_estilo(selecionada: bool) -> StyleBoxFlat:
+	var st := StyleBoxFlat.new()
+	st.bg_color = Color(0, 0, 0, 0)
+	st.border_color = COR_DESTAQUE if selecionada else Color(0, 0, 0, 0)
+	st.border_width_bottom = 2
+	st.content_margin_left = 10
+	st.content_margin_right = 10
+	st.content_margin_top = 6
+	st.content_margin_bottom = 6
+	return st
 
 ## Desenha a caixa: borda branca; marcada = preenchida em dourado com um "v" escuro.
 static func _icone_check(marcado: bool) -> ImageTexture:
@@ -131,10 +180,13 @@ func alternar() -> void:
 func abrir() -> void:
 	_pausado_antes = get_tree().paused
 	get_tree().paused = true
-	_atualizar_tudo()
+	_marcar_todas_sujas()
 	_atualizar_titulo()
+	_abas.set_block_signals(true)
 	_abas.current_tab = clampi(_ultima_aba, 0, _abas.get_tab_count() - 1)
+	_abas.set_block_signals(false)
 	_janela.show()
+	_ao_trocar_aba(_abas.current_tab)
 	_conectar_sinais()
 
 ## Título com o mapa atual e a posição da bruxa.
@@ -166,8 +218,94 @@ func _conectar_sinais() -> void:
 		game_temp.inventory_changed.connect(_on_inventario_mudou)
 
 func _on_inventario_mudou() -> void:
-	if aberto():
-		_atualizar_itens()
+	_sujas["Itens"] = true
+	if aberto() and _aba_atual() == "Itens":
+		_atualizar_aba("Itens")
+
+# ---- abas montadas só quando abertas ----
+func _aba_atual() -> String:
+	var c := _abas.get_current_tab_control()
+	return str(c.name) if c else ""
+
+func _marcar_todas_sujas() -> void:
+	for c in _abas.get_children():
+		_sujas[str(c.name)] = true
+
+func _ao_trocar_aba(i: int) -> void:
+	if not _pronto or not aberto():
+		return   # montando ou fechado: abrir() chama de novo
+	_ultima_aba = i
+	var nome := _aba_atual()
+	if _sujas.get(nome, true):
+		_atualizar_aba(nome)
+	_aplicar_busca()
+
+func _atualizar_aba(nome: String) -> void:
+	_sujas[nome] = false
+	match nome:
+		"Variáveis": _atualizar_vars()
+		"Personalidade": _atualizar_pers()
+		"Itens": _atualizar_itens()
+		"Mapa": _atualizar_mapa()
+		"Comandos":
+			if _comandos:
+				_comandos.atualizar()
+		"Estados": _atualizar_estados()
+
+## Lista (VBox) da aba atual, para a busca.
+func _lista_da_aba(nome: String) -> Container:
+	match nome:
+		"Variáveis": return _lista_vars
+		"Personalidade": return _lista_pers
+		"Itens": return _lista_itens
+		"Mapa": return _lista_mapa
+		"Comandos": return _comandos
+		"Estados": return _lista_estados
+	return null
+
+## Busca geral: esconde as linhas da aba atual que não têm o texto (títulos de seção
+## ficam se algo abaixo deles ficou). Em Variáveis usa o filtro próprio (grupos).
+func _aplicar_busca() -> void:
+	var q := _busca.text.strip_edges().to_lower() if _busca else ""
+	var nome := _aba_atual()
+	if nome == "Variáveis":
+		_filtro_vars = q
+		_filtrar_vars()
+		return
+	var lista := _lista_da_aba(nome)
+	if lista == null:
+		return
+	var secao: Control = null
+	var secao_tem := false
+	for c in lista.get_children():
+		if not (c is Control):
+			continue
+		if c.has_meta("secao"):
+			if secao:
+				secao.visible = secao_tem or q == ""
+			secao = c
+			secao_tem = false
+			continue
+		if c.has_meta("fixo"):
+			continue
+		var ok: bool = q == "" or _texto_de(c).to_lower().contains(q)
+		c.visible = ok
+		if ok:
+			secao_tem = true
+	if secao:
+		secao.visible = secao_tem or q == ""
+
+func _texto_de(no: Node) -> String:
+	var t := ""
+	if no is Label or no is Button:
+		t = no.text
+	elif no is LineEdit:
+		t = no.text + " " + no.placeholder_text
+	elif no is OptionButton:
+		t = no.text
+	for c in no.get_children():
+		t += " " + _texto_de(c)
+	return t
 
 # =============================================================================
 # MONTAGEM
@@ -181,7 +319,7 @@ func _montar() -> void:
 	add_child(_janela)
 
 	var fundo := ColorRect.new()
-	fundo.color = Color(0, 0, 0, 0.55)
+	fundo.color = Color(0, 0, 0, 0.3)
 	fundo.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	fundo.mouse_filter = Control.MOUSE_FILTER_STOP
 	_janela.add_child(fundo)
@@ -194,10 +332,10 @@ func _montar() -> void:
 	painel.offset_bottom = -24
 	var estilo := StyleBoxFlat.new()
 	estilo.bg_color = COR_FUNDO
-	estilo.border_color = Color(1.0, 0.75, 0.2)
-	estilo.set_border_width_all(2)
-	estilo.set_corner_radius_all(10)
-	estilo.set_content_margin_all(12)
+	estilo.border_color = COR_LINHA
+	estilo.set_border_width_all(1)
+	estilo.set_corner_radius_all(6)
+	estilo.set_content_margin_all(10)
 	painel.add_theme_stylebox_override("panel", estilo)
 	_janela.add_child(painel)
 
@@ -211,8 +349,8 @@ func _montar() -> void:
 	titulo.text = "DEBUG"
 	titulo.tooltip_text = "tecla ' abre/fecha"
 	titulo.clip_text = true
-	titulo.add_theme_font_size_override("font_size", FONTE + 4)
-	titulo.add_theme_color_override("font_color", Color(1.0, 0.8, 0.3))
+	titulo.add_theme_font_size_override("font_size", FONTE + 2)
+	titulo.add_theme_color_override("font_color", COR_DESTAQUE)
 	titulo.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	var fechar_btn := Button.new()
 	fechar_btn.text = "  X  "
@@ -221,9 +359,15 @@ func _montar() -> void:
 	topo.add_child(fechar_btn)
 	col.add_child(topo)
 
+	_busca = LineEdit.new()
+	_busca.placeholder_text = "buscar na aba..."
+	_busca.clear_button_enabled = true
+	_busca.text_changed.connect(func(_t: String): _aplicar_busca())
+	col.add_child(_busca)
+
 	_abas = TabContainer.new()
 	_abas.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_abas.tab_changed.connect(func(i: int): _ultima_aba = i)
+	_abas.tab_changed.connect(_ao_trocar_aba)
 	col.add_child(_abas)
 
 	_lista_vars = _criar_aba("Variáveis")
@@ -236,6 +380,7 @@ func _montar() -> void:
 	_comandos = DebugComandos.new(self)
 	scroll_cmd.add_child(_comandos)
 	_abas.add_child(scroll_cmd)
+	_lista_estados = _criar_aba("Estados")
 	_montar_info()
 	_ajustar_toque(_janela)
 
@@ -263,6 +408,8 @@ func _criar_aba(nome: String) -> VBoxContainer:
 	return lista
 
 func _limpar(caixa: Container) -> void:
+	if caixa == null:
+		return
 	for c in caixa.get_children():
 		caixa.remove_child(c)
 		c.queue_free()
@@ -278,12 +425,10 @@ func _rotulo(texto: String, largura: float = 0.0) -> Label:
 	return l
 
 func _atualizar_tudo() -> void:
-	_atualizar_vars()
-	_atualizar_pers()
-	_atualizar_itens()
-	_atualizar_mapa()
-	if _comandos:
-		_comandos.atualizar()
+	_marcar_todas_sujas()
+	if aberto():
+		_atualizar_aba(_aba_atual())
+		_aplicar_busca()
 
 # =============================================================================
 # VARIÁVEIS
@@ -293,17 +438,8 @@ func _atualizar_vars() -> void:
 	if not game_temp:
 		_lista_vars.add_child(_rotulo("GameTemp não encontrado"))
 		return
-	# barra: busca + só alteradas
+	# barra: só alteradas (a busca é a geral, no topo)
 	var barra := HBoxContainer.new()
-	var busca := LineEdit.new()
-	busca.placeholder_text = "buscar variável..."
-	busca.text = _filtro_vars
-	busca.clear_button_enabled = true
-	busca.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	busca.text_changed.connect(func(txt: String):
-		_filtro_vars = txt
-		_filtrar_vars())
-	barra.add_child(busca)
 	var so := CheckBox.new()
 	so.text = "só alteradas"
 	so.button_pressed = _so_alteradas
@@ -593,9 +729,9 @@ func _montar_info() -> void:
 	_info.offset_bottom = -50
 	var estilo := StyleBoxFlat.new()
 	estilo.bg_color = COR_FUNDO_FICHA
-	estilo.border_color = Color(0.5, 0.8, 1.0)
-	estilo.set_border_width_all(2)
-	estilo.set_corner_radius_all(8)
+	estilo.border_color = Color(0.5, 0.8, 1.0, 0.4)
+	estilo.set_border_width_all(1)
+	estilo.set_corner_radius_all(6)
 	estilo.set_content_margin_all(10)
 	_info.add_theme_stylebox_override("panel", estilo)
 	_janela.add_child(_info)
@@ -675,7 +811,8 @@ func mostrar_item(id: String) -> void:
 
 func _secao(texto: String) -> Label:
 	var l := _rotulo(texto)
-	l.add_theme_color_override("font_color", Color(1.0, 0.8, 0.3))
+	l.add_theme_color_override("font_color", COR_DESTAQUE)
+	l.set_meta("secao", true)
 	return l
 
 func _limite(nome: String, x0: float, h: float, unidade: String) -> String:
@@ -864,6 +1001,111 @@ func _atualizar_mapa() -> void:
 		_lista_mapa.add_child(linha)
 	_ajustar_toque(_lista_mapa)
 
+
+# =============================================================================
+# ESTADOS SALVOS (slots de teste)
+# =============================================================================
+func _ler_estados() -> Dictionary:
+	if not FileAccess.file_exists(ARQ_ESTADOS):
+		return {}
+	var f := FileAccess.open(ARQ_ESTADOS, FileAccess.READ)
+	if f == null:
+		return {}
+	var d = JSON.parse_string(f.get_as_text())
+	return d if d is Dictionary else {}
+
+func _gravar_estados(d: Dictionary) -> void:
+	var f := FileAccess.open(ARQ_ESTADOS, FileAccess.WRITE)
+	if f:
+		f.store_string(JSON.stringify(d, "\t"))
+
+func _atualizar_estados() -> void:
+	_limpar(_lista_estados)
+	if not game_temp:
+		_lista_estados.add_child(_rotulo("GameTemp não encontrado"))
+		return
+	var linha := HBoxContainer.new()
+	linha.set_meta("fixo", true)
+	var nome := LineEdit.new()
+	nome.placeholder_text = "nome do estado (ex.: antes do casamento)"
+	nome.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var salvar := Button.new()
+	salvar.text = "Salvar"
+	salvar.pressed.connect(func(): _salvar_estado(nome.text))
+	linha.add_child(nome)
+	linha.add_child(salvar)
+	_lista_estados.add_child(linha)
+	var dica := _rotulo("Guarda variáveis, personalidades, inventário e self-vars. Mesmo nome = substitui.")
+	dica.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	dica.clip_text = false
+	dica.add_theme_color_override("font_color", COR_TEXTO.darkened(0.35))
+	dica.set_meta("fixo", true)
+	_lista_estados.add_child(dica)
+	var estados := _ler_estados()
+	var nomes: Array = estados.keys()
+	nomes.sort()
+	if nomes.is_empty():
+		_lista_estados.add_child(_rotulo("(nenhum estado salvo)"))
+	for n in nomes:
+		var e: Dictionary = estados[n]
+		var h := HBoxContainer.new()
+		var r := _rotulo("%s   %s" % [n, str(e.get("quando", ""))])
+		var carregar := Button.new()
+		carregar.text = "Carregar"
+		carregar.pressed.connect(_carregar_estado.bind(str(n)))
+		var apagar := Button.new()
+		apagar.text = "Apagar"
+		apagar.pressed.connect(_apagar_estado.bind(str(n)))
+		h.add_child(r)
+		h.add_child(carregar)
+		h.add_child(apagar)
+		_lista_estados.add_child(h)
+	_ajustar_toque(_lista_estados)
+
+func _salvar_estado(nome: String) -> void:
+	nome = nome.strip_edges()
+	if nome == "" or not game_temp:
+		return
+	var estados := _ler_estados()
+	estados[nome] = {
+		"quando": Time.get_datetime_string_from_system(false, true),
+		"variaveis": game_temp.variaveis.duplicate(true),
+		"personalidades": game_temp.personalidades.duplicate(true),
+		"inventario": game_temp.inventario.duplicate(true),
+		"self_vars": game_temp.self_vars.duplicate(true),
+	}
+	_gravar_estados(estados)
+	_atualizar_estados()
+
+func _carregar_estado(nome: String) -> void:
+	var e: Dictionary = _ler_estados().get(nome, {})
+	if e.is_empty() or not game_temp:
+		return
+	game_temp.variaveis = (e.get("variaveis", {}) as Dictionary).duplicate(true)
+	var pers := {}
+	var p_salvas: Dictionary = e.get("personalidades", {})
+	for k in p_salvas:
+		pers[k] = Array(p_salvas[k])   # JSON volta como Array de floats
+	game_temp.personalidades = pers
+	var inv := {}
+	var i_salvo: Dictionary = e.get("inventario", {})
+	for k in i_salvo:
+		inv[k] = int(i_salvo[k])     # JSON guarda número como float
+	game_temp.inventario = inv
+	game_temp.self_vars = (e.get("self_vars", {}) as Dictionary).duplicate(true)
+	game_temp.variables_changed.emit()
+	game_temp.inventory_changed.emit()
+	for k in pers:
+		game_temp.personality_changed.emit(k)
+	_marcar_todas_sujas()
+	_sujas["Estados"] = false
+	_atualizar_titulo()
+
+func _apagar_estado(nome: String) -> void:
+	var estados := _ler_estados()
+	estados.erase(nome)
+	_gravar_estados(estados)
+	_atualizar_estados()
 
 ## Deixa tudo que se toca com altura mínima confortável para o dedo.
 func _ajustar_toque(no: Node) -> void:

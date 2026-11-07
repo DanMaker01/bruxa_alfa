@@ -7,6 +7,8 @@ extends PanelContainer
 var _lista: VBoxContainer
 var _linhas: Array = []   # [{"raiz", "nome", "pct", "barra", "fill", "status", "tags", "assinatura_tags", "punindo"}]
 var _t: float = 0.0
+## true = nunca aparece (o debug do caldeirão tem os cards de itens no lugar).
+var oculto: bool = false
 
 
 func _ready() -> void:
@@ -56,7 +58,8 @@ func limpar() -> void:
 	hide()
 
 func adicionar(nome_exibicao: String) -> void:
-	show()
+	if not oculto:
+		show()
 	var raiz := VBoxContainer.new()
 	raiz.add_theme_constant_override("separation", 1)
 	var topo := HBoxContainer.new()

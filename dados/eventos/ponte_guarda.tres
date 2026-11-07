@@ -116,16 +116,16 @@ personagem = ExtResource("x0")
 posicao = 100.0
 texto = "Está certo. A princesa avisou que uma bruxa viria. A ordem real é que você prossiga..."
 
+[sub_resource type="Resource" id="R_20"]
+script = ExtResource("4_x")
+variavel = "missao01_passou_guarda"
+valor = 1.0
+
 [sub_resource type="Resource" id="Resource_6bvne"]
 script = ExtResource("20_mover")
 destino = 2
 deslocamento = 100.0
 metadata/_custom_type_script = "uid://dp3mfol3wf88y"
-
-[sub_resource type="Resource" id="R_20"]
-script = ExtResource("4_x")
-variavel = "missao01_passou_guarda"
-valor = 1.0
 
 [sub_resource type="Resource" id="R_21"]
 script = ExtResource("5_x")

@@ -203,11 +203,12 @@ func tocar(diagnosticos: Array, origem: Vector2, destino: Vector2, lado_final: f
 	# 3. multiplica: o produto acumulado entra no próximo
 	for i in n - 1:
 		_ops.append(_op("×", slots, i))
-	tw = _tw().set_parallel(true)
-	for o in _ops:
-		tw.tween_property(o, "modulate:a", 1.0, 0.3)
-	await _rodar(tw)
-	await _pausa(0.2)
+	if not _ops.is_empty():   # 1 ingrediente só: sem "×" (tween vazio nunca termina e travava aqui)
+		tw = _tw().set_parallel(true)
+		for o in _ops:
+			tw.tween_property(o, "modulate:a", 1.0, 0.3)
+		await _rodar(tw)
+		await _pausa(0.2)
 	# o produto acumulado fica parado (à direita / embaixo) e o próximo vem até ele;
 	# a grade do acumulado só muda de P para o novo valor, suave (sem voltar a zero)
 	var acc: CartaProd = _cartas[0]

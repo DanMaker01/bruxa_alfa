@@ -47,7 +47,9 @@ func avisar_mudancas(i: int, nome: String, est: Dictionary, t: float) -> void:
 	for k in est["niveis"]:
 		var nivel: int = est["niveis"][k]
 		if nivel > int(antes.get(k, 0)) and _pode_avisar("%d:%s:%d" % [i, k, nivel], t):
-			texto_flutuante("%s: %s" % [nome, MSG_NIVEL[k][nivel]], COR_PUNICAO if nivel == 2 else COR_ALERTA)
+			# passou do ponto é aviso (amarelo): a perda é gradual, não é punição forte como queimar
+			var cor_msg: Color = COR_PUNICAO if nivel == 2 and k != "ponto" else COR_ALERTA
+			texto_flutuante("%s: %s" % [nome, MSG_NIVEL[k][nivel]], cor_msg)
 			if nivel == 2:
 				marcador.emit(COR_PUNICAO)
 	if est.get("no_ponto", false) and not antes.get("no_ponto", false) and _pode_avisar("%d:no_ponto" % i, t):

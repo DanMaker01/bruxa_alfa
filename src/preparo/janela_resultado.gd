@@ -497,14 +497,19 @@ func _copia_pocao(camada_n: int) -> TextureRect:
 ## Confirmou: a matriz final encolhe até o lugar da poção e a poção surge ali.
 func _matriz_vira_pocao() -> void:
 	var g: GradeMatriz = _vistas.grade
+	# encolhe para o centro dos pontos da matriz (não para o canto): só a escala anima,
+	# em volta do pivô no centro; a posição não muda
+	var meio_local: Vector2 = g.centro_pontos()
+	var centro: Vector2 = g.get_global_transform() * meio_local
+	if "pivot_offset_ratio" in g:
+		g.set("pivot_offset_ratio", Vector2.ZERO)
+	g.position += (meio_local - g.pivot_offset) * (Vector2.ONE - g.scale)   # troca o pivô sem pular
+	g.pivot_offset = meio_local
 	# a poção surge no lugar da própria matriz
-	_pocao.position = g.get_global_rect().get_center() - TAM_POCAO * 0.5
+	_pocao.position = centro - TAM_POCAO * 0.5
 	_halo.position = _pocao.position - TAM_POCAO * 0.15
-	var centro := _pocao.position + TAM_POCAO * 0.5
-	g.pivot_offset = g.size * 0.5
 	var tw := create_tween().set_parallel(true)
-	tw.tween_property(g, "global_position", centro - g.size * 0.5, 0.45).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
-	tw.tween_property(g, "scale", Vector2(0.15, 0.15), 0.45).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	tw.tween_property(g, "scale", Vector2(0.05, 0.05), 0.45).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 	tw.tween_property(g, "modulate:a", 0.0, 0.2).set_delay(0.3)
 	await tw.finished
 	_estourar_brilhos(centro)

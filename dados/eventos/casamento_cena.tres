@@ -12,7 +12,7 @@
 [ext_resource type="Resource" path="res://dados/falantes/principe.tres" id="Cx7"]
 [ext_resource type="Script" uid="uid://bm6rsgpqii0pt" path="res://src/dados/comandos/cmd_som.gd" id="Cx9"]
 [ext_resource type="Resource" path="res://dados/falantes/convidado.tres" id="Cx10"]
-[ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="Cx11"]
+[ext_resource type="Resource" uid="uid://ck5s2dlc4wcek" path="res://dados/falantes/bruxa.tres" id="Cx11"]
 [ext_resource type="Resource" path="res://dados/falantes/rei.tres" id="Cx12"]
 [ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="Cx13"]
 [ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="Cx14"]
