@@ -12,7 +12,7 @@
 [ext_resource type="Resource" uid="uid://chrkm8ylgh7e1" path="res://dados/eventos/pensamento_inicio.tres" id="Hx0"]
 [ext_resource type="Script" uid="uid://dvii04cb4qtqa" path="res://src/dados/comandos/cmd_chamar_evento.gd" id="Hx1"]
 [ext_resource type="Resource" uid="uid://b0vf54xwaodp7" path="res://dados/eventos/pensamento_fim.tres" id="Hx2"]
-[ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="Kx0"]
+[ext_resource type="Resource" uid="uid://ck5s2dlc4wcek" path="res://dados/falantes/bruxa.tres" id="Kx0"]
 [ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="Kx1"]
 [ext_resource type="Script" uid="uid://bchvbuxgicj1n" path="res://src/dados/comandos/cmd_evento_animacao.gd" id="x0"]
 [ext_resource type="Script" uid="uid://bm6rsgpqii0pt" path="res://src/dados/comandos/cmd_som.gd" id="x1"]

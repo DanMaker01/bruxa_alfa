@@ -11,7 +11,7 @@
 [ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="23_x"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="24_x"]
 [ext_resource type="Resource" path="res://dados/falantes/rei.tres" id="x0"]
-[ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="x1"]
+[ext_resource type="Resource" uid="uid://ck5s2dlc4wcek" path="res://dados/falantes/bruxa.tres" id="x1"]
 [ext_resource type="Script" uid="uid://dp3mfol3wf88y" path="res://src/dados/comandos/cmd_mover.gd" id="x2"]
 [ext_resource type="Script" uid="uid://bchvbuxgicj1n" path="res://src/dados/comandos/cmd_evento_animacao.gd" id="x3"]
 [ext_resource type="Script" uid="uid://bm6rsgpqii0pt" path="res://src/dados/comandos/cmd_som.gd" id="x4"]
@@ -121,7 +121,7 @@ segundos = 0.4
 [sub_resource type="Resource" id="R_fuga_tele"]
 script = ExtResource("21_x")
 mapa = "res://mapas/mapa_castelo_in02.tscn"
-posicao = Vector2(100, 505)
+posicao = Vector2(160, 505)
 direcao = 2
 
 [sub_resource type="Resource" id="G_mostra"]

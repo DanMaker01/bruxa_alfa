@@ -9,7 +9,7 @@
 [ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="8_cond"]
 [ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="8_ludc1"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="9_ev"]
-[ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="Sx0"]
+[ext_resource type="Resource" uid="uid://ck5s2dlc4wcek" path="res://dados/falantes/bruxa.tres" id="Sx0"]
 [ext_resource type="Script" uid="uid://btdlgkphiqan1" path="res://src/dados/comandos/cmd_mostrar_opcoes.gd" id="Sx1"]
 [ext_resource type="Script" uid="uid://crwb7mjauibuo" path="res://src/dados/comandos/cmd_label.gd" id="Sx2"]
 [ext_resource type="Script" uid="uid://b3yty8028fcf2" path="res://src/dados/comandos/cmd_goto.gd" id="Sx3"]
@@ -64,5 +64,5 @@ direcao = 2
 
 [resource]
 script = ExtResource("9_ev")
-id = "spawn_musgo_recato"
+id = "spawn_flor_farra"
 paginas = Array[ExtResource("1_pag")]([SubResource("Resource_pag0"), SubResource("Resource_pag1")])

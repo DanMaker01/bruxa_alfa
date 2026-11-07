@@ -10,6 +10,15 @@ extends Node
 # ---- partículas ----
 ## T (°C) em que as partículas chegam ao máximo.
 const T_PARTICULAS_MAX: float = 200.0
+## Curva exponencial das partículas: quase nada no começo, cresce devagar e dispara no fim.
+## Maior = mais "guardado" para o final.
+const PARTICULAS_CURVA: float = 4.0
+## Limites máximos (no T_PARTICULAS_MAX). Mínimos: valores do começo da curva.
+const BOLHAS_QTD_MAX: float = 0.7
+const BOLHAS_VEL_MAX := Vector2(30.0, 120.0)      # velocidade inicial (mín, máx)
+const ESTRELAS_QTD_MAX: float = 0.6
+const ESTRELAS_VEL_MAX := Vector2(80.0, 150.0)
+const ESTRELAS_GIRO_MAX: float = 540.0            # graus/s
 # ---- fogo ----
 const ANIM_FOGO_ALTO := &"fogo_alto"
 const TEMPO_FOGO_ALTO: float = 0.3
@@ -48,6 +57,14 @@ const COR_VERMELHO := Color(1.0, 0.22, 0.15)
 ## Vermelho de baixo para cima: acima de T_VERMELHO_INICIO o vermelho sobe do fundo e chega ao topo em T_VERMELHO_TOPO.
 const T_VERMELHO_TOPO: float = 200.0   # vermelho chega ao topo, no máximo
 const T_VERMELHO_INICIO: float = 90.0
+## Pontos do gradiente (°C, progresso 0..1); entre eles é linear. Ajuste aqui.
+## 100 °C: só o fundinho; 160 °C: todo vermelho claro; 200 °C: bem vermelho até o topo.
+const GRADIENTE_VERMELHO := [
+	Vector2(90.0, 0.0),
+	Vector2(100.0, 0.09),
+	Vector2(160.0, 0.27),
+	Vector2(200.0, 1.0),
+]
 const SHADER_RADIAL := """
 shader_type canvas_item;
 uniform float progresso : hint_range(0.0, 1.0) = 0.0;   // 0 = nada, 1 = vermelho até o topo
@@ -176,7 +193,7 @@ func atualizar(sistema: SistemaTermico, delta: float, perda_media: float, _punin
 	if caldeirao:
 		caldeirao.self_modulate = Color.WHITE
 		if _mat_radial:
-			var p := clampf((sistema.T - T_VERMELHO_INICIO) / (T_VERMELHO_TOPO - T_VERMELHO_INICIO), 0.0, 1.0)
+			var p := progresso_vermelho(sistema.T)
 			_mat_radial.set_shader_parameter("progresso", p)
 	# fogo: cor/intensidade pela temperatura do fogo
 	if fogo:
@@ -211,23 +228,27 @@ func atualizar(sistema: SistemaTermico, delta: float, perda_media: float, _punin
 func _atualizar_particulas(T: float) -> void:
 	_aplicar_particulas(clampf((T - SistemaTermico.T_AMB) / (T_PARTICULAS_MAX - SistemaTermico.T_AMB), 0.0, 1.0))
 
+## 0..1 linear -> 0..1 exponencial (pouquíssimo no começo, máximo no fim).
+static func curva_particulas(tn: float) -> float:
+	return (exp(PARTICULAS_CURVA * tn) - 1.0) / (exp(PARTICULAS_CURVA) - 1.0)
+
 func _aplicar_particulas(tn: float) -> void:
+	var e := curva_particulas(tn)
 	if bolhas:
-		bolhas.amount_ratio = lerpf(0.03, 1.0, tn)
+		bolhas.amount_ratio = lerpf(0.02, BOLHAS_QTD_MAX, e)
 		bolhas.speed_scale = 1.0
 	if _mat_bolhas:
-		_mat_bolhas.initial_velocity_min = lerpf(3.0, 45.0, sqrt(tn))
-		_mat_bolhas.initial_velocity_max = lerpf(8.0, 220.0, tn)
+		_mat_bolhas.initial_velocity_min = lerpf(3.0, BOLHAS_VEL_MAX.x, e)
+		_mat_bolhas.initial_velocity_max = lerpf(8.0, BOLHAS_VEL_MAX.y, e)
 	if brilhos:
-		brilhos.amount_ratio = lerpf(0.01, 1.0, tn * tn)
+		brilhos.amount_ratio = lerpf(0.01, ESTRELAS_QTD_MAX, e)
 		brilhos.speed_scale = 1.0
 	if _mat_brilhos:
-		_mat_brilhos.initial_velocity_min = lerpf(5.0, 150.0, tn)
-		_mat_brilhos.initial_velocity_max = lerpf(15.0, 260.0, tn)   # chegam mais longe
-		_mat_brilhos.spread = lerpf(20.0, 50.0, tn)                     # abrem mais
-		var a= 10
-		_mat_brilhos.angular_velocity_min = lerpf(-90.0, -360.0*a, tn)    # giram mais
-		_mat_brilhos.angular_velocity_max = lerpf(90.0, 360.0*a, tn)
+		_mat_brilhos.initial_velocity_min = lerpf(5.0, ESTRELAS_VEL_MAX.x, e)
+		_mat_brilhos.initial_velocity_max = lerpf(15.0, ESTRELAS_VEL_MAX.y, e)   # chegam mais longe
+		_mat_brilhos.spread = lerpf(20.0, 50.0, e)                                # abrem mais
+		_mat_brilhos.angular_velocity_min = lerpf(-90.0, -ESTRELAS_GIRO_MAX, e)   # giram mais
+		_mat_brilhos.angular_velocity_max = lerpf(90.0, ESTRELAS_GIRO_MAX, e)
 
 # =============================================================================
 # CALDO TURVO / LIMPO (visão geral do aproveitamento)
@@ -252,6 +273,16 @@ func _aplicar_turvo(delta: float, perda_media: float) -> void:
 		_mat_bolhas.initial_velocity_max *= lenta
 
 # =============================================================================
+## Progresso do vermelho (0..1) pela temperatura, seguindo GRADIENTE_VERMELHO.
+static func progresso_vermelho(T: float) -> float:
+	var g: Array = GRADIENTE_VERMELHO
+	if T <= g[0].x:
+		return g[0].y
+	for i in range(1, g.size()):
+		if T <= g[i].x:
+			return lerpf(g[i - 1].y, g[i].y, (T - g[i - 1].x) / (g[i].x - g[i - 1].x))
+	return g[-1].y
+
 # TREMOR (pela temperatura: leve na fervura, um pouco mais forte acima)
 # Problemas na poção NÃO fazem o caldeirão tremer (isso fica com os ícones/painel).
 # =============================================================================

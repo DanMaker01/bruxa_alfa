@@ -16,7 +16,7 @@
 [ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="22_x"]
 [ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="23_x"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="24_x"]
-[ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="x0"]
+[ext_resource type="Resource" uid="uid://ck5s2dlc4wcek" path="res://dados/falantes/bruxa.tres" id="x0"]
 [ext_resource type="Resource" path="res://dados/falantes/rei.tres" id="x1"]
 [ext_resource type="Resource" path="res://dados/falantes/princesa.tres" id="x2"]
 [ext_resource type="Script" uid="uid://dvii04cb4qtqa" path="res://src/dados/comandos/cmd_chamar_evento.gd" id="x_chamar"]

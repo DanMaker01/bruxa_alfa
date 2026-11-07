@@ -107,6 +107,11 @@ func _ready():
 	else:
 		print("[Player] ❌ InteractionZone NÃO encontrada!")
 
+## Andando por um comando Mover com velocidade fixa (escolta, cutscene)?
+func _anda_por_comando() -> bool:
+	var im = game_manager.get_input_manager() if game_manager and game_manager.has_method("get_input_manager") else null
+	return im != null and im.has_method("velocidade_fixa_ativa") and im.velocidade_fixa_ativa()
+
 # 🔥 MÉTODO PRINCIPAL DE MOVIMENTO COM ACELERAÇÃO
 func _physics_process(delta: float) -> void:
 	# 1. OBTÉM A DIREÇÃO DO INPUT (teclado)
@@ -132,6 +137,8 @@ func _physics_process(delta: float) -> void:
 			if abs(velocity.x) < 0.1:
 				velocity.x = 0
 				is_moving_from_input = false
+		elif _anda_por_comando():
+			pass   # Mover com velocidade fixa: o InputManager manda na velocidade (sem fricção, senão a bruxa atrasa)
 		else:
 			# Vem do InputManager (clique), aplica fricção
 			velocity.x = move_toward(velocity.x, 0, FRICTION * delta)

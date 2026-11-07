@@ -171,6 +171,7 @@ func _input(event):
 					return
 				
 				var world_click = camera.get_canvas_transform().affine_inverse() * event.position
+				ToqueFeedback.mostrar(player.get_parent(), world_click)   # anel no ponto tocado
 				var new_target_x = world_click.x
 				
 				if abs(new_target_x - player.global_position.x) < 10.0:
@@ -238,6 +239,10 @@ func move_to_position(target_x: float, target_y: float, velocidade: float = 0.0)
 	target_position = Vector2(target_x, y)
 	_start_moving()
 	auto_moving = true
+
+## true enquanto anda por comando com velocidade fixa (o player não aplica fricção).
+func velocidade_fixa_ativa() -> bool:
+	return is_moving and _vel_fixa > 0.0
 
 func move_to_event(event_node: Node2D):
 	"""Move o player até a posição X de um evento"""

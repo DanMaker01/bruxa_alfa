@@ -39,7 +39,7 @@ evento = ExtResource("ev_estradaB_passagem2")
 
 [node name="NPC" type="CharacterBody2D" parent="Eventos" unique_id=917375917]
 z_index = 3
-position = Vector2(656, 544)
+position = Vector2(1104, 544)
 script = ExtResource("4_08wjo")
 evento = ExtResource("ev_estradaB_guarda")
 
@@ -54,8 +54,8 @@ z_index = 3
 position = Vector2(320, 576)
 script = ExtResource("area_spawn_x")
 evento = ExtResource("ev_musgo")
-espalhamento_min = 0.1
-espalhamento_max = 1.0
 quantidade = 1
 largura = 399.9999999999872
 cooldown = 15.0
+espalhamento_min = 0.1
+espalhamento_max = 1.0

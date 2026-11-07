@@ -17,7 +17,7 @@ signal _nome_definido
 
 # ---- ajuste aqui ----
 const ICONE_POCAO := "res://assets/game_caldeirao/pocao.png"
-const ALFA_FUNDO: float = 0.85
+const ALFA_FUNDO: float = 1.0   # preto puro: a cena do caldeirão some por trás
 const TAM_POCAO := Vector2(160, 160)
 const CENTRO_POCAO := Vector2(320, 220)       # posição inicial da poção (ela surge no lugar da matriz)
 ## Para onde a poção voa ao sair (fallback, se a carta do inventário não for achada).
@@ -196,14 +196,23 @@ func abrir(resultado: Dictionary) -> void:
 	# 1. entrada: escurece e o produtório: os ingredientes se alinham, o aproveitamento
 	#    vira B_i e os B_i se combinam até a matriz final, que fica no lugar da grade
 	#    (a poção só aparece quando confirma, em _fechar)
+	#    os cartões saem dos ícones do caldeirão; a cena escurece até o preto e some
+	#    (fica escondida e parada, mais leve)
+	var cena = get_parent()
+	var icones = cena.get("icones") if cena else null
+	var saidas: Array = icones.saidas_para_resultado() if icones and icones.has_method("saidas_para_resultado") else []
+	if icones and icones.has_method("esconder_icones"):
+		icones.esconder_icones()
 	var tw := create_tween()
-	tw.tween_property(_fundo, "color:a", ALFA_FUNDO, 0.8)
-	await tw.finished
+	tw.tween_property(_fundo, "color:a", ALFA_FUNDO, 1.2).set_delay(0.3)
+	tw.tween_callback(_cobrir_cena.bind(cena))
 	var diags: Array = resultado.get("diagnosticos", [])
 	_vistas.montar(resultado, A)
 	var destino: Rect2 = _vistas.rect_grade()
 	_estado = Estado.PRODUTORIO
-	await _produtorio.tocar(diags, ORIGEM_PRODUTORIO, destino.get_center(), destino.size.x)
+	await _produtorio.tocar(diags, ORIGEM_PRODUTORIO, destino.get_center(), destino.size.x, saidas)
+	if tw.is_running():
+		await tw.finished
 	_estado = Estado.ENTRANDO
 
 	# 2. meio: poção para a esquerda, informações à direita
@@ -231,6 +240,10 @@ func abrir(resultado: Dictionary) -> void:
 	await _vistas.mostrar_ingredientes()
 	await get_tree().create_timer(0.5, true).timeout
 	await _depois_das_informacoes(pedir_nome)
+
+func _cobrir_cena(cena) -> void:
+	if is_instance_valid(cena) and cena.has_method("cobrir_cena"):
+		cena.cobrir_cena(true)
 
 func _depois_das_informacoes(pedir_nome: bool) -> void:
 	var tw: Tween

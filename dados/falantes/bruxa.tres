@@ -1,10 +1,13 @@
-[gd_resource type="Resource" script_class="Personagem" format=3]
+[gd_resource type="Resource" script_class="Personagem" format=3 uid="uid://ck5s2dlc4wcek"]
 
-[ext_resource type="Script" path="res://src/dados/personagem.gd" id="1_p"]
-[ext_resource type="Texture2D" path="res://assets/faces/bruxa_grande.png" id="f0"]
-[ext_resource type="Texture2D" path="res://assets/faces/bruxa_pensando.png" id="f1"]
+[ext_resource type="Script" uid="uid://blrso3i4foop8" path="res://src/dados/personagem.gd" id="1_p"]
+[ext_resource type="Texture2D" uid="uid://dj8t3su6xcsi8" path="res://assets/faces/bruxa_grande.png" id="f0"]
+[ext_resource type="Texture2D" uid="uid://cvk2hr10jkalv" path="res://assets/faces/bruxa_pensando.png" id="f1"]
 
 [resource]
 script = ExtResource("1_p")
 nome = "BRUXA"
-faces = {"normal": ExtResource("f0"), "pensando": ExtResource("f1")}
+faces = {
+"normal": ExtResource("f0"),
+"pensando": ExtResource("f1")
+}

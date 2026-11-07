@@ -579,7 +579,18 @@ func _unhandled_input(event: InputEvent):
 		return
 	if _zone_global_rect().has_point(get_global_mouse_position()):
 		get_viewport().set_input_as_handled()
+		_destacar_toque()
 		_on_zone_interacted()
+
+## Feedback de toque: o sprite da página clareia rapidinho (self_modulate, não briga com o PISCAR).
+const COR_TOQUE := Color(1.6, 1.6, 1.6)
+func _destacar_toque() -> void:
+	var pg = _get_active_page_node()
+	var spr = pg.get("animated_sprite") if pg else null
+	if not (spr is CanvasItem):
+		return
+	spr.self_modulate = COR_TOQUE
+	spr.create_tween().tween_property(spr, "self_modulate", Color.WHITE, 0.3)
 
 func _pagina_tem_comandos() -> bool:
 	var dados: PaginaData = _get_active_page_data()

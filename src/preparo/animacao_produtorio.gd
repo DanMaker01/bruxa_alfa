@@ -153,7 +153,9 @@ func tocou() -> void:
 
 ## Roda a animação. diagnosticos: os do CalculadoraPocao (com "item" e "a").
 ## origem: de onde os ingredientes saem (caldeirão); destino: onde a poção vai surgir.
-func tocar(diagnosticos: Array, origem: Vector2, destino: Vector2, lado_final: float) -> void:
+## saidas: (opcional) [{"item", "pos"}] com a posição na TELA de cada ingrediente no caldeirão;
+## cada cartão sai do seu ícone. Sem par para o cartão, ele sai da origem.
+func tocar(diagnosticos: Array, origem: Vector2, destino: Vector2, lado_final: float, saidas: Array = []) -> void:
 	limpar()
 	var grupos := _agrupar(diagnosticos)
 	if grupos.is_empty():
@@ -166,6 +168,7 @@ func tocar(diagnosticos: Array, origem: Vector2, destino: Vector2, lado_final: f
 	var slots := _slots(n)
 	_tam0 = slots["tam"]
 	var horiz: bool = true   # cartão deitado: ícone à esquerda, grade à direita
+	var de_onde := _origens(grupos, origem, saidas)
 	# 1. saem do caldeirão e se alinham
 	var tw := _tw().set_parallel(true)
 	for i in n:
@@ -174,7 +177,7 @@ func tocar(diagnosticos: Array, origem: Vector2, destino: Vector2, lado_final: f
 		c.montar(g["item"].icone if g["item"] else null, slots["tam"], horiz)
 		c.qtd = g["qtd"]
 		add_child(c)
-		c.position = origem - slots["tam"] * 0.5
+		c.position = de_onde[i] - slots["tam"] * 0.5
 		c.scale = Vector2(0.3, 0.3)
 		c.modulate.a = 0.0
 		c.set_m(g["A"])
@@ -253,6 +256,22 @@ func tocar(diagnosticos: Array, origem: Vector2, destino: Vector2, lado_final: f
 
 # -----------------------------------------------------------------------------
 ## Grupos de ingredientes iguais em sequência: {item, qtd, a (média), A (do item), B (produto do grupo)}.
+## Posição (local) de onde cada cartão sai: o ícone do mesmo item no caldeirão, na ordem;
+## sem par, a origem.
+func _origens(grupos: Array, origem: Vector2, saidas: Array) -> Array:
+	var para_local := get_global_transform_with_canvas().affine_inverse()
+	var livres := saidas.duplicate()
+	var r := []
+	for g in grupos:
+		var pos := origem
+		for k in livres.size():
+			if livres[k]["item"] == g["item"]:
+				pos = para_local * (livres[k]["pos"] as Vector2)
+				livres.remove_at(k)
+				break
+		r.append(pos)
+	return r
+
 func _agrupar(diags: Array) -> Array:
 	var out: Array = []
 	for d in diags:

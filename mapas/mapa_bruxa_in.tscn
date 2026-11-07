@@ -21,7 +21,6 @@ z_index = 10
 scroll_scale = Vector2(0.99, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="Frente+" unique_id=145479066]
-position = Vector2(-64, 0)
 scale = Vector2(1.1781818, 1)
 texture = ExtResource("2_1lk5r")
 centered = false

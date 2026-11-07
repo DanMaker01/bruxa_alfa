@@ -22,7 +22,7 @@
 [ext_resource type="Resource" uid="uid://b0vf54xwaodp7" path="res://dados/eventos/pensamento_fim.tres" id="94_pensa_fim"]
 [ext_resource type="Script" uid="uid://bchvbuxgicj1n" path="res://src/dados/comandos/cmd_evento_animacao.gd" id="x0"]
 [ext_resource type="Script" uid="uid://b4qulgg7vsh20" path="res://src/dados/comandos/cmd_balao.gd" id="x1"]
-[ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="x2"]
+[ext_resource type="Resource" uid="uid://ck5s2dlc4wcek" path="res://dados/falantes/bruxa.tres" id="x2"]
 [ext_resource type="Resource" path="res://dados/falantes/campones.tres" id="x3"]
 [ext_resource type="Script" uid="uid://d133ab77oamwa" path="res://src/dados/comandos/cmd_apagar_evento.gd" id="x4"]
 [ext_resource type="Script" uid="uid://cwdgcnn30o052" path="res://src/dados/comandos/cmd_if.gd" id="x5"]

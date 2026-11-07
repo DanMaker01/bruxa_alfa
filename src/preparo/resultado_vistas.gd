@@ -73,11 +73,7 @@ func montar(res: Dictionary, A: Array) -> void:
 	_titulo.autowrap_mode = TextServer.AUTOWRAP_WORD
 	_titulo.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	add_child(_titulo)
-	_nota = _label(24, HORIZONTAL_ALIGNMENT_CENTER, IconesCaldeirao.cor_aproveitamento(media_aproveitamento(_diags())))
-	_nota.position = Vector2(20, 92)
-	_nota.size = Vector2(600, 34)
-	add_child(_nota)
-	atualizar_nota()
+	# (nota em estrelas removida)
 	_montar_coluna()
 	for c in get_children():
 		if c is CanvasItem:

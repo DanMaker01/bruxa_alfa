@@ -2,11 +2,14 @@
 
 [ext_resource type="Script" uid="uid://dsxujjugldv23" path="res://src/cena/mapa_base.gd" id="1_eko0s"]
 [ext_resource type="Texture2D" uid="uid://b0a4wj6m4ko52" path="res://assets/mapa/mapa_bruxa_out/mapa_bruxa_out3_fundo.png" id="2_eko0s"]
+[ext_resource type="Texture2D" uid="uid://bs3hyi7e40hjo" path="res://assets/mapa/mapa_bruxa_out/mapa_bruxa_out2_frente.png" id="3_c1amh"]
 [ext_resource type="Texture2D" uid="uid://s7fsf5qmeqi2" path="res://assets/mapa/mapa_bruxa_out/casa_bruxa.png" id="4_h5d0o"]
 [ext_resource type="Script" uid="uid://bjxlt3vqym72w" path="res://src/cena/evento_base.gd" id="5_bqian"]
-[ext_resource type="Resource" uid="uid://dnakudqdv774e" path="res://dados/eventos/bruxa_out_passagem2.tres" id="6_fva4q"]
-[ext_resource type="Resource" uid="uid://b50tjq8hxn2er" path="res://dados/eventos/bruxa_out_passagem1.tres" id="7_2hsha"]
+[ext_resource type="Resource" uid="uid://cgfv0kibtv5bt" path="res://dados/eventos/bruxa_out3_passagem1.tres" id="6_c1amh"]
 [ext_resource type="Resource" uid="uid://ca2oinxrwxc5d" path="res://dados/eventos/bruxa_out_passagem_bruxa_in.tres" id="8_1bxj7"]
+[ext_resource type="Script" uid="uid://ci10r4ypiyt11" path="res://src/cena/area_spawn.gd" id="8_eko0s"]
+[ext_resource type="Resource" uid="uid://cfmqv8x5131bu" path="res://dados/eventos/spawn_musgo_recato.tres" id="9_ndyyl"]
+[ext_resource type="Resource" uid="uid://boetws53g0pmi" path="res://dados/eventos/spawn_flor_farra.tres" id="10_sm2o5"]
 
 [node name="MapaBruxaOut" type="Node2D" unique_id=231347479]
 script = ExtResource("1_eko0s")
@@ -23,7 +26,14 @@ centered = false
 [node name="Meio" type="Parallax2D" parent="." unique_id=1011851333]
 scroll_scale = Vector2(1, 0)
 
+[node name="Sprite2D" type="Sprite2D" parent="Meio" unique_id=720024551]
+modulate = Color(1, 1, 1, 0.22745098)
+z_index = -1
+texture = ExtResource("3_c1amh")
+centered = false
+
 [node name="casa" type="Sprite2D" parent="Meio" unique_id=1468445260]
+self_modulate = Color(1, 1, 1, 0.21960784)
 z_index = 1
 position = Vector2(64, -32)
 texture = ExtResource("4_h5d0o")
@@ -34,15 +44,15 @@ z_index = 1
 
 [node name="Passagem2" type="CharacterBody2D" parent="Eventos" unique_id=1043341573]
 z_index = 3
-position = Vector2(1280, 512)
+position = Vector2(1256, 496)
 script = ExtResource("5_bqian")
-evento = ExtResource("6_fva4q")
+evento = ExtResource("6_c1amh")
 
 [node name="Passagem1" type="CharacterBody2D" parent="Eventos" unique_id=693460388]
 z_index = 3
 position = Vector2(0, 496)
 script = ExtResource("5_bqian")
-evento = ExtResource("7_2hsha")
+evento = ExtResource("6_c1amh")
 
 [node name="Porta" type="CharacterBody2D" parent="Eventos" unique_id=772237566]
 z_index = 3
@@ -50,3 +60,25 @@ position = Vector2(392, 400)
 scale = Vector2(0.6, 0.6)
 script = ExtResource("5_bqian")
 evento = ExtResource("8_1bxj7")
+
+[node name="AreaMusgo" type="Node2D" parent="Eventos" unique_id=1582476358]
+z_index = 3
+position = Vector2(1032, 544)
+script = ExtResource("8_eko0s")
+evento = ExtResource("9_ndyyl")
+quantidade = 2
+largura = 299.9999999999904
+cooldown = 5.0
+espalhamento_min = 0.1
+espalhamento_max = 1.0
+
+[node name="AreaFlor" type="Node2D" parent="Eventos" unique_id=1642446729]
+z_index = 3
+position = Vector2(224, 536)
+script = ExtResource("8_eko0s")
+evento = ExtResource("10_sm2o5")
+quantidade = 2
+largura = 299.9999999999904
+cooldown = 5.0
+espalhamento_min = 0.1
+espalhamento_max = 1.0

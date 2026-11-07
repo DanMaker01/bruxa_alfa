@@ -4,7 +4,7 @@
 [ext_resource type="SpriteFrames" uid="uid://47c22e8l5kxm" path="res://animacoes/mercador2.tres" id="9_3y2ys"]
 [ext_resource type="Resource" path="res://dados/falantes/mercador.tres" id="Mx1"]
 [ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="Mx2"]
-[ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="Mx3"]
+[ext_resource type="Resource" uid="uid://ck5s2dlc4wcek" path="res://dados/falantes/bruxa.tres" id="Mx3"]
 [ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="Mx4"]
 [ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="Mx5"]
 [ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="Mx6"]

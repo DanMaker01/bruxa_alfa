@@ -48,7 +48,7 @@ evento = ExtResource("ev_bruxa_out_passagem2")
 
 [node name="Passagem1" type="CharacterBody2D" parent="Eventos" unique_id=693460388]
 z_index = 3
-position = Vector2(0, 496)
+position = Vector2(8, 496)
 script = ExtResource("4_42op0")
 evento = ExtResource("ev_bruxa_out_passagem1")
 

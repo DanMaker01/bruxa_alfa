@@ -88,11 +88,11 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] cidade
 		[ ] cidade_in01
 		[ ] cidade_in02
-		[ ] cidade_in03
+		[ ] cidade_in03 (será aumentado)
 		[ ] estrada_a
 		[ ] ponte
 		[ ] castelo
-		[ ] castelo_in01
+		[ ] castelo_in01 (será aumentado)
 		[ ] castelo_in02
 		[ ] castelo_in03
 		[ ] estrada_b
@@ -152,15 +152,13 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 
 [ ] Diálogos 100%
 	[ ] Intro: melhorar texto (tempo e ritmo).
-	[ ] revisar todos
-		[?] camponês de vira antes de caminhar para a porta.
-			Feito: andando (Mover, rota), os eventos viram sozinhos para o lado do movimento, como a bruxa; a direção do Mover é para onde olhar ao chegar. Comando novo "Travar direção" (trava/destrava, bruxa ou evento) para as exceções. Página tem "sprite olha esquerda" para arte desenhada para a esquerda (ligado no camponês).
-	[?] sempre que falar de item, o texto deve estar da mesma cor COR_ITEM
-		Feito: [item]erva[/item] no texto = roxo (#c9a0ff) e negrito (DialogueBox.COR_ITEM). Vale para falas e perguntas das opções. Já marcados: ervas, cogumelos, maçã, véu, Poção da Calma Profunda / Calma Profunda, Poção de Pó de Retorno Concentrada, e as perguntas dos spawns (erva, cogumelo brilhante, flor-de-farra, musgo-do-recato).
+	[ ] Revisão de cada evento.
+	[ ] Balão de expressão por sprite: precisa da arte (1 sprite de balão, se der pra fazer sem deformar as quinas seria ideal)
 
 [ ] Caldeirão 100%
 	[ ] Menus, botões
 		[?] Botão de ingrediente: afunda e clareia ao encostar o dedo (antes não reagia). Continua lançando ao soltar, para não atrapalhar a rolagem da lista.
+		[ ] Reformular Layout (pensar em celular)
 	[ ] Poções balanceadas
 	[ ] Feedback bom pra temperatura do caldeirão, tanto frio quanto quente
 		[?] Ícone do ingrediente quente/frio: antes eram degraus (nada até 5% do limite; 30% de cor até o limite; 65% depois), por isso ficava vermelho de repente.
@@ -169,36 +167,28 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 			Gelo no frio continua igual.
 		[?] Partículas maiores (menos as bolhas, que ficam do tamanho original): x1,8 (ESCALA_PARTICULAS) e as do abanar o fogo (labaredas e brasas) x2,6 (ESCALA_ABANAR), em visual_caldeirao.gd.
 			Particulas de bolha e caldeirão não devem sofrer a escala. somente as fogo.
+		[?] Bolhas e estrelas pela temperatura em curva exponencial (quase nada no começo, máximo em 200 °C): quantidade, velocidade e giro das estrelas. Limites baixos em visual_caldeirao.gd (PARTICULAS_CURVA, BOLHAS_*_MAX, ESTRELAS_*_MAX).
+		[?] Vermelho do caldeirão por pontos (GRADIENTE_VERMELHO em visual_caldeirao.gd): 100 °C só o fundinho, 160 °C todo vermelho claro, 200 °C bem vermelho. Para mudar, edite os pontos (°C, progresso).
+		[?]  anéis branco > amarelo > laranja > vermelho > verde no ideal, e volta ao passar.
+			(item antigo dos círculos branco > amarelo > laranja > vermelho > verde juntado aqui: feito, paleta "aproxima" na tecla P)
+			Modos para testar no preparo (teclado):
+				M = régua (punição / proporcional / absoluto), já existia.
+				P = cores: FAIXA (padrão: anéis contínuos, cada trecho com a cor do aproveitamento naquele ponto: vermelho > amarelo > verde no ideal > amarelo > vermelho; o anel começa vazio e vai revelando a cor; anel de fora = cozimento, de dentro = tempo) · dourado (antiga) · aproxima (branco > amarelo > laranja > vermelho > VERDE no ideal; passando: vermelho > laranja > amarelo > branco) · semáforo (cinza > amarelo > verde; passando: amarelo > laranja > vermelho > preto) · cor única (o anel inteiro na cor do estado atual).
+				C = anel já colorido (as bolhinhas apagadas já mostram a cor do trecho, fraquinhas, e a "barra" vai acendendo).
+				A vela usa as mesmas cores. Começa em "faixa". Outras ideias de feedback: me diga e eu ponho como mais um modo.
 	[ ] Receitas 
-	[?] Caldeirão: anéis branco > amarelo > laranja > vermelho > verde no ideal, e volta ao passar.
-		Modos para testar no preparo (teclado):
-			M = régua (punição / proporcional / absoluto), já existia.
-			P = cores: FAIXA (padrão: anéis contínuos, cada trecho com a cor do aproveitamento naquele ponto: vermelho > amarelo > verde no ideal > amarelo > vermelho; o anel começa vazio e vai revelando a cor; anel de fora = cozimento, de dentro = tempo) · dourado (antiga) · aproxima (branco > amarelo > laranja > vermelho > VERDE no ideal; passando: vermelho > laranja > amarelo > branco) · semáforo (cinza > amarelo > verde; passando: amarelo > laranja > vermelho > preto) · cor única (o anel inteiro na cor do estado atual).
-			C = anel já colorido (as bolhinhas apagadas já mostram a cor do trecho, fraquinhas, e a "barra" vai acendendo).
-			A vela usa as mesmas cores. Começa em "faixa". Outras ideias de feedback: me diga e eu ponho como mais um modo.
-	[?] Debug do caldeirão organizado: caixas com fundo (direita: modos M/P/T/C/K + indicadores em cima, "Na panela" embaixo; embaixo do caldeirão: gráfico). Liga no menu de debug (aba Mapa) ou no botão "debug grafico caldeirão" (embaixo do DEBUG, canto superior esquerdo) (src/preparo/debug_caldeirao.gd).
+		[ ] Definir 2~3 receitas
+		[ ] balancear dificuldade, peso de cada erro: tempo, temp, cozimento, explorar os TIPOS de matrizes. explorar o que é posível nesse sistema térmico
+			[?] balancear o resultado da poção de extroversão. pois um cogumelo já está sendo suficiente para o melhor resultado, entender o pq.
+			Por quê: o cogumelo multiplica E por 1,16 (+16%) e o critério do filho do mercador aceitava qualquer E que subisse 10% (e aceitava C/A/O mudando até "pouco").
+			Ajuste: E precisa subir "muito" (>= +30%; a desenvoltura dá +40%) e O, C, A não podem mudar (menos de 10%); N não pode subir; nenhum traço extremo.
+			Com 1 cogumelo agora: "B-bom... dia." / "Melhorou um pouco, mas ainda não dá para deixar a loja com ele."
+
 	[?] Resultado Caldeirão: animação do produtório das matrizes no resultado.
 		Feito (src/preparo/animacao_produtorio.gd, antes da poção na JanelaResultado): ingredientes se alinham (A = B_n·…·B_1, o 1º à direita/embaixo), anel enche até a_i e a grade desbota de A_i para B_i, os B_i se combinam em ordem até a matriz final, que fica no lugar da grade da janela. Sem agrupar iguais. A poção só aparece ao confirmar (toque): a matriz encolhe e vira a poção, que vai para o inventário. Só em coluna; depois da 1ª combinação o cartão vira ícone de poção e o anel mostra a média do aproveitamento. Teste no preparo: K = toque acelera/pula.
-	[?] Tela de resultado: 3 visuais para testar (botões no rodapé quando a janela está pronta): "coluna" (nome + nota; matriz e pentágono lado a lado; ícones dos ingredientes com anel, tocar abre os detalhes e a curva), "páginas" (Efeito / Ingredientes / Preparo, arrastar ou setas) e "duas colunas" (o antigo). Nota: estrelas / porcentagem / sem nota. A poção surge no lugar da matriz ao confirmar. Ficou só o "coluna" (os outros foram apagados do código) (src/preparo/resultado_vistas.gd).
-	[ ] Caldeirão: balancear dificuldade (peso de cada erro).
-
-	
+		Ao finalizar: os cartões saem dos ícones dos ingredientes no caldeirão (perdidos não), a tela vai ao preto puro e a cena do caldeirão fica escondida e parada (CenaPreparo.cobrir_cena) até a janela fechar. Mais leve.
 
 
-[ ] Próximos decisões:
-	[ ] Quando o HUD abre a primeira vez (bruxa_out1 na intro? bruxa_in antes do diálogo?).
-	[ ] Balão de expressão por sprite: precisa da arte (1 sprite de balão, se der pra fazer sem deformar as quinas seria ideal)
-	[ ] Resultado 1: o que muda depois do casamento (falas, bônus, realeza deve um favor/dinheiro).
-	[ ] Som de festa/igreja e de palmas (hoje o casamento usa batida02.mp3 nas palmas).
-	[ ] Pode apagar: dados/eventos/cidadeA_in03_vazia.tres, dados/falantes/bruxa_pensando.tres. (conferido: nada usa; o editor daqui não consegue apagar, apague pelo explorador)
-  	[ ] Convidados muito apertados na igreja -> aumentar igreja
-	
-[ ] Usar traços na história:
-	[ ] O
-	[ ] C
-	[!] E (cidade_in02, mercador)
-	[ ] A
-	[!] N (cap 1, princesa)
 
 [ ] Roteiro/Estilo/Personagens
 	[ ] Princípios
@@ -220,34 +210,38 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 	[ ] Cap. 1 Casamento
 		[?] após o casamento as falas no castelo_in01 devem mudar
 			Feito: rei, princesa e os dois guardas têm falas novas depois do casamento, diferentes para resultado 1 (convidada, grata) e 2 (não convidada, princesa "calma demais").
+	
+	
 
+[ ] Quando o HUD abre a primeira vez (bruxa_out1 na intro? bruxa_in antes do diálogo?).
+[ ] Pode apagar: dados/eventos/cidadeA_in03_vazia.tres, dados/falantes/bruxa_pensando.tres. (conferido: nada usa; o editor daqui não consegue apagar, apague pelo explorador)
 
-[!] Padrão dos eventos: retângulo de colisão e retângulo de interação do tamanho do sprite (escala x = 1, y = 1).
-	Feito: tamanho = 1º quadro da animação da página x escala; sem sprite = 32x32 (antes 64x64). Todas as páginas foram convertidas (mesmo tamanho de antes).
-[?] Editor de eventos em Python (_/editor_eventos, abrir com abrir_editor.bat; precisa de PySide6): páginas, condições, comandos, diálogo em texto (Ctrl+T), labels (F12), várias páginas/eventos de uma vez, buscar/substituir, desfazer, backup ao salvar. Ver _/editor_eventos/README.md.
+[ ] Usar traços na história:
+	[ ] O
+	[ ] C
+	[!] E (cidade_in02, mercador)
+	[ ] A
+	[!] N (cap 1, princesa)
+
 [ ] ervas muito escondidas na floresta. mudar o sprite da erva para destacar mais na floresta.
-[ ] entrando em portas sem querer com o touch, feedback quando clicar em eventos
-[ ] definir quando o hud abre a primeira vez, bruxa_out1 na intro? bruxa_in logo antes de iniciar o diálogo?
-[ ] balão de expressão: o atual está montando na hora e dá pra ver a ligação do cabo com o fundo, mudar por sprite?
+
+[?] Escolta do castelo_in01: guardas e bruxa desalinhavam. Causa: o player aplicava fricção mesmo quando um Mover com velocidade fixa mandava nele, então a bruxa andava mais devagar que os eventos (e dependia do FPS). Agora com velocidade fixa não há fricção (InputManager.velocidade_fixa_ativa).
+[?] Guardas da ponte e da estradaB: o Mover da bruxa vinha antes da variável que libera, e a página sólida bloqueava. Agora a variável vem antes: a página muda na hora (passável) e o Mover anda. Regra: a página do evento troca assim que a variável muda, mesmo com os comandos ainda rodando.
+[?] Editor de eventos em Python (_/editor_eventos, abrir com abrir_editor.bat; precisa de PySide6): páginas, condições, comandos, diálogo em texto (Ctrl+T), labels (F12), várias páginas/eventos de uma vez, buscar/substituir, desfazer, backup ao salvar. Ver _/editor_eventos/README.md.
+[?] entrando em portas sem querer com o touch, feedback quando clicar em eventos
+	Feito: todo toque no mapa mostra um anel no ponto tocado (src/ui/toque_feedback.gd) e o evento de clique tocado clareia rapidinho (evento_base._destacar_toque).
 [?] cor nas palavras/frases, efeito nas palavras/frases no comando mostrarmsg.
 	Toc toc (efeito SOM): os risquinhos apontam sempre para a esquerda (dentro ou fora da tela).
 	Prints de debug tirados de interaction_zone.gd, pagina.gd e evento_base.gd (davam "output overflow").
 	Feito: BBCode do Godot no texto: [color=red]..[/color], [b], [i], [u], [s], [wave], [shake], [rainbow], [tornado], [fade], [bgcolor=..], [font_size=..], [outline_color=..], [outline_size=..].
 	Outros "[" continuam aparecendo como texto. A escrita letra a letra conta só as letras (sem as tags). O cabeçalho antigo [nome;foto;pos] continua valendo.
 	Anotado: lista de comandos (e BBCode) no fim do readme, em "Comandos de evento (referência)".
-[?] balancear o resultado da poção de extroversão. pois um cogumelo já está sendo suficiente para o melhor resultado, entender o pq.
-	Por quê: o cogumelo multiplica E por 1,16 (+16%) e o critério do filho do mercador aceitava qualquer E que subisse 10% (e aceitava C/A/O mudando até "pouco").
-	Ajuste: E precisa subir "muito" (>= +30%; a desenvoltura dá +40%) e O, C, A não podem mudar (menos de 10%); N não pode subir; nenhum traço extremo.
-	Com 1 cogumelo agora: "B-bom... dia." / "Melhorou um pouco, mas ainda não dá para deixar a loja com ele."
 [.] brilho na porta, da mesma cor do véu, ao trocar o véu.
 	Feito: ao clicar no véu adicione um flash da cor do véu no sprite da porta, para que ele pisque da cor.
 	Feito: saiu o brilho da porta (o do véu continua); a porta pisca 2 vezes na cor nova. Novo tipo de efeito PISCAR no Mostrar efeito (serve para qualquer evento)
 	Correção: tingiu, mas como a cor do objeto não era branca misturou as cores do objeto mais a tintura. quero que leve em consideração isso e pinte da cor que eu pedi. preciso mandar o mesmo sprite com tons de branco para isso?
 
 
-[ ] caldeirão, balancear dificuldade, peso de cada erro: tempo, temp, cozimento, explorar os tipos de matrizes. explorar o que é posível nesse sistema térmico.
-[ ] os circulos em volta dos ingredientes devem começar com cor branca, ir mostrando sua cor amarelando(mais cedo do que o atual), alaranjando, avermelhando e ficando verde ao chegar perto do ideal, ao passar do ideal ele deve ir avermelhando, alaranjando, amarelando, esbranquecendo.
-[ ] no resultado, após listar os ingredientes e curvas. deve fazer como o produtório, os aproveitamentos se juntam à cada matriz, e ocorre a multiplicação de matrizes uma a uma. ficando a matriz resultado. (ver como vai ser essa animação nos detalhes para evitar retrabalho)
 
 
 [ ] organização da pasta Graphics(está sendo chamada de assets neste projeto) estilo rpgmaker:
@@ -259,10 +253,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 	Transitions
 	Windowskins
 
-[ ] Casamento/História:
-	Decidido: sem prazo no Cap. 1. O casamento só acontece depois que ela entrega a poção e pega o véu; ninguém perde por demorar (sem contador de tempo).
-	Não mexi (decidir depois):
-	missao01_convite é gravada e nunca lida: fica para o Cap. 2 (convite do casamento).
+[ ] missao01_convite é gravada e nunca lida: fica para o Cap. 2 (convite do casamento).
 
 
 [ ] 2ª receita:  - desenvoltura
@@ -289,7 +280,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 			Posição: menu "(padrão)" / "escolher posição" no inspetor (no arquivo, posicao -1 = padrão). (padrão) repete a última posição em que aquele personagem falou (0 na primeira vez); qualquer outro valor vira a nova posição lembrada dele. Cada personagem lembra a sua.
 			[nome;foto;pos] no começo do texto continua valendo, com prioridade.
 			Personagens: bruxa (normal, pensando), campones, desconhecido (???), guarda1, guarda2, princesa, rei. bruxa_pensando.tres ficou sem uso: pode apagar.
-[ ]		Variações no flip card. (depois) Sorteadas: normal = 1 flip diagonal; variações no mesmo tempo: 5 flips com velocidade decrescente; flip mudando a dimensão horizontal, com 1 ou 5 flips. 
+[ ]		Variações no flip card. Sorteadas: normal = 1 flip diagonal; variações no mesmo tempo: 5 flips com velocidade decrescente; flip mudando a dimensão horizontal, com 1 ou 5 flips. 
 
 
 [ ]	Representação de poções visual com matriz/grafo. (feito, versão simples: no pentágono cada ponta sai do traço que mais contribui e gira até a sua; diagonal = só escala com um pulo)

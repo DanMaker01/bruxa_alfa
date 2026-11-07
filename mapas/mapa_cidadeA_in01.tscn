@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b18t7bhpqpfqr" path="res://assets/mapa/mapa_cidadeA_in01/mapa_cidadeA_in01_fundo.png" id="2_cdd6b"]
 [ext_resource type="Texture2D" uid="uid://c8mku7q0rsfey" path="res://assets/mapa/mapa_cidadeA_in01/mapa_cidadeA_in01_frente.png" id="2_ubx4i"]
 [ext_resource type="Script" uid="uid://bjxlt3vqym72w" path="res://src/cena/evento_base.gd" id="5_vbqe2"]
+[ext_resource type="Resource" uid="uid://cfleoe40m4goq" path="res://dados/eventos/cidadeA_in01_npc.tres" id="6_20ipy"]
 [ext_resource type="Resource" uid="uid://cleybmiq0x444" path="res://dados/eventos/cidadeA_in01_passagem.tres" id="ev_cidadeA_in01_passagem"]
 
 [node name="CidA_in01" type="Node2D" unique_id=231347479]
@@ -38,3 +39,9 @@ z_index = 3
 position = Vector2(992, 432)
 script = ExtResource("5_vbqe2")
 evento = ExtResource("ev_cidadeA_in01_passagem")
+
+[node name="Npc" type="CharacterBody2D" parent="Eventos" unique_id=1964034208]
+z_index = 3
+position = Vector2(736, 464)
+script = ExtResource("5_vbqe2")
+evento = ExtResource("6_20ipy")

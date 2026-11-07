@@ -579,7 +579,30 @@ func _finalizar_preparo() -> void:
 	_on_resultado_fechado(resultado)
 
 ## A janela do resultado fechou (ou não havia poção): fecha o preparo e entrega a poção.
+## Resultado aberto por cima (fundo preto): esconde e para tudo do preparo, menos a janela.
+## false volta ao normal.
+var _cobertos: Dictionary = {}   # nó -> [process_mode, visible] de antes
+
+func cobrir_cena(cobrir: bool) -> void:
+	if cobrir:
+		for c in get_children():
+			if c == janela_resultado or _cobertos.has(c):
+				continue
+			var vis: bool = c.visible if (c is CanvasItem or c is CanvasLayer) else true
+			_cobertos[c] = [c.process_mode, vis]
+			if c is CanvasItem or c is CanvasLayer:
+				c.visible = false
+			c.process_mode = Node.PROCESS_MODE_DISABLED
+	else:
+		for c in _cobertos:
+			if is_instance_valid(c):
+				c.process_mode = _cobertos[c][0]
+				if c is CanvasItem or c is CanvasLayer:
+					c.visible = _cobertos[c][1]
+		_cobertos.clear()
+
 func _on_resultado_fechado(resultado: Dictionary) -> void:
+	cobrir_cena(false)
 	if game_manager and game_manager.has_method("fechar_preparo"):
 		game_manager.fechar_preparo(resultado)
 	else:

@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://cfleoe40m4goq"]
+
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="1_ktf70"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_gqwpe"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="3_dg83w"]
+[ext_resource type="Script" uid="uid://blrso3i4foop8" path="res://src/dados/personagem.gd" id="3_i3t31"]
+[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="4_cbeky"]
+[ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="4_i3t31"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="5_cbeky"]
+[ext_resource type="SpriteFrames" uid="uid://xar5t82cmcew" path="res://animacoes/cidadeA_in01_npc.tres" id="7_inffl"]
+
+[sub_resource type="Resource" id="Resource_ifn78"]
+script = ExtResource("3_i3t31")
+nome = "NPC"
+metadata/_custom_type_script = "uid://blrso3i4foop8"
+
+[sub_resource type="Resource" id="Resource_l83s5"]
+script = ExtResource("4_cbeky")
+personagem = SubResource("Resource_ifn78")
+texto = "Sou um NPC. Não tenho nada a dizer."
+metadata/_custom_type_script = "uid://8liac65hmnnq"
+
+[sub_resource type="Resource" id="Resource_inffl"]
+script = ExtResource("1_ktf70")
+sprite_frames = ExtResource("7_inffl")
+comandos = Array[ExtResource("2_gqwpe")]([SubResource("Resource_l83s5")])
+metadata/_custom_type_script = "uid://gdfc3xl4mcr4"
+
+[resource]
+script = ExtResource("5_cbeky")
+id = "cidadeA_in01_npc"
+paginas = Array[ExtResource("1_ktf70")]([SubResource("Resource_inffl")])

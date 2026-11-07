@@ -7,7 +7,7 @@
 [ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="5_passo"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="6_ev"]
 [ext_resource type="SpriteFrames" path="res://animacoes/cidade_npc2.tres" id="7_anim"]
-[ext_resource type="Resource" path="res://dados/falantes/bruxa.tres" id="8_bruxa"]
+[ext_resource type="Resource" uid="uid://ck5s2dlc4wcek" path="res://dados/falantes/bruxa.tres" id="8_bruxa"]
 [ext_resource type="Resource" path="res://dados/falantes/menino.tres" id="9_npc"]
 
 [sub_resource type="Resource" id="M_0_0"]

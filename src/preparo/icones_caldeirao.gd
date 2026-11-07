@@ -493,6 +493,24 @@ func limpar() -> void:
 func quantidade() -> int:
 	return _icones.size()
 
+## Para o resultado: posição na tela (canvas) de cada ingrediente que conta (sem os perdidos),
+## na ordem em que entraram. Cada entrada: {"item": ItemData, "pos": Vector2}.
+func saidas_para_resultado() -> Array:
+	var r := []
+	for ic in _icones:
+		if ic["perdido"]:
+			continue
+		var raiz: Node2D = ic["raiz"]
+		r.append({"item": ic["item"], "pos": raiz.get_global_transform_with_canvas().origin})
+	return r
+
+## Esconde todos os ícones (saíram do caldeirão para o resultado).
+func esconder_icones() -> void:
+	for ic in _icones:
+		ic["raiz"].visible = false
+	if _frente:
+		_frente.visible = false
+
 # =============================================================================
 # MOVIMENTO E APARÊNCIA (a cada frame)
 # =============================================================================
