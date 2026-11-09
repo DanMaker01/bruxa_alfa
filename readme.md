@@ -153,23 +153,12 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] definir audio das interações
 		[ ] interação com outros menus
 
-[ ] Diálogos 100%
-	[ ] Intro : melhorar texto (tempo e ritmo).
-	[ ] Cap. 1: Revisão de cada evento.
-	[ ] Sprites: Balão de expressão por sprite: precisa da arte (1 sprite de balão, se der pra fazer sem deformar as quinas seria ideal)
-	[ ] Estilo visual:
-		[ ] organizar o layout e textura dialogo/opções
-		[ ]	Ajuste estético, borda, cor, fonte, etc.
-		[ ]	Criação de estilos padronizados para cada coisa. estilo de texto, estilo de janela, paleta de cores, animação coerente, etc...
-		[ ] Eventos de diálogo devem verificar se o próximo evento a tomar a frente será diálogo também, exceto depois de comando wait, etc.
-			se um evento acabar em mensagem e outro iniciar em mensagem com o mesmo falante, nome, foto etc então o card não deve fechar depois do primeiro evento, pois é uma continudade. exemplos disso acontecem ao chamar eventos por comando, entre outros.
-
 
 [ ] Caldeirão 100%
 	[ ]	Tutorial do caldeirão na 1ª vez. usando poucos ingredientes, mudar intro talvez. tentar integrar naturalmente com o que já tem. senão coloca na intro. 
-	[ ] Poder retirar item em preparo (com punição: cozimento? fragil? etc)
-	[ ] Menus, botões
-		[ ] Reformular Layout (pensar em celular)
+	[ ] Poder retirar item em preparo (com punição alta a depender de t: cozimento? fragil? etc)
+	[ ] Layout
+		[ ] Reformular Layout (pensar em celular). Menus, botões,Bruxa_chibi,caldeirão, texto em cima do caldeirão (passar para falas da bruxa), feedback rápido da bruxa.
 		[ ] janela do inventário mostrando poucos itens.  
 	[ ] Poções balanceadas
 	[ ] Feedback bom pra temperatura do caldeirão e itens, tanto frio quanto quente
@@ -189,17 +178,6 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 
 
 [ ]	Livro de Receitas: 
-	[ ]	Ao criar uma poção nova a bruxa tem opção de anotar a receita no livro. Caso escolha anotar: Abre a cena do livro de receitas já anotando.
-	[ ]	Iniciar o livro de receitas, cena com janela que inicia após uma nova receita. A cena de livro abre e é escrita uma nova receita.
-	[ ]	Pensar no Layout
-	[ ]	Uma receita por página, 2 páginas por folha, mostra o livro aberto e tem opção de controlar com clique ou arrastando, é redundante para melhor UX.
-	[ ]	Ao clicar numa página mostra seus ingredientes e tempo relacionado com seu gráfico, seu resultado.
-	[ ]	Fazer tudo bem animado e temático de bruxaria.
-	[.] Database (nomes das proibidas ficam para o Cap. 2): Nomear as poções de referência no catálogo (PocaoReferencia: nome, descrição, A). Poção da Calma Profunda. Poção #2. Poções proíbidas. 
-		Poção #2 = Poção da Desenvoltura (definir bem antes do Cap. 1; só usada no Cap. X).
-		Poções proibidas: as que têm algum autovalor 0 (2^5 − 1 = 31 combinações de traços zerados). Ainda sem nome. (feito: 31 no catálogo como "Poção Proibida (sem O, C...)", nomes provisórios)
-		Poção de Pó de Retorno Concentrada no catálogo, com efeito (teleporte para bruxa_in). Pó: diag(0.97,1,1,1,1.03), cozimento leniente (m 3000, T 60–170, t 10–150, folgas 0,4/0,6).
-		Nome: poção de um item só agora usa "Poção de [item] [qualidade]" antes de procurar no catálogo (senão um pó mal cozido virava "Concentrada").
 	[ ] Receitas:
 		[ ] 1ª receita: calma profunda
 			[ ] escrever e padronizar, 
@@ -212,23 +190,52 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 			Por quê: o cogumelo multiplica E por 1,16 (+16%) e o critério do filho do mercador aceitava qualquer E que subisse 10% (e aceitava C/A/O mudando até "pouco").
 			Ajuste: E precisa subir "muito" (>= +30%; a desenvoltura dá +40%) e O, C, A não podem mudar (menos de 10%); N não pode subir; nenhum traço extremo.
 			Com 1 cogumelo agora: "B-bom... dia." / "Melhorou um pouco, mas ainda não dá para deixar a loja com ele."
-
+		
+	[ ] Interação com resultado do preparo:
+		[ ] Anota na mão ou automático? Lembra só da última?
+		[ ] Como será?
+			[ ]	Ao criar uma poção nova a bruxa tem opção de anotar a receita no livro. Caso escolha anotar: Abre a cena do livro de receitas já anotando.
+			[ ]	Iniciar o livro de receitas, cena com janela que inicia após uma nova receita. A cena de livro abre e é escrita uma nova receita.
+		[ ] Alternativas?
+			[ ] ... (adicionar alternativas)
+	[] Cena do Livro:
+		[ ]	Pensar no Layout
+		[ ]	Uma receita por página, 2 páginas por folha, mostra o livro aberto e tem opção de controlar com clique ou arrastando, é redundante para melhor UX.
+		[ ]	Ao clicar numa página mostra seus ingredientes e tempo relacionado com seu gráfico, seu resultado.
+		[ ]	Fazer tudo bem animado e temático de bruxaria.
+		[.] Database (nomes das proibidas ficam para o Cap. 2): Nomear as poções de referência no catálogo (PocaoReferencia: nome, descrição, A). Poção da Calma Profunda. Poção #2. Poções proíbidas. 
+			Poção #2 = Poção da Desenvoltura (definir bem antes do Cap. 1; só usada no Cap. X).
+			Poções proibidas: as que têm algum autovalor 0 (2^5 − 1 = 31 combinações de traços zerados). Ainda sem nome. (feito: 31 no catálogo como "Poção Proibida (sem O, C...)", nomes provisórios)
+			Poção de Pó de Retorno Concentrada no catálogo, com efeito (teleporte para bruxa_in). Pó: diag(0.97,1,1,1,1.03), cozimento leniente (m 3000, T 60–170, t 10–150, folgas 0,4/0,6).
+			Nome: poção de um item só agora usa "Poção de [item] [qualidade]" antes de procurar no catálogo (senão um pó mal cozido virava "Concentrada").
 
 [ ] História/Roteiro
-	[ ] Usar traços na história:
-		[ ] O
-		[ ] C
-		[!] E (cidade_in02, mercador)
-		[ ] A
-		[!] N (cap 1, princesa)
 	[ ]	Diálogos devem condizer com a época
-		[ ] Cap. 1
+		[ ] Cap. 1 (-N)
 			[?] intro-Campones
 			[ ] Guardas
 			[ ] Bosque NPC
 			[ ] Cidade 
 			[ ] Castelo
-		[ ] Cap. 2
+		[ ] Cap. 2 (+E)
+	[ ] Usar traços na história: 
+		O,(conservador com pouca abertura)
+		C (consequencialidade, prudencia, preguiçoso),
+		A (amabilidade, aumentar ou diminuir?)
+	[ ] Usar permutação de traços
+	[ ] Poções proibidas
+
+
+[ ] Diálogos 100%
+	[ ] Intro : melhorar texto (tempo e ritmo).
+	[ ] Cap. 1: Revisão de cada evento.
+	[ ] Sprites: Balão de expressão por sprite: precisa da arte (1 sprite de balão, se der pra fazer sem deformar as quinas seria ideal)
+	[ ] Estilo visual:
+		[ ] organizar o layout e textura dialogo/opções
+		[ ]	Ajuste estético, borda, cor, fonte, etc.
+		[ ]	Criação de estilos padronizados para cada coisa. estilo de texto, estilo de janela, paleta de cores, animação coerente, etc...
+		[ ] Eventos de diálogo devem verificar se o próximo evento a tomar a frente será diálogo também, exceto depois de comando wait, etc.
+			se um evento acabar em mensagem e outro iniciar em mensagem com o mesmo falante, nome, foto etc então o card não deve fechar depois do primeiro evento, pois é uma continudade. exemplos disso acontecem ao chamar eventos por comando, entre outros.
 
 
 [ ] Quests
