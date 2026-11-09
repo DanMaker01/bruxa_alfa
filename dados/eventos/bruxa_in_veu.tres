@@ -8,7 +8,9 @@
 [ext_resource type="Script" uid="uid://u1lexc30s8be" path="res://src/dados/comandos/cmd_player.gd" id="5_player"]
 [ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="6_esp"]
 [ext_resource type="Script" uid="uid://dp3mfol3wf88y" path="res://src/dados/comandos/cmd_mover.gd" id="7_mover"]
+[ext_resource type="Resource" uid="uid://ck5s2dlc4wcek" path="res://dados/falantes/bruxa.tres" id="7_mssvv"]
 [ext_resource type="Script" uid="uid://7xxa8u611ha0" path="res://src/dados/comandos/cmd_mostrar_efeito.gd" id="8_efeito"]
+[ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="8_rjpy5"]
 [ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="9_var"]
 [ext_resource type="SpriteFrames" path="res://animacoes/veu_porta1.tres" id="x0"]
 [ext_resource type="SpriteFrames" path="res://animacoes/veu_porta2.tres" id="x1"]
@@ -19,6 +21,17 @@ script = ExtResource("2_pg")
 
 [sub_resource type="Resource" id="V_trava"]
 script = ExtResource("5_player")
+
+[sub_resource type="Resource" id="Resource_ouiik"]
+script = ExtResource("6_esp")
+segundos = 0.2
+metadata/_custom_type_script = "uid://dkw5y5gsrn515"
+
+[sub_resource type="Resource" id="Resource_8iijf"]
+script = ExtResource("8_rjpy5")
+personagem = ExtResource("7_mssvv")
+texto = "Ótimo! Vou colocar o véu aqui em cima."
+metadata/_custom_type_script = "uid://8liac65hmnnq"
 
 [sub_resource type="Resource" id="V_esp0"]
 script = ExtResource("6_esp")
@@ -85,7 +98,7 @@ variavel = "missao01_guardas_perseguem"
 script = ExtResource("2_pg")
 condicoes = Array[ExtResource("4_cond")]([SubResource("C_veu1"), SubResource("C_sem_guardas")])
 gatilho = 2
-comandos = Array[ExtResource("3_cmd")]([SubResource("V_trava"), SubResource("V_esp0"), SubResource("V_anda"), SubResource("V_esp_porta"), SubResource("V_pula"), SubResource("V_var"), SubResource("V_esp_aparece"), SubResource("V_voa"), SubResource("V_magia2"), SubResource("V_esp1"), SubResource("V_destrava")])
+comandos = Array[ExtResource("3_cmd")]([SubResource("V_trava"), SubResource("Resource_ouiik"), SubResource("Resource_8iijf"), SubResource("V_esp0"), SubResource("V_anda"), SubResource("V_esp_porta"), SubResource("V_pula"), SubResource("V_var"), SubResource("V_esp_aparece"), SubResource("V_voa"), SubResource("V_magia2"), SubResource("V_esp1"), SubResource("V_destrava")])
 
 [sub_resource type="Resource" id="PCor_brilho0"]
 script = ExtResource("8_efeito")

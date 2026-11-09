@@ -63,22 +63,20 @@ evento = ExtResource("8_1bxj7")
 
 [node name="AreaMusgo" type="Node2D" parent="Eventos" unique_id=1582476358]
 z_index = 3
-position = Vector2(1032, 544)
+position = Vector2(952, 552)
 script = ExtResource("8_eko0s")
 evento = ExtResource("9_ndyyl")
-quantidade = 2
-largura = 299.9999999999904
+largura = 400.0
 cooldown = 5.0
 espalhamento_min = 0.1
 espalhamento_max = 1.0
 
 [node name="AreaFlor" type="Node2D" parent="Eventos" unique_id=1642446729]
 z_index = 3
-position = Vector2(224, 536)
+position = Vector2(240, 552)
 script = ExtResource("8_eko0s")
 evento = ExtResource("10_sm2o5")
-quantidade = 2
-largura = 299.9999999999904
+largura = 400.0
 cooldown = 5.0
 espalhamento_min = 0.1
 espalhamento_max = 1.0

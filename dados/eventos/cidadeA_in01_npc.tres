@@ -17,7 +17,7 @@ metadata/_custom_type_script = "uid://blrso3i4foop8"
 [sub_resource type="Resource" id="Resource_l83s5"]
 script = ExtResource("4_cbeky")
 personagem = SubResource("Resource_ifn78")
-texto = "Sou um NPC. Não tenho nada a dizer."
+texto = "Sou um NPC. Mas não tenho nada a dizer."
 metadata/_custom_type_script = "uid://8liac65hmnnq"
 
 [sub_resource type="Resource" id="Resource_inffl"]

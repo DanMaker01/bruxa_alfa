@@ -41,11 +41,11 @@ texture = ExtResource("3_kgy4o")
 centered = false
 
 [node name="in02" type="Sprite2D" parent="Meio" unique_id=1230715399]
-position = Vector2(1520, 0)
+position = Vector2(1520, 17)
 texture = ExtResource("3_casa2")
 centered = false
 
-[node name="in03" type="Sprite2D" parent="Meio" unique_id=1740835358]
+[node name="in03 - igreja" type="Sprite2D" parent="Meio" unique_id=1740835358]
 position = Vector2(2784, 0)
 texture = ExtResource("3_casa3")
 centered = false

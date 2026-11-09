@@ -10,7 +10,11 @@
 
 [sub_resource type="Resource" id="Resource_ok2us"]
 script = ExtResource("3_ysprn")
-texto = "(capítulo3)"
+texto = "[color=red] [wave] texto em onda [/wave] [/color]
+[shake] TERRORRRRR!!![/shake]
+[tornado] aaAAaaAAaaAA [/tornado]
+[rainbow] arcoiro [/rainbow]
+"
 metadata/_custom_type_script = "uid://8liac65hmnnq"
 
 [sub_resource type="Resource" id="Resource_pioo1"]

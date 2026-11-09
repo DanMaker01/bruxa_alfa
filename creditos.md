@@ -15,3 +15,5 @@
 ### Playtest
 
 - Tharcisio Alves de Souza
+- Gustavo
+- 
