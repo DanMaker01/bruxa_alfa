@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="EventoData" format=3 uid="uid://cl55esx4qnd88"]
+
+[ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="1_pag"]
+[ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="2_cmd"]
+[ext_resource type="Script" uid="uid://bgod7onjrq0tc" path="res://src/dados/comandos/cmd_livro.gd" id="3_livro"]
+[ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="4_67r5a"]
+[ext_resource type="SpriteFrames" path="res://animacoes/livro_receita.tres" id="4_spr"]
+[ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="5_3y2x3"]
+[ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="5_ev"]
+
+[sub_resource type="Resource" id="C_livro"]
+script = ExtResource("3_livro")
+
+[sub_resource type="Resource" id="P_1"]
+script = ExtResource("1_pag")
+sprite_frames = ExtResource("4_spr")
+comandos = Array[ExtResource("2_cmd")]([SubResource("C_livro")])
+
+[resource]
+script = ExtResource("5_ev")
+id = "bruxa_in_livro"
+paginas = Array[ExtResource("1_pag")]([SubResource("P_1")])

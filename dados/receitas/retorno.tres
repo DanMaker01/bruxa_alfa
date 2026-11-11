@@ -17,5 +17,6 @@ pocao = ExtResource("p_pocao")
 descricao = "Leva quem bebe de volta para casa. Só para casa."
 ingredientes = Array[ExtResource("2_ing")]([SubResource("L0")])
 passos = PackedStringArray("Acenda e esquente o caldeirão.", "Jogue o pó e cozinhe por ~30 s perto de 100 °C.")
+passos_livro = Array[Dictionary]([{"tipo": "chama", "estado": "normal"}, {"tipo": "ingrediente", "item": "po_retorno", "qtd": 1, "seg": 30.0}])
 duracao = 35.0
 conhecida = true

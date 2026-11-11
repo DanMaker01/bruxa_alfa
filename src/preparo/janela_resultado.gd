@@ -228,7 +228,10 @@ func abrir(resultado: Dictionary) -> void:
 	elif _nome_ingrediente(A) != "":
 		_definir_nome(_nome_ingrediente(A))   # matriz parecida com um ingrediente puro
 	else:
-		pedir_nome = true
+		# poção nova: o nome NÃO é pedido aqui; fica "Poção desconhecida" e a bruxa
+		# dá o nome depois, no livro de receitas (página do preparo)
+		_definir_nome(NOME_DESCONHECIDO)
+		_res["nomeavel"] = true
 	_estado = Estado.MOSTRANDO
 	_nome_atual = NOME_DESCONHECIDO if pedir_nome else (_pocao_item.get_nome() if _pocao_item else "Poção")
 	# moldura → matriz troca → pentágono → ingredientes

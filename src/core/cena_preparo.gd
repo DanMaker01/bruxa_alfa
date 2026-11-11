@@ -69,6 +69,8 @@ var _fogo_ja_forte: bool = false
 var janela_resultado: JanelaResultado
 var som: SomCaldeirao
 var debug_ui: DebugCaldeirao
+## Layouts para celular (Original / A / B / C) + régua da chama + receita memorizada.
+var layout: LayoutPreparo
 var botao_debug: Button
 ## Sem GameManager (cena aberta sozinha): o botão liga/desliga só aqui.
 var _debug_local: bool = false
@@ -129,7 +131,7 @@ func _process(delta: float) -> void:
 	# 🔥 HISTÓRICO (ring buffer com descarte em bloco)
 	_tempo_desde_ultimo_ponto += delta
 	if _tempo_desde_ultimo_ponto >= INTERVALO_HISTORICO:
-		historico_T.append({"t": sistema.t_sim, "T": sistema.T, "F": sistema.F})
+		historico_T.append({"t": sistema.t_sim, "T": sistema.T, "F": sistema.F, "fogo": sistema.fogo_ligado})
 		_tempo_desde_ultimo_ponto = 0.0
 		_acumular_ingredientes(historico_T[-1])
 		if historico_T.size() > MAX_PONTOS + BLOCO_DESCARTE:
@@ -205,6 +207,10 @@ func _criar_componentes() -> void:
 	som = SomCaldeirao.new()
 	som.name = "SomCaldeirao"
 	add_child(som)
+
+	layout = LayoutPreparo.new()
+	add_child(layout)
+	layout.configurar(self)
 
 	janela_resultado = JanelaResultado.new()
 	janela_resultado.name = "JanelaResultado"
@@ -316,9 +322,11 @@ func _popular_inventario() -> void:
 		label.text = "(Inventário vazio)"
 		label.add_theme_color_override("font_color", Color(0.5, 0.5, 0.7))
 		lista_ingredientes.add_child(label)
-		return
-	for item_name in inventario:
-		lista_ingredientes.add_child(_criar_botao_item(item_name, database.get_item(item_name), inventario[item_name]))
+	else:
+		for item_name in inventario:
+			lista_ingredientes.add_child(_criar_botao_item(item_name, database.get_item(item_name), inventario[item_name]))
+	if layout:
+		layout.inventario_mudou()   # grade do layout A
 
 func _criar_botao_item(item_name: String, item: ItemData, quantidade: int) -> Button:
 	var btn = Button.new()
@@ -399,6 +407,8 @@ func _registrar_ingrediente(item_name: String) -> void:
 	indicadores.registrar_acao_adicionar(sistema)
 	indicadores.registrar_acao_mexer(sistema)
 	sistema.adicionar_ingrediente(item_name)
+	if layout:
+		layout.guia.ingrediente_entrou(item_name)
 
 func _item_de(nome: String) -> ItemData:
 	if not _itens_cache.has(nome):
@@ -485,6 +495,8 @@ func _perda_media() -> float:
 # =============================================================================
 func _fogo_clique_curto() -> void:
 	# Clique curto no [F] → pulso de fogo (F += CONST_A), só com o fogo aceso
+	if layout and layout.ignorar_toque_fogo():
+		return   # layout C: foi um arrasto (abaixar), não um toque
 	if not sistema.fogo_ligado:
 		feedback.texto_flutuante("fogo apagado (segure para acender)", VisualCaldeirao.COR_FOGO_DESLIGA)
 		return
@@ -499,6 +511,15 @@ func _fogo_segurar() -> void:
 	sistema.ligar_fogo()
 	var cor := visual.liga_desliga(botao_fogo, true)
 	feedback.texto_flutuante("fogo aceso!", cor)
+
+## Botão Acender/Apagar dos layouts novos.
+func alternar_fogo() -> void:
+	if not sistema.fogo_ligado:
+		_fogo_segurar()
+		return
+	sistema.desligar_fogo()
+	var cor := visual.apagou(botao_fogo)
+	feedback.texto_flutuante("fogo apagado", cor)
 
 ## Segurando com o fogo aceso: tira CONST_A de F; fraco demais → apaga.
 func _abafar_fogo() -> void:
@@ -558,6 +579,8 @@ func _iniciar_preparo() -> void:
 	icones.limpar()
 	visual.resetar()
 	_atualizar_botao_pocao()
+	if layout and game_temp and "livro" in game_temp:
+		layout.guia.carregar(game_temp.livro)   # receita memorizada (some quando a poção termina)
 
 func _finalizar_preparo() -> void:
 	if not preparo_ativo:
@@ -604,10 +627,27 @@ func cobrir_cena(cobrir: bool) -> void:
 
 func _on_resultado_fechado(resultado: Dictionary) -> void:
 	cobrir_cena(false)
+	_anotar_no_livro(resultado)
 	if game_manager and game_manager.has_method("fechar_preparo"):
 		game_manager.fechar_preparo(resultado)
 	else:
 		encerrar()
+
+## Poção pronta: o preparo vira passos e vai para o livro (soma numa receita igual ou
+## vira rascunho). A receita memorizada só valia para esta poção.
+func _anotar_no_livro(resultado: Dictionary) -> void:
+	if resultado.get("cancelado", false) or not (resultado.get("pocao") is ItemData):
+		return
+	if not game_temp or not ("livro" in game_temp) or game_temp.livro.is_empty():
+		return
+	var passos := TranscritorReceita.transcrever(historico_T, ingredientes_ativos, sistema.t_sim)
+	if passos.is_empty():
+		return
+	var pocao: ItemData = resultado["pocao"]
+	var a: float = ResultadoVistas.media_aproveitamento(resultado.get("diagnosticos", []))
+	var extra := {"item": pocao.id, "A": resultado.get("A", []), "nomeavel": resultado.get("nomeavel", false)}
+	LivroReceitas.registrar_preparo(game_temp.livro, passos, pocao.get_nome(), a, extra)
+	game_temp.livro["memorizada"] = -1
 
 func _calcular_resultado() -> Dictionary:
 	return {

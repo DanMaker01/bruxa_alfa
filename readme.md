@@ -199,6 +199,22 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] Alternativas?
 			[ ] ... (adicionar alternativas)
 	[] Cena do Livro:
+		[?] Cena do livro feita (src/livro/, scenes/cena_livro.tscn; F6 abre sozinha com um livro de teste):
+			Livro aberto, 2 páginas (640x640, o HUD fica embaixo), uma receita por página. Setas ‹ › ou arrastar o dedo.
+			Receita = nome + passos: "chama <estado>" ou "<ingrediente> ×qtd, N s" (joga e espera N s); "Finalizar" é sempre o último.
+			Estados da chama (EstadosChama, pela T do caldo com a chama estável): apagado, transparente 59-80, transparente grande 80-95, normal ~100, laranja ~110, amarelo ~135, branco ~155, púrpura ~170, negro >195. O fogo continua em pulsos.
+			Páginas: efetivas (Editar, Copiar, Memorizar, Apagar), de NPC (Copiar, Memorizar), rascunhos no fim (Passar a limpo, Apagar; últimos 10, um por preparo). Livro com 12 páginas. Apagar pede confirmação.
+			Editor: nome, passos (+ chama, + ingrediente com qtd e segundos, subir/descer/apagar). Só ingredientes que a bruxa já teve (GameTemp.itens_vistos). Mudar os passos apaga o resultado anotado.
+			Memorizar: uma receita só, vale para o próximo preparo (guia, a integrar). Dados em GameTemp.livro (LivroReceitas). Receitas de NPC vêm de dados/receitas com conhecida = true e passos_livro.
+			Integração com o preparo: feita (ver abaixo).
+			Evento do livro no bruxa_in (bruxa_in_livro, nó Livro em x 600 y 448, ajuste no mapa): clique abre o livro. Comando novo "Livro" (cmd_livro.gd) abre e espera fechar.
+			[?] Preparo reformado para celular (src/preparo/layout_preparo.gd), botão "Layout" (abaixo do Finalizar) alterna: Original / A Bancada / B Polegares / C Prateleira.
+				A: cena em cima, régua horizontal da chama, embaixo Abanar grande + Abaixar + Acender/Apagar à esquerda e grade de ingredientes (4 por página) à direita.
+				B: termômetro vertical ao lado do caldeirão, carrossel de ingredientes, Abaixar (esquerda) e Abanar (direita) grandes, Acender/Apagar embaixo.
+				C: prateleira de ingredientes em cima, caldeirão mais abaixo com a régua em arco, área de fogo grande (toque abana, arrastar para baixo abaixa), Acender/Apagar.
+				Régua da chama (regua_chama.gd): estados do livro pela T do caldo, nome do estado atual. Finalizar no canto superior direito.
+				Receita memorizada (guia_receita.gd): lista inteira no canto superior esquerdo, marca o passo atual sozinha (chama certa por 1 s; ingrediente: entrou a quantidade e passaram os segundos). Some quando a poção termina.
+				Ao terminar a poção (transcritor_receita.gd): o preparo vira passos (chama dominante antes de cada ingrediente, mesmo item em sequência junta, tempos ao segundo). Se bater com uma página (±1 s) soma nela (Feita Nx, melhor resultado); senão vira rascunho.
 		[ ]	Pensar no Layout
 		[ ]	Uma receita por página, 2 páginas por folha, mostra o livro aberto e tem opção de controlar com clique ou arrastando, é redundante para melhor UX.
 		[ ]	Ao clicar numa página mostra seus ingredientes e tempo relacionado com seu gráfico, seu resultado.
@@ -346,3 +362,6 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 [ ]	Sistema de mercado/valor dinâmico
 
 ```
+
+				Nome de poção nova: não é mais pedido no resultado (fica "Poção desconhecida"). No livro, a página do preparo tem "Dar nome à poção": muda o item no inventário e registra no catálogo do jogador. Poção que já veio com nome não pode ser renomeada.
+				Livro: rascunhos são as primeiras páginas (mais novo primeiro); "+ Nova receita" no rodapé; a seta não avança para duas páginas vazias.

@@ -25,4 +25,5 @@ pocao = ExtResource("p_pocao")
 descricao = "Solta a língua e a timidez: só o E sobe (x 1,4). Teste de infusão e cozimento lento."
 ingredientes = Array[ExtResource("2_ing")]([SubResource("L0"), SubResource("L1")])
 passos = PackedStringArray("Acenda e esquente o caldeirão sem passar de 100 °C (infusão, 75–95 °C).", "Jogue as 3 flores e mantenha a temperatura.", "Na metade do processo (~30 s), jogue os 6 musgos.", "Mantenha a mesma temperatura até o fim.")
+passos_livro = Array[Dictionary]([{"tipo": "chama", "estado": "transparente_grande"}, {"tipo": "ingrediente", "item": "flor_farra", "qtd": 3, "seg": 30.0}, {"tipo": "ingrediente", "item": "musgo_recato", "qtd": 6, "seg": 30.0}])
 duracao = 60.0

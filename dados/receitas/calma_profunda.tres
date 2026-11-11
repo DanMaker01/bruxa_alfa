@@ -25,5 +25,6 @@ pocao = ExtResource("p_pocao")
 descricao = "Acalma os nervos sem mudar quem a pessoa é. Só o N cai (x 0,5625)."
 ingredientes = Array[ExtResource("2_ing")]([SubResource("L0"), SubResource("L1")])
 passos = PackedStringArray("Segure o botão de fogo ~1 s para acender.", "Assim que o caldo esquentar um pouco (~8 s, chama ainda fraca), jogue as 8 ervas.", "Deixe cozinhar com a chama vermelha/laranja por ~40 s (não deixe chegar ao amarelo por muito tempo).", "Clique no fogo ~1 vez por segundo até a chama ficar branca.", "Jogue os 4 cogumelos e mantenha a chama branca (sem chegar ao púrpura) por ~10 s.")
+passos_livro = Array[Dictionary]([{"tipo": "chama", "estado": "normal"}, {"tipo": "ingrediente", "item": "erva", "qtd": 8, "seg": 32.0}, {"tipo": "chama", "estado": "branco"}, {"tipo": "ingrediente", "item": "cogumelo_brilhante", "qtd": 4, "seg": 8.0}])
 duracao = 65.0
 conhecida = true

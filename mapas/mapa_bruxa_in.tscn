@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://bjxlt3vqym72w" path="res://src/cena/evento_base.gd" id="4_iquun"]
 [ext_resource type="Resource" uid="uid://bgywscj5liwe5" path="res://dados/eventos/bruxa_in_auto.tres" id="ev_bruxa_in_auto"]
 [ext_resource type="Resource" uid="uid://bj42mmgkqvxl8" path="res://dados/eventos/bruxa_in_caldeirao.tres" id="ev_bruxa_in_caldeirao"]
+[ext_resource type="Resource" uid="uid://cl55esx4qnd88" path="res://dados/eventos/bruxa_in_livro.tres" id="ev_bruxa_in_livro"]
 [ext_resource type="Resource" uid="uid://himp7lgodr5s" path="res://dados/eventos/bruxa_in_npc.tres" id="ev_bruxa_in_npc"]
 [ext_resource type="Resource" uid="uid://ca2repsthqv07" path="res://dados/eventos/bruxa_in_passagem.tres" id="ev_bruxa_in_passagem"]
 [ext_resource type="Resource" uid="uid://16tnqj4gw7my" path="res://dados/eventos/bruxa_in_vestido.tres" id="ev_bruxa_in_vestido"]
@@ -69,3 +70,9 @@ z_index = 2
 position = Vector2(944, 305)
 script = ExtResource("4_iquun")
 evento = ExtResource("ev_bruxa_in_veu")
+
+[node name="Livro" type="CharacterBody2D" parent="Eventos" unique_id=571807742]
+z_index = 3
+position = Vector2(224, 336)
+script = ExtResource("4_iquun")
+evento = ExtResource("ev_bruxa_in_livro")

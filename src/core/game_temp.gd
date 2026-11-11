@@ -9,6 +9,10 @@ var self_vars: Dictionary = {}
 var spawns: Dictionary = {}
 ## Poções que o jogador nomeou nesta sessão (catálogo do jogador).
 var pocoes_nomeadas: CatalogoPocoes = CatalogoPocoes.new()
+## Livro de receitas (ver LivroReceitas). Vazio até o database carregar.
+var livro: Dictionary = {}
+## Itens que a bruxa já teve alguma vez (id -> true): o livro só deixa escolher esses.
+var itens_vistos: Dictionary = {}
 
 var database = null
 var database_pronto = false
@@ -51,6 +55,8 @@ func _on_database_loaded():
 	self_vars = {}
 	spawns = {}
 	pocoes_nomeadas = CatalogoPocoes.new()
+	livro = LivroReceitas.novo(LivroReceitas.receitas_conhecidas())
+	itens_vistos = {}
 	
 	database_pronto = true
 	print("[GameTemp] ===== PRONTO =====")
@@ -137,6 +143,7 @@ func get_personality_value(pers_name: String, index: int) -> float:
 
 func add_item(item_name: String, quantidade: int = 1):
 	if database and database.has_item(item_name):
+		itens_vistos[item_name] = true
 		if inventario.has(item_name):
 			inventario[item_name] += quantidade
 		else:
