@@ -25,7 +25,7 @@ const FALAS := {
 	"quente": ["Tá queimando!", "Fogo demais!", "Quente, quente!"],
 	"frio": ["Esfriou...", "Mais fogo!", "Brrr, tá frio."],
 	"tempo": ["Tempo demais!", "Já devia ter tirado..."],
-	"ponto": ["Passou do ponto!", "Cozinhou demais..."],
+	"ponto": ["Passou muito do ponto!", "Cozinhou demais..."],
 	"perto": ["Cuidado...", "Hmm, quase...", "Atenção!"],
 	"perfeito": ["Isso!", "Perfeito!", "No ponto!"],
 	"novo": ["Vamos ver...", "Mais um.", "Hmm."],

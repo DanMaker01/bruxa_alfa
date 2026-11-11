@@ -1035,7 +1035,7 @@ func _atualizar_estados() -> void:
 	linha.add_child(nome)
 	linha.add_child(salvar)
 	_lista_estados.add_child(linha)
-	var dica := _rotulo("Guarda variáveis, personalidades, inventário e self-vars. Mesmo nome = substitui.")
+	var dica := _rotulo("Guarda variáveis, personalidades, inventário, self-vars, livro, mapa e posição da bruxa. Carregar leva a bruxa de volta. Mesmo nome = substitui.")
 	dica.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	dica.clip_text = false
 	dica.add_theme_color_override("font_color", COR_TEXTO.darkened(0.35))
@@ -1049,7 +1049,7 @@ func _atualizar_estados() -> void:
 	for n in nomes:
 		var e: Dictionary = estados[n]
 		var h := HBoxContainer.new()
-		var r := _rotulo("%s   %s" % [n, str(e.get("quando", ""))])
+		var r := _rotulo("%s   %s%s" % [n, str(e.get("quando", "")), ("   " + str(e["mapa"]).get_file().get_basename()) if e.has("mapa") else ""])
 		var carregar := Button.new()
 		carregar.text = "Carregar"
 		carregar.pressed.connect(_carregar_estado.bind(str(n)))
@@ -1073,7 +1073,15 @@ func _salvar_estado(nome: String) -> void:
 		"personalidades": game_temp.personalidades.duplicate(true),
 		"inventario": game_temp.inventario.duplicate(true),
 		"self_vars": game_temp.self_vars.duplicate(true),
+		"livro": game_temp.livro.duplicate(true) if "livro" in game_temp else {},
+		"itens_vistos": game_temp.itens_vistos.duplicate(true) if "itens_vistos" in game_temp else {},
 	}
+	# mapa e posição da bruxa
+	var onde := _onde_esta()
+	if not onde.is_empty():
+		estados[nome]["mapa"] = onde["mapa"]
+		estados[nome]["x"] = onde["x"]
+		estados[nome]["y"] = onde["y"]
 	_gravar_estados(estados)
 	_atualizar_estados()
 
@@ -1099,7 +1107,43 @@ func _carregar_estado(nome: String) -> void:
 		game_temp.personality_changed.emit(k)
 	_marcar_todas_sujas()
 	_sujas["Estados"] = false
+	if e.has("livro") and "livro" in game_temp and not (e["livro"] as Dictionary).is_empty():
+		game_temp.livro = _numeros_inteiros((e["livro"] as Dictionary).duplicate(true))
+	if e.has("itens_vistos") and "itens_vistos" in game_temp:
+		game_temp.itens_vistos = (e["itens_vistos"] as Dictionary).duplicate(true)
+	# leva a bruxa para o mapa e a posição salvos
+	if e.has("mapa") and ferramentas and ferramentas.gm and ferramentas.gm.get("teleporte"):
+		fechar()
+		ferramentas.gm.teleporte.teleportar(str(e["mapa"]), float(e.get("x", 0.0)), float(e.get("y", 0.0)))
+		return
 	_atualizar_titulo()
+
+## Mapa (cena) e posição da bruxa agora.
+func _onde_esta() -> Dictionary:
+	if not ferramentas:
+		return {}
+	var m = ferramentas.mundo()
+	var p = ferramentas.gm.get_player() if ferramentas.gm else null
+	if m == null or p == null:
+		return {}
+	for c in m.get_children():
+		if c.name != "Player" and c.scene_file_path != "":
+			return {"mapa": c.scene_file_path, "x": p.global_position.x, "y": p.global_position.y}
+	return {}
+
+## JSON devolve todo número como float: ids e contagens do livro voltam a ser inteiros.
+static func _numeros_inteiros(v):
+	if v is Dictionary:
+		for k in v:
+			v[k] = _numeros_inteiros(v[k])
+		return v
+	if v is Array:
+		for i in v.size():
+			v[i] = _numeros_inteiros(v[i])
+		return v
+	if v is float and is_equal_approx(v, roundf(v)) and absf(v) < 1e9:
+		return int(v)
+	return v
 
 func _apagar_estado(nome: String) -> void:
 	var estados := _ler_estados()

@@ -18,9 +18,13 @@ const CURTO := {"apagado": "apag.", "transparente": "transp.", "transparente_gra
 
 var formato: Formato = Formato.HORIZONTAL
 var cena = null
-## ARCO: centro (local) e raio.
+## ARCO: centro (local), raio e ângulos (graus) do começo (frio) e do fim (quente).
 var centro_arco := Vector2(320, 430)
 var raio_arco: float = 190.0
+var ang_ini: float = 200.0
+var ang_fim: float = 340.0
+## Nome do estado: acima do arco (false) ou abaixo (true).
+var nome_embaixo: bool = false
 var _fonte: Font
 
 
@@ -35,6 +39,15 @@ func _process(_d: float) -> void:
 func _T() -> float:
 	var s = cena.get("sistema") if cena else null
 	return float(s.T) if s else 20.0
+
+func _F() -> float:
+	var s = cena.get("sistema") if cena else null
+	return float(s.F) if s else 20.0
+
+## Números só com o debug do caldeirão ligado.
+func _debug() -> bool:
+	var d = cena.get("debug_ui") if cena else null
+	return d != null and d.visible
 
 func _fogo() -> bool:
 	var s = cena.get("sistema") if cena else null
@@ -100,11 +113,14 @@ func _arco(T: float, atual: String) -> void:
 	var pm := centro_arco + Vector2(cos(am), sin(am)) * raio_arco
 	draw_circle(pm, 8.0, COR_TEXTO)
 	draw_circle(pm, 5.0, EstadosChama.cor(atual))
-	_texto_centro(centro_arco + Vector2(0, -raio_arco - 18), "Chama " + EstadosChama.nome(atual).to_lower(), 15, EstadosChama.cor(atual).lightened(0.3))
+	var y_nome: float = raio_arco + 30.0 if nome_embaixo else -raio_arco - 18.0
+	_texto_centro(centro_arco + Vector2(0, y_nome), "Chama " + EstadosChama.nome(atual).to_lower(), 15, EstadosChama.cor(atual).lightened(0.3))
+	if _debug():
+		_texto_centro(centro_arco + Vector2(0, y_nome + 18), "T %.1f °C   F %d °C" % [T, roundi(_F())], 12, COR_SUAVE)
 
 
 func _ang(f: float) -> float:
-	return deg_to_rad(200.0 + 140.0 * f)
+	return deg_to_rad(lerpf(ang_ini, ang_fim, f))
 
 func _texto_centro(p: Vector2, s: String, tam: int, cor: Color) -> void:
 	var w := _fonte.get_string_size(s, HORIZONTAL_ALIGNMENT_LEFT, -1, tam).x

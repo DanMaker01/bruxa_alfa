@@ -2,15 +2,19 @@
 # Cena do livro de receitas: livro aberto, duas páginas (uma receita por página),
 # na parte de cima da tela (640x640; embaixo fica o HUD).
 #   passar página: setas ‹ › ou arrastar o dedo para o lado
-#   página efetiva: Editar, Copiar, Memorizar, Apagar
-#   página de NPC:  Copiar, Memorizar (não edita)
-#   rascunho:       Passar a limpo, Apagar (todo preparo cria um; são as primeiras
-#                   páginas do livro, o mais novo primeiro)
+#   página efetiva: Editar, Memorizar, Apagar
+#   página de NPC:  Memorizar (não edita)
+#   rascunho:       Passar a limpo, Apagar (todo preparo cria um; ficam no fim do
+#                   livro, do mais antigo ao mais novo)
 #   poção sem nome (feita no preparo): "Dar nome à poção" na página; o nome vale para o
 #                   item no inventário e para as próximas iguais. Poção com nome não muda.
 #   + Nova receita: botão no rodapé (não há página em branco para avançar até ela)
-# Editar abre um editor por cima do livro: nome, passos (+ chama, + ingrediente,
-# subir/descer/apagar); "Finalizar" é sempre o último passo.
+# Editar: a própria página vira editável e a página ao lado vira a paleta (EditorReceita,
+# arrastar e soltar); Pronto / Cancelar voltam ao normal. Tocar numa página já feita
+# abre o DetalheReceita (gráfico do melhor preparo).
+# Tipos marcados no papel: ensinada = fitinha dourada; rascunho = papel cinza e carimbo.
+# Animações: abrir/fechar o livro, virar folha, ir até uma página (várias folhas),
+# página nova aparecendo, página apagada sumindo.
 # Os dados ficam em GameTemp.livro (LivroReceitas). Aberta sozinha (F6), usa um livro de teste.
 class_name CenaLivro
 extends Control
@@ -51,16 +55,17 @@ var _indicador: Label
 var _b_nova: Button
 var _confirmar_apagar: int = -1     # id que pediu "Apagar" uma vez
 
-# editor
-var _editor: PanelContainer
-var _editando: Dictionary = {}      # a página sendo editada (original)
-var _ed_passos: Array = []          # cópia de trabalho dos passos
-var _ed_nome: LineEdit
-var _ed_lista: VBoxContainer
-var _ed_chama: OptionButton
-var _ed_item: OptionButton
-var _ed_qtd: SpinBox
-var _ed_seg: SpinBox
+var _editor: EditorReceita
+var _editando_lado: int = -1        # lado da receita em edição (o outro vira paleta)
+var _detalhe: DetalheReceita
+var _corpo: Control                 # o livro todo (para abrir/fechar)
+var _folhas_no: Array = []          # [Control esquerda, Control direita] (viram)
+var _fitas: Array = []              # fitinha das ensinadas, por lado
+var _carimbos: Array = []           # carimbo "rascunho", por lado
+var _animando: bool = false
+const T_FOLHA: float = 0.14         # meia virada (s)
+const T_FOLHA_RAPIDA: float = 0.05
+const COR_FITA := Color(0.85, 0.65, 0.15)
 
 var _toque_ini := Vector2(-1, -1)
 
@@ -72,6 +77,7 @@ func _ready() -> void:
 	_carregar_dados()
 	_montar()
 	_atualizar()
+	_animar_abrir()
 
 
 ## GameTemp do jogo, ou um livro de teste quando a cena roda sozinha.
@@ -106,28 +112,63 @@ func _montar() -> void:
 	fundo.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(fundo)
 
+	_corpo = Control.new()
+	_corpo.size = AREA
+	_corpo.pivot_offset = AREA * 0.5
+	_corpo.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_corpo)
 	var capa := Panel.new()
 	capa.position = RECT_LIVRO.position
 	capa.size = RECT_LIVRO.size
 	capa.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	capa.add_theme_stylebox_override("panel", _caixa(COR_CAPA, 10, Color(0, 0, 0, 0.4), 2))
-	add_child(capa)
+	_corpo.add_child(capa)
 
 	for i in 2:
 		var r: Rect2 = RECT_PAG[i]
+		var folha := Control.new()
+		folha.position = r.position
+		folha.size = r.size
+		folha.pivot_offset = Vector2(r.size.x if i == 0 else 0.0, r.size.y * 0.5)   # gira na lombada
+		folha.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_corpo.add_child(folha)
+		_folhas_no.append(folha)
 		var papel := Panel.new()
-		papel.position = r.position
 		papel.size = r.size
-		papel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		add_child(papel)
+		papel.mouse_filter = Control.MOUSE_FILTER_STOP
+		papel.gui_input.connect(_papel_input.bind(i))
+		folha.add_child(papel)
 		_papeis.append(papel)
+		var carimbo := _rotulo("RASCUNHO", 30, Color(0.65, 0.12, 0.1, 0.22), false)
+		carimbo.position = Vector2(40, r.size.y * 0.42)
+		carimbo.rotation = deg_to_rad(-14)
+		folha.add_child(carimbo)
+		_carimbos.append(carimbo)
 		var caixa := VBoxContainer.new()
-		caixa.position = r.position + Vector2(MARGEM, MARGEM)
+		caixa.position = Vector2(MARGEM, MARGEM)
 		caixa.size = Vector2(r.size.x - 2 * MARGEM, r.size.y - 2 * MARGEM - ALT_RODAPE)
 		caixa.add_theme_constant_override("separation", 6)
 		caixa.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		add_child(caixa)
+		folha.add_child(caixa)
 		_caixas.append(caixa)
+		# fitinha das ensinadas: pendurada no alto da página
+		var fita := Control.new()
+		fita.position = Vector2(r.size.x - 42, -8)
+		fita.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var faixa := ColorRect.new()
+		faixa.color = COR_FITA
+		faixa.size = Vector2(18, 70)
+		faixa.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		fita.add_child(faixa)
+		var ponta := Polygon2D.new()
+		ponta.polygon = PackedVector2Array([Vector2(0, 70), Vector2(18, 70), Vector2(18, 82), Vector2(9, 74), Vector2(0, 82)])
+		ponta.color = COR_FITA
+		fita.add_child(ponta)
+		var estrela := _rotulo("★", 13, Color(0.45, 0.25, 0.05), false)
+		estrela.position = Vector2(2, 44)
+		fita.add_child(estrela)
+		folha.add_child(fita)
+		_fitas.append(fita)
 
 	# lombada
 	var lombada := ColorRect.new()
@@ -135,7 +176,7 @@ func _montar() -> void:
 	lombada.position = Vector2(316, 22)
 	lombada.size = Vector2(8, 596)
 	lombada.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(lombada)
+	_corpo.add_child(lombada)
 
 	# rodapé: setas e número
 	var y_rod: float = RECT_PAG[0].end.y - ALT_RODAPE + 4
@@ -143,22 +184,22 @@ func _montar() -> void:
 	_seta_esq.position = Vector2(RECT_PAG[0].position.x + 8, y_rod)
 	_seta_esq.size = Vector2(56, 40)
 	_seta_esq.add_theme_font_size_override("font_size", 24)
-	add_child(_seta_esq)
+	_corpo.add_child(_seta_esq)
 	_seta_dir = _botao("›", _passar.bind(1))
 	_seta_dir.position = Vector2(RECT_PAG[1].end.x - 64, y_rod)
 	_seta_dir.size = Vector2(56, 40)
 	_seta_dir.add_theme_font_size_override("font_size", 24)
-	add_child(_seta_dir)
+	_corpo.add_child(_seta_dir)
 	_b_nova = _botao("+ Nova receita", _nova)
 	_b_nova.position = Vector2(RECT_PAG[0].position.x + 72, y_rod)
 	_b_nova.size = Vector2(150, 40)
-	add_child(_b_nova)
+	_corpo.add_child(_b_nova)
 	_indicador = _rotulo("", 12, COR_SUAVE, false)
 	_indicador.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_indicador.position = Vector2(RECT_PAG[1].position.x + 10, y_rod + 10)
 	_indicador.size = Vector2(200, 24)
 	_indicador.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	add_child(_indicador)
+	_corpo.add_child(_indicador)
 
 	# fechar
 	var x := _botao("✕", fechar)
@@ -166,9 +207,17 @@ func _montar() -> void:
 	x.size = Vector2(44, 40)
 	x.add_theme_stylebox_override("normal", _caixa(COR_CAPA, 8, Color(1, 1, 1, 0.3), 1))
 	x.add_theme_color_override("font_color", Color(1, 0.95, 0.85))
-	add_child(x)
+	_corpo.add_child(x)
 
-	_montar_editor()
+	_editor = EditorReceita.new()
+	add_child(_editor)
+	_editor.montar(livro, database, _vistos)
+	_editor.terminou.connect(_editor_terminou)
+	_detalhe = DetalheReceita.new()
+	_detalhe.position = RECT_LIVRO.position + Vector2(6, 6)
+	_detalhe.size = RECT_LIVRO.size - Vector2(12, 12)
+	add_child(_detalhe)
+	_detalhe.montar(database)
 	_montar_nomear()
 
 
@@ -176,10 +225,12 @@ func _montar() -> void:
 # PÁGINAS
 # =============================================================================
 func _atualizar() -> void:
-	_folhas = livro["rascunhos"].duplicate()
-	_folhas.reverse()   # rascunho mais novo primeiro
-	_folhas.append_array(livro["paginas"])
+	_folhas = livro["paginas"].duplicate()
+	_folhas.append_array(livro["rascunhos"])   # rascunhos no fim do livro
 	_spread = clampi(_spread, 0, maxi(0, ((_folhas.size() - 1) / 2) * 2))
+	if _editando_lado >= 0:
+		_montar_edicao()
+		return
 	for lado in 2:
 		var k := _spread + lado
 		var folha = _folhas[k] if k < _folhas.size() else null
@@ -190,17 +241,59 @@ func _atualizar() -> void:
 	_indicador.text = "%d-%d de %d   ·   %d/%d páginas" % [_spread + 1, mini(_spread + 2, _folhas.size()), _folhas.size(),
 		livro["paginas"].size(), int(livro["max"])]
 
+func _ultimo_spread() -> int:
+	return maxi(0, ((_folhas.size() - 1) / 2) * 2)
+
 func _passar(d: int) -> void:
+	if _animando:
+		return
 	_confirmar_apagar = -1
-	_spread = clampi(_spread + 2 * d, 0, maxi(0, ((_folhas.size() - 1) / 2) * 2))
+	var alvo := clampi(_spread + 2 * d, 0, _ultimo_spread())
+	if alvo == _spread:
+		return
+	_animando = true
+	await _virar(d, T_FOLHA)
+	_animando = false
+
+## Vira uma folha: a página do lado que vira fecha na lombada, troca, a outra abre.
+func _virar(d: int, t: float) -> void:
+	var sai: Control = _folhas_no[1] if d > 0 else _folhas_no[0]
+	var entra: Control = _folhas_no[0] if d > 0 else _folhas_no[1]
+	var tw := create_tween()
+	tw.tween_property(sai, "scale:x", 0.0, t).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	await tw.finished
+	sai.scale.x = 1.0
+	_spread = clampi(_spread + 2 * d, 0, _ultimo_spread())
+	_atualizar()
+	entra.scale.x = 0.0
+	tw = create_tween()
+	tw.tween_property(entra, "scale:x", 1.0, t).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	await tw.finished
+
+## Vai até a página de uma receita (por id), virando as folhas no caminho.
+func ir_para(id: int) -> void:
+	_folhas = livro["paginas"].duplicate()
+	_folhas.append_array(livro["rascunhos"])
+	var alvo := -1
+	for k in _folhas.size():
+		if int(_folhas[k].get("id", -1)) == id:
+			alvo = (k / 2) * 2
+	if alvo < 0:
+		_atualizar()
+		return
+	_animando = true
+	while _spread != alvo:
+		await _virar(1 if alvo > _spread else -1, T_FOLHA_RAPIDA)
+	_animando = false
 	_atualizar()
 
-## Abre o livro na página de uma receita (por id).
-func ir_para(id: int) -> void:
-	for k in _folhas.size():
-		if _folhas[k] is Dictionary and int(_folhas[k].get("id", -1)) == id:
-			_spread = (k / 2) * 2
-	_atualizar()
+## Lado (0/1) em que a página está agora, ou -1.
+func _lado_de(id: int) -> int:
+	for lado in 2:
+		var k := _spread + lado
+		if k < _folhas.size() and int(_folhas[k].get("id", -1)) == id:
+			return lado
+	return -1
 
 func _montar_pagina(lado: int, folha, numero: int) -> void:
 	var caixa: VBoxContainer = _caixas[lado]
@@ -209,6 +302,8 @@ func _montar_pagina(lado: int, folha, numero: int) -> void:
 		c.queue_free()
 	var rascunho: bool = folha is Dictionary and folha.get("tipo") == "rascunho"
 	_papeis[lado].add_theme_stylebox_override("panel", _caixa(COR_PAPEL_RASCUNHO if rascunho else COR_PAPEL, 4, Color(0, 0, 0, 0.15), 1))
+	_carimbos[lado].visible = rascunho
+	_fitas[lado].visible = folha is Dictionary and folha.get("tipo") == "npc"
 	if folha == null:
 		return
 	if folha.get("slot") == "nova":
@@ -280,11 +375,9 @@ func _montar_pagina(lado: int, folha, numero: int) -> void:
 	match p.get("tipo"):
 		"efetiva":
 			g.add_child(_botao("Editar", _editar.bind(p)))
-			g.add_child(_botao("Copiar", _copiar.bind(p)))
 			g.add_child(_botao("Esquecer" if LivroReceitas.esta_memorizada(livro, p) else "Memorizar", _memorizar.bind(p)))
 			g.add_child(_botao_apagar(p))
 		"npc":
-			g.add_child(_botao("Copiar", _copiar.bind(p)))
 			g.add_child(_botao("Esquecer" if LivroReceitas.esta_memorizada(livro, p) else "Memorizar", _memorizar.bind(p)))
 		"rascunho":
 			var pl := _botao("Passar a limpo", _passar_a_limpo.bind(p))
@@ -321,176 +414,108 @@ func _botao_apagar(p: Dictionary) -> Button:
 
 # ---- ações ----
 func _nova() -> void:
+	if _animando:
+		return
 	var p := LivroReceitas.nova_pagina(livro)
-	if not p.is_empty():
-		_atualizar()
-		ir_para(int(p["id"]))
-		_editar(p)
+	if p.is_empty():
+		return
+	await ir_para(int(p["id"]))
+	await _aparecer_pagina(int(p["id"]))
+	_editar(p)
 
-func _copiar(p: Dictionary) -> void:
-	var c := LivroReceitas.copiar(livro, p)
-	if c.is_empty():
-		return   # livro cheio
-	_atualizar()
-	ir_para(int(c["id"]))
+## Página nova: a tinta aparece de cima para baixo.
+func _aparecer_pagina(id: int) -> void:
+	var lado := _lado_de(id)
+	if lado < 0:
+		return
+	var caixa: Control = _caixas[lado]
+	caixa.modulate.a = 0.0
+	caixa.scale = Vector2(1.0, 0.85)
+	var tw := create_tween().set_parallel(true)
+	tw.tween_property(caixa, "modulate:a", 1.0, 0.35)
+	tw.tween_property(caixa, "scale", Vector2.ONE, 0.35).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	await tw.finished
 
 func _memorizar(p: Dictionary) -> void:
 	LivroReceitas.memorizar(livro, p)
 	_atualizar()
 
 func _apagar(p: Dictionary) -> void:
+	if _animando:
+		return
 	if _confirmar_apagar != int(p["id"]):
 		_confirmar_apagar = int(p["id"])   # 1º toque pede confirmação
 		_atualizar()
 		return
 	_confirmar_apagar = -1
+	# a página some e as outras se ajeitam
+	var lado := _lado_de(int(p["id"]))
+	if lado >= 0:
+		_animando = true
+		var folha: Control = _folhas_no[lado]
+		var tw := create_tween().set_parallel(true)
+		tw.tween_property(folha, "modulate:a", 0.0, 0.3)
+		tw.tween_property(folha, "position:y", folha.position.y + 24, 0.3).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		await tw.finished
+		folha.modulate.a = 1.0
+		folha.position = RECT_PAG[lado].position
+		_animando = false
 	LivroReceitas.apagar(livro, p)
 	_atualizar()
 
 func _passar_a_limpo(p: Dictionary) -> void:
+	if _animando:
+		return
 	if LivroReceitas.passar_a_limpo(livro, p):
-		_atualizar()
-		ir_para(int(p["id"]))
+		await ir_para(int(p["id"]))
+		await _aparecer_pagina(int(p["id"]))
 		_editar(p)
+
+## Tocar no papel (fora dos botões) de uma página já feita abre o detalhe.
+func _papel_input(ev: InputEvent, lado: int) -> void:
+	if _editor.ativo or not (ev is InputEventMouseButton and ev.button_index == MOUSE_BUTTON_LEFT and not ev.pressed):
+		return
+	if _toque_ini.x >= 0.0 and ev.global_position.distance_to(_toque_ini) > 12.0:
+		return   # foi um arrasto (virar página)
+	var k := _spread + lado
+	if k < _folhas.size() and DetalheReceita.tem_detalhe(_folhas[k]):
+		_detalhe.abrir(_folhas[k])
 
 
 # =============================================================================
 # EDITOR
 # =============================================================================
-func _montar_editor() -> void:
-	_editor = PanelContainer.new()
-	_editor.position = RECT_LIVRO.position + Vector2(8, 8)
-	_editor.size = RECT_LIVRO.size - Vector2(16, 16)
-	var st := _caixa(COR_PAPEL, 6, Color(0, 0, 0, 0.3), 1)
-	st.set_content_margin_all(14)
-	_editor.add_theme_stylebox_override("panel", st)
-	add_child(_editor)
-	var col := VBoxContainer.new()
-	col.add_theme_constant_override("separation", 8)
-	_editor.add_child(col)
-	col.add_child(_rotulo("Editar receita", 18, COR_TINTA))
-	_ed_nome = LineEdit.new()
-	_ed_nome.placeholder_text = "nome da receita"
-	_ed_nome.custom_minimum_size.y = 44
-	col.add_child(_ed_nome)
-	col.add_child(_rotulo("Passos", 12, COR_SUAVE))
-	var sc := ScrollContainer.new()
-	sc.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	_ed_lista = VBoxContainer.new()
-	_ed_lista.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_ed_lista.add_theme_constant_override("separation", 4)
-	sc.add_child(_ed_lista)
-	col.add_child(sc)
-	col.add_child(_linha())
-	# + chama
-	var h1 := HBoxContainer.new()
-	h1.add_theme_constant_override("separation", 6)
-	_ed_chama = OptionButton.new()
-	_ed_chama.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_ed_chama.custom_minimum_size.y = 44
-	for e in EstadosChama.LISTA:
-		_ed_chama.add_item("Chama " + str(e["nome"]).to_lower())
-	_ed_chama.select(EstadosChama.indice("normal"))
-	h1.add_child(_ed_chama)
-	h1.add_child(_botao("+ Chama", _ed_add_chama))
-	col.add_child(h1)
-	# + ingrediente
-	var h2 := HBoxContainer.new()
-	h2.add_theme_constant_override("separation", 6)
-	_ed_item = OptionButton.new()
-	_ed_item.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_ed_item.custom_minimum_size.y = 44
-	_ed_item.clip_text = true
-	h2.add_child(_ed_item)
-	_ed_qtd = _spin(1, 20, 1, 1, "×", "")
-	h2.add_child(_ed_qtd)
-	_ed_seg = _spin(0, 300, 5, 10, "", " s")
-	h2.add_child(_ed_seg)
-	h2.add_child(_botao("+", _ed_add_ingrediente))
-	col.add_child(h2)
-	# cancelar / salvar
-	var h3 := HBoxContainer.new()
-	h3.add_theme_constant_override("separation", 8)
-	var cancelar := _botao("Cancelar", _ed_fechar.bind(false))
-	cancelar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	var salvar := _botao("Salvar", _ed_fechar.bind(true))
-	salvar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	h3.add_child(cancelar)
-	h3.add_child(salvar)
-	col.add_child(h3)
-	_editor.hide()
-
 func _editar(p: Dictionary) -> void:
 	if p.get("tipo") == "npc":
 		return
+	var lado := _lado_de(int(p["id"]))
+	if lado < 0:
+		return
 	_confirmar_apagar = -1
-	_editando = p
-	_ed_passos = p["passos"].duplicate(true)
-	_ed_nome.text = str(p["nome"])
-	_ed_item.clear()
-	for id in _vistos:
-		_ed_item.add_item(LivroReceitas.nome_item(id, database))
-		_ed_item.set_item_metadata(_ed_item.item_count - 1, id)
-	_ed_item.disabled = _vistos.is_empty()
-	if _vistos.is_empty():
-		_ed_item.add_item("(nenhum ingrediente visto)")
-	_ed_lista_atualizar()
-	_editor.show()
+	_editor.abrir(p)
+	_editando_lado = lado
+	_atualizar()
 
-func _ed_lista_atualizar() -> void:
-	for c in _ed_lista.get_children():
-		_ed_lista.remove_child(c)
-		c.queue_free()
-	for i in _ed_passos.size():
-		var h := HBoxContainer.new()
-		h.add_theme_constant_override("separation", 4)
-		var linha := _linha_passo(i + 1, _ed_passos[i])
-		linha.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		h.add_child(linha)
-		var sobe := _botao("↑", _ed_mover.bind(i, -1))
-		sobe.disabled = i == 0
-		var desce := _botao("↓", _ed_mover.bind(i, 1))
-		desce.disabled = i == _ed_passos.size() - 1
-		for b in [sobe, desce, _botao("✕", _ed_remover.bind(i))]:
-			b.custom_minimum_size = Vector2(44, 40)
-			h.add_child(b)
-		_ed_lista.add_child(h)
-	_ed_lista.add_child(_linha_passo(_ed_passos.size() + 1, {"tipo": "finalizar"}))
+## As duas páginas durante a edição: a receita (editável) e a paleta ao lado.
+func _montar_edicao() -> void:
+	var outro := 1 - _editando_lado
+	for lado in 2:
+		var caixa: VBoxContainer = _caixas[lado]
+		for c in caixa.get_children():
+			caixa.remove_child(c)
+			c.queue_free()
+		_papeis[lado].add_theme_stylebox_override("panel", _caixa(COR_PAPEL, 4, Color(0, 0, 0, 0.15), 1))
+		_carimbos[lado].visible = false
+		_fitas[lado].visible = false
+	_editor.montar_pagina(_caixas[_editando_lado])
+	_editor.montar_paleta(_caixas[outro])
+	_seta_esq.disabled = true
+	_seta_dir.disabled = true
+	_b_nova.disabled = true
+	_indicador.text = "editando receita"
 
-func _ed_add_chama() -> void:
-	_ed_passos.append({"tipo": "chama", "estado": EstadosChama.LISTA[_ed_chama.selected]["id"]})
-	_ed_lista_atualizar()
-
-func _ed_add_ingrediente() -> void:
-	if _vistos.is_empty() or _ed_item.selected < 0:
-		return
-	_ed_passos.append({"tipo": "ingrediente", "item": str(_ed_item.get_item_metadata(_ed_item.selected)),
-		"qtd": int(_ed_qtd.value), "seg": float(_ed_seg.value)})
-	_ed_lista_atualizar()
-
-func _ed_mover(i: int, d: int) -> void:
-	var j := i + d
-	if j < 0 or j >= _ed_passos.size():
-		return
-	var tmp = _ed_passos[i]
-	_ed_passos[i] = _ed_passos[j]
-	_ed_passos[j] = tmp
-	_ed_lista_atualizar()
-
-func _ed_remover(i: int) -> void:
-	_ed_passos.remove_at(i)
-	_ed_lista_atualizar()
-
-func _ed_fechar(salvar: bool) -> void:
-	if salvar and not _editando.is_empty():
-		var nome := _ed_nome.text.strip_edges()
-		_editando["nome"] = nome if nome != "" else "Receita sem nome"
-		if _editando["passos"] != _ed_passos:
-			_editando["resultado"] = {}   # receita mudou: o resultado anotado não vale mais
-		_editando["passos"] = _ed_passos
-	_editando = {}
-	_editor.hide()
+func _editor_terminou(_salvou: bool) -> void:
+	_editando_lado = -1
 	_atualizar()
 
 
@@ -550,7 +575,22 @@ func _fechar_nomear() -> void:
 # =============================================================================
 # ABRIR / FECHAR / ARRASTAR
 # =============================================================================
+func _animar_abrir() -> void:
+	_corpo.scale = Vector2(0.15, 0.9)
+	_corpo.modulate.a = 0.0
+	var tw := create_tween().set_parallel(true)
+	tw.tween_property(_corpo, "scale", Vector2.ONE, 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tw.tween_property(_corpo, "modulate:a", 1.0, 0.2)
+
 func fechar() -> void:
+	if _animando:
+		return
+	_animando = true
+	var tw := create_tween().set_parallel(true)
+	tw.tween_property(_corpo, "scale", Vector2(0.15, 0.9), 0.22).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tw.tween_property(_corpo, "modulate:a", 0.0, 0.22)
+	tw.tween_property(self, "modulate:a", 0.0, 0.25)
+	await tw.finished
 	fechou.emit()
 	queue_free()
 
@@ -560,13 +600,15 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		if _nomear.visible:
 			_fechar_nomear()
-		elif _editor.visible:
-			_ed_fechar(false)
+		elif _detalhe.visible:
+			_detalhe.fechar()
+		elif _editor.ativo:
+			_editor._fim(false)
 		else:
 			fechar()
 		get_viewport().set_input_as_handled()
 		return
-	if _editor.visible or _nomear.visible:
+	if _editor.ativo or _nomear.visible or _detalhe.visible:
 		return
 	# arrastar para o lado passa a página
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -574,9 +616,13 @@ func _input(event: InputEvent) -> void:
 			_toque_ini = event.position
 		elif not event.pressed and _toque_ini.x >= 0.0:
 			var d: Vector2 = event.position - _toque_ini
-			_toque_ini = Vector2(-1, -1)
 			if absf(d.x) > SWIPE_MIN and absf(d.y) < absf(d.x):
 				_passar(-1 if d.x > 0 else 1)
+			_limpar_toque.call_deferred()   # o papel ainda lê _toque_ini neste mesmo toque
+
+
+func _limpar_toque() -> void:
+	_toque_ini = Vector2(-1, -1)
 
 
 # =============================================================================

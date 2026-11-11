@@ -61,6 +61,16 @@ func ingrediente_entrou(id: String) -> void:
 			_t_primeiro = _t_sim()
 
 
+## Ingrediente retirado do caldeirão (nos primeiros segundos): desconta do passo atual.
+func ingrediente_saiu(id: String) -> void:
+	if pagina.is_empty() or _i >= pagina["passos"].size():
+		return
+	var s: Dictionary = pagina["passos"][_i]
+	if s.get("tipo") == "ingrediente" and s.get("item") == id and _contagem > 0:
+		_contagem -= 1
+		if _contagem == 0:
+			_t_primeiro = -1.0
+
 func _t_sim() -> float:
 	var s = cena.get("sistema") if cena else null
 	return float(s.t_sim) if s else 0.0

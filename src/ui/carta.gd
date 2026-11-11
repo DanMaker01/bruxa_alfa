@@ -52,6 +52,8 @@ var z_forcado: int = -1:
 			var prio: bool = _atual == face_prioridade
 			z_as_relative = not prio
 			z_index = Z_CARTA if prio else 0
+## false: toque não abre (a carta só vira por abrir()/fechar()).
+var interativa: bool = true
 var segurar: bool = false:
 	set(v):
 		segurar = v
@@ -104,6 +106,70 @@ func _aplicar_giro() -> void:
 func _set_achatar(v: float) -> void:
 	_achatar = v
 	_aplicar_giro()
+
+# =============================================================================
+# CARTA PRONTA (para reaproveitar fora do HUD)
+# =============================================================================
+const SPRITE_CARTA := "res://assets/ui/hud_frame2.png"
+const SCRIPT_PENTAGRAMA := "res://src/ui/pentagrama_verso.gd"
+const COR_FUNDO := Color(0.1, 0.1, 0.15, 1)
+
+## Monta uma carta igual às do HUD, por código: fundo, verso (pentagrama + título),
+## a face "Frente" (ponha o conteúdo em carta.face("Frente")) e o sprite da carta por cima.
+## Por padrão não abre com toque nem desvira sozinha (controle com abrir()/fechar()).
+## Ex.: var c := Carta.criar(Vector2(300, 400), "Poção"); add_child(c); c.abrir()
+static func criar(tam: Vector2, titulo_verso: String = "", interativa: bool = false) -> Carta:
+	var c := Carta.new()
+	c.face_aberta = "Frente"
+	c.face_prioridade = "Dialogo"   # vazia: nunca aparece
+	c.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	c.size = tam
+	c.interativa = interativa
+	c.segurar = not interativa
+	var fundo := ColorRect.new()
+	fundo.name = "Fundo"
+	fundo.color = COR_FUNDO
+	var verso := Control.new()
+	verso.name = "Verso"
+	verso.z_index = 1
+	var simbolo := Control.new()
+	simbolo.name = "Simbolo"
+	simbolo.set_script(load(SCRIPT_PENTAGRAMA))
+	simbolo.set("raio_rel", 0.28)
+	simbolo.set("giro_graus_s", 1.0)
+	simbolo.z_index = 2
+	simbolo.size = tam
+	simbolo.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	verso.add_child(simbolo)
+	if titulo_verso != "":
+		var tit := Label.new()
+		tit.name = "Titulo"
+		tit.text = titulo_verso
+		tit.modulate.a = 0.6
+		tit.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		tit.add_theme_font_size_override("font_size", 24)
+		tit.position = Vector2(0, tam.y - minf(96.0, tam.y * 0.3))
+		tit.size = Vector2(tam.x, 40)
+		tit.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		verso.add_child(tit)
+	var frente := Control.new()
+	frente.name = "Frente"
+	frente.z_index = 1
+	frente.visible = false
+	var dialogo := Control.new()
+	dialogo.name = "Dialogo"
+	dialogo.visible = false
+	var moldura := TextureRect.new()
+	moldura.name = "Moldura"
+	moldura.texture = load(SPRITE_CARTA) if ResourceLoader.exists(SPRITE_CARTA) else null
+	moldura.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	moldura.stretch_mode = TextureRect.STRETCH_SCALE
+	moldura.z_index = 0   # o sprite é opaco: fica atrás (frente e verso em z 1)
+	for n in [fundo, verso, frente, dialogo, moldura]:
+		n.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		n.size = tam
+		c.add_child(n)
+	return c
 
 ## Uma face (ou outro filho) da carta pelo nome.
 func face(nome: String) -> Node:
@@ -219,6 +285,6 @@ func _input(event: InputEvent) -> void:
 	if not get_global_rect().has_point(pos):
 		return
 	_ocioso = 0.0
-	if event is InputEventMouseButton and _atual == VERSO and not _virando and ativa:
+	if event is InputEventMouseButton and _atual == VERSO and not _virando and ativa and interativa:
 		abrir()
 		get_viewport().set_input_as_handled()

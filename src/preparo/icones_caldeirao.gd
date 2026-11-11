@@ -493,6 +493,33 @@ func limpar() -> void:
 func quantidade() -> int:
 	return _icones.size()
 
+## Índice do ícone sob o ponto (coordenadas da tela), ou -1.
+func icone_no_ponto(p_tela: Vector2) -> int:
+	var melhor := -1
+	var dist := TAMANHO * 0.8
+	for k in _icones.size():
+		if _icones[k]["perdido"]:
+			continue
+		var raiz: Node2D = _icones[k]["raiz"]
+		if not raiz.visible:
+			continue
+		var d := raiz.get_global_transform_with_canvas().origin.distance_to(p_tela)
+		if d < dist:
+			dist = d
+			melhor = k
+	return melhor
+
+## Tira o ícone k (ingrediente retirado do caldeirão).
+func remover(k: int) -> void:
+	if k < 0 or k >= _icones.size():
+		return
+	var raiz: Node2D = _icones[k]["raiz"]
+	var tw := raiz.create_tween().set_parallel(true)
+	tw.tween_property(raiz, "position:y", raiz.position.y - 60.0, 0.3).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tw.tween_property(raiz, "modulate:a", 0.0, 0.3)
+	tw.chain().tween_callback(raiz.queue_free)
+	_icones.remove_at(k)
+
 ## Para o resultado: posição na tela (canvas) de cada ingrediente que conta (sem os perdidos),
 ## na ordem em que entraram. Cada entrada: {"item": ItemData, "pos": Vector2}.
 func saidas_para_resultado() -> Array:

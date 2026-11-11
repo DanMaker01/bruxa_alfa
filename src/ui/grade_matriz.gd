@@ -8,6 +8,9 @@ extends Control
 
 const TRACOS := ["O", "C", "E", "A", "N"]
 const DESVIO_CHEIO: float = 0.15
+## Tamanho das bolinhas em escala log: ponto cheio em DESVIO_CHEIO_LOG; ESCALA_LOG controla a curva.
+const DESVIO_CHEIO_LOG: float = 1.0
+const ESCALA_LOG: float = 0.02
 const COR_SOBE := Color(1.0, 0.82, 0.3)
 const COR_DESCE := Color(1.0, 0.35, 0.3)
 const COR_NADA := Color(1, 1, 1, 0.18)
@@ -71,7 +74,8 @@ func _draw() -> void:
 			if absf(desvio) < 0.0005:
 				draw_circle(c, 1.5, COR_NADA)
 				continue
-			var r: float = cel * 0.45 * clampf(sqrt(absf(desvio) / DESVIO_CHEIO), 0.2, 1.0)
+			# escala log: desvios pequenos ainda aparecem, grandes não estouram
+			var r: float = cel * 0.45 * clampf(log(1.0 + absf(desvio) / ESCALA_LOG) / log(1.0 + DESVIO_CHEIO_LOG / ESCALA_LOG), 0.15, 1.0)
 			draw_circle(c, r, COR_SOBE if desvio > 0.0 else COR_DESCE)
 	# balão da célula tocada
 	if _sel.x >= 0:

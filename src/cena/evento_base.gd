@@ -297,7 +297,13 @@ func _on_zone_player_exited():
 
 # evento_base.gd - Em _on_zone_interacted()
 
+## Bruxa travada (comando Travar player): clique em evento não faz nada.
+func _clique_travado() -> bool:
+	return game_manager != null and game_manager.has_method("is_player_locked") and game_manager.is_player_locked()
+
 func _on_zone_interacted():
+	if trigger == "click" and _clique_travado():
+		return
 	if not _can_activate():
 		return
 	if trigger == "click" and not _pagina_tem_comandos():
@@ -574,6 +580,8 @@ func _unhandled_input(event: InputEvent):
 		return
 	if trigger != "click" or not is_visible_in_tree():
 		return
+	if _clique_travado():
+		return   # bruxa travada (autostart, cutscene): eventos de clique não respondem
 	# página sem comandos não segura o clique: ele passa para o evento de trás
 	if not _pagina_tem_comandos():
 		return

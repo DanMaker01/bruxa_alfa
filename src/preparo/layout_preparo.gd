@@ -9,19 +9,23 @@
 #   3 C Prateleira ingredientes numa prateleira em cima, caldeirão no meio com a régua
 #                 em arco, embaixo uma área de fogo grande (toque abana, arrastar para
 #                 baixo abaixa) e Acender/Apagar
+#   4 D B+C       (padrão) igual ao B, com a régua da chama em arco em volta do fogo
+#                 (estados do livro) e a régua do caldeirão (cor pelo T) à direita,
+#                 com o selo "estável"
 # Em todos: Finalizar no canto superior direito e a receita memorizada (GuiaReceita)
 # no canto superior esquerdo. Reaproveita os nós da cena (BotaoFogo, Poção, lista).
 class_name LayoutPreparo
 extends Control
 
-const NOMES := ["Original", "A: Bancada", "B: Polegares", "C: Prateleira"]
+const NOMES := ["Original", "A: Bancada", "B: Polegares", "C: Prateleira", "D: B+C"]
 const ITENS_POR_PAGINA: int = 4
 const ARRASTO_ABAIXAR: float = 28.0   # C: px arrastados para baixo por "abaixar"
 
-static var atual: int = 2   # B (Polegares) é o padrão
+static var atual: int = 4   # D (B+C) é o padrão
 
 var cena = null
 var regua: ReguaChama
+var regua_caldeirao: ReguaCaldeirao
 var guia: GuiaReceita
 var _painel: Control          # PainelIngredientes
 var _painel_bg: Control
@@ -59,6 +63,10 @@ func configurar(p_cena) -> void:
 	regua.cena = cena
 	regua.z_index = 6
 	add_child(regua)
+	regua_caldeirao = ReguaCaldeirao.new()
+	regua_caldeirao.cena = cena
+	regua_caldeirao.z_index = 6
+	add_child(regua_caldeirao)
 	guia = GuiaReceita.new()
 	guia.cena = cena
 	guia.z_index = 6
@@ -115,7 +123,8 @@ func aplicar(n: int) -> void:
 	_b_layout.size = Vector2(160, 36)
 	var novo: bool = n != 0
 	regua.visible = novo
-	_b_abaixar.visible = n == 1 or n == 2
+	regua_caldeirao.visible = n == 4
+	_b_abaixar.visible = n == 1 or n == 2 or n == 4
 	_b_acender.visible = novo
 	_grade.visible = n == 1
 	_grade_nav.visible = n == 1
@@ -134,6 +143,7 @@ func aplicar(n: int) -> void:
 		1: _layout_a()
 		2: _layout_b()
 		3: _layout_c()
+		4: _layout_d()
 	_atualizar_acender()
 	inventario_mudou()
 
@@ -161,12 +171,26 @@ func _layout_c() -> void:
 	regua.formato = ReguaChama.Formato.ARCO
 	regua.centro_arco = Vector2(320, 440)
 	regua.raio_arco = 190.0
+	regua.ang_ini = 200.0
+	regua.ang_fim = 340.0
+	regua.nome_embaixo = false
 	_por(regua, Vector2.ZERO, Vector2(640, 660))
 	_por(_scroll, Vector2(16, 104), Vector2(440, 136))
 	guia.position = Vector2(12, 250)
 	_fundo_controles(668)
 	_por(_b_fogo, Vector2(16, 676), Vector2(608, 216))
 	_por(_b_acender, Vector2(220, 904), Vector2(200, 48))
+
+func _layout_d() -> void:
+	_layout_b()
+	regua.formato = ReguaChama.Formato.ARCO
+	regua.centro_arco = Vector2(320, 372)
+	regua.raio_arco = 118.0
+	regua.ang_ini = 160.0
+	regua.ang_fim = 20.0
+	regua.nome_embaixo = true
+	_por(regua, Vector2.ZERO, Vector2(640, 640))
+	_por(regua_caldeirao, Vector2(500, 150), Vector2(136, 440))
 
 ## Faixa escura atrás dos controles de baixo.
 func _fundo_controles(y: float) -> void:

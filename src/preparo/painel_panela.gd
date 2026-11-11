@@ -57,6 +57,12 @@ func limpar() -> void:
 			c.queue_free()
 	hide()
 
+func remover(i: int) -> void:
+	if i < 0 or i >= _linhas.size():
+		return
+	_linhas[i]["raiz"].queue_free()
+	_linhas.remove_at(i)
+
 func adicionar(nome_exibicao: String) -> void:
 	if not oculto:
 		show()

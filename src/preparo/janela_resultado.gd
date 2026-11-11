@@ -2,8 +2,9 @@
 # Janela que aparece quando a poção fica pronta (por cima da cena de preparo):
 #   1. ENTRADA: a tela escurece e o produtório (AnimacaoProdutorio): os ingredientes viram a
 #               matriz da poção, que fica no lugar da grade. A poção só aparece ao confirmar.
-#   2. MEIO:    as informações (ResultadoVistas): nome e nota, matriz e pentágono
-#               O-C-E-A-N lado a lado, e os ingredientes com o anel de aproveitamento.
+#   2. MEIO:    as informações (ResultadoVistas) em 3 cartas que viram uma a uma:
+#               nome + matriz, pentágono O-C-E-A-N, ingredientes com o anel.
+#               Ao confirmar: cartas 2 e 3 fecham, a matriz vira a poção, a carta 1 fecha.
 #   3. NOME:    1) parecida com uma conhecida (CatalogoPocoes) → esse nome;
 #               2) feita de um item só → "Poção de [item] [adjetivo]" (qualidade);
 #               3) senão aparece "Poção desconhecida" e, depois das informações, pede um
@@ -154,6 +155,9 @@ func _construir() -> void:
 	_vistas.name = "Vistas"
 	_vistas.visible = false
 	add_child(_vistas)
+	move_child(_vistas, 1)   # cartas logo acima do fundo: a matriz do produtório e a poção ficam por cima
+	for n in [_produtorio, _halo, _pocao]:
+		n.z_index = 10   # acima da moldura das cartas (z 3)
 
 	add_child(_faixa_nome)
 	add_child(_texto)
@@ -161,7 +165,7 @@ func _construir() -> void:
 
 	_dica = _label(20, HORIZONTAL_ALIGNMENT_CENTER)
 	_dica.text = "toque para continuar"
-	_dica.position = Vector2(0, 868)
+	_dica.position = Vector2(0, 900)
 	_dica.size = Vector2(640, 40)
 	_dica.visible = false
 	add_child(_dica)
@@ -387,7 +391,9 @@ func _input(event: InputEvent) -> void:
 func _fechar() -> void:
 	_estado = Estado.SAINDO
 	_dica.visible = false
+	await _vistas.fechar_cartas_menores()
 	await _matriz_vira_pocao()
+	await _vistas.fechar_carta_nome()
 	var hud = get_node_or_null("/root/Main/CanvasLayer/HUD")
 	var carta = hud.get("carta_inventario") if hud else null
 	var gt = get_node_or_null("/root/Main/GameManager/GameTemp")

@@ -1,9 +1,10 @@
 # resultado_vistas.gd
-# Tela de informações da poção pronta (dentro da JanelaResultado), em uma coluna:
-#   nome e nota (1 a 5 estrelas pela média do aproveitamento);
-#   matriz e pentágono O-C-E-A-N lado a lado;
-#   fileira de ícones dos ingredientes com o anel de aproveitamento.
-#   Tocar num ícone abre os detalhes (problemas e curva de temperatura).
+# Tela de informações da poção pronta (dentro da JanelaResultado), em 3 cartas no estilo
+# do HUD (Carta.criar), duas em cima e uma embaixo, que aparecem de verso e viram abertas, uma de cada vez:
+#   1. nome + matriz (a matriz do produtório pousa nela);
+#   2. pentágono O-C-E-A-N (efeito numa pessoa neutra);
+#   3. ingredientes com o anel de aproveitamento (tocar num ícone abre os detalhes).
+# Ao confirmar, as cartas 2 e 3 fecham, a matriz vira a poção e a carta 1 fecha.
 class_name ResultadoVistas
 extends Control
 
@@ -13,12 +14,17 @@ const COR_TEXTO := Color(0.95, 0.95, 0.9)
 const COR_SUAVE := Color(1, 1, 1, 0.5)
 const TELA := Vector2(640, 960)
 
-# --- coluna
-const C_GRADE := Rect2(56, 190, 230, 230)
-const C_PENT := Rect2(320, 170, 280, 270)
-const C_ICONES_Y: float = 500.0
-const C_CEL: float = 96.0
-const C_DETALHE := Rect2(30, 620, 580, 230)
+# --- cartas (tudo em coordenadas da tela): duas em cima, uma embaixo
+const C_CARTA1 := Rect2(16, 40, 296, 400)     # nome + matriz
+const C_CARTA2 := Rect2(328, 40, 296, 400)    # pentágono
+const C_CARTA3 := Rect2(16, 456, 608, 420)    # ingredientes
+const C_GRADE := Rect2(39, 124, 250, 250)
+const C_PENT := Rect2(343, 96, 266, 270)
+const C_CEL_MAX: float = 96.0
+const C_ICONES_FIM: float = 650.0             # ícones acima disto; o detalhe abre embaixo
+const C_DETALHE := Rect2(30, 656, 580, 210)
+var cartas: Array = []          # [Carta x3], no estilo das cartas do HUD
+const TITULOS_VERSO := ["Poção", "Efeito", "Ingredientes"]
 var grade: GradeMatriz
 var pentagono: PentagonoOcean
 var _titulo: Label
@@ -56,6 +62,7 @@ func limpar() -> void:
 	for c in get_children():
 		c.queue_free()
 	_icones.clear()
+	cartas.clear()
 	_detalhe = null
 	grade = null
 	pentagono = null
@@ -67,17 +74,48 @@ func montar(res: Dictionary, A: Array) -> void:
 	_res = res
 	_A = A
 	visible = true
-	_titulo = _label(32, HORIZONTAL_ALIGNMENT_CENTER, COR_TITULO)
-	_titulo.position = Vector2(20, 30)
-	_titulo.size = Vector2(600, 60)
+	cartas = [_carta(C_CARTA1, TITULOS_VERSO[0]), _carta(C_CARTA2, TITULOS_VERSO[1]), _carta(C_CARTA3, TITULOS_VERSO[2])]
+	_titulo = _label(26, HORIZONTAL_ALIGNMENT_CENTER, COR_TITULO)
+	_titulo.position = Vector2(16, 14)
+	_titulo.size = Vector2(C_CARTA1.size.x - 32, 68)
 	_titulo.autowrap_mode = TextServer.AUTOWRAP_WORD
 	_titulo.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	add_child(_titulo)
-	# (nota em estrelas removida)
+	cartas[0].face("Frente").add_child(_titulo)
 	_montar_coluna()
-	for c in get_children():
-		if c is CanvasItem:
-			c.modulate.a = 0.0
+	for c in cartas:
+		c.modulate.a = 0.0
+
+## Carta igual às do HUD (Carta.criar: sprite da carta, verso com pentagrama, virada na
+## diagonal). O conteúdo vai na face "Frente".
+func _carta(r: Rect2, titulo_verso: String) -> Carta:
+	var c := Carta.criar(r.size, titulo_verso)
+	c.position = r.position
+	add_child(c)          # o _ready da Carta põe tudo no Giro
+	return c
+
+## Aparece de verso e vira aberta.
+func _abrir_carta(c: Carta) -> void:
+	c.fechar()
+	var tw := create_tween()
+	tw.tween_property(c, "modulate:a", 1.0, 0.25)
+	await tw.finished
+	c.abrir()
+	await get_tree().create_timer(c.tempo_virar + 0.1, true).timeout
+
+## Vira para o verso e some.
+func _fechar_carta(c: Carta) -> void:
+	if c.modulate.a <= 0.01:
+		return
+	c.fechar()
+	await get_tree().create_timer(c.tempo_virar + 0.15, true).timeout
+	var tw := create_tween()
+	tw.tween_property(c, "modulate:a", 0.0, 0.25)
+	await tw.finished
+
+## Coloca um nó numa carta, com a posição dada na tela.
+func _na_carta(k: int, no: Control, pos_tela: Vector2) -> void:
+	cartas[k].face("Frente").add_child(no)
+	no.position = pos_tela - cartas[k].position
 
 
 func _diags() -> Array:
@@ -113,37 +151,42 @@ func rect_grade() -> Rect2:
 
 func _montar_coluna() -> void:
 	grade = GradeMatriz.new()
-	grade.position = C_GRADE.position
 	grade.size = C_GRADE.size
-	add_child(grade)
+	_na_carta(0, grade, C_GRADE.position)
+	grade.modulate.a = 0.0
+	_na_carta(0, _legenda("matriz", Vector2.ZERO), Vector2(C_GRADE.get_center().x - 150, C_GRADE.end.y + 8))
 	pentagono = PentagonoOcean.new()
-	pentagono.position = C_PENT.position
 	pentagono.size = C_PENT.size
-	add_child(pentagono)
-	add_child(_legenda("matriz", Vector2(C_GRADE.get_center().x, C_GRADE.end.y + 8)))
-	add_child(_legenda("efeito numa pessoa neutra", Vector2(C_PENT.get_center().x, C_PENT.end.y - 4)))
-	# fileira de ícones (quebra a cada 6), na ordem em que entraram
+	_na_carta(1, pentagono, C_PENT.position)
+	pentagono.modulate.a = 0.0
+	_na_carta(1, _legenda("efeito numa pessoa neutra", Vector2.ZERO), Vector2(C_PENT.get_center().x - 150, C_PENT.end.y + 4))
+	# ícones na ordem em que entraram (até 2 linhas; encolhem se forem muitos)
 	var diags := _diags()
 	var cab := _label(18, HORIZONTAL_ALIGNMENT_CENTER, COR_SUAVE)
 	cab.text = "ingredientes  ·  toque para ver"
-	cab.position = Vector2(0, C_ICONES_Y - 34)
-	cab.size = Vector2(640, 26)
-	add_child(cab)
-	for i in diags.size():
-		var lin: int = floori(i / 6.0)
-		var col: int = i % 6
-		var n_lin: int = mini(6, diags.size() - lin * 6)
-		var x0: float = (640.0 - n_lin * C_CEL) * 0.5
-		var r := Rect2(x0 + col * C_CEL, C_ICONES_Y + lin * (C_CEL + 14), C_CEL, C_CEL + 10)
+	cab.size = Vector2(C_CARTA3.size.x, 26)
+	_na_carta(2, cab, C_CARTA3.position + Vector2(0, 14))
+	var n: int = diags.size()
+	var linhas: int = 1 if n <= 6 else 2
+	var por_linha: int = maxi(1, ceili(n / float(linhas)))
+	var y0: float = C_CARTA3.position.y + 48.0
+	var cel: float = minf(C_CEL_MAX, minf((C_CARTA3.size.x - 40.0) / por_linha, (C_ICONES_FIM - y0) / linhas - 10.0))
+	for i in n:
+		var lin: int = floori(i / float(por_linha))
+		var col: int = i % por_linha
+		var n_lin: int = mini(por_linha, n - lin * por_linha)
+		var x0: float = (640.0 - n_lin * cel) * 0.5
+		var r := Rect2(x0 + col * cel, y0 + lin * (cel + 10), cel, cel + 10)
 		var ic := IconeIngRes.new()
 		ic.d = diags[i]
 		ic.vistas = self
-		ic.position = r.position
 		ic.size = r.size
-		add_child(ic)
+		_na_carta(2, ic, r.position)
+		ic.modulate.a = 0.0
 		_icones.append({"no": ic, "rect": r, "d": diags[i]})
 	_detalhe = Control.new()
 	_detalhe.position = C_DETALHE.position
+	_detalhe.z_index = 10   # acima da moldura das cartas (z 3)
 	_detalhe.size = C_DETALHE.size
 	_detalhe.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_detalhe)
@@ -152,18 +195,9 @@ func _montar_coluna() -> void:
 # =============================================================================
 # ANIMAÇÃO (a JanelaResultado chama na ordem)
 # =============================================================================
-## Moldura (título, nota, legendas, páginas) aparece; grade, pentágono e ícones esperam.
+## Carta 1 (nome + matriz) aparece de verso e vira; a grade ainda espera a matriz.
 func entrar() -> void:
-	if grade:
-		grade.modulate.a = 0.0
-	if pentagono:
-		pentagono.modulate.a = 0.0
-	var fora: Array = _nos_icones() + [grade, pentagono]
-	var tw := create_tween().set_parallel(true)
-	for c in get_children():
-		if c is CanvasItem and not (c in fora):
-			tw.tween_property(c, "modulate:a", 1.0, 0.5)
-	await tw.finished
+	await _abrir_carta(cartas[0])
 
 
 ## A grade troca de lugar com a matriz do produtório (mesma posição e tamanho).
@@ -176,6 +210,7 @@ func mostrar_grade() -> void:
 func mostrar_pentagono() -> void:
 	if not pentagono:
 		return
+	await _abrir_carta(cartas[1])
 	var tw := create_tween()
 	tw.tween_property(pentagono, "modulate:a", 1.0, 0.4)
 	await tw.finished
@@ -185,6 +220,7 @@ func mostrar_pentagono() -> void:
 
 ## Coluna: os ícones aparecem um a um e o anel enche até o aproveitamento.
 func mostrar_ingredientes() -> void:
+	await _abrir_carta(cartas[2])
 	for ic in _icones:
 		var no = ic["no"]
 		no.scale = Vector2(0.6, 0.6)
@@ -199,15 +235,28 @@ func mostrar_ingredientes() -> void:
 
 ## Tudo pronto de uma vez (ao trocar de visual com a janela já aberta).
 func mostrar_tudo() -> void:
-	for c in get_children():
-		if c is CanvasItem:
-			c.modulate.a = 1.0
+	for c in cartas:
+		c.modulate.a = 1.0
+		c.abrir()
+	for no in [grade, pentagono] + _nos_icones():
+		if no:
+			no.modulate.a = 1.0
 	if grade:
 		grade.mostrar(_A)
 	if pentagono:
 		pentagono.mostrar(_A, 0.01)
 	for ic in _icones:
 		ic["no"].set_anel(1.0)
+
+
+## Confirmou: fecham as cartas 2 e 3 (a 1 fecha depois que a matriz vira poção).
+func fechar_cartas_menores() -> void:
+	_fechar_detalhe()
+	_fechar_carta(cartas[2])
+	await _fechar_carta(cartas[1])
+
+func fechar_carta_nome() -> void:
+	await _fechar_carta(cartas[0])
 
 
 func _nos_icones() -> Array:
@@ -231,6 +280,9 @@ func consumir_toque(pos: Vector2) -> bool:
 	if _detalhe and _detalhe.get_child_count() > 0:
 		_fechar_detalhe()
 		return true
+	for c in cartas:
+		if c.get_global_rect().has_point(pos) and c != cartas[0]:
+			return true   # toque dentro das cartas 2 e 3 não fecha
 	if grade and grade.is_visible_in_tree() and grade.get_global_rect().has_point(pos):
 		return true
 	return false

@@ -35,6 +35,8 @@ const TEMPO_LONGO: float = 0.7
 ## Ingrediente com aproveitamento (o que já perdeu e não volta) abaixo disto é perdido:
 ## sai do caldeirão e não entra na poção.
 const LIMIAR_PERDIDO: float = 0.01
+## Até quantos segundos depois de entrar o ingrediente ainda pode ser retirado (volta inteiro).
+const T_MAX_RETIRAR: float = 5.0
 ## Segurar o botão de fogo APAGADO para acender (mais longo, para não acontecer sem querer).
 const TEMPO_SEGURAR_FOGO: float = 1.0
 ## Segurar o botão de fogo ACESO: abafa (−CONST_A em F) a cada INTERVALO_ABAFAR enquanto segura.
@@ -640,12 +642,30 @@ func _anotar_no_livro(resultado: Dictionary) -> void:
 		return
 	if not game_temp or not ("livro" in game_temp) or game_temp.livro.is_empty():
 		return
-	var passos := TranscritorReceita.transcrever(historico_T, ingredientes_ativos, sistema.t_sim)
+	# só entram os ingredientes que serviram (perdidos não; retirados já saíram da lista)
+	var validos := _ingredientes_validos()
+	var passos := TranscritorReceita.transcrever(historico_T, validos, sistema.t_sim)
 	if passos.is_empty():
 		return
 	var pocao: ItemData = resultado["pocao"]
 	var a: float = ResultadoVistas.media_aproveitamento(resultado.get("diagnosticos", []))
 	var extra := {"item": pocao.id, "A": resultado.get("A", []), "nomeavel": resultado.get("nomeavel", false)}
+	# para o detalhe da página: curva (a cada 0,5 s), entradas e aproveitamento de cada item
+	var curva: Array = []
+	var prox := 0.0
+	for pt in historico_T:
+		if float(pt["t"]) >= prox:
+			curva.append([snappedf(float(pt["t"]), 0.01), snappedf(float(pt["T"]), 0.1)])
+			prox = float(pt["t"]) + 0.5
+	var entradas: Array = []
+	for ing in validos:
+		entradas.append([float(ing["t0"]), str(ing["nome"])])
+	var itens_a: Array = []
+	for d in resultado.get("diagnosticos", []):
+		itens_a.append([str(d.get("nome", "?")), float(d.get("a", 0.0))])
+	extra["curva"] = curva
+	extra["entradas"] = entradas
+	extra["itens_a"] = itens_a
 	LivroReceitas.registrar_preparo(game_temp.livro, passos, pocao.get_nome(), a, extra)
 	game_temp.livro["memorizada"] = -1
 
@@ -721,6 +741,44 @@ func _unhandled_input(event: InputEvent) -> void:
 	if tecla in ["M", "P", "T", "K", "C"]:
 		trocar_modo(tecla)
 		get_viewport().set_input_as_handled()
+
+## Tocar no ícone de um ingrediente que acabou de entrar (até T_MAX_RETIRAR s) tira ele
+## do caldeirão e devolve ao inventário. Depois disso já misturou no caldo.
+func _input(event: InputEvent) -> void:
+	if not visible or not preparo_ativo or preparo_pausado or not icones:
+		return
+	if not (event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT):
+		return
+	var k := icones.icone_no_ponto(event.position)
+	if k < 0 or k >= ingredientes_ativos.size():
+		return
+	get_viewport().set_input_as_handled()
+	var acc: Dictionary = ingredientes_ativos[k]
+	var nome := _nome_exibicao(str(acc["nome"]))
+	if sistema.t_sim - float(acc["t0"]) > T_MAX_RETIRAR:
+		feedback.texto_flutuante(nome + ": já misturou no caldo", FeedbackPreparo.COR_ALERTA)
+		return
+	_retirar_ingrediente(k)
+	feedback.texto_flutuante(nome + " retirado", FeedbackPreparo.COR_OK)
+
+func _retirar_ingrediente(k: int) -> void:
+	var id: String = str(ingredientes_ativos[k]["nome"])
+	ingredientes_ativos.remove_at(k)
+	if k < _estados.size():
+		_estados.remove_at(k)
+	if k < _nomes_grafico.size():
+		_nomes_grafico.remove_at(k)
+	_fatias_atual = {}
+	feedback.remover(k)
+	painel.remover(k)
+	icones.remover(k)
+	if grafico and grafico.has_method("set_ingredientes"):
+		grafico.set_ingredientes(_nomes_grafico)
+	if game_temp:
+		game_temp.add_item(id, 1)
+	if layout:
+		layout.guia.ingrediente_saiu(id)
+	_atualizar_botao_pocao()
 
 ## Modos de teste (teclas M / P / T / K / C, ou tocando no debug do caldeirão).
 func trocar_modo(tecla: String) -> void:

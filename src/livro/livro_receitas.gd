@@ -90,6 +90,7 @@ static func passar_a_limpo(l: Dictionary, p: Dictionary) -> bool:
 	p["tipo"] = "efetiva"
 	if str(p["nome"]).begins_with("Rascunho"):
 		p["nome"] = "Receita sem nome"
+	_nome_pela_pocao(p)
 	l["paginas"].append(p)
 	return true
 
@@ -117,10 +118,23 @@ static func registrar_preparo(l: Dictionary, passos: Array, pocao: String, a: fl
 				r.merge(extra, true)
 			r["vezes"] = vezes
 			p["resultado"] = r
+			_nome_pela_pocao(p)
 			return p
 	var novo := {"pocao": pocao, "a": a, "vezes": 1}
 	novo.merge(extra, true)
-	return adicionar_rascunho(l, passos, novo)
+	var pag := adicionar_rascunho(l, passos, novo)
+	_nome_pela_pocao(pag)
+	return pag
+
+const NOMES_PADRAO := ["Rascunho", "Receita sem nome"]
+
+## A receita que dá uma poção com nome leva o nome da poção (se a bruxa não deu outro).
+static func _nome_pela_pocao(p: Dictionary) -> void:
+	var r: Dictionary = p.get("resultado", {})
+	if r.is_empty() or r.get("nomeavel", false):
+		return
+	if str(p.get("nome", "")) in NOMES_PADRAO:
+		p["nome"] = str(r.get("pocao", p["nome"]))
 
 ## Nome dado no livro a uma poção sem nome: muda o resultado da página, o item no
 ## inventário e registra no catálogo do jogador (as próximas iguais já vêm com o nome).
@@ -131,6 +145,7 @@ static func nomear_pocao(l: Dictionary, p: Dictionary, nome: String, db = null, 
 		return false
 	r["pocao"] = nome
 	r["nomeavel"] = false
+	_nome_pela_pocao(p)
 	var it: ItemData = item(str(r.get("item", "")), db) if r.has("item") else null
 	if it:
 		it.nome = nome

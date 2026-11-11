@@ -21,7 +21,7 @@ const MSG_NIVEL := {
 	"quente": ["", "quase quente demais", "quente demais!"],
 	"frio": ["", "quase frio demais", "frio demais!"],
 	"tempo": ["", "quase passando do tempo", "tempo demais!"],
-	"ponto": ["", "no ponto, não passe!", "passou do ponto!"],
+	"ponto": ["", "passando do ponto", "passou muito do ponto!"],
 }
 ## Mesmo aviso não se repete antes disso (s de simulação).
 const INTERVALO_AVISO: float = 2.0
@@ -39,6 +39,10 @@ func resetar() -> void:
 func novo_ingrediente() -> void:
 	_niveis_anteriores.append({})
 
+func remover(i: int) -> void:
+	if i >= 0 and i < _niveis_anteriores.size():
+		_niveis_anteriores.remove_at(i)
+
 ## Compara com o estado anterior do ingrediente i e avisa o que piorou/melhorou.
 func avisar_mudancas(i: int, nome: String, est: Dictionary, t: float) -> void:
 	if i >= _niveis_anteriores.size():
@@ -47,8 +51,8 @@ func avisar_mudancas(i: int, nome: String, est: Dictionary, t: float) -> void:
 	for k in est["niveis"]:
 		var nivel: int = est["niveis"][k]
 		if nivel > int(antes.get(k, 0)) and _pode_avisar("%d:%s:%d" % [i, k, nivel], t):
-			# passou do ponto é aviso (amarelo): a perda é gradual, não é punição forte como queimar
-			var cor_msg: Color = COR_PUNICAO if nivel == 2 and k != "ponto" else COR_ALERTA
+			# passando do ponto = aviso amarelo; passou muito (a perda já pesa) = vermelho
+			var cor_msg: Color = COR_PUNICAO if nivel == 2 else COR_ALERTA
 			texto_flutuante("%s: %s" % [nome, MSG_NIVEL[k][nivel]], cor_msg)
 			if nivel == 2:
 				marcador.emit(COR_PUNICAO)

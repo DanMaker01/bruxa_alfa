@@ -215,6 +215,10 @@ static func _tag(chave: String, texto: String, a: float, fixo: bool) -> Dictiona
 # Níveis: 0 = ok, 1 = alerta (ainda não perdeu nada), 2 = punição (perdendo agora).
 # "perda" = parte IRREVERSÍVEL do aproveitamento (o que já foi perdido e não volta):
 #   excesso de calor, falta de calor, tempo demais e cozimento além do ponto.
+## Avisos de passar do ponto (aproveitamento do cozimento a_Q).
+const PONTO_ALERTA: float = 0.95
+const PONTO_MUITO: float = 0.8
+
 static func estado_ao_vivo(acc: Dictionary, item: ItemData, t_agora: float, T_agora: float) -> Dictionary:
 	var d = diagnostico_do_acumulador(acc, t_agora)
 	_aproveitamento(d, item)
@@ -248,10 +252,12 @@ static func estado_ao_vivo(acc: Dictionary, item: ItemData, t_agora: float, T_ag
 		elif d["duracao"] >= 0.8 * item.t_max:
 			niveis["tempo"] = 1
 	# ---- ponto do cozimento ----
+	# Passar um pouco do ponto é normal (perde quase nada); só avisa quando a perda
+	# começa a pesar (a_Q < PONTO_ALERTA) e alarma quando é grande (a_Q < PONTO_MUITO).
 	var passou: bool = item.m > 0.0 and d["Q"] > item.m
-	if passou and d["a_Q"] < 0.99:
+	if passou and d["a_Q"] < PONTO_MUITO:
 		niveis["ponto"] = 2
-	elif passou:
+	elif passou and d["a_Q"] < PONTO_ALERTA:
 		niveis["ponto"] = 1
 
 	var perda: float = d["a_T_max"] * d["a_T_min"] * d["a_t_max"] * (d["a_Q"] if passou else 1.0)
@@ -264,7 +270,7 @@ static func estado_ao_vivo(acc: Dictionary, item: ItemData, t_agora: float, T_ag
 	if niveis["quente"] == 2: texto = "queimando!"
 	elif niveis["frio"] == 2: texto = "esfriando demais!"
 	elif niveis["tempo"] == 2: texto = "tempo demais!"
-	elif niveis["ponto"] == 2: texto = "passou do ponto!"
+	elif niveis["ponto"] == 2: texto = "passou muito do ponto!"
 	elif niveis["quente"] == 1: texto = "quase quente demais"
 	elif niveis["frio"] == 1: texto = "quase frio demais"
 	elif niveis["tempo"] == 1: texto = "quase passando do tempo"

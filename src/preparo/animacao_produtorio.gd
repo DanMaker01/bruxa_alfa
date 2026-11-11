@@ -231,9 +231,7 @@ func tocar(diagnosticos: Array, origem: Vector2, destino: Vector2, lado_final: f
 		tw.tween_method(acc.set_a, media_antes, media, T_TROCA * 2.0).set_delay(T_MULTIPLICAR * 0.55)
 		if i == 1:
 			tw.tween_callback(acc.virar_pocao.bind(tex_pocao)).set_delay(T_MULTIPLICAR * 0.5)
-		var base: Vector2 = acc.scale
-		tw.tween_property(acc, "scale", base * 1.12, T_MULTIPLICAR * 0.25).set_delay(T_MULTIPLICAR * 0.5)
-		tw.chain().tween_property(acc, "scale", base, T_MULTIPLICAR * 0.25)
+		# (sem pulso: a matriz acumulada fica parada, só os valores mudam)
 		await _rodar(tw)
 		P = novo
 		await _reorganizar(i)
