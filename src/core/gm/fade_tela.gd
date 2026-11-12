@@ -34,6 +34,9 @@ func _rodar(tipo: String, de: float, ate: float, tempo: float) -> void:
 	if fade_rect.visible:
 		de = fade_rect.color.a
 	_interromper()
+	# tempo proporcional ao que falta: já escuro e pedindo fade_out = quase na hora
+	# (pular a intro várias vezes não deixa a tela preta esperando à toa)
+	tempo *= absf(ate - de)
 	_tipo = tipo
 	fade_rect.color = Color(0, 0, 0, de)
 	fade_rect.visible = true

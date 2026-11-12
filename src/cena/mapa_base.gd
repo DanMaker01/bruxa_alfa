@@ -88,8 +88,15 @@ func _tocar_bgm() -> void:
 	var audio = game_manager.get_node_or_null("AudioManager") if game_manager else null
 	if audio == null or audio.get("bgm_player") == null:
 		return
+	# o inspetor do Godot 4.4+ guarda o arquivo como "uid://...": converte para o caminho
+	var caminho := bgm
+	if caminho.begins_with("uid://"):
+		var id := ResourceUID.text_to_id(caminho)
+		caminho = ResourceUID.get_id_path(id) if ResourceUID.has_id(id) else ""
+		if caminho == "":
+			push_warning("[Mapa] bgm com uid desconhecido: " + bgm)
 	# play_bgm já ignora se for a mesma música tocando; "" para a música
-	audio.play_bgm(bgm.get_file().get_basename() if bgm != "" else "", bgm_volume)
+	audio.play_bgm(caminho.get_file().get_basename() if caminho != "" else "", bgm_volume)
 
 func _debug_limits_simple():
 	"""Debug simples dos limites da câmera"""

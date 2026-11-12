@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://dldftnhpdhm4n"]
 
+[ext_resource type="Script" path="res://src/ui/pause_menu.gd" id="1_pausa"]
+
 [node name="PauseMenu" type="Control" unique_id=692826576]
+script = ExtResource("1_pausa")
 layout_mode = 3
 anchors_preset = 0
 offset_right = 640.0

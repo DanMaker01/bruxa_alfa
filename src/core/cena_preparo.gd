@@ -748,13 +748,13 @@ func get_ingredientes() -> Array:
 func is_preparando() -> bool:
 	return preparo_ativo
 
-## TESTE do anel/vela: M troca a régua (punição / proporcional / absoluto), P troca as cores, C liga o anel já colorido, T troca o aviso de quente/frio do ícone.
-## TESTE do produtório (fim da poção): K troca o toque (acelera/pula).
+## TESTE: P troca as cores do anel (sempre contínuo), C liga o anel já colorido (revelando),
+## T troca o aviso de quente/frio do ícone; K troca o toque do produtório. (Régua: absoluta.)
 func _unhandled_input(event: InputEvent) -> void:
 	if not visible or not (event is InputEventKey) or not event.pressed or event.echo:
 		return
 	var tecla := OS.get_keycode_string(event.keycode)
-	if tecla in ["M", "P", "T", "K", "C"]:
+	if tecla in ["P", "C", "T", "K"]:
 		trocar_modo(tecla)
 		get_viewport().set_input_as_handled()
 
@@ -796,25 +796,22 @@ func _retirar_ingrediente(k: int) -> void:
 		layout.guia.ingrediente_saiu(id)
 	_atualizar_botao_pocao()
 
-## Modos de teste (teclas M / P / T / K / C, ou tocando no debug do caldeirão).
+## Modos de teste (teclas P / C / T / K).
 func trocar_modo(tecla: String) -> void:
 	var cor := Color(0.85, 0.85, 1.0)
 	match tecla:
-		"M":
-			IconesCaldeirao.modo = (IconesCaldeirao.modo + 1) % IconesCaldeirao.ModoRegua.size()
-			feedback.texto_flutuante("régua: " + IconesCaldeirao.NOMES_MODO[IconesCaldeirao.modo], cor)
 		"P":
 			IconesCaldeirao.paleta = (IconesCaldeirao.paleta + 1) % IconesCaldeirao.Paleta.size()
 			feedback.texto_flutuante("cores: " + IconesCaldeirao.NOMES_PALETA[IconesCaldeirao.paleta], cor)
+		"C":
+			IconesCaldeirao.precolorido = not IconesCaldeirao.precolorido
+			feedback.texto_flutuante("anel já colorido: " + ("sim" if IconesCaldeirao.precolorido else "não"), cor)
 		"T":
 			IconesCaldeirao.modo_temp = (IconesCaldeirao.modo_temp + 1) % IconesCaldeirao.ModoTemp.size()
 			feedback.texto_flutuante("aviso quente/frio: " + IconesCaldeirao.NOMES_MODO_TEMP[IconesCaldeirao.modo_temp], cor)
 		"K":
 			AnimacaoProdutorio.toque = (AnimacaoProdutorio.toque + 1) % AnimacaoProdutorio.Toque.size()
 			feedback.texto_flutuante("produtório: " + AnimacaoProdutorio.NOMES_TOQUE[AnimacaoProdutorio.toque], cor)
-		"C":
-			IconesCaldeirao.precolorido = not IconesCaldeirao.precolorido
-			feedback.texto_flutuante("anel já colorido: " + ("sim" if IconesCaldeirao.precolorido else "não"), cor)
 	if debug_ui:
 		debug_ui.atualizar_modos()
 

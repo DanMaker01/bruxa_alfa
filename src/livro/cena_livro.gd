@@ -51,7 +51,8 @@ var _spread: int = 0                # índice da folha da esquerda (par)
 var _caixas: Array = []             # [VBox esquerda, VBox direita]
 var _escrita: Array = [[], []]      # por lado: nós que a animação de escrever revela, em ordem
 const T_ESCREVER_LINHA: float = 0.35
-const MAX_ESCREVER: int = 3          # páginas novas escritas de uma vez ao abrir
+const T_ABRIR: float = 0.6           # abrir/fechar o livro (s)
+const T_FECHAR: float = 0.45
 var _papeis: Array = []             # [Panel esquerda, Panel direita]
 var _seta_esq: Button
 var _seta_dir: Button
@@ -75,6 +76,7 @@ var _toque_ini := Vector2(-1, -1)
 
 
 func _ready() -> void:
+	add_to_group("cena_livro")   # o botão ☰ da pausa some com o livro aberto (cobria o fechar)
 	theme = _tema()
 	size = AREA
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -400,6 +402,10 @@ func _montar_pagina(lado: int, folha, numero: int) -> void:
 	for b in g.get_children():
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	caixa.add_child(g)
+	if p.get("escrever", false):
+		# rascunho ainda não escrito: a página fica em branco até a bruxa escrever
+		for c in caixa.get_children():
+			c.modulate.a = 0.0
 
 func _linha_passo(n: int, s: Dictionary) -> Control:
 	var h := HBoxContainer.new()
@@ -436,19 +442,24 @@ func _nova() -> void:
 	await _aparecer_pagina(int(p["id"]))
 	_editar(p)
 
+## Ao abrir: o livro começa na 1ª página e corre até a página mais atual (a última
+## criada); se há preparos novos, vai até cada um e escreve (abaixo).
 ## Preparos novos (rascunhos marcados "escrever"): ao abrir o livro, vai até cada página
-## e a bruxa escreve o nome e os passos, linha por linha (até MAX_ESCREVER; os mais
-## antigos só aparecem prontos).
+## (todas, da mais antiga para a mais nova): a página está em branco e a bruxa escreve o
+## nome, os passos e o resultado, linha por linha; o resto (cabeçalho, botões) aparece no fim.
 func _escrever_novas() -> void:
 	var novas: Array = []
 	for p in livro["paginas"] + livro["rascunhos"]:
 		if p.get("escrever", false):
-			novas.append(p)
-			p.erase("escrever")
+			novas.append(p)   # a marca só sai depois de escrita (até lá a página fica em branco)
+	await get_tree().create_timer(T_ABRIR).timeout   # o livro termina de abrir
 	if novas.is_empty():
+		var mais_nova := -1
+		for p in livro["paginas"] + livro["rascunhos"]:
+			mais_nova = maxi(mais_nova, int(p["id"]))
+		if mais_nova >= 0 and is_inside_tree():
+			await ir_para(mais_nova)
 		return
-	novas = novas.slice(maxi(0, novas.size() - MAX_ESCREVER))
-	await get_tree().create_timer(0.35).timeout   # o livro termina de abrir
 	for p in novas:
 		if not is_inside_tree():
 			return
@@ -461,6 +472,16 @@ func _escrever_pagina(id: int) -> void:
 		return
 	_animando = true
 	var nos: Array = _escrita[lado].duplicate()
+	# o que não é escrito linha a linha (cabeçalho, ingredientes, botões) aparece no fim
+	var resto: Array = []
+	for c in _caixas[lado].get_children():
+		var tem_escrita := false
+		for no in nos:
+			if is_instance_valid(no) and (no == c or c.is_ancestor_of(no)):
+				tem_escrita = true
+		c.modulate.a = 1.0 if tem_escrita else 0.0
+		if not tem_escrita:
+			resto.append(c)
 	for no in nos:
 		if is_instance_valid(no):
 			no.modulate.a = 0.0
@@ -474,6 +495,15 @@ func _escrever_pagina(id: int) -> void:
 			rotulo.visible_ratio = 0.0
 			tw.tween_property(rotulo, "visible_ratio", 1.0, T_ESCREVER_LINHA)
 		await tw.finished
+	if not resto.is_empty():
+		var tw2 := create_tween().set_parallel(true)
+		for c in resto:
+			if is_instance_valid(c):
+				tw2.tween_property(c, "modulate:a", 1.0, 0.3)
+		await tw2.finished
+	for p in livro["paginas"] + livro["rascunhos"]:
+		if int(p["id"]) == id:
+			p.erase("escrever")
 	_animando = false
 
 ## O texto (último Label) de uma linha de passo.
@@ -640,24 +670,26 @@ func _animar_abrir() -> void:
 	_corpo.scale = Vector2(0.15, 0.9)
 	_corpo.modulate.a = 0.0
 	var tw := create_tween().set_parallel(true)
-	tw.tween_property(_corpo, "scale", Vector2.ONE, 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tw.tween_property(_corpo, "modulate:a", 1.0, 0.2)
+	tw.tween_property(_corpo, "scale", Vector2.ONE, T_ABRIR).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tw.tween_property(_corpo, "modulate:a", 1.0, T_ABRIR * 0.6)
 
 func fechar() -> void:
 	if _animando:
 		return
 	_animando = true
 	var tw := create_tween().set_parallel(true)
-	tw.tween_property(_corpo, "scale", Vector2(0.15, 0.9), 0.22).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	tw.tween_property(_corpo, "modulate:a", 0.0, 0.22)
-	tw.tween_property(self, "modulate:a", 0.0, 0.25)
+	tw.tween_property(_corpo, "scale", Vector2(0.15, 0.9), T_FECHAR).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tw.tween_property(_corpo, "modulate:a", 0.0, T_FECHAR)
+	tw.tween_property(self, "modulate:a", 0.0, T_FECHAR + 0.05)
 	await tw.finished
 	fechou.emit()
 	queue_free()
 
 func _input(event: InputEvent) -> void:
-	if not is_visible_in_tree():
-		return
+	if not is_visible_in_tree() or UiModal.bloqueia(self):
+		return   # pausa (ou outra janela) por cima: o toque é dela
+	if event is InputEventMouseButton and UiModal.em_botao_prioritario(self, event.position):
+		return   # toque no ☰ da pausa
 	if event.is_action_pressed("ui_cancel"):
 		if _nomear.visible:
 			_fechar_nomear()

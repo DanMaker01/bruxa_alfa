@@ -10,6 +10,13 @@
 class_name LayoutPreparo
 extends Control
 
+## Teste: Abaixar, Abanar e Acender com o sprite de carta do HUD (false = botões normais).
+const BOTOES_CARTA: bool = true
+## Margem (px) dos cantos do sprite que não esticam (9 fatias).
+const MARGEM_CARTA: float = 26.0
+## Ícone do Abaixar (−Fogo), centralizado como o do +Fogo.
+const ICONE_ABAIXAR := "res://assets/game_caldeirao/botao_fogo_menos.png"
+
 var cena = null
 var regua_caldeirao: ReguaCaldeirao
 var arcos: ArcosDebug
@@ -59,6 +66,9 @@ func configurar(p_cena) -> void:
 	_b_acender.pressed.connect(_acender_apagar)
 	_painel.add_child(_b_acender)
 	_montar()
+	if BOTOES_CARTA:
+		for b in [_b_abaixar, _b_fogo, _b_acender]:
+			_estilo_carta(b)
 
 
 func _montar() -> void:
@@ -78,6 +88,15 @@ func _montar() -> void:
 	_por(_scroll, Vector2(16, 650), Vector2(608, 136))
 	_por(_b_abaixar, Vector2(16, 798), Vector2(296, 112))
 	_por(_b_fogo, Vector2(328, 798), Vector2(296, 112))
+	_b_fogo.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER   # ícone do +Fogo no meio do botão
+	_b_fogo.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
+	_b_fogo.expand_icon = true
+	if ResourceLoader.exists(ICONE_ABAIXAR):
+		_b_abaixar.icon = load(ICONE_ABAIXAR)
+		_b_abaixar.text = ""
+		_b_abaixar.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_b_abaixar.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
+		_b_abaixar.expand_icon = true
 	_por(_b_acender, Vector2(220, 914), Vector2(200, 42))
 	_atualizar_acender()
 
@@ -104,6 +123,23 @@ func _process(_d: float) -> void:
 
 
 # =============================================================================
+## Botão com o sprite de carta (Carta.SPRITE_CARTA) em 9 fatias: os cantos não deformam.
+func _estilo_carta(b: Button) -> void:
+	var tex: Texture2D = load(Carta.SPRITE_CARTA) if ResourceLoader.exists(Carta.SPRITE_CARTA) else null
+	if tex == null:
+		return
+	for estado in [["normal", Color.WHITE], ["hover", Color(1.15, 1.15, 1.15)], ["pressed", Color(0.8, 0.8, 0.85)],
+			["disabled", Color(0.6, 0.6, 0.6)]]:
+		var st := StyleBoxTexture.new()
+		st.texture = tex
+		st.set_texture_margin_all(MARGEM_CARTA)
+		st.set_content_margin_all(10)
+		st.modulate_color = estado[1]
+		b.add_theme_stylebox_override(estado[0], st)
+	b.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	b.add_theme_color_override("font_color", Color(0.95, 0.92, 0.85))
+	b.add_theme_color_override("font_pressed_color", Color(1.0, 0.9, 0.6))
+
 func _por(n: Control, pos: Vector2, tam: Vector2) -> void:
 	n.position = pos
 	n.custom_minimum_size = Vector2.ZERO

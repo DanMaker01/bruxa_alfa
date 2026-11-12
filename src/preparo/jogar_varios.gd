@@ -16,6 +16,10 @@ const INTERVALO_MIN: float = 0.32
 const ACELERACAO: float = 1.0          # 1 = sem aceleração
 const INTERVALO_LOTE: float = 0.12     # QUANTIDADE: espaço entre os itens jogados
 const LIMIAR_ARRASTE: float = 12.0
+## Contagem contínua: jogar o mesmo item de novo (toque ou segurar) até este tempo depois do
+## último lance continua a contagem da bruxa ("1...", toque, segura: "2...", "3...").
+## Sem lance novo por este tempo (e nada no ar), ela fala o total ("N!!").
+const INTERVALO_JOGAR_ITEM: float = 1.0
 
 static var modo: int = Modo.ACELERA   # escolhido: segurar acelera
 
@@ -35,7 +39,9 @@ var _contador: Label
 var _contar_id: String = ""
 var _em_voo: int = 0
 var _contados: int = 0
-var _usou_antes: bool = false
+var _ultimo_lance: float = -100.0   # s (relógio real) do último item jogado
+var _final_dado: bool = true
+var _soltou_segurar: bool = false   # soltou depois de jogar segurando: o último a cair fala "N!!"
 
 
 func _ready() -> void:
@@ -73,19 +79,39 @@ func _down(btn: Control, id: String) -> void:
 	_prox = ESPERA
 	_conta = 0
 	_usou_segurar = false
-	_usou_antes = false   # segurar de novo: a contagem recomeça
+	_soltou_segurar = false
 	_segurando = modo != Modo.TOQUE
 
 func _pressed(btn: Control, id: String) -> void:
 	if _usou_segurar:
 		_usou_segurar = false
+		_fim_segurar()
 		if modo == Modo.QUANTIDADE and _segurando:
 			_soltar_lote()
 		return
 	_segurando = false
+	if cena.game_temp and cena.game_temp.has_item(id):
+		_registrar_lance(id)
 	cena._on_item_selecionado(id, btn)
 
+func _agora() -> float:
+	return Time.get_ticks_msec() / 1000.0
+
+## Um item foi jogado (toque ou segurando): continua a contagem se for o mesmo item logo em seguida.
+func _registrar_lance(id: String) -> void:
+	var t := _agora()
+	if id != _contar_id or (t - _ultimo_lance > INTERVALO_JOGAR_ITEM and _em_voo == 0):
+		_contar_id = id
+		_contados = 0
+		_em_voo = 0
+	_ultimo_lance = t
+	_em_voo += 1
+	_final_dado = false
+
 func _process(delta: float) -> void:
+	# parou de jogar (nada no ar, sem lance novo há um tempo): a bruxa fala o total
+	if not _final_dado and _em_voo == 0 and not _segurando and _agora() - _ultimo_lance > INTERVALO_JOGAR_ITEM:
+		_falar_total()
 	if not _segurando:
 		return
 	var ainda := Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
@@ -93,6 +119,8 @@ func _process(delta: float) -> void:
 		# soltou (talvez fora do botão: o pressed não vem)
 		if modo == Modo.QUANTIDADE and _conta > 0:
 			_soltar_lote()
+		if _usou_segurar:
+			_fim_segurar()
 		_segurando = false
 		return
 	var pos: Vector2 = cena.get_global_mouse_position()
@@ -108,12 +136,7 @@ func _process(delta: float) -> void:
 	match modo:
 		Modo.ACELERA:
 			if _tem():
-				if _contar_id != _id or _em_voo == 0 and not _usou_antes:
-					_contar_id = _id
-					_contados = 0
-					_em_voo = 0
-				_usou_antes = true
-				_em_voo += 1
+				_registrar_lance(_id)
 				cena._on_item_selecionado(_id, null, _origem)
 		Modo.QUANTIDADE:
 			var max_q: int = _quantidade()
@@ -121,14 +144,31 @@ func _process(delta: float) -> void:
 				_conta += 1
 				_mostrar_contador()
 
-## Um item caiu no caldeirão: se foi jogado segurando, a bruxa conta em voz alta.
+## Um item caiu no caldeirão: a bruxa conta em voz alta ("1...", "2...").
 func _caiu(id: String) -> void:
 	if id != _contar_id or _em_voo <= 0:
 		return
 	_em_voo -= 1
 	_contados += 1
-	if cena.get("reacao") and cena.reacao.has_method("contar"):
-		cena.reacao.contar(_contados)
+	if _soltou_segurar and _em_voo == 0:
+		_falar_total()   # soltou o botão e este era o último no ar
+	elif cena.get("reacao") and cena.reacao.has_method("contar"):
+		cena.reacao.contar(_contados, false)
+
+## Soltou o botão depois de jogar segurando: se nada mais está no ar, fala o total agora.
+func _fim_segurar() -> void:
+	if _soltou_segurar:
+		return
+	_soltou_segurar = true
+	if _em_voo == 0:
+		_falar_total()
+
+func _falar_total() -> void:
+	if _final_dado:
+		return
+	_final_dado = true
+	if _contados >= 2 and cena.get("reacao") and cena.reacao.has_method("contar"):
+		cena.reacao.contar(_contados, true)
 
 func _tem() -> bool:
 	return cena.game_temp != null and cena.game_temp.has_item(_id)

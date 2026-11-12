@@ -140,7 +140,7 @@ func on_map_event(evento: EventoData, origem: Node = null) -> void:
 ## Anda até o evento. Retorna true só se chegou (false se cancelado/travado).
 ## Clique num evento: true = a bruxa anda só até encostar na COLISÃO do evento (a borda
 ## do lado em que ela está) e ativa ali. false = jeito antigo (anda até o evento).
-const CLIQUE_ATE_COLISAO: bool = true
+const CLIQUE_ATE_COLISAO: bool = false   # testado e não ficou melhor: voltou ao jeito antigo
 
 func move_player_to_event(event_node: Node2D) -> bool:
 	if not is_instance_valid(event_node) or not input_manager or not input_manager.can_move():

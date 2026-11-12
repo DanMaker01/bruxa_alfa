@@ -110,6 +110,8 @@ func play_bgm(filename: String, volume: float = 1.0):
 	if current_bgm == filename and bgm_player.playing:
 		return
 	
+	if "loop" in stream:
+		stream.loop = true   # BGM sempre em loop (mesmo se o .import veio com loop desligado)
 	bgm_player.stop()
 	bgm_player.stream = stream
 	current_bgm_base_volume = volume

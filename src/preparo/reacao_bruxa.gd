@@ -88,12 +88,13 @@ func avisar(motivo: String) -> void:
 	_ultima_fala = -100.0   # aviso importante: fala mesmo que tenha falado agora há pouco
 	_falar(motivo)
 
-## Segurando um item: a bruxa conta quantos já entraram ("1!", "2!"...).
-func contar(n: int) -> void:
-	_balao_label.text = "%d!" % n
+## Segurando um item: a bruxa conta quantos já entraram ("1...", "2...") e, quando
+## o último cai depois de soltar o botão, fala o total ("8!!").
+func contar(n: int, final: bool = false) -> void:
+	_balao_label.text = ("%d!!" if final else "%d...") % n
 	_balao.size = _balao.get_combined_minimum_size()
 	_ultima_fala = _t
-	_balao_ate = _t + 1.2
+	_balao_ate = _t + (2.0 if final else 1.2)
 	_balao.modulate.a = 1.0
 	_balao.pivot_offset = _balao.size * 0.5
 	_balao.scale = Vector2(1.2, 1.2)

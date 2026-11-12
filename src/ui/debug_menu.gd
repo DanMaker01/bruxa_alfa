@@ -246,7 +246,7 @@ func _atualizar_aba(nome: String) -> void:
 		"Variáveis": _atualizar_vars()
 		"Personalidade": _atualizar_pers()
 		"Itens": _atualizar_itens()
-		"Mapa": _atualizar_mapa()
+		"Mapa": _atualizar_mapa.call_deferred()   # deferred: nunca montar a lista com o nó ocupado
 		"Comandos":
 			if _comandos:
 				_comandos.atualizar()
@@ -917,7 +917,7 @@ func _atualizar_mapa() -> void:
 		b.button_pressed = is_equal_approx(Engine.time_scale, k)
 		b.pressed.connect(func():
 			Engine.time_scale = k
-			_atualizar_mapa())
+			_atualizar_mapa.call_deferred())   # deferred: o botão que chamou ainda está na lista
 		vel.add_child(b)
 	_lista_mapa.add_child(vel)
 	_lista_mapa.add_child(HSeparator.new())
@@ -958,7 +958,7 @@ func _atualizar_mapa() -> void:
 	cab.add_child(_secao("Eventos do mapa"))
 	var atualizar := Button.new()
 	atualizar.text = "Atualizar"
-	atualizar.pressed.connect(_atualizar_mapa)
+	atualizar.pressed.connect(func(): _atualizar_mapa.call_deferred())
 	cab.add_child(atualizar)
 	_lista_mapa.add_child(cab)
 

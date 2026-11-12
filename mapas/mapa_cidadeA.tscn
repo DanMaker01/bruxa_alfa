@@ -19,6 +19,7 @@
 
 [node name="CidadeA" type="Node2D" unique_id=231347479]
 script = ExtResource("1_4bgty")
+bgm = "uid://bp1swabb3mv6c"
 
 [node name="Fundo" type="Parallax2D" parent="." unique_id=647674415]
 z_index = -2

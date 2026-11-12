@@ -122,7 +122,7 @@ var _bolha_escala_base := Vector2.ONE  # scale_min/max originais do material das
 ## O vapor começa na fervura e fica no máximo em T_VAPOR_MAX.
 const T_VAPOR_MAX: float = 160.0
 ## Esfriando: abaixo de T_FRIO_FIM as bolhas e o vapor vão sumindo até T_FRIO_INI.
-const T_FRIO_INI: float = 70.0
+const T_FRIO_INI: float = 90.0
 const T_FRIO_FIM: float = 100.0
 const COR_VAPOR := Color(0.92, 0.92, 1.0, 0.35)
 var _vapor: CPUParticles2D

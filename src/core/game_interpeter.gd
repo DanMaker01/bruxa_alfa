@@ -113,7 +113,10 @@ func dialogo_a_seguir() -> bool:
 		if ev.finished or ev.is_waiting:
 			continue
 		if ev.is_paused and ev.pause_reason != "dialog":
-			continue
+			# evento que chamou outro: quando o chamado acabar, ele continua dali
+			# (ex.: chamado termina em fala e quem chamou volta com outra fala)
+			if not (ev.pause_reason == "chamado" and (ev.filho == null or ev.filho.finished)):
+				continue
 		var i: int = ev.current_index + (1 if ev.is_paused else 0)
 		for k in OLHAR_A_FRENTE:
 			if i >= ev.commands.size():

@@ -34,6 +34,8 @@ class _Ouvinte extends Node:
 		var toque: bool = (e is InputEventMouseButton or e is InputEventScreenTouch) and e.pressed
 		if not toque or ev.finished or ev.current_index >= alvo:
 			return
+		if UiModal.bloqueia(self) or UiModal.em_botao_prioritario(self, e.position):
+			return   # menu de pausa (ou o botão ☰) por cima: o toque é dele
 		get_viewport().set_input_as_handled()
 		# cancela o que está rodando e pula
 		for n in get_tree().get_nodes_in_group(CmdLegenda.GRUPO):

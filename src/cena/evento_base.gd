@@ -56,6 +56,7 @@ func _update_page():
 		_activate_page(new_index)
 
 func _ready():
+	add_to_group("eventos_mapa")   # o InputManager procura cliques em eventos aqui
 	pass
 	pass
 	
@@ -296,6 +297,15 @@ func _on_zone_player_exited():
 # evento_base.gd - Em _on_zone_interacted()
 
 # evento_base.gd - Em _on_zone_interacted()
+
+## Clique dentro da área de um evento de clique em que a bruxa JÁ está: ela não anda,
+## só ativa (o InputManager pergunta isto antes de mandar a bruxa andar até o clique).
+func clique_sem_andar(ponto_mundo: Vector2) -> bool:
+	if trigger != "click" or not is_visible_in_tree() or not _pagina_tem_comandos():
+		return false
+	if not _is_player_near():
+		return false
+	return _zone_global_rect().has_point(ponto_mundo)
 
 ## Bruxa travada (comando Travar player): clique em evento não faz nada.
 func _clique_travado() -> bool:

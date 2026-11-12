@@ -1,8 +1,10 @@
 [gd_scene format=3 uid="uid://cghsvj5vju42v"]
 
 [ext_resource type="Theme" uid="uid://3chprlsxpov2" path="res://resources/tema_base.tres" id="1_i85hu"]
+[ext_resource type="Script" path="res://src/ui/menu_principal.gd" id="2_menu"]
 
 [node name="MenuPrincipal" type="Control" unique_id=1568489843]
+script = ExtResource("2_menu")
 visible = false
 layout_mode = 3
 anchors_preset = 0

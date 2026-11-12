@@ -41,8 +41,8 @@ const ESPERA_MAX_DIALOGO: float = 1.5
 ##   voltas: 1, ou bem raro N_VOLTAS (CHANCE_N_VOLTAS)
 @export var variar_virada: bool = true
 const CHANCE_DIAGONAL: float = 0.8
-const CHANCE_N_VOLTAS: float = 0.05
-const N_VOLTAS: int = 3
+const CHANCE_N_VOLTAS: float = 1.0 / 40.0   # (1/40 em inteiros dá 0: nunca girava)
+const N_VOLTAS: int = 2
 
 var ativa: bool = true:
 	set(v):
@@ -238,8 +238,15 @@ func _quer_prioridade() -> bool:
 # =============================================================================
 # VIRAR: achata na diagonal, troca a face, abre de novo
 # =============================================================================
+## Som ao virar uma carta: nome do arquivo em audio/se/ (sem .mp3). Vazio = sem som (ainda não há).
+const SOM_VIRAR: String = ""
+
 func _virar(alvo: String) -> void:
 	_virando = true
+	if SOM_VIRAR != "":
+		var audio = get_node_or_null("/root/Main/GameManager/AudioManager")
+		if audio and audio.has_method("play_se"):
+			audio.play_se(SOM_VIRAR)
 	var giros: Array = _sortear_virada()
 	var tw := create_tween()
 	if alvo == NADA:

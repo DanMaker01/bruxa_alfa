@@ -10,7 +10,7 @@
 #   aproveitamento perdido → fica mais transparente (o ícone nunca encolhe)
 #   punindo agora  → treme
 # E um anel de bolhinhas em volta de cada ícone mostra o cozimento (enche no sentido horário).
-# A régua do anel (e da vela) tem 3 modos para testar (IconesCaldeirao.modo; tecla M no preparo troca):
+# A régua do anel (e da vela): ABSOLUTO é o final (os outros ficam só como referência):
 #   PUNICAO      ponto sempre em FRACAO_PONTO; o resto do anel = punição (1 − a), linear na punição.
 #   PROPORCIONAL anel fecha em m + 3·s+ (vela: (1 + h_max)·t_max): posição do ponto depende do item.
 #   ABSOLUTO     anel fecha sempre em Q_ABSOLUTO (vela: T_ABSOLUTO s): cada item tem posição absoluta
@@ -77,7 +77,8 @@ const ESCALA_CORES := [
 	Color(1.0, 0.15, 0.1),    # 4 vermelho: punição de 50%
 	Color(0.05, 0.05, 0.05),  # 5 preto: punição máxima
 ]
-# ---- PALETAS do anel/vela (para testar; tecla P no preparo troca, tecla C liga/desliga o anel já colorido) ----
+# ---- PALETAS do anel/vela. Escolhida: SEMAFORO, com o anel começando vazio (precolorido = false).
+#      As teclas de teste P / C / M saíram; as outras paletas ficam no código só como referência. ----
 #   DOURADO   branco (cru) -> DOURADO (ideal) -> amarelo -> laranja -> vermelho -> preto (a de antes)
 #   APROXIMA  chegando: branco -> amarelo -> laranja -> vermelho -> VERDE (ideal);
 #             passando: vermelho -> laranja -> amarelo -> branco (o pedido do readme)
@@ -87,8 +88,10 @@ const ESCALA_CORES := [
 #             Começa vazio e vai revelando a cor conforme cozinha (anel de fora) e o tempo passa (anel de dentro).
 #   COR_UNICA todas as bolhinhas acesas com a cor do estado ATUAL (paleta APROXIMA); o anel só mostra o quanto andou
 enum Paleta { FAIXA, DOURADO, APROXIMA, SEMAFORO, COR_UNICA }
-const NOMES_PALETA := ["faixa (anel inteiro pintado: vermelho > amarelo > verde > amarelo > vermelho)", "dourado (antiga)", "aproxima (branco > amarelo > laranja > vermelho > verde)", "semáforo (cinza > amarelo > verde > vermelho)", "cor única (estado atual)"]
-static var paleta: int = Paleta.FAIXA
+const NOMES_PALETA := ["faixa (vermelho > amarelo > verde > amarelo > vermelho)", "dourado (branco > dourado > amarelo > laranja > vermelho > preto)", "aproxima (branco > amarelo > laranja > vermelho > verde)", "semáforo (cinza > amarelo > verde > amarelo > vermelho > preto)", "cor única (= aproxima no anel contínuo)"]
+static var paleta: int = Paleta.FAIXA   # cores do anel (tecla P troca para testar)
+## O anel é sempre contínuo (como a FAIXA); a paleta só escolhe as cores. false = bolinhas (antigo).
+const ANEL_CONTINUO: bool = true
 ## Ligado: as bolhinhas que ainda não acenderam já mostram a cor do trecho (fraquinhas) e a "barra" vai acendendo.
 static var precolorido: bool = false
 const C_BRANCO := Color(0.95, 0.95, 0.9)
@@ -112,6 +115,19 @@ static func cor_ideal() -> Color:
 ## FAIXA: cor do aproveitamento a (0 = punição total, 1 = ideal).
 static func cor_aproveitamento(a: float) -> Color:
 	return _rampa([C_VERMELHO, C_AMARELO, C_VERDE], clampf(a, 0.0, 1.0))
+
+## Cor de um trecho do anel contínuo na paleta atual: a = aproveitamento naquele ponto,
+## depois = já passou do ideal (cozinhou demais / tempo demais).
+static func cor_faixa(a: float, depois: bool) -> Color:
+	match paleta:
+		Paleta.FAIXA:
+			return cor_aproveitamento(a)
+		Paleta.DOURADO:
+			if depois:
+				return cor_punicao(1.0 - a)
+			return cor_ideal() if a >= 0.9 else ESCALA_CORES[0]
+		_:
+			return cor_depois(1.0 - a) if depois else cor_antes(a)
 
 ## Cor chegando no ideal: a = aproveitamento (0 = longe, >= 0.9 = no ponto).
 static func cor_antes(a: float) -> Color:
@@ -352,7 +368,7 @@ func atualizar(i: int, est: Dictionary) -> void:
 			ic["progresso_alvo"] = FRACAO_PONTO + (1.0 - FRACAO_PONTO) * punicao_q
 	else:
 		ic["progresso_alvo"] = FRACAO_PONTO   # sem exigência de cozimento: já está no ponto
-	if paleta == Paleta.FAIXA:
+	if ANEL_CONTINUO:
 		ic["progresso_alvo"] = clampf(float(est.get("Q", 0.0)) / _q_faixa(item_ic), 0.0, 1.0)
 	ic["ponto"] = est.get("no_ponto", false)
 	# cor do estado agora (paleta COR_UNICA)
@@ -372,7 +388,7 @@ func atualizar(i: int, est: Dictionary) -> void:
 	var dano_calor: float = clampf((1.0 - float(est.get("a_T_max", 1.0))) * 1.5, 0.0, 1.0)
 	ic["rachado_alvo"] = maxf(dano_calor, 0.25 if niveis.get("quente", 0) > 0 else 0.0)
 	_atualizar_vela(ic, est)
-	if paleta == Paleta.FAIXA and ic["tem_vela"]:
+	if ANEL_CONTINUO and ic["tem_vela"]:
 		ic["vela_alvo"] = clampf(float(est.get("duracao", 0.0)) / _t_faixa(item_ic), 0.0, 1.0)
 
 ## Vela: a janela de tempo do ingrediente, na mesma régua do anel (ver modo).
@@ -662,7 +678,7 @@ func _draw() -> void:
 	for ic in _icones:
 		if ic["perdido"]:
 			continue
-		if paleta == Paleta.FAIXA:
+		if ANEL_CONTINUO:
 			_desenhar_faixa(ic)
 		else:
 			_desenhar_anel(ic)
@@ -757,7 +773,7 @@ static func _t_faixa(item: ItemData) -> float:
 static var _cache_faixa: Dictionary = {}
 ## Cores dos trechos da faixa (cozimento e tempo) para o item.
 static func cores_faixa(item: ItemData) -> Dictionary:
-	var chave := str(item.get_instance_id() if item else 0) + ":" + str(modo)
+	var chave := str(item.get_instance_id() if item else 0) + ":" + str(modo) + ":" + str(paleta)
 	if not _cache_faixa.has(chave):
 		var coz: Array = []
 		var tem: Array = []
@@ -768,14 +784,15 @@ static func cores_faixa(item: ItemData) -> Dictionary:
 			var a_q: float = 1.0
 			if item and item.m > 0.0:
 				a_q = CalculadoraPocao.a_cozimento(u * q_cheio, item.m, item.s_menos, item.s_mais)
-			coz.append(cor_aproveitamento(a_q))
+			coz.append(cor_faixa(a_q, item != null and item.m > 0.0 and u * q_cheio > item.m))
 			var a_t: float = 1.0
 			if item:
 				var t: float = u * t_cheio
 				a_t = CalculadoraPocao.curva_min(t, item.t_min, item.h_min)
 				if item.t_max > 0.0 and item.t_max < 999.0:
 					a_t *= CalculadoraPocao.curva_max(t, item.t_max, item.h_max)
-			tem.append(cor_aproveitamento(a_t))
+			var depois_t: bool = item != null and item.t_max > 0.0 and item.t_max < 999.0 and u * t_cheio > item.t_max
+			tem.append(cor_faixa(a_t, depois_t))
 		_cache_faixa[chave] = {"coz": coz, "tempo": tem}
 	return _cache_faixa[chave]
 
@@ -794,6 +811,13 @@ func _faixa_arco(c: Vector2, raio: float, largura: float, u: float, cores: Array
 	var ini := -PI * 0.5
 	u = clampf(u, 0.0, 1.0)
 	draw_arc(c, raio, ini, ini + TAU, 64, Color(1, 1, 1, 0.10 * alfa), largura * 0.6)
+	if precolorido:
+		# anel já colorido: o caminho todo aparece fraquinho e vai sendo revelado
+		for k in FAIXA_TRECHOS:
+			var w0: float = float(k) / FAIXA_TRECHOS
+			if w0 + 1.0 / FAIXA_TRECHOS <= u:
+				continue
+			draw_arc(c, raio, ini + TAU * maxf(w0, u), ini + TAU * (float(k + 1) / FAIXA_TRECHOS) + 0.01, 3, Color(cores[k], 0.28 * alfa), largura * 0.8)
 	if u <= 0.0:
 		return
 	var n: int = FAIXA_TRECHOS

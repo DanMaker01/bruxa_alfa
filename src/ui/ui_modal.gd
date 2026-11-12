@@ -7,6 +7,8 @@ class_name UiModal
 extends RefCounted
 
 const GRUPO := "ui_modal"
+## Botões que sempre ganham o toque (ex.: ☰ da pausa), mesmo de quem lê _input direto.
+const GRUPO_BOTOES := "ui_botao_prioritario"
 
 ## true se existe uma janela modal visível que não contém "no".
 static func bloqueia(no: Node) -> bool:
@@ -18,4 +20,13 @@ static func bloqueia(no: Node) -> bool:
 		if m.is_ancestor_of(no):
 			continue
 		return true
+	return false
+
+## true se o ponto (tela) cai num botão prioritário visível (ex.: ☰ da pausa).
+static func em_botao_prioritario(no: Node, pos: Vector2) -> bool:
+	if no == null or not no.is_inside_tree():
+		return false
+	for b in no.get_tree().get_nodes_in_group(GRUPO_BOTOES):
+		if b is Control and b.is_visible_in_tree() and b.get_global_rect().has_point(pos):
+			return true
 	return false

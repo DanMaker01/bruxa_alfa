@@ -57,7 +57,7 @@ var _aperto_pos := Vector2.ZERO
 ## Durante as animações (produtório, cartas): segurar acelera; um toque pula até o fim.
 const TEMPO_TOQUE: float = 0.2         # soltar antes disto = toque (pula)
 const VEL_SEGURAR: float = 3.0
-const VEL_PULAR: float = 40.0
+const VEL_PULAR: float = 100.0
 var _apertou_em: float = -1.0
 var _pulando: bool = false
 

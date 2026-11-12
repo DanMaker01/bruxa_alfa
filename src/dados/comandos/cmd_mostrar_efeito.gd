@@ -136,16 +136,49 @@ static func _fumaca(tree: SceneTree, no, alt: float) -> void:
 	tree.create_timer(p.lifetime + 0.3).timeout.connect(p.queue_free)
 
 ## O alvo inteiro (sprite) fica com a cor por um instante e volta ao normal, duas vezes.
+## Pinta na cor pedida mesmo com sprite colorido: um shader troca a cor de cada pixel pela
+## cor escolhida, mantendo só o claro/escuro (a textura) do sprite.
+const SHADER_PISCAR := """
+shader_type canvas_item;
+uniform vec4 cor : source_color = vec4(1.0);
+uniform float forca : hint_range(0.0, 1.0) = 0.0;
+void fragment() {
+	vec4 t = texture(TEXTURE, UV) * COLOR;
+	float lum = dot(t.rgb, vec3(0.299, 0.587, 0.114));
+	vec3 pintado = clamp(cor.rgb * (0.55 + 0.9 * lum), 0.0, 1.0);
+	COLOR = vec4(mix(t.rgb, pintado, forca), t.a);
+}
+"""
+
 static func _piscar(no, c: Color) -> void:
 	if not (no is CanvasItem):
 		return
-	var original: Color = no.modulate
-	var forte := Color(c.r * 1.8, c.g * 1.8, c.b * 1.8, original.a)
+	# os sprites do alvo (o próprio nó e os filhos que desenham textura)
+	var alvos: Array = []
+	if no is Sprite2D or no is AnimatedSprite2D or no is TextureRect:
+		alvos.append(no)
+	for f in no.find_children("*", "", true, false):
+		if f is Sprite2D or f is AnimatedSprite2D or f is TextureRect:
+			alvos.append(f)
+	if alvos.is_empty():
+		alvos.append(no)
+	var sh := Shader.new()
+	sh.code = SHADER_PISCAR
+	var mat := ShaderMaterial.new()
+	mat.shader = sh
+	mat.set_shader_parameter("cor", c)
+	var antigos: Array = []
+	for a in alvos:
+		antigos.append(a.material)
+		a.material = mat
 	var tw: Tween = no.create_tween()
 	for i in 2:
-		tw.tween_property(no, "modulate", forte, 0.1)
-		tw.tween_property(no, "modulate", original, 0.3)
+		tw.tween_method(func(v: float): mat.set_shader_parameter("forca", v), 0.0, 1.0, 0.1)
+		tw.tween_method(func(v: float): mat.set_shader_parameter("forca", v), 1.0, 0.0, 0.3)
 	await tw.finished
+	for k in alvos.size():
+		if is_instance_valid(alvos[k]):
+			alvos[k].material = antigos[k]
 
 static func _clarao(tree: SceneTree, c: Color) -> void:
 	var camada := CanvasLayer.new()

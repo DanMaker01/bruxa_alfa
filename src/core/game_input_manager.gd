@@ -152,6 +152,9 @@ func _input(event):
 		# IGNORA CLIQUE NO HUD (Y > 640)
 		if event.position.y > 640:
 			return
+		# ☰ da pausa (e outros botões prioritários): o toque é do botão, a bruxa não anda
+		if UiModal.em_botao_prioritario(self, event.position):
+			return
 		
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
@@ -172,6 +175,11 @@ func _input(event):
 				
 				var world_click = camera.get_canvas_transform().affine_inverse() * event.position
 				ToqueFeedback.mostrar(player.get_parent(), world_click)   # anel no ponto tocado
+				# clicou num evento em cuja área a bruxa já está: não anda (o evento só ativa)
+				if _clique_em_evento_perto(world_click):
+					is_mouse_pressed = false
+					is_dragging = false
+					return
 				var new_target_x = world_click.x
 				
 				if abs(new_target_x - player.global_position.x) < 10.0:
@@ -185,6 +193,12 @@ func _input(event):
 		if is_mouse_pressed:
 			# Só guarda a posição do dedo; _process recalcula o destino todo frame.
 			mouse_position = event.position
+
+func _clique_em_evento_perto(ponto: Vector2) -> bool:
+	for ev in get_tree().get_nodes_in_group("eventos_mapa"):
+		if ev.has_method("clique_sem_andar") and ev.clique_sem_andar(ponto):
+			return true
+	return false
 
 func _follow_finger():
 	var camera = get_viewport().get_camera_2d()
