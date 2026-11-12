@@ -23,6 +23,8 @@ const COR_SUAVE := Color(0.75, 0.72, 0.68)
 const CATEGORIAS := [[40.0, "ferro"], [100.0, "fundo rubro"], [160.0, "rubro"], [200.0, "rubro intenso"]]
 
 var cena = null
+## true: só aparece com o debug do caldeirão aberto.
+var so_debug: bool = false
 var _fonte: Font
 var estavel: bool = false
 var dT: float = 0.0
@@ -34,6 +36,9 @@ func _ready() -> void:
 	_fonte = get_theme_default_font()
 
 func _process(_d: float) -> void:
+	if so_debug:
+		var dbg = cena.get("debug_ui") if cena else null
+		visible = dbg != null and dbg.visible
 	if is_visible_in_tree():
 		estavel = _medir_estavel()
 		queue_redraw()

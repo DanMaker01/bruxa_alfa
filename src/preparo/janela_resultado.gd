@@ -54,6 +54,12 @@ var _produtorio: AnimacaoProdutorio
 ## A tela de informações (nome, nota, matriz, pentágono, ingredientes).
 var _vistas: ResultadoVistas
 var _aperto_pos := Vector2.ZERO
+## Durante as animações (produtório, cartas): segurar acelera; um toque pula até o fim.
+const TEMPO_TOQUE: float = 0.2         # soltar antes disto = toque (pula)
+const VEL_SEGURAR: float = 3.0
+const VEL_PULAR: float = 40.0
+var _apertou_em: float = -1.0
+var _pulando: bool = false
 
 
 func _ready() -> void:
@@ -74,6 +80,22 @@ func _process(delta: float) -> void:
 		_halo.modulate.a = 0.35 + 0.2 * sin(_t * 3.0)   # brilho pulsando
 	if _dica.visible:
 		_dica.modulate.a = 0.45 + 0.45 * sin(_t * 4.0)
+	# segurando durante a animação: acelera
+	if _apertou_em >= 0.0 and not _pulando and _animando() \
+			and Time.get_ticks_msec() / 1000.0 - _apertou_em >= TEMPO_TOQUE:
+		Engine.time_scale = VEL_SEGURAR
+
+func _exit_tree() -> void:
+	Engine.time_scale = 1.0   # nunca deixa o jogo acelerado
+
+func _animando() -> bool:
+	return _estado in [Estado.ENTRANDO, Estado.PRODUTORIO, Estado.MOSTRANDO]
+
+## Volta a velocidade normal do jogo.
+func _velocidade_normal() -> void:
+	_pulando = false
+	_apertou_em = -1.0
+	Engine.time_scale = 1.0
 
 # =============================================================================
 # CONSTRUÇÃO
@@ -277,6 +299,7 @@ func _depois_das_informacoes(pedir_nome: bool) -> void:
 		await _atualizar_titulo(_pocao_item.get_nome() if _pocao_item else NOME_DESCONHECIDO)
 
 	# 4. pronto: qualquer toque fecha
+	_velocidade_normal()
 	_dica.visible = true
 	_estado = Estado.PRONTA
 
@@ -353,12 +376,20 @@ func _estourar_brilhos(centro: Vector2) -> void:
 # SAÍDA
 # =============================================================================
 func _input(event: InputEvent) -> void:
-	if visible and _estado == Estado.PRODUTORIO:
-		var aperto: bool = (event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT) \
-			or (event is InputEventScreenTouch and event.pressed)
-		if aperto:
+	if visible and _animando():
+		# segurar acelera (ver _process); um toque curto pula tudo até o resultado pronto
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 			get_viewport().set_input_as_handled()
-			_produtorio.tocou()
+			if event.pressed:
+				_apertou_em = Time.get_ticks_msec() / 1000.0
+			elif _apertou_em >= 0.0:
+				var curto: bool = Time.get_ticks_msec() / 1000.0 - _apertou_em < TEMPO_TOQUE
+				_apertou_em = -1.0
+				if curto and not _pulando:
+					_pulando = true
+					Engine.time_scale = VEL_PULAR
+				elif not _pulando:
+					Engine.time_scale = 1.0
 		return
 	if not visible or _estado != Estado.PRONTA:
 		return
@@ -389,6 +420,7 @@ func _input(event: InputEvent) -> void:
 ## Sequência: escurece + poção ao meio → carta abre → poção desce → nome dourado →
 ## carta fecha → escuro total → preparo e janela fecham por baixo → escuro some (mapa).
 func _fechar() -> void:
+	_velocidade_normal()
 	_estado = Estado.SAINDO
 	_dica.visible = false
 	await _vistas.fechar_cartas_menores()

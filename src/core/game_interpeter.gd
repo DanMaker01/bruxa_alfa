@@ -95,6 +95,38 @@ func _process(delta):
 
 		_process_event_step(event)
 
+## Comandos que mostram diálogo (pelo nome do arquivo do script).
+const CMDS_DIALOGO := ["cmd_mostrar_msg.gd", "cmd_mostrar_opcoes.gd"]
+## Comandos instantâneos: olhando para frente, pula eles (não interrompem o diálogo).
+const CMDS_INSTANTANEOS := ["cmd_label.gd", "cmd_variavel.gd", "cmd_if.gd", "cmd_else.gd", "cmd_end.gd",
+	"cmd_item.gd", "cmd_som.gd", "cmd_goto.gd", "cmd_direcao.gd", "cmd_break.gd", "cmd_estilo_dialogo.gd",
+	"cmd_mudar_personalidade.gd", "cmd_apagar_evento.gd"]
+const OLHAR_A_FRENTE: int = 6
+
+## Vem diálogo logo em seguida? (fila de diálogos, ou algum evento rodando cujo próximo
+## comando que conta é um diálogo). Esperar, mover, fade etc. interrompem: aí não.
+## A carta do HUD pergunta isto para não desvirar entre dois diálogos seguidos.
+func dialogo_a_seguir() -> bool:
+	if not dialog_queue.is_empty():
+		return true
+	for ev in running_events:
+		if ev.finished or ev.is_waiting:
+			continue
+		if ev.is_paused and ev.pause_reason != "dialog":
+			continue
+		var i: int = ev.current_index + (1 if ev.is_paused else 0)
+		for k in OLHAR_A_FRENTE:
+			if i >= ev.commands.size():
+				break
+			var c = ev.commands[i]
+			var arq: String = c.get_script().resource_path.get_file() if c and c.get_script() else ""
+			if arq in CMDS_DIALOGO:
+				return true
+			if not (arq in CMDS_INSTANTANEOS):
+				break
+			i += 1
+	return false
+
 func _process_event_step(event: EventInstance):
 	if event.current_index >= event.commands.size():
 		_finish_event(event, true)

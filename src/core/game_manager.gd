@@ -138,10 +138,21 @@ func on_map_event(evento: EventoData, origem: Node = null) -> void:
 		interpeter.trigger_event(evento, origem)
 
 ## Anda até o evento. Retorna true só se chegou (false se cancelado/travado).
+## Clique num evento: true = a bruxa anda só até encostar na COLISÃO do evento (a borda
+## do lado em que ela está) e ativa ali. false = jeito antigo (anda até o evento).
+const CLIQUE_ATE_COLISAO: bool = true
+
 func move_player_to_event(event_node: Node2D) -> bool:
 	if not is_instance_valid(event_node) or not input_manager or not input_manager.can_move():
 		return false
 	var alvo: Vector2 = event_node.global_position + Vector2(-30, -80)
+	if CLIQUE_ATE_COLISAO and event_node.has_method("alvo_encostar"):
+		var p = get_player()
+		if p:
+			var x_encosto = event_node.alvo_encostar(p)
+			if x_encosto == null:
+				return true   # já está encostada
+			alvo.x = x_encosto
 	input_manager.move_to_position(alvo.x, alvo.y)
 	var meu_clique = input_manager.click_id
 	const TIMEOUT := 15.0
@@ -161,6 +172,8 @@ func move_player_to_event(event_node: Node2D) -> bool:
 	if not player or not is_instance_valid(event_node):
 		return false
 	if abs(player.global_position.x - alvo.x) < 20.0:
+		return true
+	if CLIQUE_ATE_COLISAO and event_node.has_method("encostado_na_colisao") and event_node.encostado_na_colisao(player):
 		return true
 	# evento sólido: a bruxa para encostada nele (o ponto alvo fica dentro da colisão)
 	return event_node.has_method("player_encostado") and event_node.player_encostado()

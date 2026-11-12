@@ -123,6 +123,7 @@ static func registrar_preparo(l: Dictionary, passos: Array, pocao: String, a: fl
 	var novo := {"pocao": pocao, "a": a, "vezes": 1}
 	novo.merge(extra, true)
 	var pag := adicionar_rascunho(l, passos, novo)
+	pag["escrever"] = true   # a bruxa escreve a página quando abrir o livro (animação)
 	_nome_pela_pocao(pag)
 	return pag
 

@@ -25,6 +25,8 @@ const VERSO := "Verso"
 const Z_CARTA: int = 160
 ## Espera antes de sair da face de prioridade (evita virar entre duas falas seguidas).
 const ESPERA_VOLTAR: float = 0.2
+## Se vem outro diálogo logo em seguida (Interpreter.dialogo_a_seguir), espera até isto.
+const ESPERA_MAX_DIALOGO: float = 1.5
 
 @export var face_aberta: String = "Inventario"
 @export var face_prioridade: String = "Dialogo"
@@ -34,6 +36,13 @@ const ESPERA_VOLTAR: float = 0.2
 @export var tempo_virar: float = 0.35
 ## Inclinação do eixo da virada (graus). 0 = vira na horizontal; 45 = na diagonal.
 @export_range(-90.0, 90.0) var angulo_diagonal: float = 45.0
+## Sorteia um jeito de virar a cada virada (no mesmo tempo total):
+##   eixo: diagonal (CHANCE_DIAGONAL) ou vertical (achata na largura)
+##   voltas: 1, ou bem raro N_VOLTAS (CHANCE_N_VOLTAS)
+@export var variar_virada: bool = true
+const CHANCE_DIAGONAL: float = 0.8
+const CHANCE_N_VOLTAS: float = 0.05
+const N_VOLTAS: int = 3
 
 var ativa: bool = true:
 	set(v):
@@ -66,6 +75,7 @@ var _virando: bool = false
 var _sem_prioridade: float = 0.0
 var _giro: Node2D
 var _achatar: float = 1.0          # 1 = carta aberta, ~0 = de lado (no meio da virada)
+var _ang_virada: float = 45.0      # eixo da virada atual (sorteado)
 
 
 func _ready() -> void:
@@ -97,7 +107,7 @@ func _ajustar_giro() -> void:
 
 ## Achata a carta ao longo do eixo inclinado: R(a) · escala(achatar, 1) · R(-a).
 func _aplicar_giro() -> void:
-	var a := deg_to_rad(angulo_diagonal)
+	var a := deg_to_rad(_ang_virada if _virando else angulo_diagonal)
 	var r := Transform2D(a, Vector2.ZERO)
 	var esc := Transform2D(Vector2(maxf(_achatar, 0.01), 0), Vector2(0, 1), Vector2.ZERO)
 	var m := r * esc * r.affine_inverse()
@@ -206,9 +216,15 @@ func _face_desejada(delta: float) -> String:
 		_sem_prioridade += delta
 		if _sem_prioridade < ESPERA_VOLTAR:
 			return face_prioridade
+		if _sem_prioridade < ESPERA_MAX_DIALOGO and _vem_dialogo():
+			return face_prioridade   # outro diálogo vem em seguida: não desvira
 	if not ativa:
 		return NADA
 	return _alvo_manual
+
+func _vem_dialogo() -> bool:
+	var it = get_node_or_null("/root/Main/GameManager/Interpeter")
+	return it != null and it.has_method("dialogo_a_seguir") and it.dialogo_a_seguir()
 
 func _quer_prioridade() -> bool:
 	var f := face(face_prioridade)
@@ -224,20 +240,45 @@ func _quer_prioridade() -> bool:
 # =============================================================================
 func _virar(alvo: String) -> void:
 	_virando = true
+	var giros: Array = _sortear_virada()
 	var tw := create_tween()
-	if _atual == NADA:
-		_mostrar(alvo)          # vinha escondida: só abre
-		_set_achatar(0.0)
-	else:
+	if alvo == NADA:
+		# sumir: só fecha uma vez
 		tw.tween_method(_set_achatar, _achatar, 0.0, tempo_virar * 0.5) \
 			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 		tw.tween_callback(_mostrar.bind(alvo))
-	if alvo != NADA:
-		tw.tween_method(_set_achatar, 0.0, 1.0, tempo_virar * 0.5) \
-			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	else:
 		tw.tween_callback(_set_achatar.bind(1.0))
+		tw.tween_callback(_fim_virar)
+		return
+	var soma := 0.0
+	for g in giros:
+		soma += g
+	var veio_de_nada := _atual == NADA
+	if veio_de_nada:
+		_mostrar(alvo)          # vinha escondida: só abre
+		_set_achatar(0.0)
+	for k in giros.size():
+		var d: float = tempo_virar * giros[k] / soma
+		if not (k == 0 and veio_de_nada):
+			tw.tween_method(_set_achatar, _achatar if k == 0 else 1.0, 0.0, d * 0.5) \
+				.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+		if k == 0 and not veio_de_nada:
+			tw.tween_callback(_mostrar.bind(alvo))   # troca de face na primeira volta
+		tw.tween_method(_set_achatar, 0.0, 1.0, d * 0.5) \
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	tw.tween_callback(_fim_virar)
+
+## Sorteia eixo e número de voltas. Devolve o peso (duração relativa) de cada volta.
+func _sortear_virada() -> Array:
+	_ang_virada = angulo_diagonal
+	if not variar_virada:
+		return [1.0]
+	if randf() >= CHANCE_DIAGONAL:
+		_ang_virada = 0.0      # vertical: achata na largura
+	var voltas: Array = []
+	voltas.resize(N_VOLTAS if randf() < CHANCE_N_VOLTAS else 1)
+	voltas.fill(1.0)       # voltas iguais, no mesmo tempo total
+	return voltas
 
 func _mostrar(nome_face: String) -> void:
 	_atual = nome_face

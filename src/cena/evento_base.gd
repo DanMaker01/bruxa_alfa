@@ -340,7 +340,8 @@ func _try_move_player_to_event():
 	# 🔥 CHEGOU: ativa o evento (antes o player andava e nada acontecia).
 	# Só se o player estiver mesmo na zona: se o evento andou (ex.: bos_goblin
 	# fugindo), chegar no ponto antigo não conta.
-	if arrived and (_is_player_near() or player_encostado()) and _can_activate():
+	var p = game_manager.get_player() if game_manager else null
+	if arrived and (_is_player_near() or player_encostado() or (p and encostado_na_colisao(p))) and _can_activate():
 		_do_activate()
 
 
@@ -603,6 +604,42 @@ func _destacar_toque() -> void:
 func _pagina_tem_comandos() -> bool:
 	var dados: PaginaData = _get_active_page_data()
 	return dados != null and not dados.comandos.is_empty()
+
+## Retângulo da colisão (StaticBody da página ativa) em coordenadas globais, mesmo se
+## o evento for passável (a colisão fica desligada, mas o tamanho vale como "corpo").
+func rect_colisao_global() -> Rect2:
+	var page = _get_active_page_node()
+	var shape_node = page.get_node_or_null("CollisionShape2D") if page else null
+	if not shape_node or not (shape_node.shape is RectangleShape2D):
+		return Rect2()
+	var sz: Vector2 = shape_node.shape.size
+	return shape_node.global_transform * Rect2(-sz / 2.0, sz)
+
+## Meia largura da colisão da bruxa (global).
+static func meia_largura(player: Node2D) -> float:
+	var cs = player.get_node_or_null("CollisionShape2D")
+	if cs and cs.shape is RectangleShape2D:
+		return cs.shape.size.x * 0.5 * absf(cs.global_transform.get_scale().x)
+	return 40.0
+
+const FOLGA_ENCOSTO: float = 6.0
+## Clique: x onde a bruxa encosta na colisão, do lado em que ela está; null = já encostada.
+func alvo_encostar(player: Node2D):
+	var r := rect_colisao_global()
+	if r.size == Vector2.ZERO:
+		r = _zone_global_rect()
+	if r.size == Vector2.ZERO:
+		return global_position.x
+	var m := meia_largura(player)
+	var x: float = player.global_position.x
+	if x + m < r.position.x - FOLGA_ENCOSTO:
+		return r.position.x - m
+	if x - m > r.end.x + FOLGA_ENCOSTO:
+		return r.end.x + m
+	return null
+
+func encostado_na_colisao(player: Node2D) -> bool:
+	return alvo_encostar(player) == null
 
 func _zone_global_rect() -> Rect2:
 	"""Retângulo da InteractionZone da página ativa em coordenadas globais

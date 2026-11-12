@@ -221,6 +221,7 @@ func mostrar_pentagono() -> void:
 ## Coluna: os ícones aparecem um a um e o anel enche até o aproveitamento.
 func mostrar_ingredientes() -> void:
 	await _abrir_carta(cartas[2])
+	# todos juntos: os ícones aparecem e os anéis enchem ao mesmo tempo
 	for ic in _icones:
 		var no = ic["no"]
 		no.scale = Vector2(0.6, 0.6)
@@ -229,8 +230,7 @@ func mostrar_ingredientes() -> void:
 		tw.tween_property(no, "modulate:a", 1.0, 0.2)
 		tw.tween_property(no, "scale", Vector2.ONE, 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 		tw.tween_method(no.set_anel, 0.0, 1.0, 0.5)
-		await get_tree().create_timer(0.15, true).timeout
-	await get_tree().create_timer(0.5, true).timeout
+	await get_tree().create_timer(0.6, true).timeout
 
 
 ## Tudo pronto de uma vez (ao trocar de visual com a janela já aberta).

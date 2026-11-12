@@ -121,6 +121,9 @@ var _bolha_escala_base := Vector2.ONE  # scale_min/max originais do material das
 # ---- vapor (acima de 100 °C) ----
 ## O vapor começa na fervura e fica no máximo em T_VAPOR_MAX.
 const T_VAPOR_MAX: float = 160.0
+## Esfriando: abaixo de T_FRIO_FIM as bolhas e o vapor vão sumindo até T_FRIO_INI.
+const T_FRIO_INI: float = 70.0
+const T_FRIO_FIM: float = 100.0
 const COR_VAPOR := Color(0.92, 0.92, 1.0, 0.35)
 var _vapor: CPUParticles2D
 ## Fumaça contínua quando o fogo está quase apagando (F perto de F_LIMIT_MIN).
@@ -225,17 +228,23 @@ func atualizar(sistema: SistemaTermico, delta: float, perda_media: float, _punin
 ## Bolhas: mais e mais rápidas conforme T. Brilhos: sobem mais alto, abrem mais e giram mais.
 ## A velocidade é a INICIAL (sorteada quando a partícula nasce, conforme o T daquela hora):
 ## as que já estão na tela não aceleram nem freiam quando T muda (speed_scale fica fixo).
+var _frio_bolhas: float = 1.0
 func _atualizar_particulas(T: float) -> void:
+	_frio_bolhas = maxf(fator_frio(T), 0.0)
 	_aplicar_particulas(clampf((T - SistemaTermico.T_AMB) / (T_PARTICULAS_MAX - SistemaTermico.T_AMB), 0.0, 1.0))
 
 ## 0..1 linear -> 0..1 exponencial (pouquíssimo no começo, máximo no fim).
 static func curva_particulas(tn: float) -> float:
 	return (exp(PARTICULAS_CURVA * tn) - 1.0) / (exp(PARTICULAS_CURVA) - 1.0)
 
+## 1 em 100 °C ou mais, 0 em T_FRIO_INI (esfriando: bolhas e vapor somem).
+static func fator_frio(T: float) -> float:
+	return smoothstep(T_FRIO_INI, T_FRIO_FIM, T)
+
 func _aplicar_particulas(tn: float) -> void:
 	var e := curva_particulas(tn)
 	if bolhas:
-		bolhas.amount_ratio = lerpf(0.02, BOLHAS_QTD_MAX, e)
+		bolhas.amount_ratio = lerpf(0.02, BOLHAS_QTD_MAX, e) * _frio_bolhas
 		bolhas.speed_scale = 1.0
 	if _mat_bolhas:
 		_mat_bolhas.initial_velocity_min = lerpf(3.0, BOLHAS_VEL_MAX.x, e)
@@ -454,8 +463,9 @@ func _atualizar_vapor(T: float) -> void:
 	if not _vapor:
 		return
 	var v: float = clampf((T - 100.0) / (T_VAPOR_MAX - 100.0), 0.0, 1.0)
-	_vapor.emitting = v > 0.01
-	_vapor.modulate.a = lerpf(0.25, 1.0, v)   # CPUParticles2D não tem amount_ratio: mais denso = mais opaco
+	var morno: float = fator_frio(T)   # abaixo de 100 °C: um fiozinho de vapor que vai sumindo
+	_vapor.emitting = v > 0.01 or morno > 0.05
+	_vapor.modulate.a = lerpf(0.25, 1.0, v) if v > 0.01 else 0.25 * morno   # CPUParticles2D não tem amount_ratio: mais denso = mais opaco
 	_vapor.speed_scale = lerpf(0.7, 1.6, v)
 	_vapor.global_position = boca()
 

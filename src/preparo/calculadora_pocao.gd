@@ -217,7 +217,7 @@ static func _tag(chave: String, texto: String, a: float, fixo: bool) -> Dictiona
 #   excesso de calor, falta de calor, tempo demais e cozimento além do ponto.
 ## Avisos de passar do ponto (aproveitamento do cozimento a_Q).
 const PONTO_ALERTA: float = 0.95
-const PONTO_MUITO: float = 0.8
+const PONTO_MUITO: float = 0.75
 
 static func estado_ao_vivo(acc: Dictionary, item: ItemData, t_agora: float, T_agora: float) -> Dictionary:
 	var d = diagnostico_do_acumulador(acc, t_agora)

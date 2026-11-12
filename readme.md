@@ -155,15 +155,12 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 
 
 [ ] Caldeirão 100%
-	[ ]	Tutorial do caldeirão na 1ª vez. usando poucos ingredientes, mudar intro talvez. tentar integrar naturalmente com o que já tem. senão coloca na intro. 
-	[?] Poder retirar item em preparo (com punição alta a depender de t: cozimento? fragil? etc)
-		Feito: tocar no ícone do item no caldeirão. Até T_MAX_RETIRAR (5 s, em cena_preparo.gd) volta inteiro para o inventário; depois disso não sai ("já misturou no caldo").
+	[ ]	Tutorial do caldeirão na 1ª vez. usando poucos ingredientes, mudar intro talvez. tentar integrar naturalmente com o que já tem. 
 	[ ] Layout
 		[ ] Reformular Layout (pensar em celular). Menus, botões,Bruxa_chibi,caldeirão, texto em cima do caldeirão (passar para falas da bruxa), feedback rápido da bruxa.
-		[ ] janela do inventário mostrando poucos itens.  
-	[ ] Poções balanceadas
 	[ ] Feedback bom pra temperatura do caldeirão e itens, tanto frio quanto quente
-		[ ] Fazer feedback: Caldeirão temperatura abaixo de 100°C até apagar. veja que a questão de apagar é responsabilidade do fogo e não do caldeirão, o caldeirão só mostra a própria temperatura T.
+		[?] Fazer feedback: Caldeirão temperatura abaixo de 100°C até apagar. veja que a questão de apagar é responsabilidade do fogo e não do caldeirão, o caldeirão só mostra a própria temperatura T.
+			Feito: abaixo de 100 °C as bolhas e um fiozinho de vapor vão sumindo até 70 °C (visual_caldeirao.gd: T_FRIO_INI/T_FRIO_FIM). O caldo que já ferveu e cai abaixo de 95 °C: a bruxa avisa "Está esfriando..." (uma vez por queda; cena_preparo.gd: T_AVISO_FRIO).
 		[.] anéis branco > amarelo > laranja > vermelho > verde no ideal, e volta ao passar.
 			(item antigo dos círculos branco > amarelo > laranja > vermelho > verde juntado aqui: feito, paleta "aproxima" na tecla P)
 			Modos para testar no preparo (teclado):
@@ -176,31 +173,32 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 					· cor única (o anel inteiro na cor do estado atual).(é interessante mas o anel tem que ser multicor, para a pessoa aprender) (deletar voto:1/2)
 				C = anel já colorido (as bolhinhas apagadas já mostram a cor do trecho, fraquinhas, e a "barra" vai acendendo). (interessante pq mostra as cores, porém já dá uma facilitada, talvez seja bom pra cozinha não ficar tão difícil)
 				A vela usa as mesmas cores. Começa em "faixa". Outras ideias de feedback: me diga e eu ponho como mais um modo.
-	[?] quero que o caldeirão consiga perceber quando |T'(t)|<e_t e também |F'(t)|<e_f e indicar que está estável.
-		Feito: selo "estável"/"mudando" embaixo da régua do caldeirão (regua_caldeirao.gd).
-		Calibrado: T' e F' são a inclinação da reta dos últimos 3 s (as abanadas se compensam), E_T 0,5 °C/s, E_F 10 °C/s, histerese 1,5×. Com o debug aberto mostra T' e F'.
 	[?] fazer um indicador linear de cor do caldeirão também ao lado do indicador do fogo, com suas categorias de cores. e no debug pode mostrar as temperaturas numericamente.
 		Feito: régua vertical à direita (ferro <100, fundo rubro 100, rubro 160, rubro intenso 200), mesma cor do caldeirão. Com o debug aberto mostra T e F.
-	[?] aviso de cozinhou demais está vindo muito cedo e com muito alerta, passar do ponto é ok, o problema é passar muito pq aí a punição será alta. vamos padronizar
-		Feito: só avisa quando pesa. a_Q < 0,95: "passando do ponto" (amarelo); a_Q < 0,8: "passou muito do ponto!" (vermelho). Ajuste em calculadora_pocao.gd (PONTO_ALERTA, PONTO_MUITO).
-	[ ] ver se consigo jogar jogar 8 ervas e 4 cogumelos rapidamente e sem erros, medir 10 testes. no meio da receita as vezes esqueço um cogumelo. talvez dar um jeito de agrupar antes ou jogar multiplos, por exemplo segurando o botão do ingrediente ou podendo combinar eles antes. UI:caso segure o botão, ou caso selecione a jogue multiplos joga em quantidade/velocidade maior.
+		Corrigir: colocar essa escala de cores no menu de debug do caldeirão apenas. A escala de T(t) também deve ficar só no debug, quero ela circular acima do caldeirão, enquanto a de F(t) fica abaixo do fogo, como já está.
+		[?] Feito (layout D): sem réguas na tela. Com o debug do caldeirão aberto: arco de T acima do caldeirão (cores do caldeirão), arco de F em volta do fogo (cores da chama, SistemaTermico.CORES_FOGO), régua de cor do caldeirão e selo "estável" (arcos_debug.gd, regua_caldeirao.gd).
+	[.] ver se consigo jogar jogar 8 ervas e 4 cogumelos rapidamente e sem erros, medir 10 testes. no meio da receita as vezes esqueço um cogumelo. talvez dar um jeito de agrupar antes ou jogar multiplos, por exemplo segurando o botão do ingrediente ou podendo combinar eles antes. UI:caso segure o botão, ou caso selecione a jogue multiplos joga em quantidade/velocidade maior.
+		Feito (jogar_varios.gd): segurar joga um item a cada 0,32 s (velocidade constante, INTERVALO_INI) e a bruxa vai contando no balão quantos entraram ("1!", "2!"...). Toque joga 1. Falta medir os 10 testes.
 	[ ] Resultado:
-		[?] após cada multiplicação no produtório, a matriz resultante não deve pulsar, isso atrapalha um pouco a visualização. e o tamanho da bola deve ser em outra escala, (talvez log?)
-			Feito: sem pulsar; bolas em escala log (grade_matriz.gd: ESCALA_LOG 0,02, DESVIO_CHEIO_LOG 1,0).
 		[?] resultado poção deve ter cartas que se abrem e mostram os resultados. ao sair, todas as cartas fecham.
 			Feito: 3 cartas do HUD (Carta.criar: sprite hud_frame2, verso com pentagrama, virada na diagonal), duas em cima (1 nome + matriz, 2 pentágono) e uma embaixo (3 ingredientes com anéis), que aparecem de verso e viram em ordem.
 			Para reaproveitar em outras telas: var c := Carta.criar(tamanho, "título do verso"); add_child(c); conteúdo em c.face("Frente"); c.abrir() / c.fechar(). Ao confirmar: 2 e 3 fecham, a matriz vira a poção, a 1 fecha e a poção vai para o inventário.
 	[ ] Usar cartas tbm na cena do caldeirão, para botões, etc?
 
-[ ]	Livro de Receitas: 
+
+[ ] Livro de Receitas:
 	[ ] Receitas:
+		[ ] Balanceamento de Receitas:
+			[ ] DEPOIS: (Todas) As receitas têm (devem ter) tempo entre [5seg,5min], com o tempo médio 1min.		
+			[ ] Se eu colocar muita (QUANTO?) quantidade de um ingrediente, vai fazer uma poção muito forte.
+			[ ] Faz sentido uma receita que leva o mesmo ingrediente 2x em tempos diferentes? I_tempo, I_Temper, Q, como conseguir aprovetar duas vezes um mesmo tipo de item numa mesma receita?
+			[ ] DEPOIS: Fazer receita dobrada tem efeito de potencializar (escalar) a matriz resultante. por exemplo se fizer uma poção da calma profunda dobrada, 
+			[ ] 
 		[ ] 1ª receita: calma profunda
-			[ ] escrever e padronizar, 
-			[?] deixar acessível no começo do jogo (livro de receitas?)
-				Feito: livro no bruxa_in; a Calma Profunda vem como página ensinada (dados/receitas, conhecida = true, passos_livro).
+			[ ] escrever e padronizar:o padrão é nome, passos (só existe 2 passos: cor de fogo(cor) e colocar ingrediente(qtd,tempo)). pensar tem algo mais que possa ser feito numa receita?
 		[ ] 2ª receita: desenvoltura
 			Ajustado: musgo t_max 12 → 35 (aguenta os ~30 s finais); flor m 2400 → 5000, s−/s+ 900/1400 → 1900/2900 (Q de 60 s a ~85 °C ≈ 5100). Juntos dão diag(1,1,1.4,1,1) se o musgo entra depois.
-			balanceat tempo, u,s-,s+, Tmin,Tmax,tmin,tmax, etc de cada item. infusao
+			balancear tempo, u,s-,s+, Tmin,Tmax,tmin,tmax, etc de cada item. infusao
 		[ ] balancear dificuldade, peso de cada erro: tempo, temp, cozimento, explorar os TIPOS de matrizes. explorar o que é posível nesse sistema térmico
 			[?] balancear o resultado da poção de extroversão. pois um cogumelo já está sendo suficiente para o melhor resultado, entender o pq.
 			Por quê: o cogumelo multiplica E por 1,16 (+16%) e o critério do filho do mercador aceitava qualquer E que subisse 10% (e aceitava C/A/O mudando até "pouco").
@@ -208,17 +206,17 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 			Com 1 cogumelo agora: "B-bom... dia." / "Melhorou um pouco, mas ainda não dá para deixar a loja com ele."
 		
 	[?] Interação com resultado do preparo:
-		Decidido e feito: automático. Todo preparo terminado vira rascunho no fim do livro (últimos 10) ou soma numa página igual; a bruxa passa a limpo, edita e dá nome à poção no livro.
-		[?] Anota na mão ou automático? Lembra só da última?
 		[?] Como será? (substituído pelos rascunhos)
 			[ ]	Ao criar uma poção nova a bruxa tem opção de anotar a receita no livro. Caso escolha anotar: Abre a cena do livro de receitas já anotando.
+				Edit: pode ter uma animação dela criando a página. porém acho que está um pouco carregado o resultado do preparo, cabe diminuir.
+				[?] Feito: no resultado, segurar acelera (3×) e um toque pula direto para o resultado pronto (janela_resultado.gd: TEMPO_TOQUE, VEL_SEGURAR, VEL_PULAR). Na carta de ingredientes os anéis enchem todos juntos.
 			[ ]	Iniciar o livro de receitas, cena com janela que inicia após uma nova receita. A cena de livro abre e é escrita uma nova receita.
 		[ ] Alternativas?
-			[ ] ... (adicionar alternativas)
+			[?] manual, só escreve a receita feita quando for abrir o livro, daí aparece a animação dela escrevendo na página.
+				Feito: o rascunho continua sendo guardado sozinho, mas ao abrir o livro ele vai até cada página nova (até 3) e escreve o nome, os passos e o resultado linha por linha.
 	[] Cena do Livro:
 		[?] Mesma receita --> mesma poção. Mesma poção -/-> mesma receita.
 			Feito: receita (rascunho ou sem nome) que dá uma poção com nome recebe o nome da poção, inclusive quando a bruxa nomeia a poção no livro. Nome dado pela bruxa não é trocado.
-		[?] Tirar botão Copiar (feito; rascunhos voltaram para o fim do livro)
 		[?] Cena do livro feita (src/livro/, scenes/cena_livro.tscn; F6 abre sozinha com um livro de teste):
 			Livro aberto, 2 páginas (640x640, o HUD fica embaixo), uma receita por página. Setas ‹ › ou arrastar o dedo.
 			Receita = nome + passos: "chama <estado>" ou "<ingrediente> ×qtd, N s" (joga e espera N s); "Finalizar" é sempre o último.
@@ -228,21 +226,15 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 			Memorizar: uma receita só, vale para o próximo preparo (vira o guia no canto do preparo). Dados em GameTemp.livro (LivroReceitas). Receitas de NPC vêm de dados/receitas com conhecida = true e passos_livro.
 			Integração com o preparo: feita (ver abaixo).
 			Evento do livro no bruxa_in (bruxa_in_livro, nó Livro em x 600 y 448, ajuste no mapa): clique abre o livro. Comando novo "Livro" (cmd_livro.gd) abre e espera fechar.
-			[?] Preparo reformado para celular (src/preparo/layout_preparo.gd), botão "Layout" (abaixo do Finalizar) alterna: Original / A Bancada / B Polegares / C Prateleira / D B+C (padrão).
-				A: cena em cima, régua horizontal da chama, embaixo Abanar grande + Abaixar + Acender/Apagar à esquerda e grade de ingredientes (4 por página) à direita.
-				B: termômetro vertical ao lado do caldeirão, carrossel de ingredientes, Abaixar (esquerda) e Abanar (direita) grandes, Acender/Apagar embaixo.
-				C: prateleira de ingredientes em cima, caldeirão mais abaixo com a régua em arco, área de fogo grande (toque abana, arrastar para baixo abaixa), Acender/Apagar.
-				D (padrão): B com a régua da chama em arco em volta do fogo e a régua de cor do caldeirão à direita, com o selo "estável".
-				Régua da chama (regua_chama.gd): estados do livro pela T do caldo, nome do estado atual. Finalizar no canto superior direito.
-				Receita memorizada (guia_receita.gd): lista inteira no canto superior esquerdo, marca o passo atual sozinha (chama certa por 1 s; ingrediente: entrou a quantidade e passaram os segundos). Some quando a poção termina.
+			[?] Preparo reformado para celular (src/preparo/layout_preparo.gd). Só ficou o layout D (os de teste Original, A, B e C e o botão Layout foram removidos do código):
+				carrossel de ingredientes embaixo do caldeirão, Abaixar (esquerda) e Abanar (direita) grandes, Acender/Apagar embaixo, Poção no canto superior direito com a receita memorizada abaixo.
+				Com o debug do caldeirão aberto: arco de T acima do caldeirão, arco de F em volta do fogo, régua de cor do caldeirão e selo "estável".
+				regua_chama.gd não é mais usado (era dos layouts antigos): pode apagar o arquivo.
+				EDIT: Receita memorizada (guia_receita.gd): agora no canto superior direito, abaixo da Poção (o botão Layout foi removido; layout fixo no D), marca o passo atual sozinha (chama certa por 1 s; ingrediente: entrou a quantidade e passaram os segundos). Some quando a poção termina.
 				Ao terminar a poção (transcritor_receita.gd): o preparo vira passos (chama dominante antes de cada ingrediente, mesmo item em sequência junta, tempos ao segundo). Se bater com uma página (±1 s) soma nela (Feita Nx, melhor resultado); senão vira rascunho.
 				Só entram os ingredientes que serviram: os perdidos e os retirados não entram na receita.
-		[?]	Pensar no Layout (livro aberto em 640x640, 2 páginas, HUD embaixo)
 		[?] animações de livro abrindo, livro fechando, avançar página, voltar página, avançar até encontrar página, adicionar página, remover página
 			Feito: abre/fecha esticando da lombada; virar = a folha fecha na lombada e a outra abre; ir até uma página = folhas rápidas; página nova: a tinta aparece; apagar: a página cai e some.
-		[?] As receitas são de 3 tipos. Rascunhos. Normal. Ensinadas (terão um simbolo ou fitinha).  
-			Feito: ensinada = fitinha dourada com estrela no alto da página; rascunho = papel cinza + carimbo RASCUNHO; normal = papel limpo.
-		[?]	Uma receita por página, 2 páginas por folha, mostra o livro aberto e tem opção de controlar com clique ou arrastando, é redundante para melhor UX.
 		[?]	Ao clicar numa página mostra seus ingredientes e tempo relacionado com seu gráfico, seu resultado.
 			Feito (detalhe_receita.gd): tocar no papel de uma página já feita abre o melhor preparo: gráfico T(t) com as faixas de cor da chama e a entrada de cada ingrediente, aproveitamento de cada um e a matriz. Só para preparos feitos a partir de agora (guardam a curva).
 		[.]	Fazer tudo bem animado e temático de bruxaria. (animações feitas; falta arte temática)
@@ -252,8 +244,10 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 			Poção de Pó de Retorno Concentrada no catálogo, com efeito (teleporte para bruxa_in). Pó: diag(0.97,1,1,1,1.03), cozimento leniente (m 3000, T 60–170, t 10–150, folgas 0,4/0,6).
 			Nome: poção de um item só agora usa "Poção de [item] [qualidade]" antes de procurar no catálogo (senão um pó mal cozido virava "Concentrada").
 		[?] menu de editar receita será reformulado, o estilo ficou legal. mude para drag and drop. o botão de chama e o de item devem ser mais intuitivos/ux friendly. os passos podem ser editados. verificar semelhança 
-			Feito (editor_receita.gd), na própria página: Editar transforma a página (nome vira campo, passos viram cartões, Cancelar/Pronto) e a página ao lado vira a paleta com as chamas (bolinhas coloridas), os ingredientes vistos (ícones), a lixeira e o botão Números. Tocar na paleta adiciona no fim, arrastar coloca onde soltar; arrastar um cartão reordena; arrastar para a lixeira apaga; tocar num cartão abre a edição (ingrediente: quantidade e segundos; chama: troca a cor).
-			Números: botão "Números: arrastar / roda" alterna os dois jeitos para testar (arrastar para o lado, ou roda para cima/baixo).
+			Feito (editor_receita.gd), na própria página: Editar transforma a página (nome vira campo, passos viram cartões, Cancelar/Pronto) e a página ao lado vira a paleta com as chamas (bolinhas coloridas), os ingredientes vistos (ícones), a lixeira. Tocar na paleta adiciona no fim, arrastar coloca onde soltar; arrastar um cartão reordena; arrastar para a lixeira apaga; tocar num cartão abre a edição (ingrediente: quantidade e segundos; chama: troca a cor).
+			Números: arrastar para o lado muda; tocar nas setinhas ‹ › soma ou tira 1 (o botão Números e a roda saíram).
+			Nome da poção: sem botão "Dar nome à poção". Poção sem nome ganha nome ao passar a limpo (ou Editar): o nome da receita vale para a poção (item, catálogo). A página mostra só "poção sem nome".
+			Corrigido: passar a limpo e dar nome deixava "Nunca feita" (a comparação dos passos via int x float como mudança; agora compara tipo, chama, item, qtd e segundos inteiros).
 			Semelhança: avisa "Igual à página N" (±1 s) ou "Parecida com a página N" (mesmos ingredientes e chamas, tempos diferentes); deixa salvar.
 
 
@@ -282,7 +276,8 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] organizar o layout e textura dialogo/opções
 		[ ]	Ajuste estético, borda, cor, fonte, etc.
 		[ ]	Criação de estilos padronizados para cada coisa. estilo de texto, estilo de janela, paleta de cores, animação coerente, etc...
-		[ ] Eventos de diálogo devem verificar se o próximo evento a tomar a frente será diálogo também, exceto depois de comando wait, etc.
+		[?] Eventos de diálogo devem verificar se o próximo evento a tomar a frente será diálogo também, exceto depois de comando wait, etc.
+			Feito: a carta do diálogo não desvira se vem outro diálogo em seguida (Interpreter.dialogo_a_seguir: fila de diálogos ou próximo comando de um evento rodando, pulando os instantâneos como variável/if/label/item/som). Esperar, mover, fade etc. interrompem. Espera no máximo 1,5 s (carta.gd: ESPERA_MAX_DIALOGO).
 			se um evento acabar em mensagem e outro iniciar em mensagem com o mesmo falante, nome, foto etc então o card não deve fechar depois do primeiro evento, pois é uma continudade. exemplos disso acontecem ao chamar eventos por comando, entre outros.
 
 
@@ -325,12 +320,10 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 
 
 [ ] Core/Eventos:
-	[?] Comando de travar bruxa também trava a interação com eventos de click (atualmente consigo clicar em eventos no meio de um autostart).
-		Feito: evento_base.gd ignora clique enquanto a bruxa está travada.
-	[?] Debug: salvar estado completo. Agora guarda também livro, itens vistos, mapa e posição; carregar teleporta para lá.
-	[ ] Colisão:
+	[?] Colisão:
 		depois de pegar o véu. quando clico no véu acima da porta, a bruxa(centro dela) vai até a posição que eu cliquei e ativa o evento do véu (as vezes ativa até antes). 
 		o certo deve ser: quando clicar em eventos, deve ir até encostar no retangulo de colisao(colisão e não interação) e já ativar o evento, não precisa ir até a posição clicada. Quero testar se isso é bom para o game feel.  
+		Feito para testar: clicar num evento longe faz a bruxa andar só até encostar na borda da colisão do evento (do lado dela; vale também para passáveis) e já ativa. Para voltar ao jeito antigo: game_manager.gd, CLIQUE_ATE_COLISAO = false.
 
 [ ] Documentação e Organização
 	[ ] organização da pasta Graphics(está sendo chamada de assets neste projeto) estilo rpgmaker:
@@ -347,11 +340,10 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[!] v2
 		[!] v3.3
 
-[ ]	Save/Load 
-	[.] Debug: Estado só salva algumas informações, quero usar estado para levar a bruxa na posição correta, no mapa correto, tudo igual estava no momento do save.
-	[ ] Sistema de save final:
-		[ ]		Game_Temp deve ter save e load de arquivo_unico de titulo "save"+time_stamp
-		[ ]		GameTemp, posição player, mapa, etc
+[ ]	Save/Load
+	[ ] Implementar o save/load final, e linkar no menu principal e de pausa.
+	[?] Game_Temp deve ter save e load de arquivo_unico de titulo "save"+time_stamp
+	[ ] GameTemp, posição player, mapa, etc
 
 
 
@@ -369,7 +361,8 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 
 [ ] Bugs/Revisão:
 	[ ] missao01_convite é gravada e nunca lida: fica para o Cap. 2 (convite do casamento).
-	[ ]		misc: Variações no flip card. Sorteadas: normal = 1 flip diagonal; variações no mesmo tempo: 5 flips com velocidade decrescente; flip mudando a dimensão horizontal, com 1 ou 5 flips. 
+	[?]		misc: Variações no flip card. Sorteadas: normal = 1 flip diagonal; variações no mesmo tempo: 5 flips com velocidade decrescente; flip mudando a dimensão horizontal, com 1 ou 5 flips.
+		Feito (carta.gd, vale para todas as cartas): eixo diagonal 80% / vertical 20%; voltas: 1, ou 3 bem raro (5%); mesmo tempo total. Desliga com variar_virada = false. 
 	[?]		godot: Matriz A aceita poucas casas decimais no Inspector, ainda está arredondando para 2 casas. quero no mínimo 5. Por enquanto tenho que editar diretamente o .tras
 					Passo do Inspector agora é 0.00001 (item_data.gd). Conferir no editor.
 	[?]		Testar: loop de bgm, loop de bgs. (floresta.mp3 já está com loop=true no import)

@@ -5,17 +5,15 @@
 #     segundos; chama: troca a cor)
 #   página ao lado:    paleta com as chamas e os ingredientes já vistos + lixeira
 #     tocar adiciona no fim; arrastar coloca onde soltar; arrastar um passo para a lixeira apaga
-# Números (botão "Números: ..." na paleta, para testar os dois jeitos):
-#   ARRASTAR  arrastar o número para o lado aumenta / diminui
-#   RODA      arrastar para cima / para baixo gira uma roda de números
+# Números (quantidade e segundos): arrastar para o lado aumenta / diminui; tocar nas
+# setinhas ‹ › soma ou tira 1.
+# Poção sem nome (resultado "nomeavel"): o nome dado aqui vale também para a poção.
 # A CenaLivro chama montar_pagina() e montar_paleta() nas caixas das duas páginas.
 class_name EditorReceita
 extends Node
 
 signal terminou(salvou: bool)
 
-enum ModoNumero { ARRASTAR, RODA }
-static var modo_numero: ModoNumero = ModoNumero.ARRASTAR
 
 const COR_TINTA := Color(0.2, 0.14, 0.1)
 const COR_SUAVE := Color(0.47, 0.4, 0.32)
@@ -34,7 +32,7 @@ var _aberto: int = -1               # cartão com a edição aberta
 var _nome: LineEdit
 var _aviso: Label
 var _lista: VBoxContainer
-var _b_modo: Button
+var game_temp = null                # para avisar o HUD quando a poção ganha nome
 
 
 func montar(p_livro: Dictionary, p_db, p_vistos: Array) -> void:
@@ -58,6 +56,8 @@ func montar_pagina(caixa: VBoxContainer) -> void:
 	_nome.custom_minimum_size.y = 42
 	_nome.add_theme_font_size_override("font_size", 17)
 	caixa.add_child(_nome)
+	if pagina.get("resultado", {}).get("nomeavel", false):
+		caixa.add_child(_rotulo("Poção sem nome: este nome vale para ela também.", 11, COR_DESTAQUE))
 	_aviso = _rotulo("", 11, COR_AVISO)
 	caixa.add_child(_aviso)
 	var sc := ScrollContainer.new()
@@ -133,11 +133,6 @@ func montar_paleta(caixa: VBoxContainer) -> void:
 	lix.editor = self
 	lix.custom_minimum_size = Vector2(0, 46)
 	caixa.add_child(lix)
-	_b_modo = _botao("", _trocar_modo)
-	_b_modo.add_theme_font_size_override("font_size", 11)
-	_b_modo.custom_minimum_size.y = 36
-	caixa.add_child(_b_modo)
-	_atualizar_modo()
 
 
 # =============================================================================
@@ -221,7 +216,7 @@ func _numero(i: int, campo: String, mn: int, mx: int, formato: String) -> Contro
 	n.minimo = mn
 	n.maximo = mx
 	n.formato = formato
-	n.custom_minimum_size = Vector2(112, 64 if modo_numero == ModoNumero.RODA else 44)
+	n.custom_minimum_size = Vector2(120, 44)
 	return n
 
 func valor(i: int, campo: String) -> int:
@@ -326,14 +321,18 @@ static func _mesma_sequencia(a: Array, b: Array) -> bool:
 
 
 # =============================================================================
-func _trocar_modo() -> void:
-	modo_numero = ModoNumero.RODA if modo_numero == ModoNumero.ARRASTAR else ModoNumero.ARRASTAR
-	_atualizar_modo()
-	if is_instance_valid(_lista):
-		atualizar()
-
-func _atualizar_modo() -> void:
-	_b_modo.text = "Números: " + ("arrastar ↔" if modo_numero == ModoNumero.ARRASTAR else "roda ↕")
+## Mesmos passos (tipo, chama, item, quantidade e segundos inteiros)? int x float não conta.
+static func mesmos_passos(a: Array, b: Array) -> bool:
+	if a.size() != b.size():
+		return false
+	for k in a.size():
+		var x: Dictionary = a[k]
+		var y: Dictionary = b[k]
+		if str(x.get("tipo")) != str(y.get("tipo")) or str(x.get("estado", "")) != str(y.get("estado", "")) \
+				or str(x.get("item", "")) != str(y.get("item", "")) or int(x.get("qtd", 0)) != int(y.get("qtd", 0)) \
+				or roundi(float(x.get("seg", 0.0))) != roundi(float(y.get("seg", 0.0))):
+			return false
+	return true
 
 func _fim(salvar: bool) -> void:
 	if not ativo:
@@ -341,8 +340,11 @@ func _fim(salvar: bool) -> void:
 	if salvar:
 		var nome := _nome.text.strip_edges() if is_instance_valid(_nome) else str(pagina["nome"])
 		pagina["nome"] = nome if nome != "" else "Receita sem nome"
-		if pagina["passos"] != passos:
+		if not mesmos_passos(pagina["passos"], passos):
 			pagina["resultado"] = {}   # receita mudou: o resultado anotado não vale mais
+		elif nome != "" and not (nome in LivroReceitas.NOMES_PADRAO):
+			# poção sem nome: o nome da receita vira o nome da poção (item, catálogo)
+			LivroReceitas.nomear_pocao(livro, pagina, nome, database, game_temp)
 		pagina["passos"] = passos
 	ativo = false
 	terminou.emit(salvar)
@@ -482,9 +484,12 @@ class Lixeira extends PanelContainer:
 		editor.apagar(int(dados["mover"]))
 
 
-## Número editável: ARRASTAR (para o lado) ou RODA (para cima/baixo).
+## Número editável: arrastar para o lado muda; tocar nas setinhas ‹ › soma ou tira 1.
 class SeletorNumero extends Control:
 	const PASSO_PX: float = 14.0
+	const SETA: float = 30.0           # largura da área de toque de cada setinha
+	const LIMIAR: float = 6.0          # px: menos que isto é toque, não arrasto
+	var _arrastou: bool = false
 	var editor
 	var indice: int = 0
 	var campo: String = "seg"
@@ -504,11 +509,29 @@ class SeletorNumero extends Control:
 
 	func _gui_input(ev: InputEvent) -> void:
 		if ev is InputEventMouseButton and ev.button_index == MOUSE_BUTTON_LEFT:
-			_ini = ev.position if ev.pressed else Vector2(-1, -1)
-			_v_ini = _v()
+			if ev.pressed:
+				_ini = ev.position
+				_v_ini = _v()
+				_arrastou = false
+			else:
+				if not _arrastou and _ini.x >= 0.0:
+					# toque: setinha da esquerda tira 1, da direita soma 1
+					var d := 0
+					if ev.position.x <= SETA:
+						d = -1
+					elif ev.position.x >= size.x - SETA:
+						d = 1
+					var novo_t := clampi(_v() + d, minimo, maximo)
+					if d != 0 and novo_t != _v():
+						editor.definir_valor(indice, campo, novo_t)
+						queue_redraw()
+				_ini = Vector2(-1, -1)
 			accept_event()
 		elif ev is InputEventMouseMotion and _ini.x >= 0.0:
-			var d: float = (ev.position.x - _ini.x) if EditorReceita.modo_numero == EditorReceita.ModoNumero.ARRASTAR else (_ini.y - ev.position.y)
+			var d: float = ev.position.x - _ini.x
+			if absf(d) < LIMIAR and not _arrastou:
+				return
+			_arrastou = true
 			var novo := clampi(_v_ini + int(d / PASSO_PX), minimo, maximo)
 			if novo != _v():
 				editor.definir_valor(indice, campo, novo)
@@ -520,14 +543,11 @@ class SeletorNumero extends Control:
 		var tinta := Color(0.2, 0.14, 0.1)
 		draw_rect(Rect2(Vector2.ZERO, size), Color(1, 1, 1, 0.5))
 		draw_rect(Rect2(Vector2.ZERO, size), Color(tinta, 0.4), false, 1.0)
-		if EditorReceita.modo_numero == EditorReceita.ModoNumero.ARRASTAR:
-			_centro(size * 0.5 + Vector2(0, 6), formato % v, 18, tinta)
-			_centro(Vector2(10, size.y * 0.5 + 6), "‹", 18, Color(tinta, 0.5))
-			_centro(Vector2(size.x - 10, size.y * 0.5 + 6), "›", 18, Color(tinta, 0.5))
-		else:
-			_centro(Vector2(size.x * 0.5, 16), formato % mini(v + 1, maximo) if v < maximo else "", 12, Color(tinta, 0.4))
-			_centro(Vector2(size.x * 0.5, size.y * 0.5 + 7), formato % v, 18, tinta)
-			_centro(Vector2(size.x * 0.5, size.y - 6), formato % maxi(v - 1, minimo) if v > minimo else "", 12, Color(tinta, 0.4))
+		_centro(size * 0.5 + Vector2(0, 6), formato % v, 18, tinta)
+		draw_rect(Rect2(0, 0, SETA, size.y), Color(tinta, 0.08))
+		draw_rect(Rect2(size.x - SETA, 0, SETA, size.y), Color(tinta, 0.08))
+		_centro(Vector2(SETA * 0.5, size.y * 0.5 + 7), "‹", 22, Color(tinta, 0.75 if v > minimo else 0.25))
+		_centro(Vector2(size.x - SETA * 0.5, size.y * 0.5 + 7), "›", 22, Color(tinta, 0.75 if v < maximo else 0.25))
 
 	func _centro(p: Vector2, s: String, tam: int, cor: Color) -> void:
 		var w := _f.get_string_size(s, HORIZONTAL_ALIGNMENT_LEFT, -1, tam).x

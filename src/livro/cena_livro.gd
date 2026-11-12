@@ -6,8 +6,9 @@
 #   página de NPC:  Memorizar (não edita)
 #   rascunho:       Passar a limpo, Apagar (todo preparo cria um; ficam no fim do
 #                   livro, do mais antigo ao mais novo)
-#   poção sem nome (feita no preparo): "Dar nome à poção" na página; o nome vale para o
-#                   item no inventário e para as próximas iguais. Poção com nome não muda.
+#   poção sem nome (feita no preparo): ganha nome ao passar a limpo e editar (o nome da
+#                   receita vale para a poção: item no inventário e próximas iguais).
+#                   Na página só aparece "poção sem nome". Poção com nome não muda.
 #   + Nova receita: botão no rodapé (não há página em branco para avançar até ela)
 # Editar: a própria página vira editável e a página ao lado vira a paleta (EditorReceita,
 # arrastar e soltar); Pronto / Cancelar voltam ao normal. Tocar numa página já feita
@@ -48,6 +49,9 @@ var _vistos: Array = []             # ingredientes que dá para escolher no edit
 var _folhas: Array = []             # páginas na ordem do livro: rascunhos (mais novo primeiro) e depois as efetivas
 var _spread: int = 0                # índice da folha da esquerda (par)
 var _caixas: Array = []             # [VBox esquerda, VBox direita]
+var _escrita: Array = [[], []]      # por lado: nós que a animação de escrever revela, em ordem
+const T_ESCREVER_LINHA: float = 0.35
+const MAX_ESCREVER: int = 3          # páginas novas escritas de uma vez ao abrir
 var _papeis: Array = []             # [Panel esquerda, Panel direita]
 var _seta_esq: Button
 var _seta_dir: Button
@@ -78,6 +82,7 @@ func _ready() -> void:
 	_montar()
 	_atualizar()
 	_animar_abrir()
+	_escrever_novas()
 
 
 ## GameTemp do jogo, ou um livro de teste quando a cena roda sozinha.
@@ -212,6 +217,7 @@ func _montar() -> void:
 	_editor = EditorReceita.new()
 	add_child(_editor)
 	_editor.montar(livro, database, _vistos)
+	_editor.game_temp = _gt
 	_editor.terminou.connect(_editor_terminou)
 	_detalhe = DetalheReceita.new()
 	_detalhe.position = RECT_LIVRO.position + Vector2(6, 6)
@@ -297,6 +303,7 @@ func _lado_de(id: int) -> int:
 
 func _montar_pagina(lado: int, folha, numero: int) -> void:
 	var caixa: VBoxContainer = _caixas[lado]
+	_escrita[lado] = []
 	for c in caixa.get_children():
 		caixa.remove_child(c)
 		c.queue_free()
@@ -332,6 +339,7 @@ func _montar_pagina(lado: int, folha, numero: int) -> void:
 	# nome
 	var nome := _rotulo(str(p["nome"]), 19, COR_NPC if p.get("tipo") == "npc" else COR_TINTA)
 	caixa.add_child(nome)
+	_escrita[lado].append(nome)
 	if LivroReceitas.esta_memorizada(livro, p):
 		caixa.add_child(_rotulo("★ memorizada para o próximo preparo", 11, COR_DESTAQUE))
 	# ingredientes
@@ -353,20 +361,25 @@ func _montar_pagina(lado: int, folha, numero: int) -> void:
 	caixa.add_child(sc)
 	var n := 1
 	for s in p["passos"]:
-		lista.add_child(_linha_passo(n, s))
+		var lp := _linha_passo(n, s)
+		lista.add_child(lp)
+		_escrita[lado].append(lp)
 		n += 1
-	lista.add_child(_linha_passo(n, {"tipo": "finalizar"}))
+	var lf := _linha_passo(n, {"tipo": "finalizar"})
+	lista.add_child(lf)
+	_escrita[lado].append(lf)
 	# resultado
 	var res: Dictionary = p.get("resultado", {})
 	var txt_res := "Nunca feita"
 	if not res.is_empty():
 		txt_res = "Feita %dx · %s · %d%%" % [int(res.get("vezes", 1)), str(res.get("pocao", "?")), roundi(float(res.get("a", 0.0)) * 100.0)]
 	caixa.add_child(_linha())
-	caixa.add_child(_rotulo(txt_res, 12, COR_TINTA if not res.is_empty() else COR_SUAVE))
+	var lres := _rotulo(txt_res, 12, COR_TINTA if not res.is_empty() else COR_SUAVE)
+	caixa.add_child(lres)
+	_escrita[lado].append(lres)
 	if res.get("nomeavel", false):
-		var bn := _botao("Dar nome à poção", _abrir_nomear.bind(p))
-		bn.add_theme_color_override("font_color", COR_DESTAQUE)
-		caixa.add_child(bn)
+		var dica := "poção sem nome: passe a limpo para dar nome" if p.get("tipo") == "rascunho" else "poção sem nome: Editar para dar nome"
+		caixa.add_child(_rotulo(dica, 11, COR_DESTAQUE))
 	# botões
 	var g := GridContainer.new()
 	g.columns = 2
@@ -422,6 +435,54 @@ func _nova() -> void:
 	await ir_para(int(p["id"]))
 	await _aparecer_pagina(int(p["id"]))
 	_editar(p)
+
+## Preparos novos (rascunhos marcados "escrever"): ao abrir o livro, vai até cada página
+## e a bruxa escreve o nome e os passos, linha por linha (até MAX_ESCREVER; os mais
+## antigos só aparecem prontos).
+func _escrever_novas() -> void:
+	var novas: Array = []
+	for p in livro["paginas"] + livro["rascunhos"]:
+		if p.get("escrever", false):
+			novas.append(p)
+			p.erase("escrever")
+	if novas.is_empty():
+		return
+	novas = novas.slice(maxi(0, novas.size() - MAX_ESCREVER))
+	await get_tree().create_timer(0.35).timeout   # o livro termina de abrir
+	for p in novas:
+		if not is_inside_tree():
+			return
+		await ir_para(int(p["id"]))
+		await _escrever_pagina(int(p["id"]))
+
+func _escrever_pagina(id: int) -> void:
+	var lado := _lado_de(id)
+	if lado < 0:
+		return
+	_animando = true
+	var nos: Array = _escrita[lado].duplicate()
+	for no in nos:
+		if is_instance_valid(no):
+			no.modulate.a = 0.0
+	for no in nos:
+		if not is_instance_valid(no):
+			continue
+		var tw := create_tween().set_parallel(true)
+		tw.tween_property(no, "modulate:a", 1.0, 0.12)
+		var rotulo: Label = no if no is Label else _rotulo_da_linha(no)
+		if rotulo:
+			rotulo.visible_ratio = 0.0
+			tw.tween_property(rotulo, "visible_ratio", 1.0, T_ESCREVER_LINHA)
+		await tw.finished
+	_animando = false
+
+## O texto (último Label) de uma linha de passo.
+func _rotulo_da_linha(linha: Node) -> Label:
+	var r: Label = null
+	for c in linha.get_children():
+		if c is Label:
+			r = c
+	return r
 
 ## Página nova: a tinta aparece de cima para baixo.
 func _aparecer_pagina(id: int) -> void:

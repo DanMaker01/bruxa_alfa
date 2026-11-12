@@ -30,6 +30,7 @@ const FALAS := {
 	"perfeito": ["Isso!", "Perfeito!", "No ponto!"],
 	"novo": ["Vamos ver...", "Mais um.", "Hmm."],
 	"apagando": ["O fogo tá morrendo!", "Vai apagar...", "Cuidado com o fogo!"],
+	"esfriando": ["Está esfriando...", "Esfriando...", "O caldo está esfriando."],
 }
 
 var _foto: Sprite2D
@@ -86,6 +87,17 @@ func resetar() -> void:
 func avisar(motivo: String) -> void:
 	_ultima_fala = -100.0   # aviso importante: fala mesmo que tenha falado agora há pouco
 	_falar(motivo)
+
+## Segurando um item: a bruxa conta quantos já entraram ("1!", "2!"...).
+func contar(n: int) -> void:
+	_balao_label.text = "%d!" % n
+	_balao.size = _balao.get_combined_minimum_size()
+	_ultima_fala = _t
+	_balao_ate = _t + 1.2
+	_balao.modulate.a = 1.0
+	_balao.pivot_offset = _balao.size * 0.5
+	_balao.scale = Vector2(1.2, 1.2)
+	_balao.create_tween().tween_property(_balao, "scale", Vector2.ONE, 0.15)
 
 func novo_ingrediente() -> void:
 	_falar("novo")

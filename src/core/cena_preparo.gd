@@ -37,6 +37,9 @@ const TEMPO_LONGO: float = 0.7
 const LIMIAR_PERDIDO: float = 0.01
 ## Até quantos segundos depois de entrar o ingrediente ainda pode ser retirado (volta inteiro).
 const T_MAX_RETIRAR: float = 5.0
+## Caldo que já ferveu e caiu abaixo disto: a bruxa avisa "esfriando".
+const T_AVISO_FRIO: float = 95.0
+var _ferveu: bool = false
 ## Segurar o botão de fogo APAGADO para acender (mais longo, para não acontecer sem querer).
 const TEMPO_SEGURAR_FOGO: float = 1.0
 ## Segurar o botão de fogo ACESO: abafa (−CONST_A em F) a cada INTERVALO_ABAFAR enquanto segura.
@@ -57,6 +60,7 @@ var sistema: SistemaTermico
 var indicadores: Indicadores
 var visual: VisualCaldeirao
 var lancador: LancadorItem
+var jogar_varios: JogarVarios
 var painel: PainelPanela
 var icones: IconesCaldeirao
 var feedback: FeedbackPreparo
@@ -155,6 +159,12 @@ func _process(delta: float) -> void:
 	if quase and not _avisou_apagando:
 		reacao.avisar("apagando")
 	_avisou_apagando = quase
+	# caldo esfriando: avisa uma vez quando cai abaixo de T_AVISO_FRIO (volta a valer acima de 100 °C)
+	if sistema.T >= 100.0:
+		_ferveu = true
+	elif _ferveu and sistema.T < T_AVISO_FRIO:
+		_ferveu = false
+		reacao.avisar("esfriando")
 	if som:
 		som.definir(sistema.T, _quente_agora, _frio_agora)
 		som.definir_fogo(sistema.F, sistema.fogo_ligado)
@@ -182,6 +192,10 @@ func _criar_componentes() -> void:
 	lancador.name = "LancadorItem"
 	add_child(lancador)
 	lancador.caiu.connect(_on_item_caiu)
+	jogar_varios = JogarVarios.new()
+	jogar_varios.name = "JogarVarios"
+	jogar_varios.cena = self
+	add_child(jogar_varios)
 
 	feedback = FeedbackPreparo.new()
 	feedback.name = "FeedbackPreparo"
@@ -327,8 +341,6 @@ func _popular_inventario() -> void:
 	else:
 		for item_name in inventario:
 			lista_ingredientes.add_child(_criar_botao_item(item_name, database.get_item(item_name), inventario[item_name]))
-	if layout:
-		layout.inventario_mudou()   # grade do layout A
 
 func _criar_botao_item(item_name: String, item: ItemData, quantidade: int) -> Button:
 	var btn = Button.new()
@@ -345,7 +357,10 @@ func _criar_botao_item(item_name: String, item: ItemData, quantidade: int) -> Bu
 	btn.add_theme_stylebox_override("pressed", _estilo(Color(0.4, 0.4, 0.6, 0.9)))
 	btn.set_meta("item", item_name)
 	btn.mouse_filter = Control.MOUSE_FILTER_PASS   # arrastar rola a lista (ListaRolavel); tocar aperta o botão
-	btn.pressed.connect(_on_item_selecionado.bind(item_name, btn))
+	if jogar_varios:
+		jogar_varios.ligar(btn, item_name)   # toque / segurar (JogarVarios.modo)
+	else:
+		btn.pressed.connect(_on_item_selecionado.bind(item_name, btn))
 	BotaoSegurar.efeito_clique(btn)   # afunda e clareia ao encostar (o item só é lançado ao soltar)
 	return btn
 
@@ -364,12 +379,14 @@ func _estilo(cor: Color) -> StyleBoxFlat:
 # =============================================================================
 ## Toque num item: ele sai do inventário na hora (reservado) e voa até o caldeirão.
 ## Só entra no preparo (t0, queda de T, painel...) quando cai dentro.
-func _on_item_selecionado(item_name: String, btn: Control = null) -> void:
+func _on_item_selecionado(item_name: String, btn: Control = null, origem_fixa = null) -> void:
 	if not preparo_ativo:
 		_iniciar_preparo()
 	if not game_temp or not game_temp.has_item(item_name):
 		return
 	var origem: Vector2 = btn.global_position + btn.size * 0.5 if is_instance_valid(btn) else Vector2(320, 860)
+	if origem_fixa is Vector2:
+		origem = origem_fixa
 	game_temp.remove_item(item_name, 1)
 	lancador.lancar(self, item_name, _item_de(item_name), _nome_exibicao(item_name), origem, visual.boca())
 
@@ -497,8 +514,6 @@ func _perda_media() -> float:
 # =============================================================================
 func _fogo_clique_curto() -> void:
 	# Clique curto no [F] → pulso de fogo (F += CONST_A), só com o fogo aceso
-	if layout and layout.ignorar_toque_fogo():
-		return   # layout C: foi um arrasto (abaixar), não um toque
 	if not sistema.fogo_ligado:
 		feedback.texto_flutuante("fogo apagado (segure para acender)", VisualCaldeirao.COR_FOGO_DESLIGA)
 		return
@@ -577,6 +592,7 @@ func _iniciar_preparo() -> void:
 	_frio_agora = 0.0
 	feedback.resetar()
 	reacao.resetar()
+	_ferveu = false
 	painel.limpar()
 	icones.limpar()
 	visual.resetar()
