@@ -48,7 +48,7 @@ PRECISA DE PLANEJAMENTO ANTES (decisões de design)
 ```
 
 [ ] Sprites 100%
-	[ ] Faces
+	[ ] Faces (422 x 908 ou algo assim)
 		[ ] Bruxa
 			[ ] neutro
 			[ ] pensando
