@@ -9,7 +9,7 @@
 
 [node name="CidA_in01" type="Node2D" unique_id=231347479]
 script = ExtResource("1_0hpv6")
-bgm = "uid://di6308yo157g3"
+bgm = "res://audio/bgm/cidade.mp3"
 bruxa_no_centro = false
 metadata/_edit_vertical_guides_ = [2358.0, 2028.0, -56.0]
 

@@ -53,6 +53,15 @@ var _escrita: Array = [[], []]      # por lado: nós que a animação de escreve
 const T_ESCREVER_LINHA: float = 0.35
 const T_ABRIR: float = 0.6           # abrir/fechar o livro (s)
 const T_FECHAR: float = 0.45
+## Sons (audio/se/): abrir e fechar o livro, virar página.
+const SOM_ABRIR := "book1"
+const SOM_VIRAR := "book2"
+var _ultimo_som_virar: int = -1000
+
+func _som(nome: String) -> void:
+	var audio = get_node_or_null("/root/Main/GameManager/AudioManager")
+	if audio and audio.has_method("play_se"):
+		audio.play_se(nome)
 var _papeis: Array = []             # [Panel esquerda, Panel direita]
 var _seta_esq: Button
 var _seta_dir: Button
@@ -246,8 +255,7 @@ func _atualizar() -> void:
 	_seta_esq.disabled = _spread <= 0
 	_seta_dir.disabled = _spread + 2 >= _folhas.size()   # nunca avança para duas páginas vazias
 	_b_nova.disabled = LivroReceitas.cheio(livro)
-	_indicador.text = "%d-%d de %d   ·   %d/%d páginas" % [_spread + 1, mini(_spread + 2, _folhas.size()), _folhas.size(),
-		livro["paginas"].size(), int(livro["max"])]
+	_indicador.text = "%d-%d de %d" % [_spread + 1, mini(_spread + 2, _folhas.size()), _folhas.size()]
 
 func _ultimo_spread() -> int:
 	return maxi(0, ((_folhas.size() - 1) / 2) * 2)
@@ -265,6 +273,9 @@ func _passar(d: int) -> void:
 
 ## Vira uma folha: a página do lado que vira fecha na lombada, troca, a outra abre.
 func _virar(d: int, t: float) -> void:
+	if Time.get_ticks_msec() - _ultimo_som_virar > 90:   # folhas rápidas: não empilha o som
+		_ultimo_som_virar = Time.get_ticks_msec()
+		_som(SOM_VIRAR)
 	var sai: Control = _folhas_no[1] if d > 0 else _folhas_no[0]
 	var entra: Control = _folhas_no[0] if d > 0 else _folhas_no[1]
 	var tw := create_tween()
@@ -380,8 +391,8 @@ func _montar_pagina(lado: int, folha, numero: int) -> void:
 	caixa.add_child(lres)
 	_escrita[lado].append(lres)
 	if res.get("nomeavel", false):
-		var dica := "poção sem nome: passe a limpo para dar nome" if p.get("tipo") == "rascunho" else "poção sem nome: Editar para dar nome"
-		caixa.add_child(_rotulo(dica, 11, COR_DESTAQUE))
+		if p.get("tipo") == "rascunho":
+			caixa.add_child(_rotulo("poção sem nome: passe a limpo para dar nome", 11, COR_DESTAQUE))
 	# botões
 	var g := GridContainer.new()
 	g.columns = 2
@@ -389,7 +400,7 @@ func _montar_pagina(lado: int, folha, numero: int) -> void:
 	g.add_theme_constant_override("v_separation", 6)
 	match p.get("tipo"):
 		"efetiva":
-			g.add_child(_botao("Editar", _editar.bind(p)))
+			# página pronta não se edita: para mudar, crie uma receita nova
 			g.add_child(_botao("Esquecer" if LivroReceitas.esta_memorizada(livro, p) else "Memorizar", _memorizar.bind(p)))
 			g.add_child(_botao_apagar(p))
 		"npc":
@@ -667,6 +678,7 @@ func _fechar_nomear() -> void:
 # ABRIR / FECHAR / ARRASTAR
 # =============================================================================
 func _animar_abrir() -> void:
+	_som(SOM_ABRIR)
 	_corpo.scale = Vector2(0.15, 0.9)
 	_corpo.modulate.a = 0.0
 	var tw := create_tween().set_parallel(true)
@@ -677,6 +689,7 @@ func fechar() -> void:
 	if _animando:
 		return
 	_animando = true
+	_som(SOM_ABRIR)
 	var tw := create_tween().set_parallel(true)
 	tw.tween_property(_corpo, "scale", Vector2(0.15, 0.9), T_FECHAR).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	tw.tween_property(_corpo, "modulate:a", 0.0, T_FECHAR)

@@ -12,14 +12,14 @@
 [ext_resource type="Resource" uid="uid://c223ejma6kqps" path="res://dados/eventos/cidadeA_passagem_in01.tres" id="ev_cidadeA_passagem_in01"]
 [ext_resource type="Resource" uid="uid://opwbriean41q" path="res://dados/eventos/cidadeA_passagem_in02.tres" id="ev_cidadeA_passagem_in02"]
 [ext_resource type="Resource" uid="uid://wxr1qs0wq10f" path="res://dados/eventos/cidadeA_passagem_in03.tres" id="ev_cidadeA_passagem_in03"]
-[ext_resource type="Resource" uid="uid://uffe8xlk7min" path="res://dados/eventos/cidadeA_igreja_barulho.tres" id="ev_igreja_barulho"]
 [ext_resource type="Resource" uid="uid://r5geo8aa07wd" path="res://dados/eventos/cidadeA_npc1.tres" id="ev_npc1"]
 [ext_resource type="Resource" uid="uid://d0wqfsw5p5bga" path="res://dados/eventos/cidadeA_npc2.tres" id="ev_npc2"]
 [ext_resource type="Resource" uid="uid://balhpuvbmr2v1" path="res://dados/eventos/cidadeA_npc3.tres" id="ev_npc3"]
+[ext_resource type="Resource" path="res://dados/eventos/cidadeA_igreja_barulho.tres" id="ev_igreja_barulho"]
 
 [node name="CidadeA" type="Node2D" unique_id=231347479]
 script = ExtResource("1_4bgty")
-bgm = "uid://bp1swabb3mv6c"
+bgm = "res://audio/bgm/cidade.mp3"
 
 [node name="Fundo" type="Parallax2D" parent="." unique_id=647674415]
 z_index = -2
@@ -42,11 +42,11 @@ texture = ExtResource("3_kgy4o")
 centered = false
 
 [node name="in02" type="Sprite2D" parent="Meio" unique_id=1230715399]
-position = Vector2(1520, 17)
+position = Vector2(1520, 0)
 texture = ExtResource("3_casa2")
 centered = false
 
-[node name="in03 - igreja" type="Sprite2D" parent="Meio" unique_id=1740835358]
+[node name="in03" type="Sprite2D" parent="Meio" unique_id=1740835358]
 position = Vector2(2784, 0)
 texture = ExtResource("3_casa3")
 centered = false
@@ -102,14 +102,14 @@ position = Vector2(2440, 544)
 script = ExtResource("4_ka47h")
 evento = ExtResource("ev_npc3")
 
-[node name="IgrejaBarulhoEsq" type="CharacterBody2D" parent="Eventos" unique_id=215371768]
+[node name="IgrejaBarulhoEsq" type="CharacterBody2D" parent="Eventos"]
 z_index = 3
-position = Vector2(2800, 544)
+position = Vector2(2820, 544)
 script = ExtResource("4_ka47h")
 evento = ExtResource("ev_igreja_barulho")
 
-[node name="IgrejaBarulhoDir" type="CharacterBody2D" parent="Eventos" unique_id=1226924822]
+[node name="IgrejaBarulhoDir" type="CharacterBody2D" parent="Eventos"]
 z_index = 3
-position = Vector2(3440, 544)
+position = Vector2(3330, 544)
 script = ExtResource("4_ka47h")
 evento = ExtResource("ev_igreja_barulho")

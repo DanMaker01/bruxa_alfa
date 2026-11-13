@@ -5,8 +5,8 @@
 # livro = {
 #   "paginas":    [página, ...]    efetivas e de NPC, na ordem do livro (contam no limite)
 #   "rascunhos":  [página, ...]    temporárias, uma por preparo, as mais novas no fim
-#   "max":        12               páginas do livro
-#   "max_rascunhos": 10            a mais antiga some quando passa disso
+#   "max":        0                páginas do livro (0 = infinito: o livro não enche)
+#   "max_rascunhos": 0             0 = infinito (nenhum rascunho some)
 #   "memorizada": id ou -1         receita que vira guia no próximo preparo (só uma, até terminar a poção)
 #   "prox_id":    int
 # }
@@ -20,8 +20,9 @@
 class_name LivroReceitas
 extends RefCounted
 
-const MAX_PAGINAS: int = 12
-const MAX_RASCUNHOS: int = 10
+## 0 = sem limite (o livro é infinito: toda receita feita ganha um rascunho).
+const MAX_PAGINAS: int = 0
+const MAX_RASCUNHOS: int = 0
 const PASTA_RECEITAS := "res://dados/receitas/"
 const PASTA_ITENS := "res://dados/itens/"
 
@@ -55,7 +56,7 @@ static func receitas_conhecidas() -> Array:
 
 # ---------------------------------------------------------------------------
 static func cheio(l: Dictionary) -> bool:
-	return l["paginas"].size() >= int(l["max"])
+	return false   # livro infinito (saves antigos com "max" 12 também não enchem mais)
 
 static func nova_pagina(l: Dictionary) -> Dictionary:
 	if cheio(l):
@@ -99,17 +100,24 @@ static func adicionar_rascunho(l: Dictionary, passos: Array, resultado: Dictiona
 	var p := _pagina(l, "rascunho", "Rascunho", passos)
 	p["resultado"] = resultado
 	l["rascunhos"].append(p)
-	while l["rascunhos"].size() > int(l["max_rascunhos"]):
+	while int(l.get("max_rascunhos", 0)) > 0 and l["rascunhos"].size() > int(l["max_rascunhos"]):
 		var velho: Dictionary = l["rascunhos"].pop_front()
 		if int(l["memorizada"]) == int(velho["id"]):
 			l["memorizada"] = -1
 	return p
 
-## Preparo terminado: se bater com uma página (mesmos passos, tempos ±1 s), soma nela
-## (vezes + 1, guarda o melhor resultado); senão anota um rascunho. Devolve a página.
+## Preparo terminado: sempre vira um rascunho novo (devolvido). Se bater com uma página
+## pronta (mesmos passos, tempos ±1 s), ela também soma (vezes + 1, guarda o melhor resultado).
 ## extra: {"item": id do item da poção, "A": matriz, "nomeavel": bool} (para dar nome depois).
 static func registrar_preparo(l: Dictionary, passos: Array, pocao: String, a: float, extra: Dictionary = {}) -> Dictionary:
-	for p in l["paginas"] + l["rascunhos"]:
+	# toda receita feita ganha uma página de rascunho (o livro é infinito)
+	var novo := {"pocao": pocao, "a": a, "vezes": 1}
+	novo.merge(extra, true)
+	var pag := adicionar_rascunho(l, passos, novo)
+	pag["escrever"] = true   # a bruxa escreve a página quando abrir o livro (animação)
+	_nome_pela_pocao(pag)
+	# e a página pronta igual (mesmos passos, ±1 s) soma: feita N vezes, guarda o melhor resultado
+	for p in l["paginas"]:
 		if TranscritorReceita.iguais(p["passos"], passos):
 			var r: Dictionary = p.get("resultado", {})
 			var vezes: int = int(r.get("vezes", 0)) + 1
@@ -119,12 +127,6 @@ static func registrar_preparo(l: Dictionary, passos: Array, pocao: String, a: fl
 			r["vezes"] = vezes
 			p["resultado"] = r
 			_nome_pela_pocao(p)
-			return p
-	var novo := {"pocao": pocao, "a": a, "vezes": 1}
-	novo.merge(extra, true)
-	var pag := adicionar_rascunho(l, passos, novo)
-	pag["escrever"] = true   # a bruxa escreve a página quando abrir o livro (animação)
-	_nome_pela_pocao(pag)
 	return pag
 
 const NOMES_PADRAO := ["Rascunho", "Receita sem nome"]

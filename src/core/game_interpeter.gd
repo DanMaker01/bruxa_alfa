@@ -101,7 +101,9 @@ const CMDS_DIALOGO := ["cmd_mostrar_msg.gd", "cmd_mostrar_opcoes.gd"]
 const CMDS_INSTANTANEOS := ["cmd_label.gd", "cmd_variavel.gd", "cmd_if.gd", "cmd_else.gd", "cmd_end.gd",
 	"cmd_item.gd", "cmd_som.gd", "cmd_goto.gd", "cmd_direcao.gd", "cmd_break.gd", "cmd_estilo_dialogo.gd",
 	"cmd_mudar_personalidade.gd", "cmd_apagar_evento.gd"]
-const OLHAR_A_FRENTE: int = 6
+const OLHAR_A_FRENTE: int = 8
+## Esperas curtas (somadas) entre duas falas não fecham a carta (ex.: fala, esperar 0,5 s, fala).
+const ESPERA_CURTA_DIALOGO: float = 1.0
 
 ## Vem diálogo logo em seguida? (fila de diálogos, ou algum evento rodando cujo próximo
 ## comando que conta é um diálogo). Esperar, mover, fade etc. interrompem: aí não.
@@ -110,21 +112,35 @@ func dialogo_a_seguir() -> bool:
 	if not dialog_queue.is_empty():
 		return true
 	for ev in running_events:
-		if ev.finished or ev.is_waiting:
+		if ev.finished:
 			continue
-		if ev.is_paused and ev.pause_reason != "dialog":
+		var espera: float = 0.0
+		if ev.is_waiting:
+			espera = float(ev.wait_timer)   # esperando agora: conta o que falta
+			if espera > ESPERA_CURTA_DIALOGO:
+				continue
+		elif ev.is_paused and ev.pause_reason != "dialog":
 			# evento que chamou outro: quando o chamado acabar, ele continua dali
 			# (ex.: chamado termina em fala e quem chamou volta com outra fala)
 			if not (ev.pause_reason == "chamado" and (ev.filho == null or ev.filho.finished)):
 				continue
-		var i: int = ev.current_index + (1 if ev.is_paused else 0)
+		var i: int = ev.current_index + (1 if (ev.is_paused or ev.is_waiting) else 0)
 		for k in OLHAR_A_FRENTE:
-			if i >= ev.commands.size():
+			if i < 0 or i >= ev.commands.size():
 				break
 			var c = ev.commands[i]
 			var arq: String = c.get_script().resource_path.get_file() if c and c.get_script() else ""
 			if arq in CMDS_DIALOGO:
 				return true
+			if arq == "cmd_goto.gd":
+				i = int(ev.labels.get(str(c.get("label")), -1))   # segue o "ir para"
+				continue
+			if arq == "cmd_esperar.gd":
+				espera += float(c.get("segundos"))
+				if espera > ESPERA_CURTA_DIALOGO:
+					break
+				i += 1
+				continue
 			if not (arq in CMDS_INSTANTANEOS):
 				break
 			i += 1

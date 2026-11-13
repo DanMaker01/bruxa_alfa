@@ -16,6 +16,7 @@
 
 [node name="MapaPonte" type="Node2D" unique_id=231347479]
 script = ExtResource("1_q1yfg")
+bgs = "res://audio/bgs/vento.mp3"
 metadata/_edit_vertical_guides_ = [2358.0, 2028.0, -56.0]
 
 [node name="Fundo4" type="Parallax2D" parent="." unique_id=647674415]

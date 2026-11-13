@@ -5,6 +5,10 @@ extends Node2D
 ## Se for a mesma do mapa anterior, ela só continua (igual RPG Maker).
 @export_file("*.mp3") var bgm: String = ""
 @export_range(0.0, 1.0, 0.01) var bgm_volume: float = 1.0
+## Som de ambiente do mapa em loop (res://audio/bgs/*.mp3: vento, pássaros...). Vazio = para.
+## Mesmo do mapa anterior = continua. Toca junto com a música.
+@export_file("*.mp3") var bgs: String = ""
+@export_range(0.0, 1.0, 0.01) var bgs_volume: float = 0.5
 
 var game_manager = null
 var interpeter = null
@@ -75,6 +79,7 @@ func _ready():
 	_preparar_parallax()
 	_connect_events()
 	call_deferred("_tocar_bgm")   # deferred: o AudioManager pode ainda não estar pronto
+	call_deferred("_tocar_bgs")
 	
 	# 🔥 EXIBE LIMITES DA CÂMERA
 	print("\n📷 [CÂMERA] ", name, " | L:", cam.l, " R:", cam.r, " T:", cam.t, " B:", cam.b)
@@ -88,15 +93,31 @@ func _tocar_bgm() -> void:
 	var audio = game_manager.get_node_or_null("AudioManager") if game_manager else null
 	if audio == null or audio.get("bgm_player") == null:
 		return
-	# o inspetor do Godot 4.4+ guarda o arquivo como "uid://...": converte para o caminho
-	var caminho := bgm
-	if caminho.begins_with("uid://"):
-		var id := ResourceUID.text_to_id(caminho)
-		caminho = ResourceUID.get_id_path(id) if ResourceUID.has_id(id) else ""
-		if caminho == "":
-			push_warning("[Mapa] bgm com uid desconhecido: " + bgm)
+	var caminho = _caminho_audio(bgm)
+	if caminho == null:
+		return   # uid velho: não para a música que já está tocando
 	# play_bgm já ignora se for a mesma música tocando; "" para a música
-	audio.play_bgm(caminho.get_file().get_basename() if caminho != "" else "", bgm_volume)
+	audio.play_bgm(str(caminho).get_file().get_basename() if caminho != "" else "", bgm_volume)
+
+func _tocar_bgs() -> void:
+	var audio = game_manager.get_node_or_null("AudioManager") if game_manager else null
+	if audio == null or audio.get("bgs_player") == null:
+		return
+	var caminho = _caminho_audio(bgs)
+	if caminho == null:
+		return
+	audio.play_bgs(str(caminho).get_file().get_basename() if caminho != "" else "", bgs_volume)
+
+## O inspetor do Godot 4.4+ guarda o arquivo como "uid://...": converte para o caminho.
+## null = uid desconhecido (o .mp3 foi reimportado; escolha o arquivo de novo no Inspector).
+func _caminho_audio(valor: String):
+	if not valor.begins_with("uid://"):
+		return valor
+	var id := ResourceUID.text_to_id(valor)
+	if ResourceUID.has_id(id):
+		return ResourceUID.get_id_path(id)
+	push_warning("[Mapa] áudio com uid desconhecido (troque pelo arquivo no Inspector): " + valor)
+	return null
 
 func _debug_limits_simple():
 	"""Debug simples dos limites da câmera"""

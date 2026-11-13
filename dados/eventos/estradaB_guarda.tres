@@ -124,7 +124,7 @@ valor = 1.0
 [sub_resource type="Resource" id="Resource_30p28"]
 script = ExtResource("20_mover")
 destino = 2
-deslocamento = -100.0
+deslocamento = -200.0
 metadata/_custom_type_script = "uid://dp3mfol3wf88y"
 
 [sub_resource type="Resource" id="R_21"]

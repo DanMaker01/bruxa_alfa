@@ -8,7 +8,7 @@
 # Usa os nós da cena (VBoxContainer com os botões, Label do título).
 extends Control
 
-const TITULO := "Jogo da Bruxa"
+const TITULO := "Bruxa"
 
 var gm = null
 var _painel: PainelMenu = null

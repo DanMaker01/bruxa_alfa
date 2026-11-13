@@ -24,23 +24,10 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 
 ```
 	
-MÉDIO (já sei o que fazer, mas leva mais tempo ou mexe em mais coisas)
-	[ ] Tutorial do caldeirão na 1ª vez (talvez com a poção concentrada; sem deixar errar). Decidido: a bruxa fala e guia, livre (não trava botões). Fazer depois.
 	[?] Anéis de aproveitamento: decidir o formato final e tirar os modos de teste (M, P, C). Feito: semáforo, anel começa vazio, régua absoluta; teclas M/P/C removidas (T e K continuam).
 		Corrigir, o anel completo ao invés das bolinhas é melhor, e as cores antigas estavam melhores tbm. quero poder escolhre melhor.
 		[?] Feito: o anel agora é sempre contínuo (ANEL_CONTINUO em icones_caldeirao.gd); a tecla P troca só as cores: faixa (padrão) > dourado > aproxima > semáforo > cor única. C liga o anel já colorido (o caminho todo fraquinho, revelando). Régua absoluta.
-	[ ] Estilo visual padronizado de diálogo/opções (borda, cor, fonte, janela).
-	[ ] Organizar a pasta assets no estilo RPG Maker (mexe em muitos caminhos: fazer com calma, de uma vez).
-	[ ] Padronizar camadas de parallax em todos os mapas.
-	[ ] Medir os 10 testes de 8 ervas + 4 cogumelos (teste seu).
-
-PRECISA DE PLANEJAMENTO ANTES (decisões de design)
-	[ ] Receitas: tempo entre 5 s e 5 min (média 1 min), excesso de um ingrediente, mesmo ingrediente 2x, receita dobrada, padrão das receitas, peso de cada erro.
-	[ ] Quando o HUD abre a primeira vez.
-	[ ] Pentagrama do Cap. 2 (arestas = a_ij, animações por tipo de matriz).
-	[ ] História/roteiro, diálogos do Cap. 1, quests (Zigmund, Bosque Goblin, Casamento), fichas e linguajar dos personagens.
-	[ ] Arte e áudio (faces, sprites, cenários, BGM/BGS/SE, balão de expressão): dependem dos arquivos.
-	[ ] Expansões (clima, fama, compra/venda, mercado).
+	
 ```
 
 ## Terminar até o Cap. 1 (1)
@@ -122,15 +109,16 @@ PRECISA DE PLANEJAMENTO ANTES (decisões de design)
 		[ ] estrada_b
 
 [ ]	Audio 100%
-	[ ] BGM
-		[ ] intro (xxxHolic opening)
-		[ ] floresta
-		[ ] bruxa_out1
-		[ ] bruxa_out2
-		[ ] bruxa_out3
+	[ ] BGM:
+		[ ] intro 	(xxxHolic opening)
+		[ ] floresta	(revisar a que já tem)
+		[ ] bruxa_out
+			[ ] bruxa_out1	(sem audio, vai ter só BGS de natureza)
+			[ ] bruxa_out2	(sem audio, vai ter só BGS de natureza) (variação)
+			[ ] bruxa_out3	(sem audio, vai ter só BGS de natureza) (variação)
 		[ ] bruxa_in
 		[ ] bosque
-		[ ] cidade, cidade_in01, cidade_in02
+		[ ] cidade, cidade_in01, cidade_in02 (+ harpa, - volume, +palmas
 		[ ] cidade_in03
 		[ ] estrada_a
 		[ ] ponte
@@ -138,18 +126,20 @@ PRECISA DE PLANEJAMENTO ANTES (decisões de design)
 		[ ] castelo_in01, castelo_in02
 		[ ] castelo_in03
 		[ ] estrada_b
-	[ ] BGS
+	[ ] BGS:
 		[ ] tremor
 		[ ] passaros
 		[ ] som floresta
 		[ ] vento
-	[ ] SE
-		[ ] porta01 	(porta batendo normalmente)
-		[ ] porta02 	(rangido de porta fechando devagar)
-		[ ] passos 		(para transição)
-		[ ] pulo 		(velocidade)
+		[ ] água correndo
+		[ ] (metal?)
+	[ ] SE:
+		[!] porta01 	(abrindo)
+		[!] porta02 	(fechando)
+		[!] passos 		(para transição)
+		[!] pulo 		(velocidade)
 		[ ] dash
-		[ ] magia01		(genérico)
+		[ ] magia01		
 		[ ] magia02 
 		[ ] magia03
 		[ ] pancada01
@@ -157,14 +147,18 @@ PRECISA DE PLANEJAMENTO ANTES (decisões de design)
 		[ ] corte
 		[ ] vidro01
 		[ ] vidro02
-		[ ] carta 		(girando)
-		[ ] aplausos
+		[!] livro		
+		[!] carta 		(girando)
+		[!] aplausos
+		[!] swing
 		
 [ ]	Menus 100%
 	[ ] Estilo de cartas
-		[ ] definir audio das interações
+		[?] definir audio das interações (feito: cartas viram com book2; livro abre/fecha com book1 e vira página com book2)
 		[ ] definir carta para cada clicável.
 	[.] menu inicial
+		[ ] bg
+		[ ] bgm
 		[!] start, load, config, sair
 	[.] menu pause
 		[ ] continuar, save, load, opções, menu principal
@@ -182,6 +176,8 @@ PRECISA DE PLANEJAMENTO ANTES (decisões de design)
 
 [ ] Caldeirão 100%
 	[ ]	Tutorial do caldeirão na 1ª vez. usando poucos ingredientes, mudar intro talvez. tentar integrar naturalmente com o que já tem.  talvez ensinar fazendo a poção concentrada? não deixar errar pq não é fácil achar o item.
+		(talvez com a poção concentrada; sem deixar errar). Decidido: a bruxa fala e guia, livre (não trava botões). Fazer depois.
+
 	[ ] Layout
 		[ ] Reformular Layout (pensar em celular). Menus, botões,Bruxa_chibi,caldeirão, texto em cima do caldeirão (passar para falas da bruxa), feedback rápido da bruxa.
 		[?] O ícone de +Fogo deve ser centralizado no botão, baixar tbm. (feito no +Fogo; o Abaixar só tem texto, que já é centralizado)
@@ -198,7 +194,9 @@ PRECISA DE PLANEJAMENTO ANTES (decisões de design)
 	[ ] Resultado da Poção:
 		[?] Tenho que analisar, o tamanho da matriz fica sem margem para a carta. o pentagrama também, está muito grande para a carta. os itens estão ok. 
 	[ ] Usar cartas tbm na cena do caldeirão, para botões, etc? testar como ficaria.
-
+	[?] Tirar nomes das cartas do preparo (feito: o verso das cartas do resultado só tem o pentagrama)
+	[?] Ao adicionar poção feita ao inventário o nome da poção está aparecendo, sumindo e fazendo a animação de fade até aparecer. (feito: a linha já nasce escondida e só aparece com o brilho)
+	[ ] Poção concentrada é só com precisão muito alta
 
 [ ] Livro de Receitas:
 	[ ] Receitas:
@@ -219,6 +217,9 @@ PRECISA DE PLANEJAMENTO ANTES (decisões de design)
 			Ajuste: E precisa subir "muito" (>= +30%; a desenvoltura dá +40%) e O, C, A não podem mudar (menos de 10%); N não pode subir; nenhum traço extremo.
 			Com 1 cogumelo agora: "B-bom... dia." / "Melhorou um pouco, mas ainda não dá para deixar a loja com ele."
 	[] Cena do Livro:
+		[?] toda receita recebe uma pagina rascunho. o livro é infinito. Não dá pra editar página, só criar uma nova receita.
+			Feito: livro sem limite de páginas e de rascunhos; todo preparo vira um rascunho novo (a página pronta igual também soma "feita N vezes"); páginas prontas não têm mais Editar (só Memorizar e Apagar); + Nova receita e Passar a limpo abrem o editor (dar nome à poção fica no Passar a limpo).
+
 		[ ] ao abrir o livro, ele inicia na primeira página, corre até a página mais atual (ou temporária), daí faz as ações dela (transcrever página temporária, etc).
 		[.] animações de livro abrindo(mais lento), livro fechando(mais lento), avançar página, voltar página, avançar até encontrar página, adicionar página, remover página
 			Feito: abre/fecha esticando da lombada; virar = a folha fecha na lombada e a outra abre; ir até uma página = folhas rápidas; página nova: a tinta aparece; apagar: a página cai e some.
@@ -247,6 +248,9 @@ PRECISA DE PLANEJAMENTO ANTES (decisões de design)
 		A (amabilidade, aumentar ou diminuir?)
 	[ ] Usar permutação de traços
 	[ ] Poções proibidas
+	[?] Guardas fazem o player deslocar o dobro quando permite passar. (feito: ponte 200 px, estradaB −200 px)
+	[?] Na cena do casamento a câmera está estranha, comça fixa, depois ela salta e começa a fazer o pan. (feito: a câmera já começa no início do pan, sem o salto)
+	[ ] Pausa antes da msg de colocar o véu no bruxa_in
 
 
 [ ] Diálogos 100%
@@ -257,14 +261,15 @@ PRECISA DE PLANEJAMENTO ANTES (decisões de design)
 		[ ] organizar o layout e textura dialogo/opções
 		[ ]	Ajuste estético, borda, cor, fonte, etc.
 		[ ]	Criação de estilos padronizados para cada coisa. estilo de texto, estilo de janela, paleta de cores, animação coerente, etc...
-		[?] Eventos de diálogo devem verificar se o próximo evento a tomar a frente será diálogo também, exceto depois de comando wait, etc.
+		[.] Eventos de diálogo devem verificar se o próximo evento a tomar a frente será diálogo também, exceto depois de comando wait, etc.
 			Feito: a carta do diálogo não desvira se vem outro diálogo em seguida (Interpreter.dialogo_a_seguir: fila de diálogos ou próximo comando de um evento rodando, pulando os instantâneos como variável/if/label/item/som). 
 			Esperar, mover, fade etc. interrompem. Espera no máximo 1,5 s (carta.gd: ESPERA_MAX_DIALOGO).
 			se um evento acabar em mensagem e outro iniciar em mensagem com o mesmo falante, nome, foto etc então o card não deve fechar depois do primeiro evento, pois é uma continudade. 
 			exemplos disso acontecem ao chamar eventos por comando, entre outros.
 			Testar mais: no camponês, no castelo_in01.
 			Feito também: quem chamou outro evento (Chamar evento) e volta com fala depois que o chamado termina em fala: a carta não fecha entre os dois.
-
+			Rei: abrindo a carta 2x para o mesmo falante, "Tanta certeza assim?" "Pois aplique aqui na minha frente". Ver se é wait, ou o quê.
+			Era o "ir para" (goto) + esperar 0,5 s entre as falas. Feito: a carta segue o goto e esperas curtas (até 1 s somado, ESPERA_CURTA_DIALOGO) não fecham a carta.
 [ ] Quests
 	[ ] Quest Zigmund
 		[ ] personalidade
@@ -320,7 +325,6 @@ PRECISA DE PLANEJAMENTO ANTES (decisões de design)
 		Pictures (sprites para controlar na tela)
 		Transitions
 		Windowskins (janelas, etc)
-	[.]	Padronizar parallaxes em cada mapa: ...,Fundo2,Fundo,Meio,Frente,Frente2... (meio é onde ficam os eventos também)
 	[ ] GDD
 		[!] v1
 		[!] v2
@@ -340,6 +344,7 @@ PRECISA DE PLANEJAMENTO ANTES (decisões de design)
 	[ ]		(Cap. 2) O pentagrama deve ter animações a depender da matriz. Por exemplo, matriz diagonal (ou próxima de diagonal a menos de ruído) só escala, então a animação do pentagram é escalar. Matriz que troca dois componentes deve trocar duas pontas do pentagrama suavemente, como uma permutação ou rotação.
 
 [ ] Bugs/Revisão:
+	[?] Música da cidade: cidadeA, in01 e in02 tocam cidade.mp3 (continua entre eles); in03 sem música até ter a própria. BGS novo nos mapas (mapa_base: bgs/bgs_volume, sempre em loop): vento na ponte.
 	[ ] missao01_convite é gravada e nunca lida: fica para o Cap. 2 (convite do casamento).
 	[?]		misc: Variações no flip card. Sorteadas: normal = 1 flip diagonal; variações no mesmo tempo: 5 flips com velocidade decrescente; flip mudando a dimensão horizontal, com 1 ou 5 flips.
 		Feito (carta.gd, vale para todas as cartas): eixo diagonal 80% / vertical 20%; voltas: 1, ou 3 bem raro (5%); mesmo tempo total. Desliga com variar_virada = false. 

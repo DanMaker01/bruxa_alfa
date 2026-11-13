@@ -74,7 +74,7 @@ func montar(res: Dictionary, A: Array) -> void:
 	_res = res
 	_A = A
 	visible = true
-	cartas = [_carta(C_CARTA1, TITULOS_VERSO[0]), _carta(C_CARTA2, TITULOS_VERSO[1]), _carta(C_CARTA3, TITULOS_VERSO[2])]
+	cartas = [_carta(C_CARTA1, ""), _carta(C_CARTA2, ""), _carta(C_CARTA3, "")]   # verso só com o pentagrama
 	_titulo = _label(26, HORIZONTAL_ALIGNMENT_CENTER, COR_TITULO)
 	_titulo.position = Vector2(16, 14)
 	_titulo.size = Vector2(C_CARTA1.size.x - 32, 68)

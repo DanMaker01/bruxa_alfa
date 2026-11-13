@@ -239,7 +239,7 @@ func _quer_prioridade() -> bool:
 # VIRAR: achata na diagonal, troca a face, abre de novo
 # =============================================================================
 ## Som ao virar uma carta: nome do arquivo em audio/se/ (sem .mp3). Vazio = sem som (ainda não há).
-const SOM_VIRAR: String = ""
+const SOM_VIRAR: String = "book2"
 
 func _virar(alvo: String) -> void:
 	_virando = true

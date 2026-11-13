@@ -449,6 +449,9 @@ func _fechar() -> void:
 	if gt and id != "":
 		gt.add_item(id, int(_res.get("quantidade", 1)))
 		_res["item_ja_adicionado"] = true
+		# a linha da poção já nasce escondida (antes aparecia, sumia e voltava com o fade)
+		if hud and hud.has_method("preparar_item_chegando"):
+			hud.preparar_item_chegando(id, true)
 
 	# 2. a carta do inventário vem para a camada 11 e abre
 	var carta_camada := _camada(11)

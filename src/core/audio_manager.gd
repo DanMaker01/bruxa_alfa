@@ -145,6 +145,8 @@ func play_bgs(filename: String, volume: float = 0.5):
 	if current_bgs == filename and bgs_player.playing:
 		return
 	
+	if "loop" in stream:
+		stream.loop = true   # BGS sempre em loop (vento, pássaros...)
 	bgs_player.stop()
 	bgs_player.stream = stream
 	current_bgs_base_volume = volume
