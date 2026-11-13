@@ -296,6 +296,10 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 
 [ ] Eventos/Core:
 	[?] O comando de pular intro com clique, no começo, parece estar demorando muito para fazer o fade e só parece que está escuro mto tempo, se eu ficar pulando.
+	[ ] Correr/Dash
+	[ ] Cada mapa pode ter múltiplos BGS tocando, e todo BGS fica em loop naturalmente.
+
+
 [ ] Documentação e Organização
 	[ ] organização da pasta Graphics(está sendo chamada de assets neste projeto) estilo rpgmaker:
 		Animations (efeitos especiais, magias, etc)
