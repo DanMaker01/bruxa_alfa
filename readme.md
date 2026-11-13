@@ -20,22 +20,12 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
   ==============================
 ```
 
-## Triagem (o que falta, por esforço)
-
-```
-	
-	[?] Anéis de aproveitamento: decidir o formato final e tirar os modos de teste (M, P, C). Feito: semáforo, anel começa vazio, régua absoluta; teclas M/P/C removidas (T e K continuam).
-		Corrigir, o anel completo ao invés das bolinhas é melhor, e as cores antigas estavam melhores tbm. quero poder escolhre melhor.
-		[?] Feito: o anel agora é sempre contínuo (ANEL_CONTINUO em icones_caldeirao.gd); a tecla P troca só as cores: faixa (padrão) > dourado > aproxima > semáforo > cor única. C liga o anel já colorido (o caminho todo fraquinho, revelando). Régua absoluta.
-	
-```
-
 ## Terminar até o Cap. 1 (1)
 
 ```
 
 [ ] Sprites 100%
-	[ ] Faces
+	[ ] Faces 			(422 x 908 ou algo assim)
 		[ ] Bruxa
 			[ ] neutro
 			[ ] pensando
@@ -56,7 +46,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 			[ ] neutro
 		[ ] Padre
 			[ ] neutro
-	[ ] Sprites
+	[ ] Sprites				(tamanhos variados, abrir no assets)
 		[ ] Bruxa
 			[ ] parada
 			[ ] andando
@@ -89,7 +79,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] Objetos
 			[ ] Livro de Receitas
 			[ ] ...
-	[ ] Cenários
+	[ ] Cenários		(largura variada, altura:640px)
 		[ ] floresta
 		[ ] bruxa_in
 		[ ] bruxa_out1
