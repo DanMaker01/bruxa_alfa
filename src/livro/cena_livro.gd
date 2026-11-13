@@ -77,8 +77,8 @@ var _folhas_no: Array = []          # [Control esquerda, Control direita] (viram
 var _fitas: Array = []              # fitinha das ensinadas, por lado
 var _carimbos: Array = []           # carimbo "rascunho", por lado
 var _animando: bool = false
-const T_FOLHA: float = 0.14         # meia virada (s)
-const T_FOLHA_RAPIDA: float = 0.05
+const T_FOLHA: float = 0.28         # meia virada (s) (2× mais lento)
+const T_FOLHA_RAPIDA: float = 0.1
 const COR_FITA := Color(0.85, 0.65, 0.15)
 
 var _toque_ini := Vector2(-1, -1)
@@ -579,9 +579,8 @@ func _papel_input(ev: InputEvent, lado: int) -> void:
 		return
 	if _toque_ini.x >= 0.0 and ev.global_position.distance_to(_toque_ini) > 12.0:
 		return   # foi um arrasto (virar página)
-	var k := _spread + lado
-	if k < _folhas.size() and DetalheReceita.tem_detalhe(_folhas[k]):
-		_detalhe.abrir(_folhas[k])
+	# tocar numa página não faz nada (o detalhe do preparo saiu; DetalheReceita fica no código)
+	return
 
 
 # =============================================================================

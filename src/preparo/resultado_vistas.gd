@@ -4,6 +4,11 @@
 #   1. nome + matriz (a matriz do produtório pousa nela);
 #   2. pentágono O-C-E-A-N (efeito numa pessoa neutra);
 #   3. ingredientes com o anel de aproveitamento (tocar num ícone abre os detalhes).
+# Gráfico da temperatura sempre visível (tocar num ingrediente destaca o trecho dele).
+# Tecla G (teste) troca onde ele fica (ResultadoVistas.modo_grafico):
+#   0 CARTA3   em cima na carta de ingredientes, ícones e detalhe embaixo
+#   1 CARTA4   uma 4ª carta só com o gráfico (2 cartas em cima, 2 embaixo)
+#   2 DETALHE  ícones em cima; embaixo o detalhe do item e o gráfico fixo
 # Ao confirmar, as cartas 2 e 3 fecham, a matriz vira a poção e a carta 1 fecha.
 class_name ResultadoVistas
 extends Control
@@ -23,6 +28,26 @@ const C_PENT := Rect2(371, 116, 210, 210)     # com margem dentro da carta 2
 const C_CEL_MAX: float = 96.0
 const C_ICONES_FIM: float = 650.0             # ícones acima disto; o detalhe abre embaixo
 const C_DETALHE := Rect2(30, 656, 580, 210)
+enum ModoGrafico { CARTA3, CARTA4, DETALHE }
+const NOMES_MODO_GRAFICO := ["gráfico em cima da carta de ingredientes", "gráfico numa 4ª carta", "gráfico fixo embaixo, com o detalhe"]
+static var modo_grafico: int = ModoGrafico.DETALHE
+var grafico: GraficoResultado
+var _r_detalhe: Rect2 = C_DETALHE
+
+## G alterna entre os dois escolhidos: fixo embaixo com o detalhe / 4ª carta (o "em cima da carta 3" saiu).
+static func proximo_modo_grafico() -> void:
+	modo_grafico = ModoGrafico.CARTA4 if modo_grafico == ModoGrafico.DETALHE else ModoGrafico.DETALHE
+
+## Retângulos (tela) da carta de ingredientes, do gráfico, da área dos ícones e do detalhe, pelo modo.
+func _layout() -> Dictionary:
+	match modo_grafico:
+		ModoGrafico.CARTA4:
+			return {"carta3": Rect2(16, 456, 296, 420), "carta4": Rect2(328, 456, 296, 420),
+				"grafico": Rect2(342, 500, 268, 170), "icones": Rect2(16, 456, 296, 420),
+				"icones_y0": 504.0, "icones_fim": 860.0, "detalhe": Rect2(338, 680, 276, 186), "carta_grafico": 3}
+		_:   # DETALHE (padrão)
+			return {"carta3": C_CARTA3, "grafico": Rect2(36, 724, 568, 140), "icones": C_CARTA3,
+				"icones_y0": 504.0, "icones_fim": 646.0, "detalhe": Rect2(30, 650, 580, 70), "carta_grafico": 2}
 var cartas: Array = []          # [Carta x3], no estilo das cartas do HUD
 const TITULOS_VERSO := ["Poção", "Efeito", "Ingredientes"]
 var grade: GradeMatriz
@@ -74,7 +99,10 @@ func montar(res: Dictionary, A: Array) -> void:
 	_res = res
 	_A = A
 	visible = true
-	cartas = [_carta(C_CARTA1, ""), _carta(C_CARTA2, ""), _carta(C_CARTA3, "")]   # verso só com o pentagrama
+	var lay := _layout()
+	cartas = [_carta(C_CARTA1, ""), _carta(C_CARTA2, ""), _carta(lay["carta3"], "")]   # verso só com o pentagrama
+	if lay.has("carta4"):
+		cartas.append(_carta(lay["carta4"], ""))
 	_titulo = _label(26, HORIZONTAL_ALIGNMENT_CENTER, COR_TITULO)
 	_titulo.position = Vector2(16, 14)
 	_titulo.size = Vector2(C_CARTA1.size.x - 32, 68)
@@ -160,22 +188,33 @@ func _montar_coluna() -> void:
 	_na_carta(1, pentagono, C_PENT.position)
 	pentagono.modulate.a = 0.0
 	_na_carta(1, _legenda("efeito numa pessoa neutra", Vector2.ZERO), Vector2(C_PENT.get_center().x - 150, C_PENT.end.y + 4))
-	# ícones na ordem em que entraram (até 2 linhas; encolhem se forem muitos)
+	# gráfico da temperatura (sempre visível)
+	var lay := _layout()
+	_r_detalhe = lay["detalhe"]
+	var rg: Rect2 = lay["grafico"]
+	grafico = GraficoResultado.new()
+	grafico.size = rg.size
+	grafico.configurar(_res.get("historico_T", []), _inicio(), float(_res.get("t_final", 1.0)), _diags())
+	_na_carta(int(lay["carta_grafico"]), grafico, rg.position)
+	grafico.modulate.a = 0.0
+	# ícones na ordem em que entraram (encolhem se forem muitos)
 	var diags := _diags()
+	var ri: Rect2 = lay["icones"]
 	var cab := _label(18, HORIZONTAL_ALIGNMENT_CENTER, COR_SUAVE)
 	cab.text = "ingredientes  ·  toque para ver"
-	cab.size = Vector2(C_CARTA3.size.x, 26)
-	_na_carta(2, cab, C_CARTA3.position + Vector2(0, 14))
+	cab.size = Vector2(ri.size.x, 26)
+	_na_carta(2, cab, Vector2(ri.position.x, float(lay["icones_y0"]) - 34.0))
 	var n: int = diags.size()
-	var linhas: int = 1 if n <= 6 else 2
+	var max_linha: int = 6 if ri.size.x > 400.0 else 3
+	var linhas: int = maxi(1, ceili(n / float(max_linha)))
 	var por_linha: int = maxi(1, ceili(n / float(linhas)))
-	var y0: float = C_CARTA3.position.y + 48.0
-	var cel: float = minf(C_CEL_MAX, minf((C_CARTA3.size.x - 40.0) / por_linha, (C_ICONES_FIM - y0) / linhas - 10.0))
+	var y0: float = float(lay["icones_y0"])
+	var cel: float = minf(C_CEL_MAX, minf((ri.size.x - 40.0) / por_linha, (float(lay["icones_fim"]) - y0) / linhas - 10.0))
 	for i in n:
 		var lin: int = floori(i / float(por_linha))
 		var col: int = i % por_linha
 		var n_lin: int = mini(por_linha, n - lin * por_linha)
-		var x0: float = (640.0 - n_lin * cel) * 0.5
+		var x0: float = ri.position.x + (ri.size.x - n_lin * cel) * 0.5
 		var r := Rect2(x0 + col * cel, y0 + lin * (cel + 10), cel, cel + 10)
 		var ic := IconeIngRes.new()
 		ic.d = diags[i]
@@ -185,9 +224,9 @@ func _montar_coluna() -> void:
 		ic.modulate.a = 0.0
 		_icones.append({"no": ic, "rect": r, "d": diags[i]})
 	_detalhe = Control.new()
-	_detalhe.position = C_DETALHE.position
+	_detalhe.position = _r_detalhe.position
 	_detalhe.z_index = 10   # acima da moldura das cartas (z 3)
-	_detalhe.size = C_DETALHE.size
+	_detalhe.size = _r_detalhe.size
 	_detalhe.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_detalhe)
 
@@ -220,7 +259,11 @@ func mostrar_pentagono() -> void:
 
 ## Coluna: os ícones aparecem um a um e o anel enche até o aproveitamento.
 func mostrar_ingredientes() -> void:
+	if cartas.size() > 3:
+		_abrir_carta(cartas[3])   # carta do gráfico junto
 	await _abrir_carta(cartas[2])
+	if grafico:
+		grafico.create_tween().tween_property(grafico, "modulate:a", 1.0, 0.3)
 	# todos juntos: os ícones aparecem e os anéis enchem ao mesmo tempo
 	for ic in _icones:
 		var no = ic["no"]
@@ -238,7 +281,7 @@ func mostrar_tudo() -> void:
 	for c in cartas:
 		c.modulate.a = 1.0
 		c.abrir()
-	for no in [grade, pentagono] + _nos_icones():
+	for no in [grade, pentagono, grafico] + _nos_icones():
 		if no:
 			no.modulate.a = 1.0
 	if grade:
@@ -252,7 +295,8 @@ func mostrar_tudo() -> void:
 ## Confirmou: fecham as cartas 2 e 3 (a 1 fecha depois que a matriz vira poção).
 func fechar_cartas_menores() -> void:
 	_fechar_detalhe()
-	_fechar_carta(cartas[2])
+	for k in range(cartas.size() - 1, 1, -1):
+		_fechar_carta(cartas[k])
 	await _fechar_carta(cartas[1])
 
 func fechar_carta_nome() -> void:
@@ -297,20 +341,24 @@ func _abrir_detalhe(d: Dictionary) -> void:
 	st.border_color = Color(1, 1, 1, 0.12)
 	st.set_border_width_all(1)
 	fundo.add_theme_stylebox_override("panel", st)
-	fundo.size = C_DETALHE.size
+	fundo.size = _r_detalhe.size
 	fundo.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_detalhe.add_child(fundo)
 	var col := VBoxContainer.new()
-	col.position = Vector2(18, 14)
-	col.size = C_DETALHE.size - Vector2(36, 28)
-	col.add_theme_constant_override("separation", 8)
-	col.add_child(_linha_ing(d, true))
+	col.position = Vector2(12, 8)
+	col.size = _r_detalhe.size - Vector2(24, 16)
+	col.add_theme_constant_override("separation", 6)
+	col.add_child(_linha_ing(d, false))   # a curva agora fica no gráfico fixo (destacada)
+	if grafico:
+		grafico.selecionar(_diags().find(d))
 	_detalhe.add_child(col)
 	_detalhe.modulate.a = 0.0
 	_detalhe.create_tween().tween_property(_detalhe, "modulate:a", 1.0, 0.15)
 
 
 func _fechar_detalhe() -> void:
+	if grafico:
+		grafico.selecionar(-1)
 	if _detalhe:
 		for c in _detalhe.get_children():
 			c.queue_free()
@@ -444,3 +492,91 @@ class IconeIngRes extends Control:
 		var fonte := get_theme_default_font()
 		var txt := "%d%%" % roundi(v * 100.0)
 		draw_string(fonte, Vector2(0, size.y - 4), txt, HORIZONTAL_ALIGNMENT_CENTER, size.x, 17, IconesCaldeirao.cor_aproveitamento(a))
+
+
+# -----------------------------------------------------------------------------
+## Gráfico T(t) do preparo inteiro (da entrada do 1º ingrediente ao fim), com a entrada de
+## cada ingrediente numerada. Selecionado: o trecho do ingrediente (da entrada dele ao fim)
+## fica pintado na cor da chama em que ele entrou.
+class GraficoResultado extends Control:
+	const T_BAIXO: float = 20.0
+	const T_ALTO: float = 180.0
+	var _hist: Array = []
+	var _ti: float = 0.0
+	var _tf: float = 1.0
+	var _diags: Array = []
+	var _sel: int = -1
+	var _f: Font
+
+	func _ready() -> void:
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_f = get_theme_default_font()
+
+	func configurar(hist: Array, ti: float, tf: float, diags: Array) -> void:
+		_hist = hist
+		_ti = ti
+		_tf = maxf(tf, ti + 0.001)
+		_diags = diags
+		queue_redraw()
+
+	func selecionar(i: int) -> void:
+		_sel = i
+		queue_redraw()
+
+	func _p(t: float, T: float) -> Vector2:
+		var x: float = 8.0 + (size.x - 16.0) * clampf((t - _ti) / (_tf - _ti), 0.0, 1.0)
+		var y: float = size.y - 16.0 - (size.y - 30.0) * clampf((T - T_BAIXO) / (T_ALTO - T_BAIXO), 0.0, 1.0)
+		return Vector2(x, y)
+
+	func _T_em(t: float) -> float:
+		var T := T_BAIXO
+		for p in _hist:
+			if float(p.get("t", 0.0)) > t:
+				break
+			T = float(p.get("T", T_BAIXO))
+		return T
+
+	func _draw() -> void:
+		draw_rect(Rect2(Vector2.ZERO, size), Color(0, 0, 0, 0.25))
+		var y100: float = _p(_ti, 100.0).y
+		draw_line(Vector2(8, y100), Vector2(size.x - 8, y100), Color(1, 1, 1, 0.15), 1.0)
+		draw_string(_f, Vector2(10, y100 - 3), "100 °C", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color(1, 1, 1, 0.4))
+		var pts := PackedVector2Array()
+		for p in _hist:
+			var t: float = float(p.get("t", 0.0))
+			if t < _ti or t > _tf:
+				continue
+			pts.append(_p(t, float(p.get("T", T_BAIXO))))
+		# trecho do ingrediente selecionado: área na cor da chama em que entrou
+		if _sel >= 0 and _sel < _diags.size():
+			var t0: float = float(_diags[_sel].get("t0", _ti))
+			var cor: Color = LinhaTempo.cor_da_temperatura(_T_em(t0))
+			var area := PackedVector2Array()
+			var base: float = size.y - 16.0
+			area.append(Vector2(_p(t0, 0).x, base))
+			for p in _hist:
+				var t: float = float(p.get("t", 0.0))
+				if t >= t0 and t <= _tf:
+					area.append(_p(t, float(p.get("T", T_BAIXO))))
+			area.append(Vector2(_p(_tf, 0).x, base))
+			if area.size() >= 3:
+				draw_colored_polygon(area, Color(cor, 0.35))
+		if pts.size() >= 2:
+			draw_polyline(pts, Color(1, 0.9, 0.7, 0.95), 2.0, true)
+		# entradas numeradas
+		for i in _diags.size():
+			var t0: float = float(_diags[i].get("t0", _ti))
+			var q := _p(t0, _T_em(t0))
+			var sel: bool = i == _sel
+			draw_circle(q, 9.0 if sel else 7.0, Color(0.1, 0.08, 0.12, 0.9))
+			draw_circle(q, 7.0 if sel else 5.5, Color(1, 0.85, 0.4) if sel else Color(1, 1, 1, 0.6))
+			var txt := str(i + 1)
+			var w := _f.get_string_size(txt, HORIZONTAL_ALIGNMENT_LEFT, -1, 11).x
+			draw_string(_f, q + Vector2(-w * 0.5, -11), txt, HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color(1, 1, 1, 0.9))
+		var fim := "%d s" % roundi(_tf - _ti)
+		draw_string(_f, Vector2(size.x - 8 - _f.get_string_size(fim, HORIZONTAL_ALIGNMENT_LEFT, -1, 11).x, size.y - 3), fim, HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color(1, 1, 1, 0.5))
+		draw_string(_f, Vector2(8, size.y - 3), "0 s", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color(1, 1, 1, 0.5))
+		if _sel >= 0 and _sel < _diags.size():
+			var t0s: float = float(_diags[_sel].get("t0", _ti))
+			var info := "entrou aos %d s · %d °C" % [roundi(t0s - _ti), roundi(_T_em(t0s))]
+			draw_string(_f, Vector2(size.x * 0.5 - _f.get_string_size(info, HORIZONTAL_ALIGNMENT_LEFT, -1, 12).x * 0.5, 14), info, HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color(1, 0.9, 0.6))

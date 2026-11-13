@@ -11,8 +11,8 @@ extends Node
 enum Modo { TOQUE, ACELERA, QUANTIDADE }
 const NOMES := ["Jogar: toque", "Jogar: segurar acelera", "Jogar: segurar conta"]
 const ESPERA: float = 0.35             # s segurando até começar
-const INTERVALO_INI: float = 0.32      # segurando: um item a cada 0,32 s (velocidade constante)
-const INTERVALO_MIN: float = 0.32
+const INTERVALO_INI: float = 0.4       # segurando: um item a cada 0,4 s (velocidade constante)
+const INTERVALO_MIN: float = 0.4
 const ACELERACAO: float = 1.0          # 1 = sem aceleração
 const INTERVALO_LOTE: float = 0.12     # QUANTIDADE: espaço entre os itens jogados
 const LIMIAR_ARRASTE: float = 12.0
@@ -168,7 +168,8 @@ func _falar_total() -> void:
 		return
 	_final_dado = true
 	if _contados >= 2 and cena.get("reacao") and cena.reacao.has_method("contar"):
-		cena.reacao.contar(_contados, true)
+		var nome: String = cena._nome_exibicao(_contar_id) if cena.has_method("_nome_exibicao") else ""
+		cena.reacao.contar(_contados, true, nome)
 
 func _tem() -> bool:
 	return cena.game_temp != null and cena.game_temp.has_item(_id)

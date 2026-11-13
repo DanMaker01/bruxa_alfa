@@ -28,6 +28,8 @@ var _b_fogo: Button
 var _b_pocao: Button
 var _b_abaixar: Button
 var _b_acender: Button
+var _b_sair: Button
+const ICONE_SAIR := "res://assets/game_caldeirao/botao_voltar.png"
 
 
 func configurar(p_cena) -> void:
@@ -65,6 +67,18 @@ func configurar(p_cena) -> void:
 	_b_acender = _botao("Acender", 18)
 	_b_acender.pressed.connect(_acender_apagar)
 	_painel.add_child(_b_acender)
+	# Sair (menor, acima do Finalizar): perde os ingredientes, com confirmação
+	_b_sair = _botao("", 14)
+	if ResourceLoader.exists(ICONE_SAIR):
+		_b_sair.icon = load(ICONE_SAIR)
+		_b_sair.expand_icon = true
+		_b_sair.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_b_sair.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
+	else:
+		_b_sair.text = "Sair"
+	_b_sair.tooltip_text = "Sair do preparo"
+	_b_sair.pressed.connect(func(): cena.confirmar_sair())
+	_painel.add_child(_b_sair)
 	_montar()
 	if BOTOES_CARTA:
 		for b in [_b_abaixar, _b_fogo, _b_acender]:
@@ -81,8 +95,9 @@ func _montar() -> void:
 		_painel_bg.visible = true
 		_painel_bg.position = Vector2(0, 640)
 		_painel_bg.size = Vector2(640, 320)
-	_por(_b_pocao, Vector2(536, 12), Vector2(96, 96))
-	guia.position = Vector2(640 - GuiaReceita.LARG - 12, 116)
+	_por(_b_sair, Vector2(566, 8), Vector2(66, 58))         # Sair: menor, em cima
+	_por(_b_pocao, Vector2(520, 72), Vector2(112, 100))     # Finalizar: grande (tamanho do +Fogo)
+	guia.position = Vector2(640 - GuiaReceita.LARG - 12, 180)
 	_por(arcos, Vector2.ZERO, Vector2(640, 640))
 	_por(regua_caldeirao, Vector2(500, 196), Vector2(136, 400))
 	_por(_scroll, Vector2(16, 650), Vector2(608, 136))

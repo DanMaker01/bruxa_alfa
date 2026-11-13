@@ -90,8 +90,11 @@ func avisar(motivo: String) -> void:
 
 ## Segurando um item: a bruxa conta quantos já entraram ("1...", "2...") e, quando
 ## o último cai depois de soltar o botão, fala o total ("8!!").
-func contar(n: int, final: bool = false) -> void:
-	_balao_label.text = ("%d!!" if final else "%d...") % n
+func contar(n: int, final: bool = false, nome_item: String = "") -> void:
+	if final:
+		_balao_label.text = ("%d %s!!" % [n, nome_item.to_lower()]) if nome_item != "" else "%d!!" % n
+	else:
+		_balao_label.text = "%d..." % n
 	_balao.size = _balao.get_combined_minimum_size()
 	_ultima_fala = _t
 	_balao_ate = _t + (2.0 if final else 1.2)

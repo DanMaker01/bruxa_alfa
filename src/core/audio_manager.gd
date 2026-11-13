@@ -159,7 +159,8 @@ func _stop_bgs():
 	bgs_player.stop()
 	current_bgs = ""
 
-func play_se(filename: String, volume: float = 1.0):
+## pitch_var: variação aleatória do tom (0.05 = ±5%).
+func play_se(filename: String, volume: float = 1.0, pitch_var: float = 0.0):
 	if filename == "None" or filename == "":
 		return
 	
@@ -177,6 +178,8 @@ func play_se(filename: String, volume: float = 1.0):
 	player.stream = stream
 	player.set_meta("base_volume",volume)
 	player.volume_db = _linear_to_db(volume * se_volume * master_volume)
+	if pitch_var > 0.0:
+		player.pitch_scale = randf_range(1.0 - pitch_var, 1.0 + pitch_var)
 	
 	se_container.add_child(player)
 	

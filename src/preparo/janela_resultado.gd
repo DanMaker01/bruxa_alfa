@@ -393,6 +393,15 @@ func _input(event: InputEvent) -> void:
 		return
 	if not visible or _estado != Estado.PRONTA:
 		return
+	# TESTE: tecla G troca onde fica o gráfico da temperatura (ResultadoVistas.modo_grafico)
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_G:
+		ResultadoVistas.proximo_modo_grafico()
+		_vistas.montar(_res, _res.get("A", []))
+		_vistas.titulo(_nome_atual)
+		_vistas.mostrar_tudo()
+		_dica.text = "gráfico: " + ResultadoVistas.NOMES_MODO_GRAFICO[ResultadoVistas.modo_grafico]
+		get_viewport().set_input_as_handled()
+		return
 	var aperto2: bool = (event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT) \
 		or (event is InputEventScreenTouch and event.pressed)
 	if aperto2:
@@ -464,9 +473,9 @@ func _fechar() -> void:
 		carta.fechar()          # primeiro aparece de verso...
 		carta.ativa = true
 		carta.segurar = true
-		await _esperar(1.5)     # verso fica um tempo na tela
+		await _esperar(0.4)     # verso aparece rapidinho
 		carta.abrir()           # ...depois vira e abre
-	await _esperar(1.0)
+	await _esperar(0.45)
 
 	# 3. a poção desce até a linha dela
 	var destino := DESTINO_INVENTARIO

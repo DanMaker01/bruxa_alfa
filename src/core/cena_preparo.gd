@@ -725,6 +725,27 @@ func _mostrar_confirmacao_finalizar() -> void:
 	add_child(dlg)
 	dlg.popup_centered()
 
+## Botão Sair (acima do Finalizar): sai do preparo sem finalizar. Com ingredientes no
+## caldeirão pede confirmação (eles se perdem).
+func confirmar_sair() -> void:
+	if _ingredientes_validos().is_empty():
+		_sair_do_preparo()
+		return
+	preparo_pausado = true
+	var dlg = ConfirmationDialog.new()
+	dlg.dialog_text = "Sair do preparo?\nOs ingredientes no caldeirão se perdem."
+	dlg.title = "Sair"
+	dlg.ok_button_text = "Sair"
+	dlg.cancel_button_text = "Ficar"
+	dlg.process_mode = Node.PROCESS_MODE_ALWAYS
+	dlg.confirmed.connect(func():
+		preparo_pausado = false
+		_sair_do_preparo())
+	dlg.canceled.connect(func(): preparo_pausado = false)
+	dlg.close_requested.connect(func(): preparo_pausado = false)
+	add_child(dlg)
+	dlg.popup_centered()
+
 # =============================================================================
 # API PÚBLICA
 # =============================================================================

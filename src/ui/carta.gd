@@ -246,7 +246,7 @@ func _virar(alvo: String) -> void:
 	if SOM_VIRAR != "":
 		var audio = get_node_or_null("/root/Main/GameManager/AudioManager")
 		if audio and audio.has_method("play_se"):
-			audio.play_se(SOM_VIRAR)
+			audio.play_se(SOM_VIRAR, 1.0, 0.05)   # tom varia ±5% a cada virada
 	var giros: Array = _sortear_virada()
 	var tw := create_tween()
 	if alvo == NADA:
