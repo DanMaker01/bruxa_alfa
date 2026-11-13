@@ -20,35 +20,12 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
   ==============================
 ```
 
-## Triagem (o que falta, por esforço)
-
-```
-	
-MÉDIO (já sei o que fazer, mas leva mais tempo ou mexe em mais coisas)
-	[ ] Tutorial do caldeirão na 1ª vez (talvez com a poção concentrada; sem deixar errar). Decidido: a bruxa fala e guia, livre (não trava botões). Fazer depois.
-	[?] Anéis de aproveitamento: decidir o formato final e tirar os modos de teste (M, P, C). Feito: semáforo, anel começa vazio, régua absoluta; teclas M/P/C removidas (T e K continuam).
-		Corrigir, o anel completo ao invés das bolinhas é melhor, e as cores antigas estavam melhores tbm. quero poder escolhre melhor.
-		[?] Feito: o anel agora é sempre contínuo (ANEL_CONTINUO em icones_caldeirao.gd); a tecla P troca só as cores: faixa (padrão) > dourado > aproxima > semáforo > cor única. C liga o anel já colorido (o caminho todo fraquinho, revelando). Régua absoluta.
-	[ ] Estilo visual padronizado de diálogo/opções (borda, cor, fonte, janela).
-	[ ] Organizar a pasta assets no estilo RPG Maker (mexe em muitos caminhos: fazer com calma, de uma vez).
-	[ ] Padronizar camadas de parallax em todos os mapas.
-	[ ] Medir os 10 testes de 8 ervas + 4 cogumelos (teste seu).
-
-PRECISA DE PLANEJAMENTO ANTES (decisões de design)
-	[ ] Receitas: tempo entre 5 s e 5 min (média 1 min), excesso de um ingrediente, mesmo ingrediente 2x, receita dobrada, padrão das receitas, peso de cada erro.
-	[ ] Quando o HUD abre a primeira vez.
-	[ ] Pentagrama do Cap. 2 (arestas = a_ij, animações por tipo de matriz).
-	[ ] História/roteiro, diálogos do Cap. 1, quests (Zigmund, Bosque Goblin, Casamento), fichas e linguajar dos personagens.
-	[ ] Arte e áudio (faces, sprites, cenários, BGM/BGS/SE, balão de expressão): dependem dos arquivos.
-	[ ] Expansões (clima, fama, compra/venda, mercado).
-```
-
 ## Terminar até o Cap. 1 (1)
 
 ```
 
 [ ] Sprites 100%
-	[ ] Faces (422 x 908 ou algo assim)
+	[ ] Faces 			(422 x 908 ou algo assim)
 		[ ] Bruxa
 			[ ] neutro
 			[ ] pensando
@@ -69,7 +46,7 @@ PRECISA DE PLANEJAMENTO ANTES (decisões de design)
 			[ ] neutro
 		[ ] Padre
 			[ ] neutro
-	[ ] Sprites
+	[ ] Sprites				(tamanhos variados, abrir no assets)
 		[ ] Bruxa
 			[ ] parada
 			[ ] andando
@@ -102,7 +79,7 @@ PRECISA DE PLANEJAMENTO ANTES (decisões de design)
 		[ ] Objetos
 			[ ] Livro de Receitas
 			[ ] ...
-	[ ] Cenários
+	[ ] Cenários		(largura variada, altura:640px)
 		[ ] floresta
 		[ ] bruxa_in
 		[ ] bruxa_out1
