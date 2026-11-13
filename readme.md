@@ -176,16 +176,14 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 			M = absoluto
 			P = anel completo, provavelmente semáforo ou aproxima.
 			C = o anel já é colorido, mas vai sendo revelado.
-	[.] ver se consigo jogar 8 ervas e 4 cogumelos rapidamente e sem erros, medir 10 testes. no meio da receita as vezes esqueço um cogumelo. talvez dar um jeito de agrupar antes ou jogar multiplos, por exemplo segurando o botão do ingrediente ou podendo combinar eles antes. UI:caso segure o botão, ou caso selecione a jogue multiplos joga em quantidade/velocidade maior.
-		Feito (jogar_varios.gd): segurar joga um item a cada 0,32 s (velocidade constante, INTERVALO_INI) e a bruxa vai contando no balão quantos entraram ("1!", "2!"...). Toque joga 1. Falta medir os 10 testes. Teste #1: 9/10 certos (itens a cada 0,4 s). Faltam mais 2 testes.
-		A bruxa vai contando sem exclamação. (ou talvez vai contando 1..., 2..., ... e quando largar o botão ela diz o último como N <iten> !!)
-		Tentar: se jogar 1 item, esperar um tempo INTERVALO_JOGAR_ITEM e segurar para jogar os próximos, ela consegue fazer a contagem contínua.
-		[?] Feito: jogar o mesmo item de novo (toque ou segurar) até 1 s depois do último continua a contagem (INTERVALO_JOGAR_ITEM em jogar_varios.gd). Sem lance novo por 1 s, ela fala o total "N <nome_item> !!" (só se N >= 2); ao soltar depois de segurar, fala assim que o último cai. 
-		[?] EDIT: mudar o intervalo entre os itens jogados seja 0.4s. (feito; e o total agora sai com o nome: "8 erva!!")
-	[ ] Resultado da Poção:
-		[?] Tenho que analisar, o tamanho da matriz fica sem margem para a carta. o pentagrama também, está muito grande para a carta. os itens estão ok. 
-	[ ] Usar cartas tbm na cena do caldeirão, para botões, etc? testar como ficaria.
-	[ ] Poção concentrada é só com precisão muito alta (definir melhor depois)
+	[.] Teste de Mecânica: segurar para jogar itens
+		Teste #1: 9/10 certos (itens a cada 0,4 s). Faltam mais 2 testes.
+		Teste #2:  /10 certos 
+		Teste #3:  /10 certos 
+	[.] Resultado da Poção:
+		[?] margem da carta da MATRIZ está pouca. a do pentagrama também. os itens estão ok. 
+	[ ] Dúvida: Usar cartas tbm na cena do caldeirão, para botões, etc? testar como ficaria.
+	[ ] Definir: Poção concentrada é só com precisão muito alta
 
 [ ] Livro de Receitas:
 	[ ] Receitas:
@@ -211,10 +209,11 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 			
 		[ ] 1ª receita: calma profunda
 			[?] deixar itens mais lenientes, onde fica a maior parte dos erros: cogumelo. o que fazer? (feito: folgas do cogumelo +50%: s− 600→900, s+ 900→1350, h_min 0,4→0,6, h_max 0,5→0,75; ponto ideal igual)
+				Testar com debug aberto para ver o cozimento ideal.
 		[ ] 2ª receita: desenvoltura
 			Ajustado: musgo t_max 12 → 35 (aguenta os ~30 s finais); flor m 2400 → 5000, s−/s+ 900/1400 → 1900/2900 (Q de 60 s a ~85 °C ≈ 5100). Juntos dão diag(1,1,1.4,1,1) se o musgo entra depois.
 			balancear tempo, u,s-,s+, Tmin,Tmax,tmin,tmax, etc de cada item. infusao
-
+			Está difícil saber a hora de colocar a flor. Mudar cor do fogo de forma mais clara? outras cores? 
 	[ ] Cena do Livro:
 		[ ] (acabou? revisar)
 
@@ -245,7 +244,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] organizar o layout e textura dialogo/opções
 		[ ]	Ajuste estético, borda, cor, fonte, etc.
 		[ ]	Criação de estilos padronizados para cada coisa. estilo de texto, estilo de janela, paleta de cores, animação coerente, etc...
-		[?] Eventos de diálogo devem verificar se o próximo evento a tomar a frente será diálogo também, exceto depois de comando wait, etc.
+		[.] Eventos de diálogo devem verificar se o próximo evento a tomar a frente será diálogo também, exceto depois de comando wait, etc.
 			Feito: a carta do diálogo não desvira se vem outro diálogo em seguida (Interpreter.dialogo_a_seguir: fila de diálogos ou próximo comando de um evento rodando, pulando os instantâneos como variável/if/label/item/som). 
 			Esperar, mover, fade etc. interrompem. Espera no máximo 1,5 s (carta.gd: ESPERA_MAX_DIALOGO).
 			se um evento acabar em mensagem e outro iniciar em mensagem com o mesmo falante, nome, foto etc então o card não deve fechar depois do primeiro evento, pois é uma continudade. 
@@ -254,6 +253,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 			Feito também: quem chamou outro evento (Chamar evento) e volta com fala depois que o chamado termina em fala: a carta não fecha entre os dois.
 			Rei: abrindo a carta 2x para o mesmo falante, "Tanta certeza assim?" "Pois aplique aqui na minha frente". Ver se é wait, ou o quê.
 			Era o "ir para" (goto) + esperar 0,5 s entre as falas. Feito: a carta segue o goto e esperas curtas (até 1 s somado, ESPERA_CURTA_DIALOGO) não fecham a carta.
+			[?] Testar: fala do rei e apagar esse tópico.
 
 
 [ ] Quests
