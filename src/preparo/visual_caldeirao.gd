@@ -25,6 +25,8 @@ const TEMPO_FOGO_ALTO: float = 0.3
 const COR_FOGO_LIGA = Color(1.0, 0.55, 0.15)
 const COR_FOGO_DESLIGA = Color(0.6, 0.65, 0.75)
 const FOGO_ALFA_MIN = 0.4
+## Alfa da chama acesa (opaca); só fica mais transparente com F < F_LIMIT_MIN.
+const FOGO_ALFA_MAX: float = 0.8
 ## Tamanho do fogo pelo F(t): F = T_AMB -> FOGO_ESCALA_MIN, F = F_EQ -> 1 (tamanho do .tscn),
 ## acima disso continua crescendo até FOGO_ESCALA_MAX. A base do fogo fica parada.
 const FOGO_ESCALA_MIN: float = 0.5
@@ -201,8 +203,9 @@ func atualizar(sistema: SistemaTermico, delta: float, perda_media: float, _punin
 	# fogo: cor/intensidade pela temperatura do fogo
 	if fogo:
 		var cor = sistema.get_cor_fogo()
-		if sistema.fogo_ligado:
-			cor.a=maxf(cor.a,FOGO_ALFA_MIN)
+		# chama opaca (FOGO_ALFA_MAX) enquanto F >= F_LIMIT_MIN; abaixo disso (apagou)
+		# vai ficando transparente até sumir junto com o F
+		cor.a = FOGO_ALFA_MAX * clampf(sistema.F / SistemaTermico.F_LIMIT_MIN, 0.0, 1.0)
 		_fogo_aceso = sistema.fogo_ligado
 		fogo.self_modulate = cor
 		fogo.visible = sistema.fogo_ligado or cor.a > 0.05

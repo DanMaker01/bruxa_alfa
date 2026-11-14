@@ -249,9 +249,9 @@ func _criar_botao_debug() -> void:
 	botao_debug.text = "debug grafico caldeirão"
 	botao_debug.toggle_mode = true
 	botao_debug.focus_mode = Control.FOCUS_NONE
-	# embaixo do botão DEBUG do menu (canto superior esquerdo, 96x64)
-	botao_debug.position = Vector2(0, 70)
+	# topo-centro (o DEBUG geral some enquanto o caldeirão está aberto)
 	botao_debug.size = Vector2(156, 32)
+	botao_debug.position = Vector2((640 - botao_debug.size.x) * 0.5, 4)
 	botao_debug.z_index = 30
 	botao_debug.add_theme_font_size_override("font_size", 12)
 	botao_debug.add_theme_color_override("font_color", Color(0.75, 0.75, 0.8))
@@ -607,6 +607,8 @@ func _finalizar_preparo() -> void:
 	# 🔥 FASE 1 (diagnóstico) + FASE 2 (aproveitamento) + MATRIZ DA POÇÃO
 	var resultado = CalculadoraPocao.calcular(_calcular_resultado(), database)
 	CalculadoraPocao.imprimir_relatorio(resultado)   # debug
+	if layout and layout.guia and not layout.guia.pagina.is_empty():
+		resultado["receita"] = layout.guia.pagina.duplicate(true)   # curva ideal no gráfico do resultado
 	# 🧪 A POÇÃO VIRA UM ITEM COMUM (o GameManager coloca no inventário)
 	if not _ingredientes_validos().is_empty() and database and database.has_method("registrar_item"):
 		var id: String = database.novo_id("pocao")

@@ -69,9 +69,22 @@ static func _curva(dist: float, m: float, meia: float) -> float:
 	var g := c * u * u + d * u * u * u          # g(1) = 1, g'(1) = r, g(0) = g'(0) = 0
 	return m * (1.0 - g)
 
+## Correndo, a câmera vai um pouco à frente da bruxa (mais tempo para reagir).
+const ADIANTE_CORRIDA: float = 70.0    # px à frente
+const VEL_ADIANTE: float = 130.0       # px/s com que a câmera vai e volta
+var _adiante: float = 0.0
+var _lado: float = 1.0
+
+func _atualizar_adiante(delta: float) -> void:
+	var correndo: bool = player.get("correndo") == true
+	if absf(player.velocity.x) > 5.0:
+		_lado = signf(player.velocity.x)
+	var alvo: float = _lado * ADIANTE_CORRIDA if correndo else 0.0
+	_adiante = move_toward(_adiante, alvo, VEL_ADIANTE * delta)
+
 ## Onde a câmera fica quando segue a bruxa.
 func _alvo_bruxa() -> Vector2:
-	return Vector2(_x_suave(player.global_position.x), player.global_position.y)
+	return Vector2(_x_suave(player.global_position.x + _adiante), player.global_position.y)
 
 ## Ponto mais próximo de p que a câmera consegue mostrar (respeita os limites).
 func _dentro(p: Vector2) -> Vector2:
@@ -119,6 +132,7 @@ func resetar_posicao_camera(tempo: float = 0.0):
 ## Volta a seguir o player e pula direto para ele, sem suavização.
 func snap_to_player():
 	_kill_move_tween()
+	_adiante = 0.0
 	is_following_player = true
 	global_position = _alvo_bruxa()
 	reset_smoothing()
@@ -137,6 +151,7 @@ func tremer_camera(intensidade: float, velocidade: float, duracao: float):
 
 # ===== PROCESSAMENTO =====
 func _process(delta):
+	_atualizar_adiante(delta)
 	if is_following_player:
 		global_position = _alvo_bruxa()
 

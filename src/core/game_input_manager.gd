@@ -28,6 +28,15 @@ var _last_x: float = 0.0
 # na mesma direção até o dedo apontar para o outro lado ou ser solto.
 var _blocked_dir: int = 0
 const HOLD_DEAD_ZONE: float = 10.0
+# Corrida: toque e, no 2º toque (até DUPLO_TOQUE s depois, perto do 1º), segurar.
+const DUPLO_TOQUE: float = 0.3
+const DUPLO_DIST: float = 90.0
+var _t_toque: float = -10.0
+## Dash mínimo: soltar logo depois do dash só para depois deste tempo (s) desde o dash.
+const DASH_MINIMO: float = 0.35
+var _t_dash: float = -10.0
+var _parar_em: float = -1.0       # relógio (s) em que para (soltou durante o dash mínimo)
+var _pos_toque: Vector2 = Vector2.ZERO
 var mouse_position: Vector2 = Vector2.ZERO
 var last_direction: Vector2 = Vector2.ZERO
 
@@ -56,6 +65,12 @@ func _process(delta):
 	if not player:
 		return
 	
+	# soltou durante o dash mínimo: para quando ele acabar (se não apertou de novo)
+	if _parar_em > 0.0 and Time.get_ticks_msec() / 1000.0 >= _parar_em:
+		_parar_em = -1.0
+		if not is_mouse_pressed and player.get("correndo") == true:
+			_stop_here()
+	
 	# 🔥 SEGURANDO: o destino é o ponto sob o dedo, atualizado TODO frame.
 	# Assim ela segue o dedo sem parar e recomeçar (a câmera anda junto com ela,
 	# então o ponto do mundo sob o dedo muda mesmo com o dedo parado).
@@ -77,6 +92,7 @@ func _process(delta):
 		if distance < 3.0:
 			player.global_position.x = target_position.x
 			is_moving = false
+			_parar_corrida()
 			auto_moving = false
 			last_direction = Vector2.ZERO
 			player.velocity.x = 0
@@ -122,6 +138,7 @@ func _process(delta):
 			auto_moving = false
 			last_direction = Vector2.ZERO
 			player.velocity.x = 0
+			_parar_corrida()
 			print("[InputManager] ✅ Chegou (corrigido overshoot)")
 
 	# Sem "arrastar contínuo": segurar parado NÃO gera novos destinos
@@ -136,6 +153,13 @@ func _input(event):
 			is_mouse_pressed = false
 			is_dragging = false
 			_blocked_dir = 0
+			# correr é só segurando: soltou correndo, para na hora (depois do dash mínimo)
+			if player and player.get("correndo") == true and not auto_moving:
+				var t_fim: float = _t_dash + DASH_MINIMO
+				if Time.get_ticks_msec() / 1000.0 >= t_fim:
+					_stop_here()
+				else:
+					_parar_em = t_fim
 			# Ao soltar, ela segue até o último ponto (ou para onde conseguir).
 		return
 	
@@ -159,6 +183,7 @@ func _input(event):
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
 				is_mouse_pressed = true
+				_parar_em = -1.0
 				_vel_fixa = 0.0
 				is_dragging = true
 				mouse_position = event.position
@@ -174,6 +199,12 @@ func _input(event):
 					return
 				
 				var world_click = camera.get_canvas_transform().affine_inverse() * event.position
+				var agora: float = Time.get_ticks_msec() / 1000.0
+				var duplo: bool = agora - _t_toque < DUPLO_TOQUE and event.position.distance_to(_pos_toque) < DUPLO_DIST
+				_t_toque = -10.0 if duplo else agora
+				_pos_toque = event.position
+				if not duplo:
+					_parar_corrida()
 				ToqueFeedback.mostrar(player.get_parent(), world_click)   # anel no ponto tocado
 				# clicou num evento em cuja área a bruxa já está: não anda (o evento só ativa)
 				if _clique_em_evento_perto(world_click):
@@ -187,6 +218,9 @@ func _input(event):
 				
 				target_position = Vector2(new_target_x, player.global_position.y)
 				_start_moving()
+				if duplo and player.has_method("iniciar_dash"):
+					player.iniciar_dash(1 if new_target_x > player.global_position.x else -1)
+					_t_dash = agora
 				print("[InputManager] 🖱️ Clique em X: ", new_target_x)
 			
 	elif event is InputEventMouseMotion:
@@ -226,6 +260,7 @@ func _stop_here():
 	auto_moving = false
 	_stuck_timer = 0.0
 	last_direction = Vector2.ZERO
+	_parar_corrida()
 	if player:
 		player.velocity.x = 0
 		if player.has_method("set_movement_direction"):
@@ -236,8 +271,13 @@ func _stop_here():
 ## Velocidade fixa (px/s) do movimento atual por comando; 0 = normal, com aceleração.
 var _vel_fixa: float = 0.0
 
+func _parar_corrida() -> void:
+	if player and player.has_method("parar_corrida"):
+		player.parar_corrida()
+
 func move_to(x: float):
 	_vel_fixa = 0.0
+	_parar_corrida()
 	"""Move o player para uma posição X"""
 	print("[InputManager] Movendo para X: ", x)
 	target_position = Vector2(x, player.global_position.y if player else 0)
@@ -248,6 +288,7 @@ func move_to_position(target_x: float, target_y: float, velocidade: float = 0.0)
 	"""Move o player para uma posição específica (Y é ignorado).
 	velocidade > 0: anda nessa velocidade fixa, sem aceleração (cutscenes com outros eventos)."""
 	_vel_fixa = velocidade
+	_parar_corrida()   # comando: anda normal
 	print("[InputManager] Movendo para posição: (", target_x, ", ", target_y, ")")
 	var y = player.global_position.y if player else 0
 	target_position = Vector2(target_x, y)

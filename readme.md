@@ -24,8 +24,8 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 
 ```
 
-[ ] Sprites 100%
-	[ ] Faces 			(422 x 908 ou algo assim)
+[ ] Arte Visual 100%
+	[ ] Faces 			(422 x 908 ou algo assim) (veja que a parte inferior é cortada, )
 		[ ] Bruxa
 			[ ] neutro
 			[ ] pensando
@@ -47,10 +47,11 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] Padre
 			[ ] neutro
 
-	[ ] Sprites			(tamanhos variados, abrir no assets)
+	[ ] Sprites			(tamanhos variados, abrir no assets) (a âncora do sprite é o centro-inferior)
 		[ ] Bruxa
 			[ ] parada
 			[ ] andando
+			[ ] correndo 
 		[ ] Rei
 		[ ] Princesa
 		[ ] Guarda1
@@ -101,17 +102,16 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] estrada_b
 
 [ ]	Audio 100%
-	[ ] O Áudio deve poder sofrer mudanças de pitch entre -1 e 1 (-12 e 12 semitons). isso pesa na reprodução do áudio?
 	[ ] BGM:
-		[ ] intro 	(xxxHolic opening)
-		[ ] floresta	(revisar a que já tem)
+		[ ] intro 			(xxxHolic opening)
+		[ ] floresta		(remix da que já tem)
 		[ ] bruxa_out
-			[ ] bruxa_out1	(sem audio, vai ter só BGS de natureza)
-			[ ] bruxa_out2	(sem audio, vai ter só BGS de natureza) (variação)
-			[ ] bruxa_out3	(sem audio, vai ter só BGS de natureza) (variação)
-		[ ] bruxa_in
-		[ ] bosque
-		[ ] cidade, cidade_in01, cidade_in02 (+ harpa, - volume, +palmas)
+			[ ] bruxa_out1	(só BGS de natureza)
+			[ ] bruxa_out2	(só BGS de natureza) (variação)
+			[ ] bruxa_out3	(só BGS de natureza) (variação2)
+		[ ] bruxa_in 		(sem bgm, talvez bgs)
+		[ ] bosque			(mágico, bem curto)
+		[ ] cidade, _in01, _in02 (+ harpa, - volume, +palmas)
 		[ ] cidade_in03
 		[ ] estrada_a
 		[ ] ponte
@@ -131,7 +131,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[!] porta02 	(fechando)
 		[!] passos 		(para transição)
 		[!] pulo 		(velocidade)
-		[ ] dash
+		[!] dash
 		[ ] magia01		
 		[ ] magia02 
 		[ ] magia03
@@ -143,7 +143,6 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[!] livro		
 		[!] carta 		(girando)
 		[!] aplausos
-		[!] swing
 		
 [ ]	Menus 100%
 	[ ] Estilo de cartas
@@ -161,16 +160,23 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] audio, 
 		[ ] video, etc
 	[ ] cartas/hud
-		[ ] definir pentagrama para o verso das cartas inventário/status 
-		[ ] interação com outros menus
+		[ ] definir verso: pentagrama (giratório lento?), 
+			principalmente as que fica no HUD sempre visivel 
 
 
 [ ] Caldeirão 100%
-	[ ]	Tutorial do caldeirão na 1ª vez. usando poucos ingredientes, mudar intro talvez. tentar integrar naturalmente com o que já tem.  talvez ensinar fazendo a poção concentrada? não deixar errar pq não é fácil achar o item.
-		(talvez com a poção concentrada; sem deixar errar). Decidido: a bruxa fala e guia, livre (não trava botões). Fazer depois.
-
+	[ ]	Tutorial do caldeirão na 1ª vez. 
+		mudar intro talvez. tentar integrar naturalmente com o que já tem.  
+		(poção concentrada pó de retorno? 3; sem deixar errar). 
+		Decidido: a bruxa fala e guia, livre (não trava botões). Mas pausa e te obriga a apertar o botão
+	[?] Mudar: Cor do fogo baixo. 
+	Transparente somente F < F_MIN_APAGAR (feito: alfa 0,8 aceso; com F < 400 vai sumindo até F = 0)
 	[ ] Layout
-		[ ] Reformular Layout (pensar em celular). Menus, botões,Bruxa_chibi,caldeirão, texto em cima do caldeirão (passar para falas da bruxa), feedback rápido da bruxa.
+		[?] Botão de Voltar (largar itens) posição: superior-esquerda, deixar do tamanho padrão. (feito)
+		[?] Retirar o botão debug. mover botão debug caldeirão para topo-centro (feito)
+		[ ] Reformular Layout (pensar em celular). 
+		Menus, botões,Bruxa_chibi,caldeirão, tamanhos livre 
+		texto em cima do caldeirão (passar para falas da bruxa), feedback rápido da bruxa.
 	[ ] Feedback bom pra temperatura do caldeirão e itens, tanto frio quanto quente
 		[.] TESTE de P e M:
 			M = absoluto
@@ -181,20 +187,35 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		Teste #2:  /10 certos 
 		Teste #3:  /10 certos 
 	[.] Resultado da Poção:
-		[?] margem da carta da MATRIZ está pouca. a do pentagrama também. os itens estão ok. 
+		[.] mostre o grafico certo, depois mostre o T(t) do jogador sendo feito.e os itens entrando. Não precisa mostrar mais os anéis de itens no resultado, mostre somente o gráfico já integrado com os itens (feito: curva ideal aparece, depois o T(t) é desenhado e cada item surge quando a curva passa; ícones pequenos sem anel, gráfico grande)
+			EDIT: Mantenha os anéis, mas quero os itens se mantendo pequenos. (feito: anel volta, ícone pequeno; enche quando o item entra)
+		[?] carta para o botão de poção também. (feito: Finalizar com sprite de carta)
+			EDIT: o mesmo para o botão de sair. (feito)
+		[.] Quando a poção vai até a carta, ela sempre deve ir na parte inferior da carta, e não na posição da lista (está indo fora da tela). (feito)
+			EDIT: não é sempre na parte inferior, só para quando a carta já estiver cheia de itens. (feito: vai na linha; se ela cai fora da carta, vai na parte de baixo) 
 	[ ] Dúvida: Usar cartas tbm na cena do caldeirão, para botões, etc? testar como ficaria.
 	[ ] Definir: Poção concentrada é só com precisão muito alta
 
 [ ] Livro de Receitas:
+	[ ] Cena do Livro:
+		[?] Caso memorize a receita, na hora do resultado mostra a curva correta atrás e mostra a sua curva por cima. vamos testar.
+			Feito: atrás da curva real, a faixa de T do estado da chama de cada passo (na cor da chama) e uma linha tracejada "ideal"; o tempo conta do 1º ingrediente.
+		[?] Receita memorizada: ícone abaixo do DEBUG (livro_receita.png). Tocar mostra só a página e "Tirar da memória"; tocar fora fecha. Some no caldeirão, no livro e na pausa.
+		[ ] Pensar em fazer um auto-cozinhar seguindo uma receita?... (pensar)
+		[?] Botão de Nova Receita deve ficar sempre na página da direita. ou se clicar numa página vazia. (feito: os dois)
+		[?] No editor de página o botão de cancelar e o de pronto devem trocar de posição. (feito: Pronto à esquerda, Cancelar à direita)
 	[ ] Receitas:
 		[ ] Balanceamento de Receitas:
-			[ ] Criar/Permitir: Receita muito rápida, receita muito demorada. Receita muito quente. Receita muito fria. 
+			[ ] Criar mais receitas:
+				Receita muito rápida, 
+				receita muito demorada. 
+				Receita muito quente. 
+				Receita muito fria. 
 			[ ] Pergunta: Dois pontos de cozimento diferentes para o mesmo item podem gerar poções diferentes?		
 			[ ] Se eu colocar muita (QUANTO?) quantidade de um ingrediente, vai fazer uma poção muito forte.
 			[ ] Faz sentido uma receita que leva o mesmo ingrediente 2x em tempos diferentes? I_tempo, I_Temper, Q, como conseguir aprovetar duas vezes um mesmo tipo de item numa mesma receita?
 			[ ] DEPOIS: Fazer receita dobrada tem efeito de potencializar (escalar) a matriz resultante. por exemplo se fizer uma poção da calma profunda dobrada, 
 			[ ] balancear dificuldade, peso de cada erro: tempo, temp, cozimento, explorar os TIPOS de matrizes. explorar o que é posível nesse sistema térmico
-				[ ] escrever e padronizar:o padrão é nome, passos (só existe 2 passos: cor de fogo(cor) e colocar ingrediente(qtd,tempo)). pensar tem algo mais que possa ser feito numa receita?
 				[?] balancear o resultado da poção de extroversão. pois um cogumelo já está sendo suficiente para o melhor resultado, entender o pq.
 				Por quê: o cogumelo multiplica E por 1,16 (+16%) e o critério do filho do mercador aceitava qualquer E que subisse 10% (e aceitava C/A/O mudando até "pouco").
 				Ajuste: E precisa subir "muito" (>= +30%; a desenvoltura dá +40%) e O, C, A não podem mudar (menos de 10%); N não pode subir; nenhum traço extremo.
@@ -210,13 +231,12 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] 1ª receita: calma profunda
 			[?] deixar itens mais lenientes, onde fica a maior parte dos erros: cogumelo. o que fazer? (feito: folgas do cogumelo +50%: s− 600→900, s+ 900→1350, h_min 0,4→0,6, h_max 0,5→0,75; ponto ideal igual)
 				Testar com debug aberto para ver o cozimento ideal.
+				
 		[ ] 2ª receita: desenvoltura
 			Ajustado: musgo t_max 12 → 35 (aguenta os ~30 s finais); flor m 2400 → 5000, s−/s+ 900/1400 → 1900/2900 (Q de 60 s a ~85 °C ≈ 5100). Juntos dão diag(1,1,1.4,1,1) se o musgo entra depois.
 			balancear tempo, u,s-,s+, Tmin,Tmax,tmin,tmax, etc de cada item. infusao
 			Está difícil saber a hora de colocar a flor. Mudar cor do fogo de forma mais clara? outras cores? 
-	[ ] Cena do Livro:
-		[ ] (acabou? revisar)
-
+		
 [ ] História/Roteiro
 	[ ]	Diálogos devem condizer com a época
 		[ ] Cap. 1 (-N)
@@ -237,9 +257,9 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 
 
 [ ] Diálogos 100%
-	[ ] Intro : revisar texto (tempo e ritmo).
+	[ ] Intro : revisar texto (tempo e ritmo). ultimas frases da intro estão pequenas em comparação. a forma do texto é pirâmide invertida.
 	[ ] Cap. 1: Revisão de cada evento.
-	[ ] Sprites: Balão de expressão por sprite: precisa da arte (1 sprite de balão, se der pra fazer sem deformar as quinas seria ideal)
+	[ ] Sprites do  Balão de expressão: precisa da arte (1 sprite de balão, se der pra fazer sem deformar as quinas seria ideal) (talvez 9 blocos)
 	[ ] Estilo visual:
 		[ ] organizar o layout e textura dialogo/opções
 		[ ]	Ajuste estético, borda, cor, fonte, etc.
@@ -296,8 +316,8 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 
 [ ] Eventos/Core:
 	[?] O comando de pular intro com clique, no começo, parece estar demorando muito para fazer o fade e só parece que está escuro mto tempo, se eu ficar pulando.
-	[ ] Correr/Dash
-	[ ] Cada mapa pode ter múltiplos BGS tocando, e todo BGS fica em loop naturalmente.
+	[?] Cada mapa pode ter múltiplos BGS tocando, e todo BGS fica em loop naturalmente.
+		Feito: no mapa, "Bgs Extras" (SomAmbiente: arquivo + volume) além do bgs. Comando CmdBgs: ligar, desligar ou desligar todos. Ao entrar num mapa ficam só os BGS dele.
 
 
 [ ] Documentação e Organização

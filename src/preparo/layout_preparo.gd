@@ -4,6 +4,7 @@
 #   carrossel de ingredientes embaixo do caldeirão
 #   Abaixar (polegar esquerdo) e Abanar (polegar direito), Acender/Apagar embaixo
 #   Poção (Finalizar) no canto superior direito; receita memorizada (GuiaReceita) abaixo dela
+#   Voltar (Sair, perde os ingredientes) no canto superior esquerdo
 #   com o debug do caldeirão aberto: arco de T acima do caldeirão, arco de F em volta do
 #   fogo (ArcosDebug), régua de cor do caldeirão e selo "estável" (ReguaCaldeirao)
 # (Os layouts de teste Original, A, B e C foram removidos; ficou o D.)
@@ -81,7 +82,7 @@ func configurar(p_cena) -> void:
 	_painel.add_child(_b_sair)
 	_montar()
 	if BOTOES_CARTA:
-		for b in [_b_abaixar, _b_fogo, _b_acender]:
+		for b in [_b_abaixar, _b_fogo, _b_acender, _b_pocao, _b_sair]:
 			_estilo_carta(b)
 
 
@@ -95,7 +96,11 @@ func _montar() -> void:
 		_painel_bg.visible = true
 		_painel_bg.position = Vector2(0, 640)
 		_painel_bg.size = Vector2(640, 320)
-	_por(_b_sair, Vector2(566, 8), Vector2(66, 58))         # Sair: menor, em cima
+	# Voltar (Sair): canto superior esquerdo, no tamanho do ícone
+	var tam_sair := Vector2(100, 88)
+	if _b_sair.icon:
+		tam_sair = _b_sair.icon.get_size()
+	_por(_b_sair, Vector2(8, 8), tam_sair)
 	_por(_b_pocao, Vector2(520, 72), Vector2(112, 100))     # Finalizar: grande (tamanho do +Fogo)
 	guia.position = Vector2(640 - GuiaReceita.LARG - 12, 180)
 	_por(arcos, Vector2.ZERO, Vector2(640, 640))

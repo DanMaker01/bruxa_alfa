@@ -9,6 +9,9 @@ extends Node2D
 ## Mesmo do mapa anterior = continua. Toca junto com a música.
 @export_file("*.mp3") var bgs: String = ""
 @export_range(0.0, 1.0, 0.01) var bgs_volume: float = 0.5
+## Mais sons de ambiente tocando junto (cada um com o seu volume). Os comandos BGS
+## ligam/desligam outros durante o jogo; ao entrar no mapa ficam só os daqui.
+@export var bgs_extras: Array[SomAmbiente] = []
 
 var game_manager = null
 var interpeter = null
@@ -103,10 +106,21 @@ func _tocar_bgs() -> void:
 	var audio = game_manager.get_node_or_null("AudioManager") if game_manager else null
 	if audio == null or audio.get("bgs_player") == null:
 		return
-	var caminho = _caminho_audio(bgs)
-	if caminho == null:
-		return
-	audio.play_bgs(str(caminho).get_file().get_basename() if caminho != "" else "", bgs_volume)
+	var lista: Array = []
+	var sons: Array = [[bgs, bgs_volume]]
+	for s in bgs_extras:
+		if s:
+			sons.append([s.arquivo, s.volume])
+	for par in sons:
+		var caminho = _caminho_audio(par[0])
+		if caminho == null:
+			return   # uid velho: não mexe nos sons que já estão tocando
+		if caminho != "":
+			lista.append([str(caminho).get_file().get_basename(), par[1]])
+	if audio.has_method("definir_bgs"):
+		audio.definir_bgs(lista)
+	elif not lista.is_empty():
+		audio.play_bgs(lista[0][0], lista[0][1])
 
 ## O inspetor do Godot 4.4+ guarda o arquivo como "uid://...": converte para o caminho.
 ## null = uid desconhecido (o .mp3 foi reimportado; escolha o arquivo de novo no Inspector).

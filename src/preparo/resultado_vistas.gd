@@ -23,7 +23,7 @@ const TELA := Vector2(640, 960)
 const C_CARTA1 := Rect2(16, 40, 296, 400)     # nome + matriz
 const C_CARTA2 := Rect2(328, 40, 296, 400)    # pentágono
 const C_CARTA3 := Rect2(16, 456, 608, 420)    # ingredientes
-const C_GRADE := Rect2(64, 124, 200, 200)     # com margem dentro da carta 1
+const C_GRADE := Rect2(64, 186, 200, 200)     # mais embaixo na carta 1 (título em cima)
 const C_PENT := Rect2(371, 116, 210, 210)     # com margem dentro da carta 2
 const C_CEL_MAX: float = 96.0
 const C_ICONES_FIM: float = 650.0             # ícones acima disto; o detalhe abre embaixo
@@ -46,8 +46,9 @@ func _layout() -> Dictionary:
 				"grafico": Rect2(342, 500, 268, 170), "icones": Rect2(16, 456, 296, 420),
 				"icones_y0": 504.0, "icones_fim": 860.0, "detalhe": Rect2(338, 680, 276, 186), "carta_grafico": 3}
 		_:   # DETALHE (padrão)
-			return {"carta3": C_CARTA3, "grafico": Rect2(36, 724, 568, 140), "icones": C_CARTA3,
-				"icones_y0": 504.0, "icones_fim": 646.0, "detalhe": Rect2(30, 650, 580, 70), "carta_grafico": 2}
+			# ícones pequenos em cima, gráfico grande, detalhe do item embaixo
+			return {"carta3": C_CARTA3, "grafico": Rect2(40, 562, 560, 240), "icones": C_CARTA3,
+				"icones_y0": 498.0, "icones_fim": 556.0, "detalhe": Rect2(46, 806, 548, 64), "carta_grafico": 2}
 var cartas: Array = []          # [Carta x3], no estilo das cartas do HUD
 const TITULOS_VERSO := ["Poção", "Efeito", "Ingredientes"]
 var grade: GradeMatriz
@@ -182,12 +183,10 @@ func _montar_coluna() -> void:
 	grade.size = C_GRADE.size
 	_na_carta(0, grade, C_GRADE.position)
 	grade.modulate.a = 0.0
-	_na_carta(0, _legenda("matriz", Vector2.ZERO), Vector2(C_GRADE.get_center().x - 150, C_GRADE.end.y + 8))
 	pentagono = PentagonoOcean.new()
 	pentagono.size = C_PENT.size
 	_na_carta(1, pentagono, C_PENT.position)
 	pentagono.modulate.a = 0.0
-	_na_carta(1, _legenda("efeito numa pessoa neutra", Vector2.ZERO), Vector2(C_PENT.get_center().x - 150, C_PENT.end.y + 4))
 	# gráfico da temperatura (sempre visível)
 	var lay := _layout()
 	_r_detalhe = lay["detalhe"]
@@ -195,6 +194,7 @@ func _montar_coluna() -> void:
 	grafico = GraficoResultado.new()
 	grafico.size = rg.size
 	grafico.configurar(_res.get("historico_T", []), _inicio(), float(_res.get("t_final", 1.0)), _diags())
+	grafico.definir_receita(_res.get("receita", {}))
 	_na_carta(int(lay["carta_grafico"]), grafico, rg.position)
 	grafico.modulate.a = 0.0
 	# ícones na ordem em que entraram (encolhem se forem muitos)
@@ -205,7 +205,7 @@ func _montar_coluna() -> void:
 	cab.size = Vector2(ri.size.x, 26)
 	_na_carta(2, cab, Vector2(ri.position.x, float(lay["icones_y0"]) - 34.0))
 	var n: int = diags.size()
-	var max_linha: int = 6 if ri.size.x > 400.0 else 3
+	var max_linha: int = 12 if ri.size.x > 400.0 else 3
 	var linhas: int = maxi(1, ceili(n / float(max_linha)))
 	var por_linha: int = maxi(1, ceili(n / float(linhas)))
 	var y0: float = float(lay["icones_y0"])
@@ -218,6 +218,7 @@ func _montar_coluna() -> void:
 		var r := Rect2(x0 + col * cel, y0 + lin * (cel + 10), cel, cel + 10)
 		var ic := IconeIngRes.new()
 		ic.d = diags[i]
+		ic.num = i + 1
 		ic.vistas = self
 		ic.size = r.size
 		_na_carta(2, ic, r.position)
@@ -262,18 +263,43 @@ func mostrar_ingredientes() -> void:
 	if cartas.size() > 3:
 		_abrir_carta(cartas[3])   # carta do gráfico junto
 	await _abrir_carta(cartas[2])
-	if grafico:
-		grafico.create_tween().tween_property(grafico, "modulate:a", 1.0, 0.3)
-	# todos juntos: os ícones aparecem e os anéis enchem ao mesmo tempo
-	for ic in _icones:
-		var no = ic["no"]
+	if grafico == null:
+		return
+	# 1. o gráfico aparece com a curva ideal (se fez com receita)
+	grafico.set_ideal_a(0.0)
+	grafico.set_progresso(0.0)
+	var tw := create_tween()
+	tw.tween_property(grafico, "modulate:a", 1.0, 0.3)
+	await tw.finished
+	if grafico.tem_ideal():
+		tw = create_tween()
+		tw.tween_method(grafico.set_ideal_a, 0.0, 1.0, DUR_IDEAL)
+		await tw.finished
+	# 2. o T(t) do preparo vai sendo desenhado; cada item entra quando a curva passa por ele
+	_icones_mostrados = 0
+	tw = create_tween()
+	tw.tween_method(_progresso_curva, 0.0, 1.0, DUR_CURVA)
+	await tw.finished
+	await get_tree().create_timer(0.3, true).timeout
+
+const DUR_IDEAL: float = 0.6     # s: a curva ideal aparece
+const DUR_CURVA: float = 2.2     # s: o T(t) é desenhado do começo ao fim
+var _icones_mostrados: int = 0
+
+func _progresso_curva(v: float) -> void:
+	grafico.set_progresso(v)
+	var t_corte: float = grafico.t_do_progresso(v)
+	for i in range(_icones_mostrados, _icones.size()):
+		if float(_icones[i]["d"].get("t0", 0.0)) > t_corte:
+			break
+		_icones_mostrados = i + 1
+		var no = _icones[i]["no"]
 		no.scale = Vector2(0.6, 0.6)
 		no.pivot_offset = no.size * 0.5
 		var tw := create_tween().set_parallel(true)
-		tw.tween_property(no, "modulate:a", 1.0, 0.2)
-		tw.tween_property(no, "scale", Vector2.ONE, 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		tw.tween_method(no.set_anel, 0.0, 1.0, 0.5)
-	await get_tree().create_timer(0.6, true).timeout
+		tw.tween_property(no, "modulate:a", 1.0, 0.15)
+		tw.tween_property(no, "scale", Vector2.ONE, 0.25).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tw.tween_method(no.set_anel, 0.0, 1.0, 0.45)
 
 
 ## Tudo pronto de uma vez (ao trocar de visual com a janela já aberta).
@@ -288,6 +314,9 @@ func mostrar_tudo() -> void:
 		grade.mostrar(_A)
 	if pentagono:
 		pentagono.mostrar(_A, 0.01)
+	if grafico:
+		grafico.set_ideal_a(1.0)
+		grafico.set_progresso(1.0)
 	for ic in _icones:
 		ic["no"].set_anel(1.0)
 
@@ -465,33 +494,38 @@ func _inicio() -> float:
 
 # -----------------------------------------------------------------------------
 ## Ícone de um ingrediente com o anel de aproveitamento (coluna).
+## Ícone pequeno de um ingrediente com o anel de aproveitamento: número da entrada no gráfico, ícone e %.
 class IconeIngRes extends Control:
 	var d: Dictionary
 	var vistas: Control
+	var num: int = 0
 	var _f: float = 1.0
-
-	func _ready() -> void:
-		mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	func set_anel(f: float) -> void:
 		_f = f
 		queue_redraw()
 
+	func _ready() -> void:
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+
 	func _draw() -> void:
 		var a: float = clampf(float(d.get("a", 0.0)), 0.0, 1.0)
-		var c := Vector2(size.x * 0.5, size.x * 0.42)
-		var r: float = size.x * 0.36
-		var item: ItemData = d.get("item")
-		if item and item.icone:
-			var lado: float = r * 1.35
-			draw_texture_rect(item.icone, Rect2(c - Vector2(lado, lado) * 0.5, Vector2(lado, lado)), false)
-		draw_arc(c, r, 0.0, TAU, 48, Color(1, 1, 1, 0.15), 5.0, true)
-		var v: float = a * _f
-		if v > 0.001:
-			draw_arc(c, r, -PI * 0.5, -PI * 0.5 + TAU * v, 48, IconesCaldeirao.cor_aproveitamento(a), 5.0, true)
 		var fonte := get_theme_default_font()
-		var txt := "%d%%" % roundi(v * 100.0)
-		draw_string(fonte, Vector2(0, size.y - 4), txt, HORIZONTAL_ALIGNMENT_CENTER, size.x, 17, IconesCaldeirao.cor_aproveitamento(a))
+		var tam_txt: int = clampi(int(size.x * 0.28), 10, 17)
+		var lado: float = minf(size.x, size.y - tam_txt - 2.0) * 0.85
+		var c := Vector2(size.x * 0.5, lado * 0.5 + 2.0)
+		var item: ItemData = d.get("item")
+		var r: float = lado * 0.5
+		if item and item.icone:
+			var li: float = lado * 0.7
+			draw_texture_rect(item.icone, Rect2(c - Vector2(li, li) * 0.5, Vector2(li, li)), false)
+		var esp: float = maxf(2.0, lado * 0.08)
+		draw_arc(c, r - esp * 0.5, 0.0, TAU, 40, Color(1, 1, 1, 0.15), esp, true)
+		if a * _f > 0.001:
+			draw_arc(c, r - esp * 0.5, -PI * 0.5, -PI * 0.5 + TAU * a * _f, 40, IconesCaldeirao.cor_aproveitamento(a), esp, true)
+		if num > 0:
+			draw_string(fonte, Vector2(1, tam_txt), str(num), HORIZONTAL_ALIGNMENT_LEFT, -1, tam_txt - 2, Color(1, 1, 1, 0.75))
+		draw_string(fonte, Vector2(0, size.y - 2), "%d%%" % roundi(a * _f * 100.0), HORIZONTAL_ALIGNMENT_CENTER, size.x, tam_txt, IconesCaldeirao.cor_aproveitamento(a))
 
 
 # -----------------------------------------------------------------------------
@@ -519,9 +553,45 @@ class GraficoResultado extends Control:
 		_diags = diags
 		queue_redraw()
 
+	## Receita memorizada: faixa de T ideal (estado da chama de cada passo) ao longo do tempo,
+	## contando do 1º ingrediente; cada passo de ingrediente dura os seus "seg".
+	var _ideal: Array = []   # [t0, t1, estado]
+	func definir_receita(rec: Dictionary) -> void:
+		_ideal.clear()
+		var t := _ti
+		var ini := _ti
+		var est := ""
+		for s in rec.get("passos", []):
+			if s.get("tipo") == "chama":
+				if est != "" and t > ini:
+					_ideal.append([ini, t, est])
+				est = str(s.get("estado", ""))
+				ini = t
+			elif s.get("tipo") == "ingrediente":
+				t += float(s.get("seg", 0.0))
+		if est != "" and t > ini:
+			_ideal.append([ini, t, est])
+		if not _ideal.is_empty():
+			_tf = maxf(_tf, t)
+		queue_redraw()
+
 	func selecionar(i: int) -> void:
 		_sel = i
 		queue_redraw()
+
+	# animação: alfa da curva ideal e quanto do T(t) já foi desenhado (0..1)
+	var _ideal_a: float = 1.0
+	var _prog: float = 1.0
+	func set_ideal_a(v: float) -> void:
+		_ideal_a = v
+		queue_redraw()
+	func set_progresso(v: float) -> void:
+		_prog = v
+		queue_redraw()
+	func tem_ideal() -> bool:
+		return not _ideal.is_empty()
+	func t_do_progresso(v: float) -> float:
+		return _ti + (_tf - _ti) * v
 
 	func _p(t: float, T: float) -> Vector2:
 		var x: float = 8.0 + (size.x - 16.0) * clampf((t - _ti) / (_tf - _ti), 0.0, 1.0)
@@ -541,14 +611,34 @@ class GraficoResultado extends Control:
 		var y100: float = _p(_ti, 100.0).y
 		draw_line(Vector2(8, y100), Vector2(size.x - 8, y100), Color(1, 1, 1, 0.15), 1.0)
 		draw_string(_f, Vector2(10, y100 - 3), "100 °C", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color(1, 1, 1, 0.4))
+		# curva ideal da receita (atrás): faixa do estado da chama + linha tracejada no meio
+		var prev := Vector2.INF
+		for seg in _ideal:
+			var e: Dictionary = EstadosChama.LISTA[maxi(0, EstadosChama.indice(seg[2]))]
+			var lo: float = clampf(float(e["T_min"]), T_BAIXO, T_ALTO)
+			var hi: float = clampf(float(e["T_max"]), T_BAIXO, T_ALTO)
+			var a0 := _p(seg[0], hi)
+			var a1 := _p(seg[1], lo)
+			draw_rect(Rect2(a0, a1 - a0), Color(e["cor"], 0.22 * _ideal_a))
+			var m0 := _p(seg[0], (lo + hi) * 0.5)
+			var m1 := _p(seg[1], (lo + hi) * 0.5)
+			if prev != Vector2.INF:
+				draw_dashed_line(prev, m0, Color(1, 1, 1, 0.45 * _ideal_a), 1.5, 5.0)
+			draw_dashed_line(m0, m1, Color(1, 1, 1, 0.55 * _ideal_a), 1.5, 5.0)
+			prev = m1
+		if not _ideal.is_empty():
+			draw_string(_f, Vector2(size.x - 8 - _f.get_string_size("- - ideal", HORIZONTAL_ALIGNMENT_LEFT, -1, 11).x, 12), "- - ideal", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color(1, 1, 1, 0.6 * _ideal_a))
+		var corte: float = t_do_progresso(_prog)
 		var pts := PackedVector2Array()
 		for p in _hist:
 			var t: float = float(p.get("t", 0.0))
-			if t < _ti or t > _tf:
+			if t < _ti or t > corte:
 				continue
 			pts.append(_p(t, float(p.get("T", T_BAIXO))))
+		if _prog < 1.0 and pts.size() >= 1:
+			draw_circle(pts[pts.size() - 1], 4.0, Color(1, 0.95, 0.8))   # ponta da caneta
 		# trecho do ingrediente selecionado: área na cor da chama em que entrou
-		if _sel >= 0 and _sel < _diags.size():
+		if _sel >= 0 and _sel < _diags.size() and _prog >= 1.0:
 			var t0: float = float(_diags[_sel].get("t0", _ti))
 			var cor: Color = LinhaTempo.cor_da_temperatura(_T_em(t0))
 			var area := PackedVector2Array()
@@ -566,6 +656,8 @@ class GraficoResultado extends Control:
 		# entradas numeradas
 		for i in _diags.size():
 			var t0: float = float(_diags[i].get("t0", _ti))
+			if t0 > corte:
+				continue   # a curva ainda não chegou neste item
 			var q := _p(t0, _T_em(t0))
 			var sel: bool = i == _sel
 			draw_circle(q, 9.0 if sel else 7.0, Color(0.1, 0.08, 0.12, 0.9))

@@ -41,6 +41,11 @@ func _subir_para_camada() -> void:
 			_botao.reparent(camada, false)
 		else:
 			camada.add_child(_botao)
+	# ícone da receita memorizada (abaixo do DEBUG)
+	var rm := ReceitaMemorizada.new()
+	rm.pausa = self
+	rm.gm = gm
+	camada.add_child(rm)
 
 
 func _montar() -> void:

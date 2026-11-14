@@ -9,7 +9,7 @@
 #   poção sem nome (feita no preparo): ganha nome ao passar a limpo e editar (o nome da
 #                   receita vale para a poção: item no inventário e próximas iguais).
 #                   Na página só aparece "poção sem nome". Poção com nome não muda.
-#   + Nova receita: botão no rodapé (não há página em branco para avançar até ela)
+#   + Nova receita: sempre na página da direita depois da última; tocar numa página em branco também cria
 # Editar: a própria página vira editável e a página ao lado vira a paleta (EditorReceita,
 # arrastar e soltar); Pronto / Cancelar voltam ao normal. Tocar numa página já feita
 # abre o DetalheReceita (gráfico do melhor preparo).
@@ -242,8 +242,7 @@ func _montar() -> void:
 # PÁGINAS
 # =============================================================================
 func _atualizar() -> void:
-	_folhas = livro["paginas"].duplicate()
-	_folhas.append_array(livro["rascunhos"])   # rascunhos no fim do livro
+	_montar_lista()
 	_spread = clampi(_spread, 0, maxi(0, ((_folhas.size() - 1) / 2) * 2))
 	if _editando_lado >= 0:
 		_montar_edicao()
@@ -254,8 +253,19 @@ func _atualizar() -> void:
 		_montar_pagina(lado, folha, k + 1)
 	_seta_esq.disabled = _spread <= 0
 	_seta_dir.disabled = _spread + 2 >= _folhas.size()   # nunca avança para duas páginas vazias
-	_b_nova.disabled = LivroReceitas.cheio(livro)
-	_indicador.text = "%d-%d de %d" % [_spread + 1, mini(_spread + 2, _folhas.size()), _folhas.size()]
+	_b_nova.visible = false   # o "+ Nova receita" fica na página da direita depois da última
+	var n_real: int = livro["paginas"].size() + livro["rascunhos"].size()
+	_indicador.text = "%d-%d de %d" % [mini(_spread + 1, n_real), mini(_spread + 2, n_real), n_real]
+
+## Páginas na ordem do livro e, no fim, a página "+ Nova receita" sempre do lado DIREITO
+## (se a última receita cai na direita, entra uma página em branco à esquerda).
+## Tocar numa página em branco também cria uma receita.
+func _montar_lista() -> void:
+	_folhas = livro["paginas"].duplicate()
+	_folhas.append_array(livro["rascunhos"])   # rascunhos no fim do livro
+	if _folhas.size() % 2 == 0:
+		_folhas.append({"slot": "vazia"})
+	_folhas.append({"slot": "nova"})
 
 func _ultimo_spread() -> int:
 	return maxi(0, ((_folhas.size() - 1) / 2) * 2)
@@ -291,8 +301,7 @@ func _virar(d: int, t: float) -> void:
 
 ## Vai até a página de uma receita (por id), virando as folhas no caminho.
 func ir_para(id: int) -> void:
-	_folhas = livro["paginas"].duplicate()
-	_folhas.append_array(livro["rascunhos"])
+	_montar_lista()
 	var alvo := -1
 	for k in _folhas.size():
 		if int(_folhas[k].get("id", -1)) == id:
@@ -326,6 +335,13 @@ func _montar_pagina(lado: int, folha, numero: int) -> void:
 	_fitas[lado].visible = folha is Dictionary and folha.get("tipo") == "npc"
 	if folha == null:
 		return
+	if folha.get("slot") == "vazia":
+		caixa.add_child(_espaco())
+		var tv := _rotulo("Página em branco\n(toque para uma nova receita)", 14, COR_SUAVE)
+		tv.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		caixa.add_child(tv)
+		caixa.add_child(_espaco())
+		return
 	if folha.get("slot") == "nova":
 		caixa.add_child(_espaco())
 		var t := _rotulo("Página em branco", 14, COR_SUAVE)
@@ -342,7 +358,7 @@ func _montar_pagina(lado: int, folha, numero: int) -> void:
 	var tipo := ""
 	match p.get("tipo"):
 		"rascunho": tipo = "rascunho · " + str(p.get("quando", ""))
-		"npc": tipo = "receita ensinada"
+		"npc": tipo = ""   # ensinada: só a fitinha dourada
 	var lt := _rotulo(tipo, 11, COR_NPC if p.get("tipo") == "npc" else COR_SUAVE, false)
 	lt.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lt.clip_text = true
@@ -579,8 +595,10 @@ func _papel_input(ev: InputEvent, lado: int) -> void:
 		return
 	if _toque_ini.x >= 0.0 and ev.global_position.distance_to(_toque_ini) > 12.0:
 		return   # foi um arrasto (virar página)
-	# tocar numa página não faz nada (o detalhe do preparo saiu; DetalheReceita fica no código)
-	return
+	# página em branco (ou a do "+ Nova receita"): cria uma receita. As outras não fazem nada.
+	var k := _spread + lado
+	if k < _folhas.size() and _folhas[k] is Dictionary and _folhas[k].has("slot"):
+		_nova()
 
 
 # =============================================================================

@@ -23,6 +23,8 @@ const TAM_POCAO := Vector2(160, 160)
 const CENTRO_POCAO := Vector2(320, 220)       # posição inicial da poção (ela surge no lugar da matriz)
 ## Para onde a poção voa ao sair (fallback, se a carta do inventário não for achada).
 const DESTINO_INVENTARIO := Vector2(192, 800)
+## A poção para nesta distância (px) acima do fundo da carta do inventário.
+const MARGEM_FUNDO_CARTA: float = 70.0
 const NOME_DESCONHECIDO := "Poção desconhecida"
 ## Poção que não muda nada (matriz identidade, ou sem ingredientes): sempre este nome.
 const NOME_AGUA := "Água de Caldeirão"
@@ -434,7 +436,7 @@ func _fechar() -> void:
 	_dica.visible = false
 	await _vistas.fechar_cartas_menores()
 	await _matriz_vira_pocao()
-	await _vistas.fechar_carta_nome()
+	_vistas.fechar_carta_nome()   # a carta da poção já vai virando enquanto a poção vai para o meio
 	var hud = get_node_or_null("/root/Main/CanvasLayer/HUD")
 	var carta = hud.get("carta_inventario") if hud else null
 	var gt = get_node_or_null("/root/Main/GameManager/GameTemp")
@@ -477,10 +479,15 @@ func _fechar() -> void:
 		carta.abrir()           # ...depois vira e abre
 	await _esperar(0.45)
 
-	# 3. a poção desce até a linha dela
+	# 3. a poção desce até a linha dela; se a lista está cheia (a linha fica fora da
+	#    carta), vai para a parte de baixo da carta
 	var destino := DESTINO_INVENTARIO
 	if hud and hud.has_method("preparar_item_chegando") and id != "":
 		destino = hud.preparar_item_chegando(id, true)
+	if carta:
+		var rc: Rect2 = carta.get_global_rect()
+		if not rc.grow(-20.0).has_point(destino):
+			destino = Vector2(rc.get_center().x, rc.end.y - MARGEM_FUNDO_CARTA)
 	tw = create_tween().set_parallel(true)
 	tw.tween_property(voo, "position", destino - TAM_POCAO * 0.5, 1.3).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
 	tw.tween_property(voo, "scale", Vector2(0.22, 0.22), 1.3).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)

@@ -13,7 +13,114 @@ var multiplicador_velocidade: float = 1.0
 var limite_x: Vector2 = Vector2(-INF, INF)
 
 func velocidade_max() -> float:
-	return MAX_SPEED * multiplicador_velocidade
+	return MAX_SPEED * multiplicador_velocidade * (CORRIDA if correndo else 1.0)
+
+# ===== CORRIDA / DASH =====
+# Toque e, no 2º toque, segurar (InputManager): dash no início e segue correndo até parar.
+const CORRIDA: float = 1.8          # velocidade da corrida (× andar)
+const DASH: float = 2.8             # impulso do dash (× andar), cai até a corrida
+const SOM_DASH := "dash"            # res://audio/se/dash.mp3 (toca se existir)
+var correndo: bool = false
+
+# ===== ANIMAÇÕES (sprites de tamanhos diferentes) =====
+# Regra única para desenhar: o PÉ fica no MEIO, EMBAIXO do quadro (olhando para a direita).
+# Qualquer largura ou altura funciona sem configurar nada: o código alinha o fundo de
+# todos os quadros na mesma linha e centraliza na horizontal. A colisão nunca muda.
+# Cada animação: arquivo (%02d = quadros 01, 02, 03... até faltar), quadros por segundo, loop.
+const ANIMACOES := {
+	"parado": {"arquivo": "res://assets/game_player/player_parado.png", "fps": 0.0, "loop": true},
+	"correr": {"arquivo": "res://assets/game_player/player_correndo%02d.png", "fps": 10.0, "loop": true},
+	"dash": {"arquivo": "res://assets/game_player/player_dash%02d.png", "fps": 12.0, "loop": false},
+}
+var _anims: Dictionary = {}     # nome -> {"quadros": [Texture2D], "fps", "loop"}
+var _anim: String = ""
+var _t_anim: float = 0.0
+var _alt_ref: float = 0.0       # altura do parado: o fundo dos quadros fica onde está o dele
+## Animação pedida por um evento (comando Animação). "" = automática (parado/correr).
+var animacao_evento: String = ""
+
+## Comando Animação: fixa uma animação ("" volta ao automático). false = não existe.
+func animacao_por_evento(nome: String) -> bool:
+	if nome != "" and not _anims.has(nome):
+		return false
+	animacao_evento = nome
+	_anim = ""   # recomeça
+	return true
+
+func _carregar_animacoes() -> void:
+	_anims.clear()
+	for nome in ANIMACOES:
+		var cfg: Dictionary = ANIMACOES[nome]
+		var arq: String = cfg["arquivo"]
+		var quadros: Array = []
+		if "%" in arq:
+			for k in range(1, 100):
+				if not ResourceLoader.exists(arq % k):
+					break
+				quadros.append(load(arq % k))
+		elif ResourceLoader.exists(arq):
+			quadros.append(load(arq))
+		if not quadros.is_empty():
+			_anims[nome] = {"quadros": quadros, "fps": cfg["fps"], "loop": cfg["loop"]}
+	if _anims.has("parado"):
+		_alt_ref = _anims["parado"]["quadros"][0].get_height()
+	elif sprite and sprite.texture:
+		_alt_ref = sprite.texture.get_height()
+	tocar("parado")
+
+## Troca de animação (não reinicia se já é a atual). Sem os sprites dela, nada muda.
+func tocar(nome: String) -> bool:
+	if not _anims.has(nome):
+		return false
+	if nome != _anim:
+		_anim = nome
+		_t_anim = 0.0
+	return true
+
+func iniciar_dash(direcao: int) -> void:
+	if direcao == 0:
+		return
+	correndo = true
+	velocity.x = direcao * MAX_SPEED * multiplicador_velocidade * DASH
+	_anim = ""   # recomeça a animação
+	# poeira no chão onde ela estava (o pé fica no fundo do desenho do parado)
+	PoeiraDash.soltar(get_parent(), global_position + Vector2(0, _alt_ref * 0.5), direcao)
+	if ResourceLoader.exists("res://audio/se/%s.mp3" % SOM_DASH) and game_manager:
+		var audio = game_manager.get_node_or_null("AudioManager")
+		if audio:
+			audio.play_se(SOM_DASH, 0.8, 0.05)
+	if not tocar("dash"):
+		tocar("correr")   # sem sprite de dash: vai direto para a corrida
+
+func parar_corrida() -> void:
+	correndo = false
+
+## A cada frame: escolhe a animação e o quadro, e alinha o desenho pelo pé.
+func _atualizar_sprite(delta: float) -> void:
+	if sprite == null or _anims.is_empty():
+		return
+	if animacao_evento != "":
+		tocar(animacao_evento)
+	elif not correndo:
+		tocar("parado")
+	elif _anim == "parado" or _anim == "":
+		tocar("correr")
+	var a: Dictionary = _anims.get(_anim, {})
+	if a.is_empty():
+		return
+	_t_anim += delta
+	var n: int = a["quadros"].size()
+	var i: int = int(_t_anim * float(a["fps"])) if float(a["fps"]) > 0.0 else 0
+	if i >= n and not a["loop"]:
+		if _anim == "dash" and correndo and tocar("correr"):
+			_atualizar_sprite(0.0)
+			return
+		i = n - 1
+	var tex: Texture2D = a["quadros"][i % n]
+	if sprite.texture != tex:
+		sprite.texture = tex
+	# centrado na horizontal; fundo na mesma linha do fundo do parado
+	sprite.offset = Vector2(0.0, (_alt_ref - tex.get_height()) * 0.5)
 
 func aceleracao() -> float:
 	return ACCELERATION * multiplicador_velocidade
@@ -101,6 +208,7 @@ func enable_interaction():
 # 	print("[Player] 🔓 Física reativada")
 
 func _ready():
+	_carregar_animacoes()
 	print("[Player] ===== INICIANDO =====")
 	if zone:
 		print("[Player] ✅ InteractionZone própria pronta (", zone.name, ")")
@@ -157,6 +265,7 @@ func _physics_process(delta: float) -> void:
 	
 	# 4. ATUALIZA A ANIMAÇÃO
 	_update_animation()
+	_atualizar_sprite(delta)
 
 # 🔥 MÉTODO CHAMADO PELO INPUT MANAGER (clique)
 func set_movement_direction(direction: int) -> void:
@@ -203,6 +312,7 @@ func stop_movement() -> void:
 func force_stop() -> void:
 	"""Para o movimento imediatamente (sem desaceleração)"""
 	velocity = Vector2.ZERO
+	parar_corrida()
 	movement_direction = 0
 	is_moving_from_input = false
 	print("[Player] 🛑 Movimento forçado a parar")

@@ -384,6 +384,16 @@ func _montar() -> void:
 	_montar_info()
 	_ajustar_toque(_janela)
 
+## O botão DEBUG some enquanto o caldeirão está aberto (lá tem o debug do caldeirão).
+var _cena_preparo: Node = null
+func _process(_d: float) -> void:
+	if _botao == null:
+		return
+	if _cena_preparo == null or not is_instance_valid(_cena_preparo):
+		_cena_preparo = get_tree().root.find_child("CenaPreparo", true, false)
+	var no_caldeirao: bool = _cena_preparo != null and _cena_preparo is CanvasItem and _cena_preparo.is_visible_in_tree()
+	_botao.visible = not no_caldeirao
+
 func _montar_botao() -> void:
 	_botao = Button.new()
 	_botao.name = "BotaoDebug"

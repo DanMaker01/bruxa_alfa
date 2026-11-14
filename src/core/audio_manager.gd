@@ -94,7 +94,11 @@ func _debug_list_audio_folder():
 	
 	print("===========================\n")
 
-func play_bgm(filename: String, volume: float = 1.0):
+## Tom: -1..1 = -12..+12 semitons (0 = normal). Muda a velocidade junto, como no RPG Maker.
+static func pitch_do_tom(tom: float) -> float:
+	return pow(2.0, clampf(tom, -1.0, 1.0))
+
+func play_bgm(filename: String, volume: float = 1.0, tom: float = 0.0):
 	if filename == "None" or filename == "":
 		_stop_bgm()
 		return
@@ -108,6 +112,7 @@ func play_bgm(filename: String, volume: float = 1.0):
 		return
 	
 	if current_bgm == filename and bgm_player.playing:
+		bgm_player.pitch_scale = pitch_do_tom(tom)
 		return
 	
 	if "loop" in stream:
@@ -116,6 +121,7 @@ func play_bgm(filename: String, volume: float = 1.0):
 	bgm_player.stream = stream
 	current_bgm_base_volume = volume
 	bgm_player.volume_db = _linear_to_db(volume * bgm_volume * master_volume)
+	bgm_player.pitch_scale = pitch_do_tom(tom)
 	bgm_player.play()
 	current_bgm = filename
 	print("[AudioManager] ✅ BGM: ", filename)
@@ -130,37 +136,75 @@ func pause_bgm():
 func resume_bgm():
 	bgm_player.stream_paused = false
 
-func play_bgs(filename: String, volume: float = 0.5):
+## Vários BGS ao mesmo tempo, cada um com o seu volume e em loop (um player por som).
+## play_bgs(nome) = só esse; "" para todos.
+var _bgs_canais: Dictionary = {}   # nome -> AudioStreamPlayer (meta "base_volume")
+
+func play_bgs(filename: String, volume: float = 0.5, tom: float = 0.0):
 	if filename == "None" or filename == "":
-		_stop_bgs()
+		definir_bgs([])
+	else:
+		definir_bgs([[filename, volume, tom]])
+
+## Deixa tocando exatamente estes: [[nome, volume, tom?], ...]. Os que já tocam continuam.
+func definir_bgs(lista: Array) -> void:
+	var manter := {}
+	for par in lista:
+		manter[str(par[0])] = true
+	for nome in _bgs_canais.keys():
+		if not manter.has(nome):
+			desligar_bgs(nome)
+	for par in lista:
+		ligar_bgs(str(par[0]), float(par[1]) if par.size() > 1 else 0.5, float(par[2]) if par.size() > 2 else 0.0)
+
+## Liga um BGS (se já toca, só ajusta o volume).
+func ligar_bgs(filename: String, volume: float = 0.5, tom: float = 0.0) -> void:
+	if filename == "" or filename == "None":
 		return
-	
+	var p: AudioStreamPlayer = _bgs_canais.get(filename)
+	if p and p.playing:
+		p.set_meta("base_volume", volume)
+		p.volume_db = _linear_to_db(volume * bgs_volume * master_volume)
+		p.pitch_scale = pitch_do_tom(tom)
+		return
 	var path = BGS_PATH + filename + ".mp3"
-	
 	var stream = ResourceLoader.load(path, "AudioStream", ResourceLoader.CACHE_MODE_REUSE)
 	if not stream:
 		print("[AudioManager] ❌ BGS não encontrado: ", path)
 		return
-	
-	if current_bgs == filename and bgs_player.playing:
-		return
-	
 	if "loop" in stream:
 		stream.loop = true   # BGS sempre em loop (vento, pássaros...)
-	bgs_player.stop()
-	bgs_player.stream = stream
-	current_bgs_base_volume = volume
-	bgs_player.volume_db = _linear_to_db(volume * bgs_volume * master_volume)
-	bgs_player.play()
-	current_bgs = filename
+	if p == null:
+		p = AudioStreamPlayer.new()
+		p.name = "BGS_" + filename.validate_node_name()
+		p.process_mode = PROCESS_MODE_ALWAYS
+		if bgs_player:
+			p.bus = bgs_player.bus
+		add_child(p)
+		_bgs_canais[filename] = p
+	p.stream = stream
+	p.set_meta("base_volume", volume)
+	p.volume_db = _linear_to_db(volume * bgs_volume * master_volume)
+	p.pitch_scale = pitch_do_tom(tom)
+	p.play()
+	current_bgs = ", ".join(_bgs_canais.keys())
 	print("[AudioManager] ✅ BGS: ", filename)
 
+func desligar_bgs(filename: String) -> void:
+	var p: AudioStreamPlayer = _bgs_canais.get(filename)
+	if p:
+		p.stop()
+		p.queue_free()
+		_bgs_canais.erase(filename)
+	current_bgs = ", ".join(_bgs_canais.keys())
+
 func _stop_bgs():
-	bgs_player.stop()
-	current_bgs = ""
+	definir_bgs([])
+	if bgs_player:
+		bgs_player.stop()
 
 ## pitch_var: variação aleatória do tom (0.05 = ±5%).
-func play_se(filename: String, volume: float = 1.0, pitch_var: float = 0.0):
+func play_se(filename: String, volume: float = 1.0, pitch_var: float = 0.0, tom: float = 0.0):
 	if filename == "None" or filename == "":
 		return
 	
@@ -178,8 +222,9 @@ func play_se(filename: String, volume: float = 1.0, pitch_var: float = 0.0):
 	player.stream = stream
 	player.set_meta("base_volume",volume)
 	player.volume_db = _linear_to_db(volume * se_volume * master_volume)
+	player.pitch_scale = pitch_do_tom(tom)
 	if pitch_var > 0.0:
-		player.pitch_scale = randf_range(1.0 - pitch_var, 1.0 + pitch_var)
+		player.pitch_scale *= randf_range(1.0 - pitch_var, 1.0 + pitch_var)
 	
 	se_container.add_child(player)
 	
@@ -227,6 +272,9 @@ func _update_bgm_volume():
 func _update_bgs_volume():
 	if bgs_player and bgs_player.playing:
 		bgs_player.volume_db = _linear_to_db(current_bgs_base_volume * bgs_volume * master_volume)
+	for nome in _bgs_canais:
+		var p: AudioStreamPlayer = _bgs_canais[nome]
+		p.volume_db = _linear_to_db(float(p.get_meta("base_volume", 0.5)) * bgs_volume * master_volume)
 
 func _update_se_volumes():
 	for child in se_container.get_children():

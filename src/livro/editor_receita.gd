@@ -1,6 +1,6 @@
 # editor_receita.gd
 # Edição de uma receita NA PRÓPRIA PÁGINA do livro (sem janela extra).
-#   página da receita: nome (campo), aviso de semelhança, passos em cartões, Cancelar / Pronto
+#   página da receita: nome (campo), aviso de semelhança, passos em cartões, Pronto / Cancelar
 #     arrastar um cartão reordena; tocar abre a edição dele (ingrediente: quantidade e
 #     segundos; chama: troca a cor)
 #   página ao lado:    paleta com as chamas e os ingredientes já vistos + lixeira
@@ -77,8 +77,8 @@ func montar_pagina(caixa: VBoxContainer) -> void:
 	var ok := _botao("Pronto", _fim.bind(true))
 	ok.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	ok.add_theme_color_override("font_color", COR_DESTAQUE)
+	h.add_child(ok)   # Pronto à esquerda, Cancelar à direita
 	h.add_child(c)
-	h.add_child(ok)
 	caixa.add_child(h)
 	atualizar()
 

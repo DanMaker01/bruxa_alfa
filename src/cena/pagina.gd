@@ -63,6 +63,15 @@ func configure(data: PaginaData):
 			else:
 				pass
 	
+	# ===== ALINHAMENTO PELO PÉ =====
+	# Quadros de tamanhos diferentes: o pé fica no meio, embaixo do quadro. O fundo de todos
+	# fica na linha do fundo do 1º quadro da animação da página (centrado na horizontal).
+	_alt_ref = tamanho_base().y / maxf(0.001, absf(animated_sprite.scale.y)) if animated_sprite else 0.0
+	if animated_sprite and not animated_sprite.frame_changed.is_connected(_alinhar_quadro):
+		animated_sprite.frame_changed.connect(_alinhar_quadro)
+		animated_sprite.animation_changed.connect(_alinhar_quadro)
+	_alinhar_quadro()
+
 	# ===== DIREÇÃO =====
 	_arte_esquerda = data.sprite_olha_esquerda
 	set_direcao(PaginaData.DIRECOES[data.direcao])
@@ -132,6 +141,18 @@ func configure(data: PaginaData):
 	pass
 
 const TAMANHO_SEM_SPRITE := Vector2(32, 32)
+var _alt_ref: float = 0.0   # altura (px da textura) do 1º quadro da animação da página
+
+func _alinhar_quadro() -> void:
+	if animated_sprite == null or animated_sprite.sprite_frames == null or _alt_ref <= 0.0:
+		return
+	var sf := animated_sprite.sprite_frames
+	var a: StringName = animated_sprite.animation
+	if not sf.has_animation(a) or animated_sprite.frame >= sf.get_frame_count(a):
+		return
+	var tex := sf.get_frame_texture(a, animated_sprite.frame)
+	if tex:
+		animated_sprite.offset = Vector2(0.0, (_alt_ref - tex.get_height()) * 0.5)
 
 ## Tamanho base da colisão e da área: o 1º quadro da animação atual
 ## (x escala do sprite). Sem sprite: 32x32.

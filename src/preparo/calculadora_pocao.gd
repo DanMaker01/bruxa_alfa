@@ -217,6 +217,8 @@ static func _tag(chave: String, texto: String, a: float, fixo: bool) -> Dictiona
 #   excesso de calor, falta de calor, tempo demais e cozimento além do ponto.
 ## Avisos de passar do ponto (aproveitamento do cozimento a_Q).
 const PONTO_ALERTA: float = 0.95
+## "No ponto" (a bruxa avisa que está pronto, ícone ✓): aproveitamento do calor >= 95%.
+const A_NO_PONTO: float = 0.95
 const PONTO_MUITO: float = 0.75
 
 static func estado_ao_vivo(acc: Dictionary, item: ItemData, t_agora: float, T_agora: float) -> Dictionary:
@@ -264,7 +266,7 @@ static func estado_ao_vivo(acc: Dictionary, item: ItemData, t_agora: float, T_ag
 	var progresso: float = clampf(d["Q"] / item.m, 0.0, 1.0) if item.m > 0.0 else 1.0
 	if item.t_min > 0.0:
 		progresso = minf(progresso, clampf(d["duracao"] / item.t_min, 0.0, 1.0))
-	var no_ponto: bool = d["a_Q"] >= 0.9 and d["a_t_min"] >= 0.99
+	var no_ponto: bool = d["a_Q"] >= A_NO_PONTO and d["a_t_min"] >= 0.99
 
 	var texto: String
 	if niveis["quente"] == 2: texto = "queimando!"
