@@ -1,0 +1,16 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://cpvbqdteuslby"
+
+[deps]
+
+source_file="res://ferramentas/sim_saida/chama_desenvoltura_p0.csv"
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

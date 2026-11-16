@@ -1,0 +1,16 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://3vvfe1wnpule"
+
+[deps]
+
+source_file="res://ferramentas/sim_saida/monte_desenvoltura.csv"
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

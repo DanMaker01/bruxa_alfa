@@ -1,0 +1,16 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://dcggqnuj5yhp3"
+
+[deps]
+
+source_file="res://ferramentas/sim_saida/chama_calma_profunda_p0.csv"
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

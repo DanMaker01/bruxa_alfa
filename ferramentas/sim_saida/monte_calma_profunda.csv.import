@@ -1,0 +1,16 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://bxr5d1ijx0glj"
+
+[deps]
+
+source_file="res://ferramentas/sim_saida/monte_calma_profunda.csv"
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

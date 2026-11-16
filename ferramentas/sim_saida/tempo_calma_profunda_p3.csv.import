@@ -1,0 +1,16 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://byp0ow75wcb27"
+
+[deps]
+
+source_file="res://ferramentas/sim_saida/tempo_calma_profunda_p3.csv"
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true
