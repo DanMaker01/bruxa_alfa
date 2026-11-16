@@ -25,7 +25,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 ```
 
 [ ] Arte Visual 100%
-	[ ] Faces						(422x908 hoje; a parte de baixo fica escondida atrás da caixa de diálogo, então pode ser 420x740 ou outro tamanho, a foto é escalada pela altura mantendo a proporção)
+	[ ] Faces		(422x908 hoje; a parte de baixo fica escondida atrás da caixa de diálogo, então pode ser 420x740 ou outro tamanho, a foto é escalada pela altura mantendo a proporção)
 		[ ] Bruxa
 			[ ] neutro
 			[ ] pensando
@@ -47,35 +47,35 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] Padre
 			[ ] neutro
 
-	[ ] Sprites			(tamanhos variados, abrir no assets) (a âncora do sprite é o centro-inferior)
+	[ ] Sprites		(tamanhos variados, abrir no assets) (a âncora do sprite é o centro-inferior)
 		[ ] Bruxa
-			[ ] parada				(80x252)
+			[ ] parada			(80x252)
 			[ ] andando
-			[ ] correndo			(126x252)
-		[ ] Rei						(105x200)
-		[ ] Princesa				(105x200)
-		[ ] Guarda1					(105x200)
-			[ ] parado
-			[ ] andando
-		[ ] Guarda2					(105x200)
+			[ ] correndo		(126x252)
+		[ ] Rei					(105x200)
+		[ ] Princesa			(105x200)
+		[ ] Guarda1				(105x200)
 			[ ] parado
 			[ ] andando
-		[ ] NPC1 - Criança			(105x145)
+		[ ] Guarda2				(105x200)
 			[ ] parado
 			[ ] andando
-		[ ] NPC2 - Criança			(105x145)
+		[ ] NPC1 - Criança		(105x145)
 			[ ] parado
 			[ ] andando
-		[ ] NPC3 - Adulto			(105x200)
+		[ ] NPC2 - Criança		(105x145)
 			[ ] parado
-		[ ] Mercador pai			(105x200)
+			[ ] andando
+		[ ] NPC3 - Adulto		(105x200)
 			[ ] parado
-		[ ] Mercador filho			(105x200)
+		[ ] Mercador pai		(105x200)
 			[ ] parado
-		[ ] Padre					(105x200)
+		[ ] Mercador filho		(105x200)
+			[ ] parado
+		[ ] Padre				(105x200)
 			[ ] parado
 		[ ] Portas
-			[ ] porta padrão		(90x180)
+			[ ] porta padrão	(90x180)
 			[ ] porta bruxa
 			[ ] portão castelo
 		[ ] Objetos
@@ -83,23 +83,23 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 			[ ] ...
 
 	[ ] Cenários			(largura variada, altura:640px)
-		[ ] floresta				(6000x640)
-		[ ] bruxa_in				(1280x640)
-		[ ] bruxa_out1				(1280x640)
-		[ ] bruxa_out2				(1280x640)
-		[ ] bruxa_out3				(1280x640)
-		[ ] bosque					(2000x640)
-		[ ] cidade					(4000x640)
-		[ ] cidade_in01				(1280x640)
-		[ ] cidade_in02				(1280x640)
-		[ ] cidade_in03				(2000x640) 
-		[ ] estrada_a				(2000x640)
-		[ ] ponte					(2000x640)
-		[ ] castelo					(3000x640)
-		[ ] castelo_in01			(2500x640) 
-		[ ] castelo_in02			(1280x640)
-		[ ] castelo_in03			(1280x640)
-		[ ] estrada_b				(2000x640)
+		[ ] floresta			(6000x640)
+		[ ] bruxa_in			(1280x640)
+		[ ] bruxa_out1			(1280x640)
+		[ ] bruxa_out2			(1280x640)
+		[ ] bruxa_out3			(1280x640)
+		[ ] bosque				(2000x640)
+		[ ] cidade				(4000x640)
+		[ ] cidade_in01			(1280x640)
+		[ ] cidade_in02			(1280x640)
+		[ ] cidade_in03			(2000x640) 
+		[ ] estrada_a			(2000x640)
+		[ ] ponte				(2000x640)
+		[ ] castelo				(3000x640)
+		[ ] castelo_in01		(2500x640) 
+		[ ] castelo_in02		(1280x640)
+		[ ] castelo_in03		(1280x640)
+		[ ] estrada_b			(2000x640)
 
 [ ]	Audio 100%
 	[ ] BGM:
@@ -127,7 +127,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] água correndo
 		[ ] (metal?)
 	[ ] SE:
-		[ ] magia01		
+		[ ] magia01	
 		[ ] magia02 
 		[ ] magia03
 		[ ] pancada01
@@ -135,7 +135,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] corte
 		[ ] vidro01
 		[ ] vidro02
-		
+	
 [ ]	Menus 100%
 	[ ] Estilo de cartas
 		[ ] definir carta para cada clicável.
@@ -180,7 +180,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 	[.] Resultado da Poção:
 		[.] mostre o grafico certo, depois mostre o T(t) do jogador sendo feito.e os itens entrando. Não precisa mostrar mais os anéis de itens no resultado, mostre somente o gráfico já integrado com os itens (feito: curva ideal aparece, depois o T(t) é desenhado e cada item surge quando a curva passa; ícones pequenos sem anel, gráfico grande)
 			EDIT: Mantenha os anéis, mas quero os itens se mantendo pequenos. (feito: anel volta, ícone pequeno; enche quando o item entra)
-		
+	
 	[ ] Dúvida: Usar cartas tbm na cena do caldeirão, para botões, etc? testar como ficaria.
 	[ ] Definir: Poção concentrada é só com precisão muito alta
 	[?] Catálogo de poções (dados/pocoes): qualquer poção com a matriz perto de uma do catálogo recebe o nome dela e, se ela tiver, o efeito (com aproveitamento >= aproveitamento_min_efeito; evita 4 mal cozidos = 3 bem cozidos). Sem quantidades nem "Dobrada" (não serve para receitas não comutativas).
@@ -204,7 +204,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 				receita muito demorada. 
 				Receita muito quente. 
 				Receita muito fria. 
-			[ ] Pergunta: Dois pontos de cozimento diferentes para o mesmo item podem gerar poções diferentes?		
+			[ ] Pergunta: Dois pontos de cozimento diferentes para o mesmo item podem gerar poções diferentes?	
 			[ ] Se eu colocar muita (QUANTO?) quantidade de um ingrediente, vai fazer uma poção muito forte.
 			[ ] Faz sentido uma receita que leva o mesmo ingrediente 2x em tempos diferentes? I_tempo, I_Temper, Q, como conseguir aprovetar duas vezes um mesmo tipo de item numa mesma receita?
 			[ ] DEPOIS: Fazer receita dobrada tem efeito de potencializar (escalar) a matriz resultante. por exemplo se fizer uma poção da calma profunda dobrada, 
@@ -220,14 +220,14 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 				Poção de Pó de Retorno Concentrada no catálogo, com efeito (teleporte para bruxa_in). Pó: diag(0.97,1,1,1,1.03), cozimento leniente (m 3000, T 60–170, t 10–150, folgas 0,4/0,6).
 				Nome: poção de um item só agora usa "Poção de [item] [qualidade]" antes de procurar no catálogo (senão um pó mal cozido virava "Concentrada").
 
-			
+		
 		[ ] 1ª receita: calma profunda
-				
+			
 		[ ] 2ª receita: desenvoltura
 			Ajustado: musgo t_max 12 → 35 (aguenta os ~30 s finais); flor m 2400 → 5000, s−/s+ 900/1400 → 1900/2900 (Q de 60 s a ~85 °C ≈ 5100). Juntos dão diag(1,1,1.4,1,1) se o musgo entra depois.
 			balancear tempo, u,s-,s+, Tmin,Tmax,tmin,tmax, etc de cada item. infusao
 			Está difícil saber a hora de colocar a flor. Mudar cor do fogo de forma mais clara? outras cores? 
-		
+	
 [ ] História/Roteiro
 	[ ]	Diálogos devem condizer com a época
 		[ ] Cap. 1 (-N)
@@ -354,8 +354,6 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 
 [ ] Bugs/Revisão:
 	[ ] missao01_convite é gravada e nunca lida: fica para o Cap. 2 (convite do casamento).
-
-
 ```
 
 ## Possíveis expansões (futuras)
