@@ -22,6 +22,9 @@ func executar(interp, ev) -> int:
 	interp.get_tree().root.add_child(no)
 	return AVANCAR
 
+## s: a legenda que estava na tela some neste tempo ao pular.
+const SAIDA_LEGENDA: float = 0.3
+
 class _Ouvinte extends Node:
 	var ev
 	var alvo: int
@@ -38,8 +41,16 @@ class _Ouvinte extends Node:
 			return   # menu de pausa (ou o botão ☰) por cima: o toque é dele
 		get_viewport().set_input_as_handled()
 		# cancela o que está rodando e pula
+		# legenda na tela: some com fade curto (sem corte seco), junto com o fade do comando
 		for n in get_tree().get_nodes_in_group(CmdLegenda.GRUPO):
-			n.queue_free()
+			n.remove_from_group(CmdLegenda.GRUPO)
+			var tw: Tween = n.create_tween().set_parallel(true)
+			for c in n.get_children():
+				if c is Control:
+					c.mouse_filter = Control.MOUSE_FILTER_IGNORE   # o toque não fica preso na legenda
+				if c is CanvasItem:
+					tw.tween_property(c, "modulate:a", 0.0, CmdPularComToque.SAIDA_LEGENDA)
+			tw.chain().tween_callback(n.queue_free)
 		ev.is_waiting = false
 		ev.move_target_ref = null
 		ev.pause_reason = ""

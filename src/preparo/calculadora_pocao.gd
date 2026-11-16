@@ -361,7 +361,7 @@ static func adjetivo_qualidade(a: float) -> String:
 
 ## Poção feita com um item só (uma ou mais unidades do mesmo item): "Poção de [item] [adjetivo]",
 ## com o adjetivo pela média do aproveitamento. Vários itens diferentes (ou nenhum) → "".
-static func nome_item_unico(diagnosticos: Array) -> String:
+static func nome_item_unico(diagnosticos: Array, com_adjetivo: bool = true) -> String:
 	var nome := ""
 	var soma_a := 0.0
 	for d in diagnosticos:
@@ -372,7 +372,7 @@ static func nome_item_unico(diagnosticos: Array) -> String:
 		soma_a += float(d.get("a", 0.0))
 	if nome == "":
 		return ""
-	var adj := adjetivo_qualidade(soma_a / diagnosticos.size())
+	var adj := adjetivo_qualidade(soma_a / diagnosticos.size()) if com_adjetivo else ""
 	return ("Poção de %s %s" % [nome, adj]) if adj != "" else ("Poção de %s" % nome)
 
 ## Poção cuja matriz é parecida com a de um ingrediente puro → "Poção de [ingrediente]".

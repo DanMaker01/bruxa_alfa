@@ -80,7 +80,13 @@ static func erro_relativo(nome: String, A: Array) -> float:
 			return distancia(A, ref.A) / maxf(base, 0.0001)
 	return -1.0
 
-## Procura a poção conhecida mais perto de A nos dois catálogos.
+## Tolerância da poção: a própria (PocaoReferencia.distancia_max > 0) ou a do catálogo.
+static func tolerancia(ref: PocaoReferencia) -> float:
+	_garantir()
+	return ref.distancia_max if ref and ref.distancia_max > 0.0 else _jogo.distancia_max
+
+## Procura a poção conhecida mais perto de A nos dois catálogos. "perto" = dentro da
+## tolerância da própria poção; entre as que estão dentro, ganha a mais perto.
 ## Devolve {"nome": String ("" se não houver nenhuma), "dist": float, "perto": bool}.
 static func procurar(A: Array) -> Dictionary:
 	_garantir()
@@ -90,10 +96,41 @@ static func procurar(A: Array) -> Dictionary:
 			if ref == null or ref.nome == "":
 				continue
 			var d := distancia(A, ref.A)
-			if d < melhor["dist"]:
-				melhor = {"nome": ref.nome, "dist": d, "perto": false}
-	melhor["perto"] = melhor["nome"] != "" and melhor["dist"] <= _jogo.distancia_max
+			var dentro: bool = d <= tolerancia(ref)
+			if (dentro and (not melhor["perto"] or d < melhor["dist"])) or (not melhor["perto"] and d < melhor["dist"]):
+				melhor = {"nome": ref.nome, "dist": d, "perto": dentro}
 	return melhor
+
+## Existe uma poção com este nome no catálogo do jogo?
+static func tem_nome(nome: String) -> bool:
+	_garantir()
+	for ref in _jogo.pocoes:
+		if ref and ref.nome == nome:
+			return true
+	return false
+
+## Reconhece a poção feita no caldeirão pela MATRIZ: o nome é o da poção do catálogo mais
+## perto (distancia_max); o efeito vem de efeito_pela_matriz (com aproveitamento mínimo).
+## Devolve {"nome", "dist", "perto", "efeito": Array[Comando]}.
+static func identificar(A: Array, a_media: float) -> Dictionary:
+	var r := procurar(A)
+	r["efeito"] = efeito_pela_matriz(A, a_media)
+	return r
+
+## Efeito da poção do catálogo (com efeito) mais perto de A, se dentro de distancia_max e
+## com aproveitamento suficiente. Qualquer quantidade que chegue na mesma matriz serve.
+static func efeito_pela_matriz(A: Array, a_media: float) -> Array[Comando]:
+	_garantir()
+	var ef: Array[Comando] = []
+	var melhor_d := INF
+	for ref in _jogo.pocoes:
+		if ref == null or ref.efeito.is_empty() or a_media < ref.aproveitamento_min_efeito:
+			continue
+		var d := distancia(A, ref.A)
+		if d <= tolerancia(ref) and d < melhor_d:
+			melhor_d = d
+			ef = ref.efeito.duplicate()
+	return ef
 
 ## Efeito da poção do catálogo do jogo com este nome (vazio se não houver).
 static func efeito_de(nome: String) -> Array[Comando]:

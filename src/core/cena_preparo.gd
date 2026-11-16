@@ -210,6 +210,7 @@ func _criar_componentes() -> void:
 
 	icones = IconesCaldeirao.new()
 	icones.name = "IconesCaldeirao"
+	icones.chegou_no_ponto.connect(_item_no_ponto)
 	icones.caldeirao = caldeirao
 	icones.z_index = 5   # na frente do caldeirão, atrás das bolhas
 	icones.position.y = ICONES_Y
@@ -302,12 +303,14 @@ func _conectar_botoes() -> void:
 		segurar_fogo = BotaoSegurar.anexar(botao_fogo, TEMPO_SEGURAR_FOGO)
 		segurar_fogo.toque_curto.connect(_fogo_clique_curto)
 		segurar_fogo.segurou.connect(_fogo_segurar)
-		segurar_fogo.repetiu.connect(_abafar_fogo)
-		segurar_fogo.carregando.connect(func(p): visual.carregando_fogo(botao_fogo, p, sistema.fogo_ligado))
+		segurar_fogo.repetiu.connect(func(): pass)   # +Fogo e −Fogo independentes
+		segurar_fogo.carregando.connect(func(p):
+			if not sistema.fogo_ligado:   # aceso, segurar o +Fogo não muda a cor do botão
+				visual.carregando_fogo(botao_fogo, p, false))
 		segurar_fogo.soltou.connect(func():
 			botao_fogo.rotation = 0.0
-			if sistema.fogo_ligado:   # parou de abafar: volta à cor de aceso
-				botao_fogo.create_tween().tween_property(botao_fogo, "modulate", VisualCaldeirao.COR_FOGO_LIGA, 0.2))
+			if sistema.fogo_ligado:   # +Fogo fica na cor normal (sem o tom avermelhado)
+				botao_fogo.create_tween().tween_property(botao_fogo, "modulate", Color.WHITE, 0.2))
 		botao_fogo.button_down.connect(func():
 			# aceso: segurar abafa, repetindo; apagado: segurar (mais tempo) acende
 			segurar_fogo.tempo_longo = INTERVALO_ABAFAR if sistema.fogo_ligado else TEMPO_SEGURAR_FOGO
@@ -379,7 +382,12 @@ func _estilo(cor: Color) -> StyleBoxFlat:
 # =============================================================================
 ## Toque num item: ele sai do inventário na hora (reservado) e voa até o caldeirão.
 ## Só entra no preparo (t0, queda de T, painel...) quando cai dentro.
+## Grava as jogadas para a ferramenta de balanceamento (user://jogadas/, só em debug).
+var gravador := GravadorJogadas.new()
+
 func _on_item_selecionado(item_name: String, btn: Control = null, origem_fixa = null) -> void:
+	if sistema:
+		gravador.acao(sistema.t_sim, "jogar", item_name)
 	if not preparo_ativo:
 		_iniciar_preparo()
 	if not game_temp or not game_temp.has_item(item_name):
@@ -518,15 +526,17 @@ func _fogo_clique_curto() -> void:
 		feedback.texto_flutuante("fogo apagado (segure para acender)", VisualCaldeirao.COR_FOGO_DESLIGA)
 		return
 	indicadores.registrar_acao_adicionar(sistema)
+	gravador.acao(sistema.t_sim, "+fogo")
 	sistema.dar_pulso_fogo()
 	visual.aticar()
 
-func _fogo_segurar() -> void:
+## botao: quem anima ao acender (o Acender do layout); o +Fogo não fica avermelhado.
+func _fogo_segurar(botao: Control = null) -> void:
 	if sistema.fogo_ligado:
-		_abafar_fogo()   # aceso: primeiro passo do abafar (os próximos vêm pelo repetiu)
-		return
+		return   # aceso: segurar o +Fogo não abafa mais (isso é do −Fogo)
 	sistema.ligar_fogo()
-	var cor := visual.liga_desliga(botao_fogo, true)
+	gravador.acao(sistema.t_sim, "acender")
+	var cor := visual.liga_desliga(botao if botao else botao_fogo, true)
 	feedback.texto_flutuante("fogo aceso!", cor)
 
 ## Botão Acender/Apagar dos layouts novos.
@@ -539,15 +549,18 @@ func alternar_fogo() -> void:
 	feedback.texto_flutuante("fogo apagado", cor)
 
 ## Segurando com o fogo aceso: tira CONST_A de F; fraco demais → apaga.
-func _abafar_fogo() -> void:
+## botao: quem anima (o −Fogo do layout); sem ele, o botão de fogo da cena.
+func _abafar_fogo(botao: Control = null) -> void:
 	if not sistema.fogo_ligado:
 		return
+	var b: Control = botao if botao else botao_fogo
+	gravador.acao(sistema.t_sim, "-fogo")
 	if sistema.abafar_fogo():
-		var cor := visual.apagou(botao_fogo)
+		var cor := visual.apagou(b)
 		feedback.texto_flutuante("o fogo apagou!", cor)
 		segurar_fogo.intervalo_repeticao = 0.0
 	else:
-		visual.abafar(botao_fogo)
+		visual.abafar(b)
 
 func _pocao_clique_curto() -> void:
 	if _ingredientes_validos().is_empty():
@@ -560,6 +573,7 @@ func _atualizar_botao_pocao() -> void:
 	if not botao_pocao:
 		return
 	var vazio: bool = _ingredientes_validos().is_empty()
+	botao_pocao.visible = not vazio   # Finalizar só aparece com itens no caldeirão (para sair há o Voltar)
 	var icone: Texture2D = _icone_voltar if vazio and _icone_voltar else _icone_pocao
 	if botao_pocao.icon != icone:
 		botao_pocao.icon = icone
@@ -580,6 +594,7 @@ func _iniciar_preparo() -> void:
 	indicadores.reset()
 	ingredientes_ativos.clear()
 	historico_T.clear()
+	gravador.limpar()
 	_tempo_desde_ultimo_ponto = 0.0
 	if grafico and grafico.has_method("reset"):
 		grafico.reset()
@@ -609,6 +624,8 @@ func _finalizar_preparo() -> void:
 	CalculadoraPocao.imprimir_relatorio(resultado)   # debug
 	if layout and layout.guia and not layout.guia.pagina.is_empty():
 		resultado["receita"] = layout.guia.pagina.duplicate(true)   # curva ideal no gráfico do resultado
+	# jogada gravada para a ferramenta de balanceamento (só em debug)
+	gravador.salvar(historico_T, _ingredientes_validos(), sistema.t_sim, resultado, resultado.get("receita", {}))
 	# 🧪 A POÇÃO VIRA UM ITEM COMUM (o GameManager coloca no inventário)
 	if not _ingredientes_validos().is_empty() and database and database.has_method("registrar_item"):
 		var id: String = database.novo_id("pocao")
@@ -818,6 +835,20 @@ func _retirar_ingrediente(k: int) -> void:
 	if layout:
 		layout.guia.ingrediente_saiu(id)
 	_atualizar_botao_pocao()
+
+## Um ingrediente chegou no ponto (>= 95%): som (vários juntos tocam um só).
+const SOM_NO_PONTO := "plim"
+const SOM_NO_PONTO_RESERVA := "cura"
+var _ultimo_som_ponto: int = -1000
+func _item_no_ponto(_i: int) -> void:
+	if Time.get_ticks_msec() - _ultimo_som_ponto < 150:
+		return
+	_ultimo_som_ponto = Time.get_ticks_msec()
+	var audio = game_manager.get_node_or_null("AudioManager") if game_manager else null
+	if audio == null:
+		return
+	var nome := SOM_NO_PONTO if ResourceLoader.exists("res://audio/se/%s.mp3" % SOM_NO_PONTO) else SOM_NO_PONTO_RESERVA
+	audio.play_se(nome, 0.7, 0.05)
 
 ## Modos de teste (teclas P / C / T / K).
 func trocar_modo(tecla: String) -> void:

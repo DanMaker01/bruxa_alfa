@@ -1,0 +1,301 @@
+jogada;a;pior_item;pocao;efeito;t_final
+0;0.9842;0.964;Poção da Calma Profunda;0;58.43
+1;0.9936;0.9847;Poção da Calma Profunda;0;56.43
+2;0.9304;0.6759;(desconhecida);0;52.43
+3;0.9136;0.5694;(desconhecida);0;52.5
+4;0.987;0.9739;Poção da Calma Profunda;0;58.26
+5;0.9863;0.9547;Poção da Calma Profunda;0;57.09
+6;0.9167;0.564;(desconhecida);0;55.3
+7;0.979;0.9366;Poção da Calma Profunda;0;58.35
+8;0.8969;0.8605;(desconhecida);0;65.8
+9;0.985;0.9309;Poção da Calma Profunda;0;55.65
+10;0.9816;0.9619;Poção da Calma Profunda;0;59.48
+11;0.9884;0.9717;Poção da Calma Profunda;0;57.57
+12;0.7393;0.0309;(desconhecida);0;52.86
+13;0.9827;0.9658;Poção da Calma Profunda;0;59.46
+14;0.7545;0.0397;(desconhecida);0;54.58
+15;0.9783;0.9617;Poção da Calma Profunda;0;58.95
+16;0.9765;0.9416;Poção da Calma Profunda;0;59.25
+17;0.9645;0.8398;(desconhecida);0;55.34
+18;0.9924;0.9796;Poção da Calma Profunda;0;56.6
+19;0.9921;0.9823;Poção da Calma Profunda;0;56.97
+20;0.9677;0.8855;(desconhecida);0;58.08
+21;0.9592;0.8142;(desconhecida);0;55.52
+22;0.9878;0.9579;Poção da Calma Profunda;0;56.8
+23;0.9487;0.7674;(desconhecida);0;56.54
+24;0.9829;0.9681;Poção da Calma Profunda;0;58.44
+25;0.9918;0.9555;Poção da Calma Profunda;0;54.34
+26;0.9472;0.7463;(desconhecida);0;54.18
+27;0.7813;0.1006;(desconhecida);0;50.4
+28;0.9009;0.4768;(desconhecida);0;54.56
+29;0.9969;0.9798;Poção da Calma Profunda;0;53.74
+30;0.8204;0.1605;(desconhecida);0;52.45
+31;0.9726;0.882;(desconhecida);0;55.63
+32;0.9661;0.858;(desconhecida);0;56.84
+33;0.9944;0.9862;Poção da Calma Profunda;0;56.31
+34;0.9786;0.9571;Poção da Calma Profunda;0;59.9
+35;0.966;0.9473;Poção da Calma Profunda;0;61.88
+36;0.9371;0.9063;Poção da Calma Profunda;0;63.31
+37;0.9719;0.9526;Poção da Calma Profunda;0;59.98
+38;0.9826;0.9222;Poção da Calma Profunda;0;55.89
+39;0.9931;0.9862;Poção da Calma Profunda;0;56.0
+40;0.996;0.9901;Poção da Calma Profunda;0;55.5
+41;0.985;0.972;Poção da Calma Profunda;0;58.73
+42;0.9732;0.947;Poção da Calma Profunda;0;61.14
+43;0.9704;0.9453;Poção da Calma Profunda;0;60.76
+44;0.9886;0.9754;Poção da Calma Profunda;0;57.64
+45;0.9485;0.9275;Poção da Calma Profunda;0;61.04
+46;0.9863;0.9721;Poção da Calma Profunda;0;58.79
+47;0.9754;0.9515;Poção da Calma Profunda;0;60.7
+48;0.9685;0.9412;Poção da Calma Profunda;0;61.15
+49;0.983;0.9645;Poção da Calma Profunda;0;59.32
+50;0.9787;0.9601;Poção da Calma Profunda;0;60.17
+51;0.9641;0.9375;Poção da Calma Profunda;0;61.38
+52;0.9901;0.9689;Poção da Calma Profunda;0;56.81
+53;0.9884;0.9606;Poção da Calma Profunda;0;56.98
+54;0.9257;0.904;Poção da Calma Profunda;0;62.81
+55;0.7691;0.0548;(desconhecida);0;54.56
+56;0.9894;0.9784;Poção da Calma Profunda;0;57.13
+57;0.9418;0.7485;(desconhecida);0;58.36
+58;0.9674;0.9462;Poção da Calma Profunda;0;60.34
+59;0.9717;0.9498;Poção da Calma Profunda;0;60.27
+60;0.9781;0.9582;Poção da Calma Profunda;0;60.25
+61;0.9827;0.964;Poção da Calma Profunda;0;59.42
+62;0.7029;0.0091;(desconhecida);0;56.16
+63;0.9903;0.978;Poção da Calma Profunda;0;57.54
+64;0.9761;0.96;Poção da Calma Profunda;0;60.06
+65;0.8176;0.1387;(desconhecida);0;54.46
+66;0.9671;0.9423;Poção da Calma Profunda;0;61.0
+67;0.9842;0.9742;Poção da Calma Profunda;0;57.48
+68;0.9475;0.9244;Poção da Calma Profunda;0;61.93
+69;0.9586;0.9359;Poção da Calma Profunda;0;61.07
+70;0.9747;0.9502;Poção da Calma Profunda;0;60.83
+71;0.671;0.0008;(desconhecida);0;55.8
+72;0.9707;0.9515;Poção da Calma Profunda;0;61.21
+73;0.7372;0.0257;(desconhecida);0;55.48
+74;0.9819;0.9192;Poção da Calma Profunda;0;55.86
+75;0.9938;0.9857;Poção da Calma Profunda;0;56.44
+76;0.9545;0.9341;Poção da Calma Profunda;0;62.91
+77;0.9384;0.9098;Poção da Calma Profunda;0;61.41
+78;0.9978;0.9939;Poção da Calma Profunda;0;54.65
+79;0.986;0.9293;Poção da Calma Profunda;0;54.13
+80;0.9274;0.8944;Poção da Calma Profunda;0;62.28
+81;0.9691;0.9518;Poção da Calma Profunda;0;61.01
+82;0.9127;0.5857;(desconhecida);0;51.71
+83;0.9894;0.9771;Poção da Calma Profunda;0;57.6
+84;0.9794;0.9354;Poção da Calma Profunda;0;58.17
+85;0.9795;0.9598;Poção da Calma Profunda;0;59.5
+86;0.9884;0.9749;Poção da Calma Profunda;0;57.92
+87;0.948;0.9229;Poção da Calma Profunda;0;61.98
+88;0.9598;0.8191;(desconhecida);0;55.24
+89;0.9917;0.9822;Poção da Calma Profunda;0;57.2
+90;0.9737;0.8902;(desconhecida);0;56.3
+91;0.9932;0.9839;Poção da Calma Profunda;0;56.53
+92;0.7796;0.0672;(desconhecida);0;55.73
+93;0.9844;0.9706;Poção da Calma Profunda;0;58.02
+94;0.9641;0.9335;Poção da Calma Profunda;0;61.9
+95;0.9757;0.9604;Poção da Calma Profunda;0;59.01
+96;0.9195;0.8893;Poção da Calma Profunda;0;64.21
+97;0.9581;0.8066;(desconhecida);0;55.16
+98;0.9832;0.9655;Poção da Calma Profunda;0;58.85
+99;0.9573;0.8023;(desconhecida);0;54.17
+100;0.9702;0.9507;Poção da Calma Profunda;0;59.99
+101;0.9703;0.9541;Poção da Calma Profunda;0;59.09
+102;0.9766;0.9165;Poção da Calma Profunda;0;57.49
+103;0.8647;0.7935;(desconhecida);0;64.86
+104;0.9861;0.9727;Poção da Calma Profunda;0;58.49
+105;0.9729;0.9463;Poção da Calma Profunda;0;60.19
+106;0.9701;0.8893;(desconhecida);0;57.76
+107;0.97;0.8663;(desconhecida);0;53.84
+108;0.9719;0.8823;(desconhecida);0;56.14
+109;0.9766;0.936;Poção da Calma Profunda;0;58.87
+110;0.9754;0.9573;Poção da Calma Profunda;0;60.61
+111;0.8058;0.1388;(desconhecida);0;51.21
+112;0.9511;0.7732;(desconhecida);0;56.02
+113;0.9698;0.9412;Poção da Calma Profunda;0;61.53
+114;0.9821;0.9634;Poção da Calma Profunda;0;59.59
+115;0.9753;0.9552;Poção da Calma Profunda;0;59.81
+116;0.9929;0.9853;Poção da Calma Profunda;0;56.55
+117;0.9546;0.7882;(desconhecida);0;55.25
+118;0.9903;0.9796;Poção da Calma Profunda;0;57.46
+119;0.9376;0.914;Poção da Calma Profunda;0;62.66
+120;0.9176;0.8749;(desconhecida);0;65.26
+121;0.9795;0.9605;Poção da Calma Profunda;0;59.95
+122;0.9727;0.9471;Poção da Calma Profunda;0;61.32
+123;0.9758;0.9572;Poção da Calma Profunda;0;59.65
+124;0.9674;0.9435;Poção da Calma Profunda;0;60.73
+125;0.9591;0.8141;(desconhecida);0;55.56
+126;0.9744;0.8944;(desconhecida);0;56.16
+127;0.9558;0.8074;(desconhecida);0;56.78
+128;0.9098;0.8732;Poção da Calma Profunda;0;63.36
+129;0.9191;0.6256;(desconhecida);0;58.89
+130;0.9876;0.9556;Poção da Calma Profunda;0;56.87
+131;0.9832;0.9256;Poção da Calma Profunda;0;55.98
+132;0.9844;0.9692;Poção da Calma Profunda;0;58.51
+133;0.9841;0.9673;Poção da Calma Profunda;0;58.7
+134;0.9695;0.8766;(desconhecida);0;56.7
+135;0.9145;0.5725;(desconhecida);0;57.31
+136;0.9533;0.783;(desconhecida);0;55.52
+137;0.9763;0.9443;Poção da Calma Profunda;0;57.14
+138;0.987;0.9364;Poção da Calma Profunda;0;53.37
+139;0.8565;0.2641;(desconhecida);0;56.25
+140;0.9583;0.9279;Poção da Calma Profunda;0;62.0
+141;0.9797;0.9644;Poção da Calma Profunda;0;58.9
+142;0.9115;0.8405;(desconhecida);0;61.73
+143;0.9796;0.9655;Poção da Calma Profunda;0;59.59
+144;0.9241;0.8596;(desconhecida);0;60.77
+145;0.987;0.9719;Poção da Calma Profunda;0;58.34
+146;0.7004;0.0097;(desconhecida);0;53.15
+147;0.9404;0.8766;(desconhecida);0;59.63
+148;0.9499;0.922;Poção da Calma Profunda;0;62.16
+149;0.9723;0.9469;Poção da Calma Profunda;0;60.73
+150;0.9818;0.9592;Poção da Calma Profunda;0;58.68
+151;0.9832;0.9653;Poção da Calma Profunda;0;59.26
+152;0.9534;0.9279;Poção da Calma Profunda;0;61.75
+153;0.9496;0.8077;(desconhecida);0;59.0
+154;0.9877;0.9361;Poção da Calma Profunda;0;53.76
+155;0.9401;0.8859;Poção da Calma Profunda;0;60.14
+156;0.9853;0.964;Poção da Calma Profunda;0;57.91
+157;0.9579;0.9321;Poção da Calma Profunda;0;61.59
+158;0.996;0.99;Poção da Calma Profunda;0;55.64
+159;0.9807;0.9646;Poção da Calma Profunda;0;58.95
+160;0.9854;0.9287;Poção da Calma Profunda;0;54.32
+161;0.9569;0.8073;(desconhecida);0;56.13
+162;0.9723;0.9525;Poção da Calma Profunda;0;59.87
+163;0.967;0.9394;Poção da Calma Profunda;0;61.13
+164;0.9716;0.9556;Poção da Calma Profunda;0;58.8
+165;0.9525;0.7792;(desconhecida);0;55.63
+166;0.9573;0.9203;(desconhecida);0;63.11
+167;0.9206;0.8927;Poção da Calma Profunda;0;63.9
+168;0.761;0.0485;(desconhecida);0;53.29
+169;0.994;0.9837;Poção da Calma Profunda;0;56.23
+170;0.9563;0.9235;Poção da Calma Profunda;0;62.45
+171;0.9527;0.9223;Poção da Calma Profunda;0;62.39
+172;0.9168;0.5686;(desconhecida);0;55.38
+173;0.9613;0.8508;(desconhecida);0;57.97
+174;0.9845;0.9689;Poção da Calma Profunda;0;58.96
+175;0.9715;0.9471;Poção da Calma Profunda;0;60.73
+176;0.9772;0.9526;Poção da Calma Profunda;0;59.45
+177;0.9879;0.9737;Poção da Calma Profunda;0;58.03
+178;0.9809;0.9663;Poção da Calma Profunda;0;59.4
+179;0.9484;0.7559;(desconhecida);0;54.95
+180;0.9671;0.8899;(desconhecida);0;58.5
+181;0.9932;0.9858;Poção da Calma Profunda;0;56.64
+182;0.9781;0.902;(desconhecida);0;55.34
+183;0.9717;0.9448;Poção da Calma Profunda;0;61.17
+184;0.9715;0.958;Poção da Calma Profunda;0;59.05
+185;0.9756;0.9569;Poção da Calma Profunda;0;59.69
+186;0.9923;0.9823;Poção da Calma Profunda;0;56.95
+187;0.9783;0.9654;Poção da Calma Profunda;0;58.11
+188;0.9857;0.932;Poção da Calma Profunda;0;55.29
+189;0.9922;0.9825;Poção da Calma Profunda;0;56.97
+190;0.9838;0.9722;Poção da Calma Profunda;0;57.82
+191;0.9287;0.6451;(desconhecida);0;56.3
+192;0.9749;0.9584;Poção da Calma Profunda;0;59.29
+193;0.9807;0.9648;Poção da Calma Profunda;0;58.78
+194;0.9937;0.9798;Poção da Calma Profunda;0;56.04
+195;0.9855;0.969;Poção da Calma Profunda;0;58.62
+196;0.987;0.9739;Poção da Calma Profunda;0;57.76
+197;0.9772;0.9564;Poção da Calma Profunda;0;59.94
+198;0.6831;0.0049;(desconhecida);0;52.85
+199;0.6716;0.0011;(desconhecida);0;55.09
+200;0.9485;0.92;Poção da Calma Profunda;0;62.42
+201;0.9461;0.7522;(desconhecida);0;52.82
+202;0.984;0.9668;Poção da Calma Profunda;0;58.86
+203;0.9908;0.9496;Poção da Calma Profunda;0;53.67
+204;0.9915;0.9807;Poção da Calma Profunda;0;57.11
+205;0.9578;0.8117;(desconhecida);0;56.25
+206;0.9765;0.9026;(desconhecida);0;56.21
+207;0.976;0.8944;(desconhecida);0;55.42
+208;0.9872;0.9727;Poção da Calma Profunda;0;58.01
+209;0.9687;0.95;Poção da Calma Profunda;0;60.02
+210;0.9721;0.8918;(desconhecida);0;56.97
+211;0.9893;0.945;Poção da Calma Profunda;0;53.92
+212;0.9861;0.9752;Poção da Calma Profunda;0;58.32
+213;0.9786;0.957;Poção da Calma Profunda;0;59.76
+214;0.9832;0.9608;Poção da Calma Profunda;0;58.53
+215;0.9913;0.9826;Poção da Calma Profunda;0;57.19
+216;0.9891;0.9759;Poção da Calma Profunda;0;58.1
+217;0.9656;0.8998;Poção da Calma Profunda;0;59.56
+218;0.9506;0.9232;Poção da Calma Profunda;0;62.04
+219;0.9912;0.9805;Poção da Calma Profunda;0;56.98
+220;0.9832;0.9652;Poção da Calma Profunda;0;59.15
+221;0.9417;0.8992;(desconhecida);0;64.4
+222;0.9546;0.8396;(desconhecida);0;59.41
+223;0.9617;0.9328;Poção da Calma Profunda;0;61.79
+224;0.9743;0.8977;(desconhecida);0;56.93
+225;0.8154;0.1501;(desconhecida);0;51.96
+226;0.988;0.9751;Poção da Calma Profunda;0;57.67
+227;0.9722;0.9454;Poção da Calma Profunda;0;61.18
+228;0.9921;0.9834;Poção da Calma Profunda;0;57.0
+229;0.9881;0.9578;Poção da Calma Profunda;0;56.85
+230;0.9513;0.7812;(desconhecida);0;52.61
+231;0.9893;0.9574;Poção da Calma Profunda;0;56.38
+232;0.9581;0.9351;Poção da Calma Profunda;0;61.15
+233;0.9669;0.8861;(desconhecida);0;58.45
+234;0.9754;0.8926;(desconhecida);0;55.75
+235;0.9918;0.9797;Poção da Calma Profunda;0;56.73
+236;0.9727;0.9258;Poção da Calma Profunda;0;59.38
+237;0.9885;0.9749;Poção da Calma Profunda;0;58.12
+238;0.9733;0.8821;(desconhecida);0;55.01
+239;0.977;0.9543;Poção da Calma Profunda;0;60.39
+240;0.9825;0.9647;Poção da Calma Profunda;0;59.47
+241;0.9792;0.9138;Poção da Calma Profunda;0;56.47
+242;0.7469;0.0328;(desconhecida);0;55.82
+243;0.9789;0.9569;Poção da Calma Profunda;0;60.03
+244;0.9233;0.8839;(desconhecida);0;64.96
+245;0.9743;0.9406;Poção da Calma Profunda;0;59.74
+246;0.9795;0.9607;Poção da Calma Profunda;0;59.84
+247;0.9843;0.9691;Poção da Calma Profunda;0;58.55
+248;0.9605;0.9262;Poção da Calma Profunda;0;62.65
+249;0.9127;0.8468;(desconhecida);0;61.85
+250;0.9545;0.8115;(desconhecida);0;57.46
+251;0.9608;0.8858;(desconhecida);0;59.69
+252;0.8635;0.3309;(desconhecida);0;51.47
+253;0.9715;0.9445;Poção da Calma Profunda;0;61.45
+254;0.9937;0.9848;Poção da Calma Profunda;0;56.58
+255;0.9513;0.8473;(desconhecida);0;60.33
+256;0.9726;0.8865;(desconhecida);0;55.98
+257;0.9618;0.8273;(desconhecida);0;55.94
+258;0.9832;0.9566;Poção da Calma Profunda;0;58.26
+259;0.9619;0.9289;Poção da Calma Profunda;0;62.95
+260;0.9756;0.9142;Poção da Calma Profunda;0;57.76
+261;0.9821;0.9647;Poção da Calma Profunda;0;58.95
+262;0.9823;0.9673;Poção da Calma Profunda;0;57.38
+263;0.9788;0.9609;Poção da Calma Profunda;0;60.11
+264;0.9729;0.9555;Poção da Calma Profunda;0;60.47
+265;0.9885;0.9668;Poção da Calma Profunda;0;57.42
+266;0.9444;0.9034;(desconhecida);0;63.96
+267;0.9924;0.9625;Poção da Calma Profunda;0;54.96
+268;0.929;0.6602;(desconhecida);0;57.71
+269;0.9854;0.97;Poção da Calma Profunda;0;58.29
+270;0.953;0.7789;(desconhecida);0;54.97
+271;0.9826;0.9203;Poção da Calma Profunda;0;55.16
+272;0.9876;0.9717;Poção da Calma Profunda;0;57.95
+273;0.9601;0.9284;Poção da Calma Profunda;0;62.36
+274;0.9582;0.9262;Poção da Calma Profunda;0;62.34
+275;0.9734;0.8987;Poção da Calma Profunda;0;57.22
+276;0.9801;0.9599;Poção da Calma Profunda;0;59.58
+277;0.988;0.9522;Poção da Calma Profunda;0;56.43
+278;0.9442;0.9118;Poção da Calma Profunda;0;63.08
+279;0.9018;0.4829;(desconhecida);0;54.45
+280;0.9535;0.7809;(desconhecida);0;54.17
+281;0.8644;0.2913;(desconhecida);0;54.64
+282;0.9779;0.9363;Poção da Calma Profunda;0;58.59
+283;0.9671;0.9372;Poção da Calma Profunda;0;61.86
+284;0.9753;0.9487;Poção da Calma Profunda;0;59.75
+285;0.9456;0.912;Poção da Calma Profunda;0;63.04
+286;0.9784;0.9606;Poção da Calma Profunda;0;59.11
+287;0.9526;0.9225;Poção da Calma Profunda;0;62.4
+288;0.9893;0.9612;Poção da Calma Profunda;0;56.65
+289;0.9875;0.9728;Poção da Calma Profunda;0;58.23
+290;0.9674;0.947;Poção da Calma Profunda;0;61.76
+291;0.9817;0.9637;Poção da Calma Profunda;0;59.12
+292;0.985;0.9691;Poção da Calma Profunda;0;58.77
+293;0.9438;0.921;Poção da Calma Profunda;0;61.96
+294;0.9846;0.9674;Poção da Calma Profunda;0;58.88
+295;0.9727;0.8947;(desconhecida);0;57.31
+296;0.9427;0.8987;(desconhecida);0;64.4
+297;0.8327;0.186;(desconhecida);0;53.42
+298;0.9594;0.9057;Poção da Calma Profunda;0;61.22
+299;0.9919;0.9618;Poção da Calma Profunda;0;55.17

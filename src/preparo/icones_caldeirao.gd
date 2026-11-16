@@ -314,6 +314,11 @@ func adicionar(item: ItemData, nome: String, onde_global: Vector2) -> void:
 		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 ## Traduz o estado ao vivo (CalculadoraPocao.estado_ao_vivo) em aparência.
+## Um ingrediente acabou de chegar no ponto (aproveitamento >= 95%): a cena toca um som.
+signal chegou_no_ponto(i: int)
+const POP_DURACAO: float = 0.45   # s do "pulo" de brilho ao chegar no ponto
+const POP_ESCALA: float = 0.35
+
 func atualizar(i: int, est: Dictionary) -> void:
 	if i < 0 or i >= _icones.size() or est.is_empty():
 		return
@@ -370,7 +375,11 @@ func atualizar(i: int, est: Dictionary) -> void:
 		ic["progresso_alvo"] = FRACAO_PONTO   # sem exigência de cozimento: já está no ponto
 	if ANEL_CONTINUO:
 		ic["progresso_alvo"] = clampf(float(est.get("Q", 0.0)) / _q_faixa(item_ic), 0.0, 1.0)
+	var chegou: bool = est.get("no_ponto", false) and not ic["ponto"]
 	ic["ponto"] = est.get("no_ponto", false)
+	if chegou:   # acabou de chegar no ponto (>= 95%): o ícone dá um "pulo" de brilho
+		ic["pop"] = 1.0
+		chegou_no_ponto.emit(i)
 	# cor do estado agora (paleta COR_UNICA)
 	if item_ic == null or item_ic.m <= 0.0:
 		ic["cor_atual"] = cor_ideal()
@@ -608,10 +617,12 @@ func _aplicar(ic: Dictionary, delta: float) -> void:
 	mat.set_shader_parameter("escurecer", ic["escuro"])
 	var sprite: Sprite2D = ic["sprite"]
 	sprite.modulate.a = ic["alfa"]
-	sprite.scale = Vector2.ONE * ic["base"] * ic["tam"]
+	ic["pop"] = maxf(0.0, float(ic.get("pop", 0.0)) - delta / POP_DURACAO)
+	var pop: float = sin(PI * (1.0 - ic["pop"])) * POP_ESCALA if ic["pop"] > 0.0 else 0.0
+	sprite.scale = Vector2.ONE * ic["base"] * ic["tam"] * (1.0 + pop)
 	var halo: Sprite2D = ic["halo"]
 	halo.scale = sprite.scale * (1.25 + 0.08 * sin(_t * 3.0))
-	halo.modulate.a = ic["brilho"] * (0.35 + 0.25 * sin(_t * 3.0)) * ic["alfa"]
+	halo.modulate.a = maxf(ic["brilho"] * (0.35 + 0.25 * sin(_t * 3.0)), float(ic["pop"])) * ic["alfa"]
 	var tremor := Vector2.ZERO
 	if ic["treme"] > 0.05:
 		tremor = Vector2(randf_range(-1, 1), randf_range(-1, 1)) * TREMOR_PX * ic["treme"]

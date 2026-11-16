@@ -244,15 +244,22 @@ func abrir(resultado: Dictionary) -> void:
 	_estado = Estado.ENTRANDO
 
 	# 2. meio: poção para a esquerda, informações à direita
-	var achada := CatalogoPocoes.procurar(A)
-	var nome_unico := CalculadoraPocao.nome_item_unico(_res.get("diagnosticos", []))
+	var diags_n: Array = _res.get("diagnosticos", [])
+	var achada := CatalogoPocoes.identificar(A, ResultadoVistas.media_aproveitamento(diags_n))
+	_efeito_achado = achada["efeito"]   # pela matriz, não pelo nome
+	_nome_achado = achada["nome"] if achada["perto"] else ""
+	var nome_unico := CalculadoraPocao.nome_item_unico(diags_n)
+	if nome_unico != "" and nome_unico != _nome_achado and CatalogoPocoes.tem_nome(nome_unico):
+		# "Poção de [item] [adjetivo]" igual ao nome de uma poção do catálogo cuja matriz não
+		# bateu: fica sem o adjetivo para não se passar por ela
+		nome_unico = CalculadoraPocao.nome_item_unico(diags_n, false)
 	var pedir_nome: bool = false
 	if CatalogoPocoes.distancia(A, CalculadoraPocao.identidade()) <= 0.0001:
 		_definir_nome(NOME_AGUA)
-	elif nome_unico != "":
-		_definir_nome(nome_unico)   # um item só: "Poção de [item] [qualidade]" (antes do catálogo)
 	elif achada["perto"]:
-		_definir_nome(achada["nome"])
+		_definir_nome(achada["nome"])   # matriz perto de uma poção do catálogo: o nome dela (antes do "Poção de [item]")
+	elif nome_unico != "":
+		_definir_nome(nome_unico)   # um item só: "Poção de [item] [qualidade]"
 	elif _nome_ingrediente(A) != "":
 		_definir_nome(_nome_ingrediente(A))   # matriz parecida com um ingrediente puro
 	else:
@@ -260,10 +267,15 @@ func abrir(resultado: Dictionary) -> void:
 		# dá o nome depois, no livro de receitas (página do preparo)
 		_definir_nome(NOME_DESCONHECIDO)
 		_res["nomeavel"] = true
+	if OS.is_debug_build():   # distribuição do aproveitamento (menu de debug, aba Poções)
+		EstatisticasPocoes.registrar(ResultadoVistas.media_aproveitamento(diags_n), _pocao_item.get_nome() if _pocao_item else "?")
 	_estado = Estado.MOSTRANDO
 	_nome_atual = NOME_DESCONHECIDO if pedir_nome else (_pocao_item.get_nome() if _pocao_item else "Poção")
 	# moldura → matriz troca → pentágono → ingredientes
 	_vistas.titulo(_nome_atual)
+	if _pocao_item and not _pocao_item.efeito.is_empty():
+		_tocar_som(SOM_EFEITO)   # poção com efeito: um "plim" antes de o nome aparecer
+		await _esperar(0.35)
 	await _vistas.entrar()
 	_vistas.mostrar_grade()
 	_produtorio.limpar()
@@ -351,10 +363,16 @@ func _confirmar_nome() -> void:
 	CatalogoPocoes.registrar(nome, _res.get("A", []), _pocao_item.descricao if _pocao_item else "")
 	_nome_definido.emit()
 
+## Efeito da poção: vem da matriz (CatalogoPocoes.efeito_pela_matriz), qualquer que seja o nome.
+var _efeito_achado: Array = []
+var _nome_achado: String = ""
+
 func _definir_nome(nome: String) -> void:
 	if _pocao_item:
 		_pocao_item.nome = nome
-		_pocao_item.efeito = CatalogoPocoes.efeito_de(nome)
+		var ef: Array[Comando] = []
+		ef.assign(_efeito_achado)
+		_pocao_item.efeito = ef
 
 ## Estouro de brilhinhos saindo do centro (entrada da poção).
 func _estourar_brilhos(centro: Vector2) -> void:
@@ -578,6 +596,18 @@ func _matriz_vira_pocao() -> void:
 	tw.tween_property(_pocao, "modulate:a", 1.0, 0.2)
 	await tw.finished
 	await _esperar(0.4)
+
+## Som da poção com efeito (res://audio/se/plim.mp3; sem ele, usa SOM_EFEITO_RESERVA).
+const SOM_EFEITO := "plim"
+const SOM_EFEITO_RESERVA := "magic"
+
+func _tocar_som(nome: String) -> void:
+	var audio = get_node_or_null("/root/Main/GameManager/AudioManager")
+	if audio == null:
+		return
+	if not ResourceLoader.exists("res://audio/se/%s.mp3" % nome):
+		nome = SOM_EFEITO_RESERVA
+	audio.play_se(nome, 0.9)
 
 ## Espera que roda mesmo com o jogo pausado.
 func _esperar(s: float) -> void:

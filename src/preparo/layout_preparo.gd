@@ -2,7 +2,8 @@
 # Layout da cena de preparo para celular (640x960). Reaproveita os nós da cena
 # (BotaoFogo = Abanar, Poção, lista de ingredientes) e acrescenta:
 #   carrossel de ingredientes embaixo do caldeirão
-#   Abaixar (polegar esquerdo) e Abanar (polegar direito), Acender/Apagar embaixo
+#   fogo apagado: um botão só, Acender; aceso: Abaixar (−Fogo, polegar esquerdo) e
+#   Abanar (+Fogo, polegar direito), independentes
 #   Poção (Finalizar) no canto superior direito; receita memorizada (GuiaReceita) abaixo dela
 #   Voltar (Sair, perde os ingredientes) no canto superior esquerdo
 #   com o debug do caldeirão aberto: arco de T acima do caldeirão, arco de F em volta do
@@ -65,8 +66,8 @@ func configurar(p_cena) -> void:
 	seg.segurou.connect(_abaixar)
 	seg.repetiu.connect(_abaixar)
 	_painel.add_child(_b_abaixar)
-	_b_acender = _botao("Acender", 18)
-	_b_acender.pressed.connect(_acender_apagar)
+	_b_acender = _botao("Acender", 30)
+	_b_acender.pressed.connect(_acender)
 	_painel.add_child(_b_acender)
 	# Sair (menor, acima do Finalizar): perde os ingredientes, com confirmação
 	_b_sair = _botao("", 14)
@@ -101,7 +102,7 @@ func _montar() -> void:
 	if _b_sair.icon:
 		tam_sair = _b_sair.icon.get_size()
 	_por(_b_sair, Vector2(8, 8), tam_sair)
-	_por(_b_pocao, Vector2(520, 72), Vector2(112, 100))     # Finalizar: grande (tamanho do +Fogo)
+	_por(_b_pocao, Vector2(520, 8), Vector2(112, 100))      # Finalizar: canto superior direito (só com itens no caldeirão)
 	guia.position = Vector2(640 - GuiaReceita.LARG - 12, 180)
 	_por(arcos, Vector2.ZERO, Vector2(640, 640))
 	_por(regua_caldeirao, Vector2(500, 196), Vector2(136, 400))
@@ -117,7 +118,11 @@ func _montar() -> void:
 		_b_abaixar.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		_b_abaixar.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
 		_b_abaixar.expand_icon = true
-	_por(_b_acender, Vector2(220, 914), Vector2(200, 42))
+	_por(_b_acender, Vector2(16, 798), Vector2(608, 112))   # no lugar dos dois botões de fogo
+	if _b_fogo.icon:
+		_b_acender.icon = _b_fogo.icon
+		_b_acender.expand_icon = false
+		_b_acender.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	_atualizar_acender()
 
 
@@ -126,17 +131,27 @@ func _montar() -> void:
 # =============================================================================
 func _abaixar() -> void:
 	if cena:
-		cena._abafar_fogo()
+		cena._abafar_fogo(_b_abaixar)   # a animação fica no próprio −Fogo (não mexe no +Fogo)
 	_atualizar_acender()
 
-func _acender_apagar() -> void:
-	if cena and cena.has_method("alternar_fogo"):
-		cena.alternar_fogo()
+func _acender() -> void:
+	if cena and cena.sistema and not cena.sistema.fogo_ligado:
+		cena._fogo_segurar(_b_acender)
 	_atualizar_acender()
 
+## Apagado: só o Acender. Aceso: −Fogo e +Fogo (o Acender some).
 func _atualizar_acender() -> void:
 	var lig: bool = cena != null and cena.sistema != null and cena.sistema.fogo_ligado
-	_b_acender.text = "Apagar" if lig else "Acender"
+	if lig and not _b_abaixar.visible:   # acabou de acender: −Fogo e +Fogo na cor normal
+		for b in [_b_abaixar, _b_fogo]:
+			b.modulate = Color.WHITE
+			b.scale = Vector2.ONE
+	if not lig and not _b_acender.visible:
+		_b_acender.modulate = Color.WHITE
+		_b_acender.scale = Vector2.ONE
+	_b_acender.visible = not lig
+	_b_abaixar.visible = lig
+	_b_fogo.visible = lig
 
 func _process(_d: float) -> void:
 	_atualizar_acender()

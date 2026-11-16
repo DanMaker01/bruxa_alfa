@@ -87,7 +87,7 @@ emocao = 2
 [sub_resource type="Resource" id="A_m1"]
 script = ExtResource("6_kgd5i")
 personagem = ExtResource("x1")
-texto = "Hmm... [item]Poção de Pó de Retorno Concentrada[/item]."
+texto = "Hmm... [item]Poção do Retorno[/item]."
 
 [sub_resource type="Resource" id="A_m2"]
 script = ExtResource("6_kgd5i")

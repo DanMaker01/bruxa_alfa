@@ -184,7 +184,10 @@ func get_intensidade_fogo() -> float:
 ## para dar para ler a faixa sem números.
 const CORES_FOGO := [
 	# T ≈ (F + 175) / 9.75: amarelo 1150 ≈ 136 °C, branco 1350 ≈ 156 °C, púrpura 1500 ≈ 172 °C
-	[70.0, Color(0.55, 0.08, 0.04)],
+	# fogo baixo (frio), 3 cores de 400 a 800, como os estados do livro:
+	# transparente (≈ 59-80 °C), azul pálido (≈ 80-95 °C), normal (vermelho)
+	[400.0, Color(0.92, 0.95, 1.0)],   # mesmas cores de EstadosChama
+	[600.0, Color(0.6, 0.76, 1.0)],
 	[800.0, Color(1.0, 0.22, 0.06)],
 	[900.0, Color(1.0, 0.55, 0.12)],
 	[1150.0, Color(1.0, 0.88, 0.2)],
@@ -196,7 +199,7 @@ const CORES_FOGO := [
 func get_cor_fogo() -> Color:
 	var i = get_intensidade_fogo()
 	if i <= 0.0:
-		return Color(1.0, 0.4, 0.1, 0.0)
+		return Color(CORES_FOGO[0][1], 0.0)
 	var cor: Color = CORES_FOGO[-1][1]
 	if F <= CORES_FOGO[0][0]:
 		cor = CORES_FOGO[0][1]

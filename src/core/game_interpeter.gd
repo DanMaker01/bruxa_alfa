@@ -326,6 +326,10 @@ func usar_item(id: String, personalidade: String = "bruxa") -> bool:
 	var item: ItemData = database.get_item(id) if database else null
 	if item == null or game_temp == null or not game_temp.has_item(id):
 		return false
+	if not item.efeito.is_empty() and game_manager and game_manager.has_method("get_input_manager"):
+		var im = game_manager.get_input_manager()   # poção com efeito: a bruxa para (não segue andando)
+		if im and im.has_method("force_reset"):
+			im.force_reset()
 	if game_temp.has_personality(personalidade):
 		CmdAplicarPocao.aplicar_matriz(self, game_temp, personalidade, CalculadoraPocao.matriz_do_item(item))
 	game_temp.remove_item(id, 1)

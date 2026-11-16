@@ -8,8 +8,9 @@ extends RefCounted
 ## id, nome no livro, faixa de T (°C) com a chama estável, cor da bolinha no livro.
 const LISTA := [
 	{"id": "apagado", "nome": "Apagado", "T_min": -999.0, "T_max": 59.0, "cor": Color(0.35, 0.33, 0.3)},
-	{"id": "transparente", "nome": "Transparente", "T_min": 59.0, "T_max": 80.0, "cor": Color(0.75, 0.85, 0.95)},
-	{"id": "transparente_grande", "nome": "Transparente grande", "T_min": 80.0, "T_max": 95.0, "cor": Color(0.55, 0.7, 0.9)},
+	{"id": "transparente", "nome": "Transparente", "T_min": 59.0, "T_max": 80.0, "cor": Color(0.92, 0.95, 1.0)},
+	# id antigo mantido (receitas salvas e desenvoltura.tres usam); no livro aparece "Azul pálido"
+	{"id": "transparente_grande", "nome": "Azul pálido", "T_min": 80.0, "T_max": 95.0, "cor": Color(0.6, 0.76, 1.0)},
 	{"id": "normal", "nome": "Normal", "T_min": 95.0, "T_max": 105.0, "cor": Color(0.9, 0.25, 0.1)},
 	{"id": "laranja", "nome": "Laranja", "T_min": 105.0, "T_max": 122.0, "cor": Color(1.0, 0.55, 0.12)},
 	{"id": "amarelo", "nome": "Amarelo", "T_min": 122.0, "T_max": 145.0, "cor": Color(0.95, 0.8, 0.15)},

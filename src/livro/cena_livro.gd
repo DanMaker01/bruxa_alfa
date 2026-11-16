@@ -9,7 +9,9 @@
 #   poção sem nome (feita no preparo): ganha nome ao passar a limpo e editar (o nome da
 #                   receita vale para a poção: item no inventário e próximas iguais).
 #                   Na página só aparece "poção sem nome". Poção com nome não muda.
-#   + Nova receita: sempre na página da direita depois da última; tocar numa página em branco também cria
+#   + Nova receita: só as receitas existentes aparecem; na última folha, a página transparente
+#     (nº ímpar) ou o botão "+ Nova" no rodapé da direita (nº par) abrem o editor; confirmou,
+#     a página é criada (animação) e a receita é transcrita
 # Editar: a própria página vira editável e a página ao lado vira a paleta (EditorReceita,
 # arrastar e soltar); Pronto / Cancelar voltam ao normal. Tocar numa página já feita
 # abre o DetalheReceita (gráfico do melhor preparo).
@@ -27,6 +29,8 @@ const RECT_LIVRO := Rect2(6, 10, 628, 620)
 const RECT_PAG := [Rect2(18, 22, 298, 596), Rect2(324, 22, 298, 596)]
 const MARGEM: float = 14.0
 const ALT_RODAPE: float = 48.0      # setas e número das páginas
+const ALFA_FANTASMA: float = 0.3   # página transparente (criar receita)
+const T_CRIAR_PAGINA: float = 0.5
 const SWIPE_MIN: float = 70.0
 
 const COR_FUNDO := Color(0, 0, 0, 0.55)
@@ -77,7 +81,7 @@ var _folhas_no: Array = []          # [Control esquerda, Control direita] (viram
 var _fitas: Array = []              # fitinha das ensinadas, por lado
 var _carimbos: Array = []           # carimbo "rascunho", por lado
 var _animando: bool = false
-const T_FOLHA: float = 0.28         # meia virada (s) (2× mais lento)
+const T_FOLHA: float = 0.2          # meia virada (s)
 const T_FOLHA_RAPIDA: float = 0.1
 const COR_FITA := Color(0.85, 0.65, 0.15)
 
@@ -116,6 +120,10 @@ func _carregar_dados() -> void:
 			{"tipo": "chama", "estado": "laranja"},
 			{"tipo": "ingrediente", "item": "erva", "qtd": 3, "seg": 25.0}], {"pocao": "Poção de Erva Fraca", "a": 0.62, "vezes": 1})
 		r["quando"] = "teste"
+	# receita nova que ficou pela metade (livro fechado no editor): não existe
+	for pg in livro["paginas"].duplicate():
+		if pg.get("pendente", false):
+			LivroReceitas.apagar(livro, pg)
 
 
 # =============================================================================
@@ -201,14 +209,14 @@ func _montar() -> void:
 	_seta_esq.size = Vector2(56, 40)
 	_seta_esq.add_theme_font_size_override("font_size", 24)
 	_corpo.add_child(_seta_esq)
-	_seta_dir = _botao("›", _passar.bind(1))
+	_seta_dir = _botao("›", _seta_direita)
 	_seta_dir.position = Vector2(RECT_PAG[1].end.x - 64, y_rod)
 	_seta_dir.size = Vector2(56, 40)
 	_seta_dir.add_theme_font_size_override("font_size", 24)
 	_corpo.add_child(_seta_dir)
-	_b_nova = _botao("+ Nova receita", _nova)
-	_b_nova.position = Vector2(RECT_PAG[0].position.x + 72, y_rod)
-	_b_nova.size = Vector2(150, 40)
+	_b_nova = _botao("+ Nova", _nova)   # rodapé da direita, só na última folha com nº par de receitas
+	_b_nova.position = Vector2(RECT_PAG[1].end.x - 64 - 8 - 120, y_rod)
+	_b_nova.size = Vector2(120, 40)
 	_corpo.add_child(_b_nova)
 	_indicador = _rotulo("", 12, COR_SUAVE, false)
 	_indicador.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -252,23 +260,35 @@ func _atualizar() -> void:
 		var folha = _folhas[k] if k < _folhas.size() else null
 		_montar_pagina(lado, folha, k + 1)
 	_seta_esq.disabled = _spread <= 0
-	_seta_dir.disabled = _spread + 2 >= _folhas.size()   # nunca avança para duas páginas vazias
-	_b_nova.visible = false   # o "+ Nova receita" fica na página da direita depois da última
+	# na última folha o "›" vira "+ Nova" (cria receita)
+	var ultima: bool = _spread >= _ultimo_spread()
+	_seta_dir.disabled = false
+	_seta_dir.text = "+ Nova" if ultima else "›"
+	_seta_dir.add_theme_font_size_override("font_size", 18 if ultima else 24)
+	var larg: float = 104.0 if ultima else 56.0
+	_seta_dir.size = Vector2(larg, 40)
+	_seta_dir.position.x = RECT_PAG[1].end.x - 8 - larg
+	_b_nova.visible = false
 	var n_real: int = livro["paginas"].size() + livro["rascunhos"].size()
 	_indicador.text = "%d-%d de %d" % [mini(_spread + 1, n_real), mini(_spread + 2, n_real), n_real]
 
-## Páginas na ordem do livro e, no fim, a página "+ Nova receita" sempre do lado DIREITO
-## (se a última receita cai na direita, entra uma página em branco à esquerda).
-## Tocar numa página em branco também cria uma receita.
+## Só as receitas existentes (sem páginas vazias). Com nº ímpar, a última folha mostra à
+## direita uma página transparente: tocar nela cria uma receita nova. Com nº par, o
+## botão "+ Nova" fica no rodapé da direita.
 func _montar_lista() -> void:
 	_folhas = livro["paginas"].duplicate()
 	_folhas.append_array(livro["rascunhos"])   # rascunhos no fim do livro
-	if _folhas.size() % 2 == 0:
-		_folhas.append({"slot": "vazia"})
-	_folhas.append({"slot": "nova"})
+	if _folhas.size() % 2 == 1:
+		_folhas.append({"slot": "fantasma"})
 
 func _ultimo_spread() -> int:
 	return maxi(0, ((_folhas.size() - 1) / 2) * 2)
+
+func _seta_direita() -> void:
+	if _spread >= _ultimo_spread():
+		_nova()
+	else:
+		_passar(1)
 
 func _passar(d: int) -> void:
 	if _animando:
@@ -333,11 +353,16 @@ func _montar_pagina(lado: int, folha, numero: int) -> void:
 	_papeis[lado].add_theme_stylebox_override("panel", _caixa(COR_PAPEL_RASCUNHO if rascunho else COR_PAPEL, 4, Color(0, 0, 0, 0.15), 1))
 	_carimbos[lado].visible = rascunho
 	_fitas[lado].visible = folha is Dictionary and folha.get("tipo") == "npc"
+	# sem página: nada (nem papel); transparente: a página para criar receita (ou a que
+	# está sendo criada, enquanto o editor não confirma)
+	var fantasma: bool = folha is Dictionary and (folha.get("slot") == "fantasma" or folha.get("pendente", false))
+	_papeis[lado].modulate.a = 0.0 if folha == null else (ALFA_FANTASMA if fantasma else 1.0)
+	_papeis[lado].mouse_filter = Control.MOUSE_FILTER_IGNORE if folha == null else Control.MOUSE_FILTER_STOP
 	if folha == null:
 		return
-	if folha.get("slot") == "vazia":
+	if fantasma:
 		caixa.add_child(_espaco())
-		var tv := _rotulo("Página em branco\n(toque para uma nova receita)", 14, COR_SUAVE)
+		var tv := _rotulo("+ Nova receita", 18, COR_SUAVE)
 		tv.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		caixa.add_child(tv)
 		caixa.add_child(_espaco())
@@ -459,15 +484,36 @@ func _botao_apagar(p: Dictionary) -> Button:
 
 
 # ---- ações ----
+## Nova receita: abre o editor numa página ainda transparente ("pendente"). Confirmou:
+## a página é criada (animação) e a receita é transcrita. Cancelou: a página some.
 func _nova() -> void:
-	if _animando:
+	if _animando or _editor.ativo:
 		return
 	var p := LivroReceitas.nova_pagina(livro)
 	if p.is_empty():
 		return
+	p["pendente"] = true
 	await ir_para(int(p["id"]))
-	await _aparecer_pagina(int(p["id"]))
 	_editar(p)
+
+## Página nova: o papel surge (de transparente a inteiro), ainda sem texto.
+func _criar_pagina(id: int) -> void:
+	var lado := _lado_de(id)
+	if lado < 0:
+		return
+	_animando = true
+	_som(SOM_VIRAR)
+	for c in _caixas[lado].get_children():
+		c.modulate.a = 0.0
+	var papel: Control = _papeis[lado]
+	papel.pivot_offset = papel.size * 0.5
+	papel.modulate.a = ALFA_FANTASMA
+	papel.scale = Vector2(0.92, 0.92)
+	var tw := create_tween().set_parallel(true)
+	tw.tween_property(papel, "modulate:a", 1.0, T_CRIAR_PAGINA)
+	tw.tween_property(papel, "scale", Vector2.ONE, T_CRIAR_PAGINA).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	await tw.finished
+	_animando = false
 
 ## Ao abrir: o livro começa na 1ª página e corre até a página mais atual (a última
 ## criada); se há preparos novos, vai até cada um e escreve (abaixo).
@@ -586,8 +632,7 @@ func _passar_a_limpo(p: Dictionary) -> void:
 		return
 	if LivroReceitas.passar_a_limpo(livro, p):
 		await ir_para(int(p["id"]))
-		await _aparecer_pagina(int(p["id"]))
-		_editar(p)
+		await _aparecer_pagina(int(p["id"]))   # passar a limpo não abre o editor
 
 ## Tocar no papel (fora dos botões) de uma página já feita abre o detalhe.
 func _papel_input(ev: InputEvent, lado: int) -> void:
@@ -624,6 +669,8 @@ func _montar_edicao() -> void:
 			caixa.remove_child(c)
 			c.queue_free()
 		_papeis[lado].add_theme_stylebox_override("panel", _caixa(COR_PAPEL, 4, Color(0, 0, 0, 0.15), 1))
+		_papeis[lado].modulate.a = 1.0
+		_papeis[lado].mouse_filter = Control.MOUSE_FILTER_STOP
 		_carimbos[lado].visible = false
 		_fitas[lado].visible = false
 	_editor.montar_pagina(_caixas[_editando_lado])
@@ -633,8 +680,19 @@ func _montar_edicao() -> void:
 	_b_nova.disabled = true
 	_indicador.text = "editando receita"
 
-func _editor_terminou(_salvou: bool) -> void:
+func _editor_terminou(salvou: bool) -> void:
 	_editando_lado = -1
+	var p: Dictionary = _editor.pagina
+	if p.get("pendente", false):
+		p.erase("pendente")
+		if not salvou:
+			LivroReceitas.apagar(livro, p)   # cancelou: a página nem chega a existir
+			_atualizar()
+			return
+		_atualizar()
+		await _criar_pagina(int(p["id"]))
+		await _escrever_pagina(int(p["id"]))
+		return
 	_atualizar()
 
 
@@ -707,6 +765,13 @@ func fechar() -> void:
 		return
 	_animando = true
 	_som(SOM_ABRIR)
+	# primeiro as páginas fecham na lombada, depois o livro some
+	var tp := create_tween().set_parallel(true)
+	for f in _folhas_no:
+		tp.tween_property(f, "scale:x", 0.0, T_FOLHA).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	if is_instance_valid(_b_nova):
+		tp.tween_property(_b_nova, "modulate:a", 0.0, T_FOLHA)
+	await tp.finished
 	var tw := create_tween().set_parallel(true)
 	tw.tween_property(_corpo, "scale", Vector2(0.15, 0.9), T_FECHAR).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	tw.tween_property(_corpo, "modulate:a", 0.0, T_FECHAR)
@@ -740,7 +805,10 @@ func _input(event: InputEvent) -> void:
 		elif not event.pressed and _toque_ini.x >= 0.0:
 			var d: Vector2 = event.position - _toque_ini
 			if absf(d.x) > SWIPE_MIN and absf(d.y) < absf(d.x):
-				_passar(-1 if d.x > 0 else 1)
+				if d.x < 0 and _spread >= _ultimo_spread() and not _animando:
+					fechar()   # passou da última folha: fecha o livro
+				else:
+					_passar(-1 if d.x > 0 else 1)
 			_limpar_toque.call_deferred()   # o papel ainda lê _toque_ini neste mesmo toque
 
 

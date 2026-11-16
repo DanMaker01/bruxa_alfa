@@ -136,8 +136,9 @@ static func _fumaca(tree: SceneTree, no, alt: float) -> void:
 	tree.create_timer(p.lifetime + 0.3).timeout.connect(p.queue_free)
 
 ## O alvo inteiro (sprite) fica com a cor por um instante e volta ao normal, duas vezes.
-## Pinta na cor pedida mesmo com sprite colorido: um shader troca a cor de cada pixel pela
-## cor escolhida, mantendo só o claro/escuro (a textura) do sprite.
+## Pinta na cor pedida mesmo com sprite colorido (não precisa de sprite branco): no pico,
+## cada pixel vira a cor escolhida, com só um leve claro/escuro do sprite para manter o
+## desenho. A tintura do próprio sprite (self_modulate) é desligada durante o piscar.
 const SHADER_PISCAR := """
 shader_type canvas_item;
 uniform vec4 cor : source_color = vec4(1.0);
@@ -145,7 +146,7 @@ uniform float forca : hint_range(0.0, 1.0) = 0.0;
 void fragment() {
 	vec4 t = texture(TEXTURE, UV) * COLOR;
 	float lum = dot(t.rgb, vec3(0.299, 0.587, 0.114));
-	vec3 pintado = clamp(cor.rgb * (0.55 + 0.9 * lum), 0.0, 1.0);
+	vec3 pintado = clamp(cor.rgb * (0.8 + 0.4 * lum), 0.0, 1.0);
 	COLOR = vec4(mix(t.rgb, pintado, forca), t.a);
 }
 """
@@ -168,9 +169,12 @@ static func _piscar(no, c: Color) -> void:
 	mat.shader = sh
 	mat.set_shader_parameter("cor", c)
 	var antigos: Array = []
+	var tintas: Array = []
 	for a in alvos:
 		antigos.append(a.material)
 		a.material = mat
+		tintas.append(a.self_modulate)
+		a.self_modulate = Color(1, 1, 1, a.self_modulate.a)
 	var tw: Tween = no.create_tween()
 	for i in 2:
 		tw.tween_method(func(v: float): mat.set_shader_parameter("forca", v), 0.0, 1.0, 0.1)
@@ -179,6 +183,7 @@ static func _piscar(no, c: Color) -> void:
 	for k in alvos.size():
 		if is_instance_valid(alvos[k]):
 			alvos[k].material = antigos[k]
+			alvos[k].self_modulate = tintas[k]
 
 static func _clarao(tree: SceneTree, c: Color) -> void:
 	var camada := CanvasLayer.new()

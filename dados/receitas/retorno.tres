@@ -8,7 +8,8 @@
 [sub_resource type="Resource" id="L0"]
 script = ExtResource("2_ing")
 item = ExtResource("i0")
-nota = "cozimento leniente, 60–170 °C"
+quantidade = 3
+nota = "fogo amarelo (122–145 °C), ~25 s"
 
 [resource]
 script = ExtResource("1_rec")
@@ -16,7 +17,7 @@ nome = "Retorno"
 pocao = ExtResource("p_pocao")
 descricao = "Leva quem bebe de volta para casa. Só para casa."
 ingredientes = Array[ExtResource("2_ing")]([SubResource("L0")])
-passos = PackedStringArray("Acenda e esquente o caldeirão.", "Jogue o pó e cozinhe por ~30 s perto de 100 °C.")
-passos_livro = Array[Dictionary]([{"tipo": "chama", "estado": "normal"}, {"tipo": "ingrediente", "item": "po_retorno", "qtd": 1, "seg": 30.0}])
-duracao = 35.0
+passos = PackedStringArray("Acenda e esquente o caldeirão.", "Chama amarela; jogue os 3 pós e cozinhe ~25 s. Só concentrada (95%) leva para casa.")
+passos_livro = Array[Dictionary]([{"tipo": "chama", "estado": "amarelo"}, {"tipo": "ingrediente", "item": "po_retorno", "qtd": 3, "seg": 25.0}])
+duracao = 30.0
 conhecida = true

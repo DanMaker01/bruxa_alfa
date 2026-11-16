@@ -139,7 +139,9 @@ func _setup_ui():
 		panel.add_theme_stylebox_override("panel", style)
 
 	if text_label:
-		text_label.add_theme_font_size_override("normal_font_size", 28)
+		# mesmo tamanho para todas as variações (o negrito do [item] usava o tamanho padrão, menor)
+		for chave in ["normal_font_size", "bold_font_size", "italics_font_size", "bold_italics_font_size", "mono_font_size"]:
+			text_label.add_theme_font_size_override(chave, FONTE_PADRAO)
 		text_label.add_theme_color_override("default_color", Color.WHITE)
 		text_label.text = ""
 
@@ -173,15 +175,35 @@ func _show_current_message():
 ## Tags de BBCode que podem ser usadas no texto das falas (Mostrar mensagem / opções).
 ## Ex.: "Isso é [color=red]perigoso[/color]!", "[shake]Socorro![/shake]", "[wave]lá lá lá[/wave]".
 const TAGS_BBCODE := ["color", "b", "i", "u", "s", "wave", "shake", "rainbow", "tornado", "fade",
-	"bgcolor", "font_size", "outline_color", "outline_size", "item"]
-## [item]erva[/item] = nome de item ou poção: roxo e negrito.
+	"bgcolor", "font_size", "outline_color", "outline_size"]
+## Palavras com cor própria nas falas (cada tipo uma cor):
+##   [item]erva[/item]        item ou poção (roxo, negrito)
+##   [ator]Zigmund[/ator]     nome de personagem
+##   [traco]Extroversão[/traco] traço de personalidade
+##   [ouro]10 moedas[/ouro]   dinheiro (amarelo)
+##   [mapa]o castelo[/mapa]   lugar
+const CORES_TAG := {
+	"item": Color("#c9a0ff"),
+	"ator": Color("#7fd4ff"),
+	"traco": Color("#8fe08a"),
+	"ouro": Color("#ffd84a"),
+	"mapa": Color("#ffa860"),
+}
+const TAGS_NEGRITO := ["item"]
 const COR_ITEM := Color("#c9a0ff")
 var _re_tag: RegEx = null
 
 ## Devolve [bbcode para o RichTextLabel, texto puro sem tags].
 func _preparar_bbcode(texto: String) -> Array:
-	# [item]...[/item] vira negrito + COR_ITEM
-	texto = texto.replace("[item]", "[b][color=#" + COR_ITEM.to_html(false) + "]").replace("[/item]", "[/color][/b]")
+	# [item], [ator], [traco], [ouro], [mapa] viram cor (item também negrito)
+	for tag in CORES_TAG:
+		var cor: Color = CORES_TAG[tag]
+		var ini: String = "[color=#" + cor.to_html(false) + "]"
+		var fim: String = "[/color]"
+		if tag in TAGS_NEGRITO:
+			ini = "[b]" + ini
+			fim = fim + "[/b]"
+		texto = texto.replace("[" + tag + "]", ini).replace("[/" + tag + "]", fim)
 	if _re_tag == null:
 		_re_tag = RegEx.new()
 		_re_tag.compile("\\[(/?)([a-z_]+)([^\\]]*)\\]")
@@ -591,8 +613,8 @@ func _aplicar_estilo_janela() -> void:
 		var tam: int = int(_estilo.get("tamanho_fonte", 0))
 		if tam <= 0:
 			tam = FONTE_PADRAO
-		text_label.add_theme_font_size_override("normal_font_size", tam)
-		text_label.add_theme_font_size_override("italics_font_size", tam)
+		for chave in ["normal_font_size", "bold_font_size", "italics_font_size", "bold_italics_font_size", "mono_font_size"]:
+			text_label.add_theme_font_size_override(chave, tam)   # todas do mesmo tamanho
 		text_label.add_theme_color_override("default_color", _estilo.get("cor", Color.WHITE))
 	if not panel:
 		return

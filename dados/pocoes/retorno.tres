@@ -11,7 +11,9 @@ evento = ExtResource("8_retorno")
 
 [resource]
 script = ExtResource("2_ref")
-nome = "Poção de Pó de Retorno Concentrada"
+nome = "Poção do Retorno"
 descricao = "Leva quem bebe de volta para casa."
-A = Array[PackedFloat32Array]([PackedFloat32Array(0.97, 0, 0, 0, 0), PackedFloat32Array(0, 1, 0, 0, 0), PackedFloat32Array(0, 0, 1, 0, 0), PackedFloat32Array(0, 0, 0, 1, 0), PackedFloat32Array(0, 0, 0, 0, 1.03)])
+A = Array[PackedFloat32Array]([PackedFloat32Array(0.912673, 0, 0, 0, 0), PackedFloat32Array(0, 1, 0, 0, 0), PackedFloat32Array(0, 0, 1, 0, 0), PackedFloat32Array(0, 0, 0, 1, 0), PackedFloat32Array(0, 0, 0, 0, 1.092727)])
 efeito = Array[ExtResource("3_cmd")]([SubResource("R_chamar_retorno")])
+aproveitamento_min_efeito = 0.95
+distancia_max = 0.02

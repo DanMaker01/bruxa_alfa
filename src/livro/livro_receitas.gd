@@ -151,8 +151,7 @@ static func nomear_pocao(l: Dictionary, p: Dictionary, nome: String, db = null, 
 	_nome_pela_pocao(p)
 	var it: ItemData = item(str(r.get("item", "")), db) if r.has("item") else null
 	if it:
-		it.nome = nome
-		it.efeito = CatalogoPocoes.efeito_de(nome)
+		it.nome = nome   # o efeito vem da matriz (já decidido no resultado); o nome não muda isso
 	if r.has("A"):
 		CatalogoPocoes.registrar(nome, r["A"], it.descricao if it else "")
 	if game_temp and game_temp.has_signal("inventory_changed"):

@@ -11,9 +11,16 @@ extends Control
 class_name DebugMenu
 
 const TRACOS := ["O", "C", "E", "A", "N"]
-const FONTE: int = 18            # fonte do menu
+const FONTE: int = 22            # fonte do menu
 ## Altura mínima de botões, campos e caixas de marcar (bom para o dedo no celular).
-const ALTURA_TOQUE: float = 56.0
+const ALTURA_TOQUE: float = 66.0
+## 4 abas (simples): cada uma junta partes. Uma parte = uma lista (montada por _atualizar_parte).
+const PAGINAS := {
+	"Jogo": ["Variáveis", "Personalidade", "Estados"],
+	"Itens": ["Itens", "Poções"],
+	"Mapa": ["Mapa"],
+	"Comandos": ["Comandos"],
+}
 const COR_TEXTO := Color(0.95, 0.93, 0.88)
 const BOTAO_DBG := Vector2(96, 64)
 const COR_FUNDO := Color(0.07, 0.07, 0.09, 0.93)       # painel escuro translúcido
@@ -186,8 +193,8 @@ func abrir() -> void:
 	_abas.current_tab = clampi(_ultima_aba, 0, _abas.get_tab_count() - 1)
 	_abas.set_block_signals(false)
 	_janela.show()
-	_ao_trocar_aba(_abas.current_tab)
 	_conectar_sinais()
+	_ao_trocar_aba.call_deferred(_abas.current_tab)   # a janela aparece na hora; a aba monta no frame seguinte
 
 ## Título com o mapa atual e a posição da bruxa.
 func _atualizar_titulo() -> void:
@@ -240,8 +247,22 @@ func _ao_trocar_aba(i: int) -> void:
 		_atualizar_aba(nome)
 	_aplicar_busca()
 
+## Monta as partes de uma aba (uma por frame, para não travar ao abrir).
+var _montando: int = 0
 func _atualizar_aba(nome: String) -> void:
 	_sujas[nome] = false
+	_montando += 1
+	var minha := _montando
+	var partes: Array = PAGINAS.get(nome, [nome])
+	for k in partes.size():
+		if k > 0:
+			await get_tree().process_frame
+			if minha != _montando or _aba_atual() != nome:
+				return   # trocou de aba no meio: a outra monta
+		_atualizar_parte(partes[k])
+	_aplicar_busca()
+
+func _atualizar_parte(nome: String) -> void:
 	match nome:
 		"Variáveis": _atualizar_vars()
 		"Personalidade": _atualizar_pers()
@@ -251,6 +272,62 @@ func _atualizar_aba(nome: String) -> void:
 			if _comandos:
 				_comandos.atualizar()
 		"Estados": _atualizar_estados()
+		"Poções": _atualizar_pocoes()
+
+# =============================================================================
+# POÇÕES (debug): distribuição do aproveitamento e poções do catálogo prontas
+# =============================================================================
+var _lista_pocoes: VBoxContainer
+
+func _atualizar_pocoes() -> void:
+	_limpar(_lista_pocoes)
+	var lista := EstatisticasPocoes.ler()
+	_lista_pocoes.add_child(_secao("Aproveitamento das poções feitas (%d)" % lista.size()))
+	var h := EstatisticasPocoes.histograma(lista)
+	var maior: int = 1
+	for v in h:
+		maior = maxi(maior, int(v))
+	var faixas: Array = EstatisticasPocoes.FAIXAS
+	for i in range(faixas.size() - 1, -1, -1):
+		var ate: String = "100" if i == faixas.size() - 1 else str(roundi(float(faixas[i + 1]) * 100.0))
+		var rot := "%d–%s%%" % [roundi(float(faixas[i]) * 100.0), ate]
+		var n: int = int(h[i])
+		var pct: float = 100.0 * n / maxf(1.0, lista.size())
+		var barra := "█".repeat(int(round(20.0 * n / maior)))
+		var l := _rotulo("%-8s %s %d (%d%%)" % [rot, barra, n, roundi(pct)])
+		if i == faixas.size() - 1:
+			l.add_theme_color_override("font_color", COR_DESTAQUE)
+		_lista_pocoes.add_child(l)
+	if not lista.is_empty():
+		var ult: Dictionary = lista[-1]
+		_lista_pocoes.add_child(_rotulo("última: %d%%  %s" % [roundi(float(ult["a"]) * 100.0), ult["nome"]]))
+	var zerar := Button.new()
+	zerar.text = "Zerar estatísticas"
+	zerar.pressed.connect(func():
+		EstatisticasPocoes.limpar()
+		_atualizar_pocoes())
+	_lista_pocoes.add_child(zerar)
+	_lista_pocoes.add_child(_secao("Dar poção do catálogo (pronta, com efeito)"))
+	CatalogoPocoes._garantir()
+	for ref in CatalogoPocoes._jogo.pocoes:
+		if ref == null or ref.nome == "":
+			continue
+		var b := Button.new()
+		b.text = ref.nome + ("  ★" if not ref.efeito.is_empty() else "")
+		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		b.pressed.connect(_dar_pocao.bind(ref))
+		_lista_pocoes.add_child(b)
+	_ajustar_toque(_lista_pocoes)
+
+func _dar_pocao(ref: PocaoReferencia) -> void:
+	if database == null or game_temp == null or not database.has_method("registrar_item"):
+		return
+	var id: String = database.novo_id("pocao")
+	var p := CalculadoraPocao.criar_pocao({"A": ref.A, "diagnosticos": []}, id, ref.nome)
+	p.descricao = ref.descricao
+	p.efeito = ref.efeito.duplicate()
+	database.registrar_item(p)
+	game_temp.add_item(id, 1)
 
 ## Lista (VBox) da aba atual, para a busca.
 func _lista_da_aba(nome: String) -> Container:
@@ -261,13 +338,17 @@ func _lista_da_aba(nome: String) -> Container:
 		"Mapa": return _lista_mapa
 		"Comandos": return _comandos
 		"Estados": return _lista_estados
+		"Poções": return _lista_pocoes
 	return null
 
 ## Busca geral: esconde as linhas da aba atual que não têm o texto (títulos de seção
 ## ficam se algo abaixo deles ficou). Em Variáveis usa o filtro próprio (grupos).
 func _aplicar_busca() -> void:
+	for parte in PAGINAS.get(_aba_atual(), []):
+		_buscar_na_parte(parte)
+
+func _buscar_na_parte(nome: String) -> void:
 	var q := _busca.text.strip_edges().to_lower() if _busca else ""
-	var nome := _aba_atual()
 	if nome == "Variáveis":
 		_filtro_vars = q
 		_filtrar_vars()
@@ -360,7 +441,7 @@ func _montar() -> void:
 	col.add_child(topo)
 
 	_busca = LineEdit.new()
-	_busca.placeholder_text = "buscar na aba..."
+	_busca.placeholder_text = "buscar..."
 	_busca.clear_button_enabled = true
 	_busca.text_changed.connect(func(_t: String): _aplicar_busca())
 	col.add_child(_busca)
@@ -370,17 +451,20 @@ func _montar() -> void:
 	_abas.tab_changed.connect(_ao_trocar_aba)
 	col.add_child(_abas)
 
-	_lista_vars = _criar_aba("Variáveis")
-	_lista_pers = _criar_aba("Personalidade")
-	_lista_itens = _criar_aba("Itens")
-	_lista_mapa = _criar_aba("Mapa")
+	var jogo := _criar_pagina("Jogo")
+	_lista_vars = _criar_parte(jogo, "Variáveis")
+	_lista_pers = _criar_parte(jogo, "Personalidade")
+	_lista_estados = _criar_parte(jogo, "Estados salvos")
+	var itens := _criar_pagina("Itens")
+	_lista_itens = _criar_parte(itens, "")
+	_lista_pocoes = _criar_parte(itens, "Poções")
+	_lista_mapa = _criar_parte(_criar_pagina("Mapa"), "")
 	var scroll_cmd := ScrollContainer.new()
 	scroll_cmd.name = "Comandos"
 	scroll_cmd.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	_comandos = DebugComandos.new(self)
 	scroll_cmd.add_child(_comandos)
 	_abas.add_child(scroll_cmd)
-	_lista_estados = _criar_aba("Estados")
 	_montar_info()
 	_ajustar_toque(_janela)
 
@@ -405,6 +489,32 @@ func _montar_botao() -> void:
 	_botao.add_theme_font_size_override("font_size", 24)
 	_botao.pressed.connect(alternar)
 	add_child(_botao)   # depois da janela: fica por cima e fecha o menu também
+
+## Uma aba (página com rolagem) que junta várias partes.
+func _criar_pagina(nome: String) -> VBoxContainer:
+	var scroll := ScrollContainer.new()
+	scroll.name = nome
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	var col := VBoxContainer.new()
+	col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	col.add_theme_constant_override("separation", 14)
+	scroll.add_child(col)
+	_abas.add_child(scroll)
+	return col
+
+## Uma parte (lista) dentro da página, com um título grande (vazio = sem título).
+func _criar_parte(pagina: VBoxContainer, titulo: String) -> VBoxContainer:
+	if titulo != "":
+		var t := Label.new()
+		t.text = titulo.to_upper()
+		t.add_theme_font_size_override("font_size", FONTE)
+		t.add_theme_color_override("font_color", COR_DESTAQUE.darkened(0.15))
+		pagina.add_child(t)
+	var lista := VBoxContainer.new()
+	lista.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	lista.add_theme_constant_override("separation", 6)
+	pagina.add_child(lista)
+	return lista
 
 func _criar_aba(nome: String) -> VBoxContainer:
 	var scroll := ScrollContainer.new()
@@ -1116,7 +1226,7 @@ func _carregar_estado(nome: String) -> void:
 	for k in pers:
 		game_temp.personality_changed.emit(k)
 	_marcar_todas_sujas()
-	_sujas["Estados"] = false
+	_atualizar_aba.call_deferred(_aba_atual())   # depois do toque no botão (que é remontado)
 	if e.has("livro") and "livro" in game_temp and not (e["livro"] as Dictionary).is_empty():
 		game_temp.livro = _numeros_inteiros((e["livro"] as Dictionary).duplicate(true))
 	if e.has("itens_vistos") and "itens_vistos" in game_temp:
