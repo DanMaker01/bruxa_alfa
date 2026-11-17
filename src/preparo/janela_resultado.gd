@@ -515,19 +515,8 @@ func _fechar() -> void:
 	_pocao.visible = false
 	_halo.visible = false
 
-	# 1. escurece a janela e a poção vai para o meio
-	var tw := create_tween().set_parallel(true)
-	tw.tween_property(escuro, "color:a", 0.7, 0.6)
-	tw.tween_property(voo, "position", CENTRO_POCAO - TAM_POCAO * 0.5, 0.8).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
-	await tw.finished
-	if gt and id != "":
-		gt.add_item(id, int(_res.get("quantidade", 1)))
-		_res["item_ja_adicionado"] = true
-		# a linha da poção já nasce escondida (antes aparecia, sumia e voltava com o fade)
-		if hud and hud.has_method("preparar_item_chegando"):
-			hud.preparar_item_chegando(id, true)
-
-	# 2. a carta do inventário vem para a camada 11 e abre
+	# 1. a carta do inventário vem para a camada 11 e já vai abrindo enquanto a janela
+	#    escurece e a poção vai para o meio
 	var carta_camada := _camada(11)
 	var pai_carta: Node = carta.get_parent() if carta else null
 	var idx_carta: int = carta.get_index() if carta else 0
@@ -538,9 +527,20 @@ func _fechar() -> void:
 		carta.fechar()          # primeiro aparece de verso...
 		carta.ativa = true
 		carta.segurar = true
-		await _esperar(0.4)     # verso aparece rapidinho
-		carta.abrir()           # ...depois vira e abre
-	await _esperar(0.45)
+		var tc := create_tween()
+		tc.tween_interval(0.4)  # verso aparece rapidinho
+		tc.tween_callback(carta.abrir)   # ...depois vira e abre (junto com o voo)
+	var tw := create_tween().set_parallel(true)
+	tw.tween_property(escuro, "color:a", 0.7, 0.6)
+	tw.tween_property(voo, "position", CENTRO_POCAO - TAM_POCAO * 0.5, 0.8).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	await tw.finished
+	if gt and id != "":
+		gt.add_item(id, int(_res.get("quantidade", 1)))
+		_res["item_ja_adicionado"] = true
+		# a linha da poção já nasce escondida (antes aparecia, sumia e voltava com o fade)
+		if hud and hud.has_method("preparar_item_chegando"):
+			hud.preparar_item_chegando(id, true)
+	await _esperar(0.45)   # a carta termina de abrir
 
 	# 3. a poção desce até a linha dela; se a lista está cheia (a linha fica fora da
 	#    carta), vai para a parte de baixo da carta

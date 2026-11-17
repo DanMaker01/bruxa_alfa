@@ -659,6 +659,8 @@ func _iniciar_preparo() -> void:
 		layout.guia.carregar(game_temp.livro)   # receita memorizada (some quando a poção termina)
 	if tutorial:
 		tutorial.comecar_se_preciso()
+	if reacao and layout:
+		reacao.com_receita = not layout.guia.pagina.is_empty()   # a guia avisa a hora de finalizar
 
 func _finalizar_preparo() -> void:
 	if not preparo_ativo:

@@ -41,7 +41,18 @@ var _motivo: String = ""
 var _t: float = 0.0
 var _ultima_fala: float = -100.0
 var _balao_ate: float = 0.0
-var _fixa: bool = false   # dizer(..., fixa): o balão fica até calar() e as reações não falam por cima
+var _fixa: bool = false
+var _fila: Array = []             # falas esperando a vez ([texto, segundos])
+var _ocupada_ate: float = 0.0     # até quando a fala atual (dizer) segura o balão
+const FILA_MAX: int = 3
+const FALA_MIN: float = 1.8       # s mínimos de cada fala da fila
+## Pulo de comemoração e o comentário quando todos os itens passam disto.
+const A_COMEMORA: float = 0.975
+const FALA_COMEMORA := "Ótimo! Só mais um segundo e já pode finalizar."
+## Com receita memorizada quem avisa a hora de finalizar é a guia ("Pronto! Pode finalizar."):
+## aqui a bruxinha só pula, sem falar (um aviso só).
+var com_receita: bool = false
+var _comemorou: bool = false   # dizer(..., fixa): o balão fica até calar() e as reações não falam por cima
 const LARG_MAX_BALAO: float = 330.0
 const FONTE_FALA: int = 28
 const FONTE_DIZER: int = 24
@@ -82,6 +93,9 @@ func _criar_balao() -> void:
 
 func resetar() -> void:
 	_fixa = false
+	_fila.clear()
+	_ocupada_ate = 0.0
+	_comemorou = false
 	_humor = Humor.CONCENTRADA
 	_motivo = ""
 	_balao_ate = 0.0
@@ -96,7 +110,7 @@ func avisar(motivo: String) -> void:
 ## Segurando um item: a bruxa conta quantos já entraram ("1...", "2...") e, quando
 ## o último cai depois de soltar o botão, fala o total ("8!!").
 func contar(n: int, final: bool = false, nome_item: String = "") -> void:
-	if _fixa:
+	if _fixa or _t < _ocupada_ate:
 		return
 	if final:
 		_balao_label.text = ("%d %s!!" % [n, nome_item.to_lower()]) if nome_item != "" else "%d!!" % n
@@ -130,7 +144,7 @@ func atualizar(estados: Array) -> void:
 				motivo = k
 			elif niveis.get(k, 0) == 1:
 				perto = true
-		if not est.get("no_ponto", false):
+		if float(est.get("a", 0.0)) < A_COMEMORA:   # comemora só com 97,5% (no ponto = 95% é cedo)
 			todos_no_ponto = false
 	if motivo != "":
 		humor = Humor.ASSUSTADA
@@ -143,13 +157,27 @@ func atualizar(estados: Array) -> void:
 	if humor != _humor or motivo != _motivo:
 		_humor = humor
 		_motivo = motivo
-		if motivo != "":
+		if motivo == "perfeito" and not _comemorou:
+			_comemorou = true   # a 1ª vez em cada preparo: pula e avisa que está quase
+			if not com_receita:
+				dizer(FALA_COMEMORA, 3.0)
+		elif motivo != "":
 			_falar(motivo)
 
 ## Fala um texto qualquer (tutorial, próximo passo da receita). segundos <= 0 ou fixa:
 ## fica até calar(). Fixa: as reações automáticas não falam por cima.
 func dizer(texto: String, segundos: float = 2.5, fixa: bool = false) -> void:
+	# fila: uma fala não cobre outra. Instrução fixa (tutorial) entra na hora; as outras
+	# esperam a fala atual durar pelo menos o tempo dela
+	if not fixa and (_fixa or _t < _ocupada_ate):
+		if _fila.size() < FILA_MAX and not _fila.any(func(f): return f[0] == texto):
+			_fila.append([texto, segundos])
+		return
+	_mostrar_dizer(texto, segundos, fixa)
+
+func _mostrar_dizer(texto: String, segundos: float, fixa: bool) -> void:
 	_fixa = fixa
+	_ocupada_ate = _t + maxf(segundos, FALA_MIN) if not fixa else 0.0
 	_balao_label.text = texto
 	_ajustar_balao(FONTE_DIZER)
 	_ultima_fala = _t
@@ -163,6 +191,7 @@ func dizer(texto: String, segundos: float = 2.5, fixa: bool = false) -> void:
 ## Tira o balão (e solta o modo fixo).
 func calar() -> void:
 	_fixa = false
+	_ocupada_ate = 0.0
 	_balao_ate = 0.0
 	_balao.create_tween().tween_property(_balao, "modulate:a", 0.0, 0.2)
 
@@ -184,7 +213,7 @@ func _ajustar_balao(fonte: int) -> void:
 	_balao.position = BALAO_OFFSET - Vector2(0, maxf(0.0, _balao.size.y - uma_linha))
 
 func _falar(motivo: String) -> void:
-	if _fixa:
+	if _fixa or _t < _ocupada_ate:
 		return
 	if _t - _ultima_fala < INTERVALO_MIN_FALA or not FALAS.has(motivo):
 		return
@@ -201,6 +230,9 @@ func _falar(motivo: String) -> void:
 
 func _process(delta: float) -> void:
 	_t += delta
+	if not _fila.is_empty() and not _fixa and _t >= _ocupada_ate:
+		var f: Array = _fila.pop_front()
+		_mostrar_dizer(f[0], f[1], false)
 	# pose alvo por humor
 	var rot_alvo := 0.0
 	var sobe_alvo := sin(_t * 1.6) * 2.0          # respirando

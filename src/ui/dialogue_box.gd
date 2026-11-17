@@ -24,7 +24,7 @@ const PAUSA_PONTUACAO := {
 	" ": 1.0,
 	# vírgula: sem pausa
 	";": 3.0, ":": 3.0,
-	".": 7.0, "!": 3.5, "?": 3.5, "…": 4.0,   # ponto: o dobro do que era (3,5)
+	".": 14.0, "!": 7.0, "?": 3.5, "…": 8.0,   # ponto, "..." e "!": o dobro de antes
 }
 var _escrevendo: bool = false
 var _cursor: float = 0.0        # posição do "cursor" em letras (pode ser fracionária)

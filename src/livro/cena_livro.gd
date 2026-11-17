@@ -96,6 +96,7 @@ var _capa_verso: Control            # verso (liso): fechou depois da última fol
 ## true: a cena abre com o livro fechado (frente); tocar na capa abre. Definir antes de entrar na árvore.
 var comecar_fechado: bool = false
 var _ja_abriu: bool = false
+var _x_aberto: Button
 ## Tutorial do livro (CmdTutorialLivro) enquanto ele roda: diz o que pode (virar, sair) e é
 ## avisado ao passar a limpo. null = livro normal.
 var tutorial = null         # a 1ª abertura vai até a página nova (escreve as novas)
@@ -245,8 +246,9 @@ func _montar() -> void:
 	_indicador.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	_corpo.add_child(_indicador)
 
-	# fechar
-	var x := _botao("✕", fechar)
+	# ✕ do livro aberto: fecha o livro (fica a capa); o ✕ da capa sai da cena
+	var x := _botao("✕", func(): fechar_livro(true))
+	_x_aberto = x
 	x.position = Vector2(RECT_LIVRO.end.x - 44, RECT_LIVRO.position.y - 6)
 	x.size = Vector2(44, 40)
 	x.add_theme_stylebox_override("normal", _caixa(COR_CAPA, 8, Color(1, 1, 1, 0.3), 1))
@@ -874,9 +876,8 @@ func _montar_capa(frente: bool) -> Control:
 	capa.mouse_filter = Control.MOUSE_FILTER_STOP
 	capa.add_theme_stylebox_override("panel", _caixa(COR_CAPA if frente else COR_CAPA.darkened(0.25), 10, Color(0, 0, 0, 0.5), 3))
 	capa.gui_input.connect(func(ev: InputEvent):
-		if (ev is InputEventMouseButton or ev is InputEventScreenTouch) and ev.pressed:
-			accept_event()
-			abrir_livro())
+		if ev is InputEventMouseButton or ev is InputEventScreenTouch:
+			accept_event())   # tocar ou arrastar na capa: _livro_fechado_input
 	raiz.add_child(capa)
 	var lombada := ColorRect.new()
 	lombada.color = Color(0, 0, 0, 0.3)
@@ -908,6 +909,7 @@ func _montar_capa(frente: bool) -> Control:
 		selo.position = Vector2(0, RECT_CAPA.size.y - 80)
 		raiz.add_child(selo)
 	var x := _botao("✕", fechar)
+	x.name = "X"
 	x.position = Vector2(RECT_CAPA.size.x - 40, -6)
 	x.size = Vector2(44, 40)
 	x.add_theme_stylebox_override("normal", _caixa(COR_CAPA, 8, Color(1, 1, 1, 0.3), 1))
@@ -921,7 +923,9 @@ func _fundo_input(ev: InputEvent) -> void:
 		return
 	if _editor.ativo or _nomear.visible or _detalhe.visible:
 		return
-	if not _fechado and RECT_LIVRO.has_point(ev.position):
+	if _fechado:
+		return   # livro fechado: _livro_fechado_input (toque ou arrasto)
+	if RECT_LIVRO.has_point(ev.position):
 		return
 	fechar()
 
@@ -971,7 +975,10 @@ func _input(event: InputEvent) -> void:
 			fechar()
 		get_viewport().set_input_as_handled()
 		return
-	if _editor.ativo or _nomear.visible or _detalhe.visible or _fechado:
+	if _fechado:
+		_livro_fechado_input(event)
+		return
+	if _editor.ativo or _nomear.visible or _detalhe.visible:
 		return
 	if tutorial and not tutorial.pode_virar():
 		return
@@ -990,6 +997,35 @@ func _input(event: InputEvent) -> void:
 					_passar(-1 if d.x > 0 else 1)
 			_limpar_toque.call_deferred()   # o papel ainda lê _toque_ini neste mesmo toque
 
+
+## Livro fechado: tocar na capa abre; tocar fora sai. Arrastar: na frente, para a direita
+## sai e para a esquerda abre; no verso, para a esquerda sai e para a direita abre.
+var _toque_fechado := Vector2(-1, -1)
+func _livro_fechado_input(event: InputEvent) -> void:
+	if _animando or not (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT):
+		return
+	if event.pressed:
+		_toque_fechado = event.position
+		return
+	if _toque_fechado.x < 0.0:
+		return
+	var d: Vector2 = event.position - _toque_fechado
+	var ini := _toque_fechado
+	_toque_fechado = Vector2(-1, -1)
+	var x = _capa_fechada.get_node_or_null("X")
+	if x and x.get_global_rect().has_point(ini):
+		return   # o ✕ da capa cuida
+	var frente: bool = _capa_fechada == _capa_frente
+	if absf(d.x) > SWIPE_MIN and absf(d.y) < absf(d.x):
+		var abre: bool = (d.x < 0) if frente else (d.x > 0)   # frente: esquerda abre; verso: direita abre
+		if abre:
+			abrir_livro()
+		else:
+			fechar()
+	elif _capa_fechada.get_global_rect().has_point(event.position):
+		abrir_livro()
+	else:
+		fechar()
 
 func _limpar_toque() -> void:
 	_toque_ini = Vector2(-1, -1)

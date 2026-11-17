@@ -4,8 +4,9 @@
 #   2. o livro abre fechado: tocar na capa (tocar fora ou no ✕ fecha e volta ao passo 1)
 #   3. a bruxa anota o rascunho da Poção do Retorno (animação de escrever)
 #   4. Passar a limpo (obrigatório): a página vira "ensinada" (fitinha) com a receita certa
-#   5. Memorizar (explica; tocar é opcional, "Continuar" segue)
-#   6. fechar o livro (arrastar para o lado) e 7. sair (tocar fora ou no ✕)
+#   5. volta à 1ª página e mostra o Memorizar (tocar é opcional)
+#   6. ✕ fecha o livro (fica a capa) e 7. ✕ da capa (ou tocar fora) sai
+# Sem textos por cima: só a moldura piscando onde tocar (e a tela escura quando é obrigatório).
 class_name CmdTutorialLivro
 extends Comando
 
@@ -44,6 +45,13 @@ class _Tutorial extends Node:
 	var _destaque: DestaqueTutorial
 	var _pagina_id: int = -1
 	var _nome_pocao: String = "Poção do Retorno"
+	var _id_memorizar: int = -1
+	var _t_memorizar: float = 0.0
+	var _t_escrito: float = 0.0
+	## Depois de escrever o rascunho, espera isto (s) antes de acender o Passar a limpo.
+	const ESPERA_DEPOIS_ESCREVER: float = 0.5
+	## O Memorizar fica piscando por este tempo; depois o ✕ também pisca (memorizar é opcional).
+	const TEMPO_MEMORIZAR: float = 4.0
 
 	func _ready() -> void:
 		_preparar_pagina()
@@ -90,7 +98,6 @@ class _Tutorial extends Node:
 			_destaque_mapa.tocou_alvo.connect(_abrir_livro)
 		_camada_mapa.visible = true
 		_destaque_mapa.alvo(_rect_evento_livro, true, false)
-		_destaque_mapa.dica("Este é o meu livro de receitas. Toque nele.")
 
 	## Retângulo do sprite do livro na tela.
 	func _rect_evento_livro() -> Rect2:
@@ -145,7 +152,7 @@ class _Tutorial extends Node:
 		return etapa == Etapa.CAPA or etapa == Etapa.SAIR
 
 	func pode_virar() -> bool:
-		return etapa == Etapa.FECHAR
+		return etapa == Etapa.MEMORIZAR or etapa == Etapa.FECHAR
 
 	## A página do tutorial foi passada a limpo: vira receita ensinada, com os passos certos.
 	func ao_passar_a_limpo(p: Dictionary) -> void:
@@ -164,30 +171,49 @@ class _Tutorial extends Node:
 		match e:
 			Etapa.CAPA:
 				_destaque.alvo(func(): return livro._capa_fechada.get_global_rect() if livro and livro._fechado else Rect2(), false)
-				_destaque.dica("Toque na capa para abrir o livro.")
 			Etapa.ESCREVER:
-				_destaque.alvo(Callable(), true)
-				_destaque.dica("Toda poção que eu faço fica anotada como rascunho...")
+				_destaque.alvo(Callable(), true)   # escuro: espera ela escrever
 			Etapa.LIMPO:
-				_destaque.alvo(_rect_botao.bind("Passar a limpo"), true)
-				_destaque.dica("Rascunho é anotação solta. Toque em Passar a limpo para guardar a receita no livro.")
+				_destaque.alvo(_rect_botao.bind(_pagina_id, "Passar a limpo"), true)
 			Etapa.MEMORIZAR:
-				_destaque.alvo(_rect_botao.bind("Memorizar"), true)
-				_destaque.dica("Memorizar leva a receita para o caldeirão: ela aparece lá enquanto eu cozinho. Toque se quiser.", "Continuar", func(): _ir(Etapa.FECHAR))
+				_destaque.alvo(Callable(), true)
+				_mostrar_memorizar()
 			Etapa.FECHAR:
-				_destaque.alvo(Callable(), false)
-				_destaque.dica("Para fechar o livro, arraste a página para o lado.")
+				_destaque.alvo(_rect_x_aberto, false)
 			Etapa.SAIR:
-				_destaque.alvo(Callable(), false)
-				_destaque.dica("Para sair, toque fora do livro ou no ✕.")
+				_destaque.alvo(_rect_x_capa, false)
 
-	func _rect_botao(texto: String) -> Rect2:
+	## Volta à 1ª página do livro e mostra o Memorizar dela (opcional).
+	func _mostrar_memorizar() -> void:
+		livro._montar_lista()
+		var primeira := -1
+		for f in livro._folhas:
+			if f is Dictionary and f.has("id"):
+				primeira = int(f["id"])
+				break
+		_id_memorizar = primeira
+		if primeira >= 0:
+			await livro.ir_para(primeira)
+		if etapa == Etapa.MEMORIZAR and is_instance_valid(_destaque):
+			_destaque.alvo(_rect_botao.bind(_id_memorizar, "Memorizar"), false)
+			_t_memorizar = 0.0
+
+	func _rect_x_aberto() -> Rect2:
+		return livro._x_aberto.get_global_rect() if livro and not livro._fechado and livro._x_aberto else Rect2()
+
+	func _rect_x_capa() -> Rect2:
+		if livro == null or not livro._fechado:
+			return Rect2()
+		var x = livro._capa_fechada.get_node_or_null("X")
+		return x.get_global_rect() if x else Rect2()
+
+	func _rect_botao(id: int, texto: String) -> Rect2:
 		if livro == null or livro._animando:
 			return Rect2()
-		var b := livro.botao_da_pagina(_pagina_id, texto)
+		var b := livro.botao_da_pagina(id, texto)
 		return b.get_global_rect().grow(6.0) if b else Rect2()
 
-	func _process(_d: float) -> void:
+	func _process(delta: float) -> void:
 		if livro == null or not is_instance_valid(livro):
 			return
 		match etapa:
@@ -197,14 +223,23 @@ class _Tutorial extends Node:
 			Etapa.ESCREVER:
 				var p := _pagina()
 				if not p.is_empty() and not p.get("escrever", false) and not livro._animando and livro._lado_de(_pagina_id) >= 0:
-					_ir(Etapa.LIMPO if p.get("tipo") == "rascunho" else Etapa.MEMORIZAR)
+					_t_escrito += delta
+					if _t_escrito >= ESPERA_DEPOIS_ESCREVER:
+						_ir(Etapa.LIMPO if p.get("tipo") == "rascunho" else Etapa.MEMORIZAR)
+				else:
+					_t_escrito = 0.0
 			Etapa.LIMPO:
 				var p := _pagina()
 				if not p.is_empty() and p.get("tipo") != "rascunho" and not livro._animando:
 					_ir(Etapa.MEMORIZAR)
 			Etapa.MEMORIZAR:
-				if int(livro.livro.get("memorizada", -1)) == _pagina_id:
-					_ir(Etapa.FECHAR)   # memorizou: segue sozinho
+				_t_memorizar += delta
+				if _id_memorizar >= 0 and int(livro.livro.get("memorizada", -1)) == _id_memorizar:
+					_ir(Etapa.FECHAR)   # memorizou: segue
+				elif _t_memorizar >= TEMPO_MEMORIZAR and not livro._animando:
+					_ir(Etapa.FECHAR)   # não é obrigatório: depois de um tempo mostra o ✕
+				elif livro._fechado:
+					_ir(Etapa.SAIR)     # fechou pelo ✕
 			Etapa.FECHAR:
 				if livro._fechado:
 					_ir(Etapa.SAIR)

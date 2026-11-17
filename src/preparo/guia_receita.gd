@@ -60,6 +60,12 @@ func _altura() -> float:
 func ingrediente_entrou(id: String) -> void:
 	if pagina.is_empty() or _i >= pagina["passos"].size():
 		return
+	# jogou o ingrediente do próximo passo antes de a chama ficar estável na cor pedida:
+	# conta mesmo assim (o passo da chama fica como feito)
+	var passos: Array = pagina["passos"]
+	if passos[_i].get("tipo") == "chama" and _i + 1 < passos.size() \
+			and passos[_i + 1].get("tipo") == "ingrediente" and passos[_i + 1].get("item") == id:
+		_avancar()
 	var s: Dictionary = pagina["passos"][_i]
 	if s.get("tipo") == "ingrediente" and s.get("item") == id:
 		_contagem += 1

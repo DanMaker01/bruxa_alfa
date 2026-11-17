@@ -46,7 +46,7 @@ func _ready():
 		advance_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		advance_button.pressed.connect(_on_advance_pressed)
 		advance_button.visible = false
-		BotaoSegurar.efeito_clique(advance_button)
+		BotaoSegurar.efeito_clique(advance_button, false)   # avançar a fala não vibra
 	
 	if cancel_button:
 		cancel_button.pressed.connect(_on_cancel_pressed)

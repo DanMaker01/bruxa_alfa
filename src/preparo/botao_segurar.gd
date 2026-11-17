@@ -84,16 +84,17 @@ func _notification(what: int) -> void:
 # =============================================================================
 # EFEITO DE CLIQUE (serve para qualquer botão, ex.: itens do inventário)
 # =============================================================================
-static func efeito_clique(btn: BaseButton) -> void:
+static func efeito_clique(btn: BaseButton, vibrar: bool = true) -> void:
 	if btn == null:
 		return
-	btn.button_down.connect(_apertado.bind(btn))
+	btn.button_down.connect(_apertado.bind(btn, vibrar))
 	btn.button_up.connect(_solto.bind(btn))
 	btn.resized.connect(func(): btn.pivot_offset = btn.size * 0.5)
 	btn.pivot_offset = btn.size * 0.5
 
-static func _apertado(btn: BaseButton) -> void:
-	Vibrar.leve()
+static func _apertado(btn: BaseButton, vibrar: bool = true) -> void:
+	if vibrar:
+		Vibrar.leve()
 	var tw := btn.create_tween().set_parallel(true)
 	tw.tween_property(btn, "scale", Vector2(0.88, 0.88), 0.06).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	tw.tween_property(btn, "modulate", Color(1.35, 1.3, 1.15), 0.06)

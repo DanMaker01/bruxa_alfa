@@ -121,6 +121,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] castelo_in03
 		[ ] estrada_b
 	[ ] BGS:
+		[ ] sapos (bruxa_out1)
 		[ ] tremor
 		[ ] passaros
 		[ ] som floresta
@@ -145,7 +146,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] bgm
 	[?] menu pause - ok?
     [?] cena caldeirão
-		[?] L para mudar Layouts
+		[?] L para mudar Layouts, decidir: caldeirão grande, botões maiores? testar mais alterativas
 	[?] opções (único)
 		[!] audio, 
 		[!] vel texto
@@ -153,8 +154,6 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
     [ ] hud, falta algo?
 
 [ ] Caldeirão 100%
-	[?]	Tutorial finalizado?
-		[?] Tutorial do livro (cmd_tutorial_livro.gd, fim do bruxa_in_auto, antes de destravar a bruxa, nos dois caminhos): ela comenta que vai anotar a receita e anda até o livro; tela escura, só o livro responde (toque nele); o livro abre fechado: toque na capa (tocar fora ou no ✕ fecha e volta a pedir o livro); a bruxa escreve o rascunho da Poção do Retorno; Passar a limpo (obrigatório) e a página vira ensinada (fitinha) com a receita certa; Memorizar explicado (opcional, Continuar); arrastar para fechar o livro; tocar fora ou no ✕ para sair. A receita Retorno não vem mais pronta no livro (retorno.tres conhecida = false; o tutorial do caldeirão continua usando o arquivo).
 	[?] Fogo frio: 3 cores de 400 a 800 (transparente 400, azul pálido 600, normal vermelho 800; no livro "Transparente grande" virou "Azul pálido"). Aceso fica opaco (alfa 0,8); só abaixo de 400 (apagando) vai sumindo até F = 0. (sistema_termico.gd CORES_FOGO)
 	[ ] Layout
 		[ ] Reformular Layout (pensar em celular). 
@@ -289,13 +288,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 				[ ] Padre
 
 
-[ ] Eventos/Core:
-	[?] Pular a intro com toques: escurece em 0,5 s (antes 1,5 s), sem a espera de 0,2 s, e o 2º toque (pular até a casa) já vale logo depois do 1º. A variável intro_historia é gravada antes, então pular direto não repete a intro. (intro_auto.tres)
-		[ ] Está complicando mas o problema persiste, vamos ao básico. No início deve haver um fade_in na intro, se a pessoa pular, dá um fade_out, depois um fade_in para bruxa_out1. Só isso.
-		[?] Correção: o 2º pulo (até a casa) só vale depois que a bruxa_out1 clareou; toque durante o escurecer não pula de novo (no celular o mesmo toque chegava 2 vezes e pulava direto para bruxa_in, com corte seco).
-			[?] Fim da intro sem pular: escurece em 1,5 s (antes era o 0,5 s do pulo); pulando continua 0,5 s.
-	[?] Intro: pular com toque faz a legenda sumir com fade curto (0,3 s), sem corte seco, junto com o fade do comando.
-
+[ ] Eventos/Core: ok? 1/3
   
 [ ] Documentação e Organização
 	[ ] organização da pasta Graphics(está sendo chamada de assets neste projeto) estilo rpgmaker:
@@ -307,8 +300,6 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		Transitions
 		Windowskins (janelas, etc)
 	[ ] Debug e ferramentas
-		[?] Debug simplificado: 4 abas (Jogo = variáveis + personalidade + estados salvos; Itens = itens + poções; Mapa; Comandos), fonte e botões maiores. Abre na hora e monta a aba no frame seguinte (uma parte por frame).
-			[?] Aba "Pers." vazia: o ponto no nome da aba virava "_" e a aba não achava a lista. Agora "Pers". Botão "Ir" (Mapa) maior; "Ir até" mais largo.
 		[?] Debug, aba Poções: histograma do aproveitamento de cada poção feita (user://estatisticas_pocoes.txt; só em build de debug), zerar, e botões para dar qualquer poção do catálogo pronta (★ = tem efeito).
 		[?] Jogadas gravadas (só em build de debug): user://jogadas/<data>.json com histórico T/F, entradas, ações (+Fogo, −Fogo, acender, jogar), receita memorizada e aproveitamento. Usadas pela ferramenta de balanceamento.
 	[ ] GDD
