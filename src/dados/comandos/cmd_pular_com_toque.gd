@@ -24,10 +24,15 @@ func executar(interp, ev) -> int:
 
 ## s: a legenda que estava na tela some neste tempo ao pular.
 const SAIDA_LEGENDA: float = 0.3
+## Um toque só pula uma vez: no celular o mesmo toque chega como toque e como clique
+## (às vezes em frames diferentes). Toques até este tempo depois de um pulo são ignorados.
+const INTERVALO_MIN_MS: int = 400
+static var _ultimo_pulo_ms: int = -100000
 
 class _Ouvinte extends Node:
 	var ev
 	var alvo: int
+	var _criado_ms: int = Time.get_ticks_msec()
 
 	func _process(_d: float) -> void:
 		if ev.finished or ev.current_index >= alvo:
@@ -39,6 +44,11 @@ class _Ouvinte extends Node:
 			return
 		if UiModal.bloqueia(self) or UiModal.em_botao_prioritario(self, e.position):
 			return   # menu de pausa (ou o botão ☰) por cima: o toque é dele
+		var agora: int = Time.get_ticks_msec()
+		if agora - CmdPularComToque._ultimo_pulo_ms < CmdPularComToque.INTERVALO_MIN_MS or agora - _criado_ms < 100:
+			get_viewport().set_input_as_handled()
+			return   # o mesmo toque (ou um toque logo depois) não pula de novo
+		CmdPularComToque._ultimo_pulo_ms = agora
 		get_viewport().set_input_as_handled()
 		# cancela o que está rodando e pula
 		# legenda na tela: some com fade curto (sem corte seco), junto com o fade do comando

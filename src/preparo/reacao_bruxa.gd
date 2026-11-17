@@ -41,6 +41,10 @@ var _motivo: String = ""
 var _t: float = 0.0
 var _ultima_fala: float = -100.0
 var _balao_ate: float = 0.0
+var _fixa: bool = false   # dizer(..., fixa): o balão fica até calar() e as reações não falam por cima
+const LARG_MAX_BALAO: float = 330.0
+const FONTE_FALA: int = 28
+const FONTE_DIZER: int = 24
 # pose suavizada
 var _rot: float = 0.0
 var _sobe: float = 0.0
@@ -77,6 +81,7 @@ func _criar_balao() -> void:
 	add_child(_balao)
 
 func resetar() -> void:
+	_fixa = false
 	_humor = Humor.CONCENTRADA
 	_motivo = ""
 	_balao_ate = 0.0
@@ -91,10 +96,13 @@ func avisar(motivo: String) -> void:
 ## Segurando um item: a bruxa conta quantos já entraram ("1...", "2...") e, quando
 ## o último cai depois de soltar o botão, fala o total ("8!!").
 func contar(n: int, final: bool = false, nome_item: String = "") -> void:
+	if _fixa:
+		return
 	if final:
 		_balao_label.text = ("%d %s!!" % [n, nome_item.to_lower()]) if nome_item != "" else "%d!!" % n
 	else:
 		_balao_label.text = "%d..." % n
+	_ajustar_balao(FONTE_FALA)
 	_balao.size = _balao.get_combined_minimum_size()
 	_ultima_fala = _t
 	_balao_ate = _t + (2.0 if final else 1.2)
@@ -138,11 +146,51 @@ func atualizar(estados: Array) -> void:
 		if motivo != "":
 			_falar(motivo)
 
+## Fala um texto qualquer (tutorial, próximo passo da receita). segundos <= 0 ou fixa:
+## fica até calar(). Fixa: as reações automáticas não falam por cima.
+func dizer(texto: String, segundos: float = 2.5, fixa: bool = false) -> void:
+	_fixa = fixa
+	_balao_label.text = texto
+	_ajustar_balao(FONTE_DIZER)
+	_ultima_fala = _t
+	_balao_ate = 0.0 if (fixa or segundos <= 0.0) else _t + segundos
+	_balao.pivot_offset = _balao.size * 0.5
+	_balao.scale = Vector2(0.7, 0.7)
+	var tw := _balao.create_tween().set_parallel(true)
+	tw.tween_property(_balao, "modulate:a", 1.0, 0.15)
+	tw.tween_property(_balao, "scale", Vector2.ONE, 0.25).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+## Tira o balão (e solta o modo fixo).
+func calar() -> void:
+	_fixa = false
+	_balao_ate = 0.0
+	_balao.create_tween().tween_property(_balao, "modulate:a", 0.0, 0.2)
+
+## Texto longo quebra linha (até LARG_MAX_BALAO) e o balão cresce para cima.
+func _ajustar_balao(fonte: int) -> void:
+	_balao_label.add_theme_font_size_override("font_size", fonte)
+	var f: Font = _balao_label.get_theme_font("font")
+	var larg: float = f.get_string_size(_balao_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, fonte).x
+	if larg > LARG_MAX_BALAO:
+		_balao_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		var alt: float = f.get_multiline_string_size(_balao_label.text, HORIZONTAL_ALIGNMENT_LEFT, LARG_MAX_BALAO, fonte).y
+		_balao_label.custom_minimum_size = Vector2(LARG_MAX_BALAO, alt)
+	else:
+		_balao_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+		_balao_label.custom_minimum_size = Vector2.ZERO
+	_balao.size = Vector2.ZERO
+	_balao.size = _balao.get_combined_minimum_size()
+	var uma_linha: float = f.get_height(fonte) + 8.0
+	_balao.position = BALAO_OFFSET - Vector2(0, maxf(0.0, _balao.size.y - uma_linha))
+
 func _falar(motivo: String) -> void:
+	if _fixa:
+		return
 	if _t - _ultima_fala < INTERVALO_MIN_FALA or not FALAS.has(motivo):
 		return
 	var opcoes: Array = FALAS[motivo]
 	_balao_label.text = opcoes[randi() % opcoes.size()]
+	_ajustar_balao(FONTE_FALA)
 	_balao.size = _balao.get_combined_minimum_size()
 	_ultima_fala = _t
 	_balao_ate = _t + BALAO_DURACAO

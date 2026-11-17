@@ -1,4 +1,4 @@
-# Abre o livro de receitas (CenaLivro); o evento espera o livro fechar.
+# Abre o livro de receitas (CenaLivro), fechado: tocar na capa abre. O evento espera a cena fechar.
 class_name CmdLivro
 extends Comando
 
@@ -20,6 +20,7 @@ func executar(interp, ev) -> int:
 	interp.get_tree().root.add_child(camada)
 	var livro = cena.instantiate()
 	livro.process_mode = Node.PROCESS_MODE_ALWAYS
+	livro.comecar_fechado = true   # abre fechado (só a capa); tocar na capa abre
 	camada.add_child(livro)
 	ev.pause("livro")
 	livro.fechou.connect(_ao_fechar.bind(ev, camada))

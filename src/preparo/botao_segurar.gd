@@ -39,6 +39,15 @@ static func anexar(btn: BaseButton, tempo: float = 0.3) -> BotaoSegurar:
 func _process(delta: float) -> void:
 	if not _segurando:
 		return
+	# o botão sumiu com o dedo em cima (ex.: o −Fogo apagou o fogo e virou Acender):
+	# o Godot não manda button_up, então solta aqui para não continuar repetindo
+	if botao == null or not botao.is_visible_in_tree():
+		cancelar()
+		soltou.emit()
+		if botao:
+			botao.scale = Vector2.ONE
+			botao.modulate = Color.WHITE
+		return
 	_tempo += delta
 	if _disparou:
 		if intervalo_repeticao > 0.0 and _tempo >= tempo_longo + intervalo_repeticao:
@@ -84,6 +93,7 @@ static func efeito_clique(btn: BaseButton) -> void:
 	btn.pivot_offset = btn.size * 0.5
 
 static func _apertado(btn: BaseButton) -> void:
+	Vibrar.leve()
 	var tw := btn.create_tween().set_parallel(true)
 	tw.tween_property(btn, "scale", Vector2(0.88, 0.88), 0.06).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	tw.tween_property(btn, "modulate", Color(1.35, 1.3, 1.15), 0.06)

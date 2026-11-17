@@ -190,6 +190,36 @@ const CORES_TAG := {
 	"mapa": Color("#ffa860"),
 }
 const TAGS_NEGRITO := ["item"]
+
+## Velocidade do texto (Opções): multiplica letras_por_segundo; 0 = instantâneo.
+static var mult_velocidade: float = 1.0
+
+## Para outros textos (opções, legendas): as tags [item], [ator]... viram cor (item em
+## negrito) e qualquer outro "[" fica literal. Sem tags, devolve o texto igual.
+static func tags_para_bbcode(texto: String) -> String:
+	var marcas: Array = []
+	for tag in CORES_TAG:
+		var cor: Color = CORES_TAG[tag]
+		var ini: String = "[color=#" + cor.to_html(false) + "]"
+		var fim: String = "[/color]"
+		if tag in TAGS_NEGRITO:
+			ini = "[b]" + ini
+			fim = fim + "[/b]"
+		for par in [["[" + tag + "]", ini], ["[/" + tag + "]", fim]]:
+			if texto.contains(par[0]):
+				texto = texto.replace(par[0], char(1) + str(marcas.size()) + char(2))
+				marcas.append(par[1])
+	texto = texto.replace("[", "[lb]")
+	for k in marcas.size():
+		texto = texto.replace(char(1) + str(k) + char(2), marcas[k])
+	return texto
+
+## true se o texto usa alguma das tags de cor.
+static func tem_tag(texto: String) -> bool:
+	for tag in CORES_TAG:
+		if texto.contains("[" + tag + "]"):
+			return true
+	return false
 const COR_ITEM := Color("#c9a0ff")
 var _re_tag: RegEx = null
 
@@ -227,7 +257,7 @@ func _preparar_bbcode(texto: String) -> Array:
 
 func _iniciar_escrita() -> void:
 	_pausa = 0.0
-	if letras_por_segundo <= 0.0:
+	if letras_por_segundo <= 0.0 or mult_velocidade <= 0.0:
 		_terminar_escrita()
 		return
 	_cursor = 0.0
@@ -237,7 +267,7 @@ func _iniciar_escrita() -> void:
 func _process(delta: float) -> void:
 	if not _escrevendo:
 		return
-	var avanco: float = delta * letras_por_segundo
+	var avanco: float = delta * letras_por_segundo * mult_velocidade
 	# pausa da pontuação: o cursor espera, mas o fade das últimas letras continua
 	if _pausa > 0.0:
 		var gasto: float = minf(_pausa, avanco)

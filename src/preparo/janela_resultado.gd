@@ -274,7 +274,10 @@ func abrir(resultado: Dictionary) -> void:
 	# moldura → matriz troca → pentágono → ingredientes
 	_vistas.titulo(_nome_atual)
 	if _pocao_item and not _pocao_item.efeito.is_empty():
-		_tocar_som(SOM_EFEITO)   # poção com efeito: um "plim" antes de o nome aparecer
+		# poção com efeito: a animação do "plim" (estrela na matriz) e o som logo depois
+		await _animar_plim(_vistas.rect_grade().get_center())
+		_tocar_som(SOM_EFEITO)
+		Vibrar.forte()
 		await _esperar(0.35)
 	await _vistas.entrar()
 	_vistas.mostrar_grade()
@@ -373,6 +376,48 @@ func _definir_nome(nome: String) -> void:
 		var ef: Array[Comando] = []
 		ef.assign(_efeito_achado)
 		_pocao_item.efeito = ef
+
+## "Plim" da poção com efeito: uma estrela de 4 pontas cresce girando, um anel se abre e
+## brilhinhos saem; volta quando a estrela está no máximo (aí entra o som).
+const T_PLIM: float = 0.45
+const COR_PLIM := Color(1.0, 0.92, 0.55)
+func _animar_plim(centro: Vector2) -> void:
+	var estrela := Polygon2D.new()
+	var pts := PackedVector2Array()
+	for k in 8:
+		var r: float = 70.0 if k % 2 == 0 else 14.0
+		pts.append(Vector2.from_angle(k * TAU / 8.0 - PI * 0.5) * r)
+	estrela.polygon = pts
+	estrela.color = COR_PLIM
+	estrela.position = centro
+	estrela.scale = Vector2.ZERO
+	estrela.z_index = 20
+	add_child(estrela)
+	var anel := Line2D.new()
+	var circ := PackedVector2Array()
+	for k in 33:
+		circ.append(Vector2.from_angle(k * TAU / 32.0) * 40.0)
+	anel.points = circ
+	anel.width = 5.0
+	anel.default_color = Color(COR_PLIM, 0.9)
+	anel.position = centro
+	anel.scale = Vector2(0.2, 0.2)
+	anel.z_index = 20
+	add_child(anel)
+	var tw := create_tween().set_parallel(true)
+	tw.tween_property(estrela, "scale", Vector2(1.3, 1.3), T_PLIM).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tw.tween_property(estrela, "rotation", PI * 0.5, T_PLIM)
+	tw.tween_property(anel, "scale", Vector2(3.0, 3.0), T_PLIM * 1.4).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tw.tween_property(anel, "modulate:a", 0.0, T_PLIM * 1.4)
+	_estourar_brilhos(centro)
+	await _esperar(T_PLIM)
+	# a estrela some sozinha enquanto o resto continua
+	var tw2 := create_tween().set_parallel(true)
+	tw2.tween_property(estrela, "scale", Vector2.ZERO, 0.35).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	tw2.tween_property(estrela, "rotation", PI, 0.35)
+	tw2.chain().tween_callback(func():
+		estrela.queue_free()
+		anel.queue_free())
 
 ## Estouro de brilhinhos saindo do centro (entrada da poção).
 func _estourar_brilhos(centro: Vector2) -> void:

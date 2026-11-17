@@ -42,17 +42,7 @@ func _mostrar(interp, ev) -> void:
 		if (e is InputEventMouseButton or e is InputEventScreenTouch) and e.pressed:
 			tocou[0] = true)
 	# texto
-	var label := Label.new()
-	label.text = texto
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.add_theme_font_size_override("font_size", tamanho_fonte)
-	label.add_theme_color_override("font_color", Color(0.95, 0.92, 0.85))
-	label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.8))
-	label.add_theme_constant_override("shadow_offset_x", 2)
-	label.add_theme_constant_override("shadow_offset_y", 2)
-	label.add_theme_constant_override("line_spacing", 8)
+	var label: Control = _rotulo()
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	label.size = Vector2(tela.x - MARGEM * 2.0, tela.y * 0.5)
 	label.position = Vector2(MARGEM, tela.y * altura - label.size.y * 0.5)
@@ -108,3 +98,35 @@ func _mostrar(interp, ev) -> void:
 func _fim(ev) -> void:
 	if not ev.finished and ev.pause_reason == "legenda":
 		ev.resume_and_advance()
+
+
+## Texto da legenda. Com tags de cor ([item], [ator]...), RichTextLabel com as cores.
+func _rotulo() -> Control:
+	if DialogueBox.tem_tag(texto):
+		var r := RichTextLabel.new()
+		r.bbcode_enabled = true
+		r.text = DialogueBox.tags_para_bbcode(texto)
+		r.scroll_active = false
+		r.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		r.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		r.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		for k in ["normal_font_size", "bold_font_size", "italics_font_size", "bold_italics_font_size"]:
+			r.add_theme_font_size_override(k, tamanho_fonte)
+		r.add_theme_color_override("default_color", Color(0.95, 0.92, 0.85))
+		r.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.8))
+		r.add_theme_constant_override("shadow_offset_x", 2)
+		r.add_theme_constant_override("shadow_offset_y", 2)
+		r.add_theme_constant_override("line_separation", 8)
+		return r
+	var label := Label.new()
+	label.text = texto
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", tamanho_fonte)
+	label.add_theme_color_override("font_color", Color(0.95, 0.92, 0.85))
+	label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.8))
+	label.add_theme_constant_override("shadow_offset_x", 2)
+	label.add_theme_constant_override("shadow_offset_y", 2)
+	label.add_theme_constant_override("line_spacing", 8)
+	return label

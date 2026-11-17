@@ -77,6 +77,8 @@ var som: SomCaldeirao
 var debug_ui: DebugCaldeirao
 ## Layouts para celular (Original / A / B / C) + régua da chama + receita memorizada.
 var layout: LayoutPreparo
+## Tutorial da Poção do Retorno (variável tutorial_caldeirao = 1).
+var tutorial: TutorialCaldeirao
 var botao_debug: Button
 ## Sem GameManager (cena aberta sozinha): o botão liga/desliga só aqui.
 var _debug_local: bool = false
@@ -228,6 +230,11 @@ func _criar_componentes() -> void:
 	layout = LayoutPreparo.new()
 	add_child(layout)
 	layout.configurar(self)
+	layout.guia.passo_mudou.connect(_passo_mudou)
+
+	tutorial = TutorialCaldeirao.new()
+	tutorial.cena = self
+	add_child(tutorial)
 
 	janela_resultado = JanelaResultado.new()
 	janela_resultado.name = "JanelaResultado"
@@ -386,6 +393,8 @@ func _estilo(cor: Color) -> StyleBoxFlat:
 var gravador := GravadorJogadas.new()
 
 func _on_item_selecionado(item_name: String, btn: Control = null, origem_fixa = null) -> void:
+	if tutorial and not tutorial.pode_jogar(item_name):
+		return
 	if sistema:
 		gravador.acao(sistema.t_sim, "jogar", item_name)
 	if not preparo_ativo:
@@ -563,6 +572,11 @@ func _abafar_fogo(botao: Control = null) -> void:
 		visual.abafar(b)
 
 func _pocao_clique_curto() -> void:
+	if tutorial and tutorial.ativo:
+		if tutorial.pode_finalizar():
+			preparo_pausado = false
+			_finalizar_preparo()   # no tutorial, sem a pergunta de confirmação
+		return
 	if _ingredientes_validos().is_empty():
 		_sair_do_preparo()   # sem ingredientes → só sai
 	else:
@@ -614,6 +628,8 @@ func _iniciar_preparo() -> void:
 	_atualizar_botao_pocao()
 	if layout and game_temp and "livro" in game_temp:
 		layout.guia.carregar(game_temp.livro)   # receita memorizada (some quando a poção termina)
+	if tutorial:
+		tutorial.comecar_se_preciso()
 
 func _finalizar_preparo() -> void:
 	if not preparo_ativo:
@@ -621,6 +637,8 @@ func _finalizar_preparo() -> void:
 	preparo_ativo = false
 	# 🔥 FASE 1 (diagnóstico) + FASE 2 (aproveitamento) + MATRIZ DA POÇÃO
 	var resultado = CalculadoraPocao.calcular(_calcular_resultado(), database)
+	if tutorial and tutorial.etapa == TutorialCaldeirao.Etapa.FIM:
+		resultado["tutorial"] = true   # a poção do tutorial não conta para a missão
 	CalculadoraPocao.imprimir_relatorio(resultado)   # debug
 	if layout and layout.guia and not layout.guia.pagina.is_empty():
 		resultado["receita"] = layout.guia.pagina.duplicate(true)   # curva ideal no gráfico do resultado
@@ -803,6 +821,8 @@ func _unhandled_input(event: InputEvent) -> void:
 func _input(event: InputEvent) -> void:
 	if not visible or not preparo_ativo or preparo_pausado or not icones:
 		return
+	if tutorial and tutorial.ativo:   # no tutorial não dá para tirar o pó de volta
+		return
 	if not (event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT):
 		return
 	var k := icones.icone_no_ponto(event.position)
@@ -844,6 +864,7 @@ func _item_no_ponto(_i: int) -> void:
 	if Time.get_ticks_msec() - _ultimo_som_ponto < 150:
 		return
 	_ultimo_som_ponto = Time.get_ticks_msec()
+	Vibrar.media()
 	var audio = game_manager.get_node_or_null("AudioManager") if game_manager else null
 	if audio == null:
 		return
@@ -877,3 +898,18 @@ func _debug() -> void:
 	print("\n=== CENA PREPARO DEBUG ===")
 	print("  preparo_ativo: ", preparo_ativo, " | T: ", sistema.T, " | F: ", sistema.F, " | t: ", sistema.t_sim)
 	print("  fogo_ligado: ", sistema.fogo_ligado, " | ingredientes: ", ingredientes_ativos.size())
+
+
+## A guia da receita passou para o próximo passo: a bruxa diz o que fazer agora
+## (ajuda a saber a hora certa do ingrediente). No tutorial quem fala é o tutorial.
+func _passo_mudou(_i: int, passo: Dictionary) -> void:
+	if tutorial and tutorial.ativo:
+		return
+	var texto := "Pronto! Pode finalizar."
+	if passo.get("tipo") == "ingrediente":
+		var q: int = int(passo.get("qtd", 1))
+		texto = "Agora: %s%s!" % [("%d× " % q) if q > 1 else "", LivroReceitas.nome_item(str(passo.get("item", "")), database).to_lower()]
+	elif passo.get("tipo") == "chama":
+		texto = "Agora: chama %s." % EstadosChama.nome(str(passo.get("estado", ""))).to_lower()
+	reacao.dizer(texto, 2.5)
+	Vibrar.leve()

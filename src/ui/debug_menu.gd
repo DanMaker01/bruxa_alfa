@@ -14,9 +14,10 @@ const TRACOS := ["O", "C", "E", "A", "N"]
 const FONTE: int = 22            # fonte do menu
 ## Altura mínima de botões, campos e caixas de marcar (bom para o dedo no celular).
 const ALTURA_TOQUE: float = 66.0
-## 4 abas (simples): cada uma junta partes. Uma parte = uma lista (montada por _atualizar_parte).
+## Abas (simples): cada uma junta partes. Uma parte = uma lista (montada por _atualizar_parte).
 const PAGINAS := {
-	"Jogo": ["Variáveis", "Personalidade", "Estados"],
+	"Vars": ["Variáveis", "Estados"],
+	"Pers.": ["Personalidade"],
 	"Itens": ["Itens", "Poções"],
 	"Mapa": ["Mapa"],
 	"Comandos": ["Comandos"],
@@ -451,10 +452,10 @@ func _montar() -> void:
 	_abas.tab_changed.connect(_ao_trocar_aba)
 	col.add_child(_abas)
 
-	var jogo := _criar_pagina("Jogo")
+	var jogo := _criar_pagina("Vars")
 	_lista_vars = _criar_parte(jogo, "Variáveis")
-	_lista_pers = _criar_parte(jogo, "Personalidade")
 	_lista_estados = _criar_parte(jogo, "Estados salvos")
+	_lista_pers = _criar_parte(_criar_pagina("Pers."), "")
 	var itens := _criar_pagina("Itens")
 	_lista_itens = _criar_parte(itens, "")
 	_lista_pocoes = _criar_parte(itens, "Poções")
@@ -672,45 +673,59 @@ func _filtrar_vars() -> void:
 # =============================================================================
 # PERSONALIDADES
 # =============================================================================
+## Uma linha por personalidade: nome, O C E A N (campos de número) e ↺ (volta ao inicial).
+const LARG_NOME_PERS: float = 130.0
 func _atualizar_pers() -> void:
 	_limpar(_lista_pers)
 	if not game_temp:
 		return
 	var pers: Dictionary = game_temp.get_all_personalities()
 	var cab := HBoxContainer.new()
-	for t in TRACOS:
-		var l := _rotulo(t)
+	cab.add_child(_rotulo("", LARG_NOME_PERS))
+	for letra_t in TRACOS:
+		var l := _rotulo(letra_t)
 		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		l.add_theme_color_override("font_color", COR_DESTAQUE)
 		cab.add_child(l)
+	cab.add_child(_rotulo("", 56))
 	_lista_pers.add_child(cab)
 	for nome in pers:
-		var cab_p := HBoxContainer.new()
-		cab_p.add_child(_secao(str(nome)))   # nome em cima, valores embaixo
+		var linha := HBoxContainer.new()
+		linha.add_theme_constant_override("separation", 4)
+		linha.add_child(_rotulo(str(nome), LARG_NOME_PERS))
+		var valores: Array = pers[nome]
+		for i in TRACOS.size():
+			var campo := LineEdit.new()
+			campo.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			campo.custom_minimum_size.x = 0
+			campo.add_theme_constant_override("minimum_character_width", 0)
+			campo.alignment = HORIZONTAL_ALIGNMENT_CENTER
+			campo.text = _n(float(valores[i]) if i < valores.size() else 0.0)
+			campo.text_submitted.connect(func(txt: String): _traco_digitado(campo, txt, nome, i))
+			campo.focus_exited.connect(func(): _traco_digitado(campo, campo.text, nome, i))
+			linha.add_child(campo)
 		var volta := Button.new()
-		volta.text = " ↺ inicial "
+		volta.text = "↺"
+		volta.tooltip_text = "voltar ao inicial"
+		volta.custom_minimum_size.x = 56
 		volta.pressed.connect(func():
 			var ini: Array = database.get_personality(nome) if database and database.has_method("get_personality") else []
 			if not ini.is_empty():
 				game_temp.set_personality(nome, ini.duplicate())
 				_atualizar_pers())
-		cab_p.add_child(volta)
-		_lista_pers.add_child(cab_p)
-		var linha := HBoxContainer.new()
-		var valores: Array = pers[nome]
-		for i in TRACOS.size():
-			var sb := SpinBox.new()
-			sb.min_value = -100.0
-			sb.max_value = 100.0
-			sb.step = 0.1
-			sb.custom_minimum_size.x = 0
-			sb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			sb.get_line_edit().custom_minimum_size.x = 0
-			sb.get_line_edit().add_theme_constant_override("minimum_character_width", 0)
-			sb.value = float(valores[i]) if i < valores.size() else 0.0
-			sb.value_changed.connect(_on_traco_mudou.bind(nome, i))
-			linha.add_child(sb)
+		linha.add_child(volta)
 		_lista_pers.add_child(linha)
 	_ajustar_toque(_lista_pers)
+
+func _traco_digitado(campo: LineEdit, txt: String, nome: String, i: int) -> void:
+	if not is_instance_valid(campo):
+		return
+	var limpo: String = txt.strip_edges().replace(",", ".")
+	var atual: Array = game_temp.get_personality(nome)
+	var v: float = limpo.to_float() if limpo.is_valid_float() else (float(atual[i]) if i < atual.size() else 0.0)
+	v = clampf(v, -100.0, 100.0)
+	campo.text = _n(v)
+	_on_traco_mudou(v, nome, i)
 
 
 func _on_traco_mudou(valor: float, nome: String, i: int) -> void:

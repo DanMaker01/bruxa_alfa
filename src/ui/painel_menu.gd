@@ -1,7 +1,7 @@
 # painel_menu.gd
 # Peças dos menus (principal e pausa): painel com título, lista de saves e opções de som.
 #   PainelMenu.saves(ao_escolher, pode_apagar)  lista os saves (mais novo primeiro)
-#   PainelMenu.opcoes()                          volumes (geral, música, efeitos)
+#   PainelMenu.opcoes()                          volumes (geral, música, efeitos), velocidade do texto, vibração
 # As opções ficam em user://opcoes.cfg e são aplicadas ao abrir o jogo (aplicar_opcoes).
 class_name PainelMenu
 extends PanelContainer
@@ -145,10 +145,46 @@ func _montar_opcoes(gm) -> void:
 		s.custom_minimum_size = Vector2(0, 48)
 		s.value_changed.connect(_mudou.bind(gm, par[1]))
 		_col.add_child(s)
+	# velocidade do texto das falas
+	_col.add_child(rotulo("Velocidade do texto", 22, COR_SUAVE))
+	var linha := HBoxContainer.new()
+	linha.add_theme_constant_override("separation", 6)
+	var grupo := ButtonGroup.new()
+	for k in VELOCIDADES_TEXTO.size():
+		var b := botao(VELOCIDADES_TEXTO[k][0], Callable())
+		b.add_theme_font_size_override("font_size", 18)
+		b.toggle_mode = true
+		b.button_group = grupo
+		b.button_pressed = k == int(cfg.get("texto", 1))
+		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		b.custom_minimum_size.y = 56
+		var valor := float(k)
+		b.pressed.connect(func(): _mudou(valor, gm, "texto"))
+		linha.add_child(b)
+	_col.add_child(linha)
+	# vibração (celular)
+	var vib := CheckButton.new()
+	vib.text = "Vibração"
+	vib.focus_mode = Control.FOCUS_NONE
+	vib.button_pressed = bool(cfg.get("vibrar", 1.0) > 0.5)
+	vib.add_theme_font_size_override("font_size", 22)
+	vib.add_theme_color_override("font_color", COR_TEXTO)
+	vib.add_theme_color_override("font_pressed_color", COR_TEXTO)
+	vib.add_theme_color_override("font_hover_color", COR_TEXTO)
+	vib.add_theme_color_override("font_hover_pressed_color", COR_TEXTO)
+	vib.custom_minimum_size.y = 56
+	vib.toggled.connect(func(on: bool):
+		_mudou(1.0 if on else 0.0, gm, "vibrar")
+		if on:
+			Vibrar.media())
+	_col.add_child(vib)
 	var esp := Control.new()
 	esp.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_col.add_child(esp)
 	_col.add_child(botao("Voltar", _fechar))
+
+## Velocidade do texto: [nome, multiplicador das letras por segundo (0 = instantâneo)].
+const VELOCIDADES_TEXTO := [["Lenta", 0.6], ["Normal", 1.0], ["Rápida", 1.8], ["Já", 0.0]]
 
 func _mudou(v: float, gm, chave: String) -> void:
 	var cfg := ler_opcoes()
@@ -158,23 +194,29 @@ func _mudou(v: float, gm, chave: String) -> void:
 
 static func ler_opcoes() -> Dictionary:
 	var c := ConfigFile.new()
-	var out := {"geral": 1.0, "musica": 1.0, "efeitos": 1.0}
+	var out := {"geral": 1.0, "musica": 1.0, "efeitos": 1.0, "texto": 1.0, "vibrar": 1.0}
 	if c.load(ARQ_OPCOES) == OK:
 		for k in out:
-			out[k] = float(c.get_value("som", k, out[k]))
+			out[k] = float(c.get_value(_secao(k), k, out[k]))
 	return out
+
+static func _secao(chave: String) -> String:
+	return "jogo" if chave in ["texto", "vibrar"] else "som"
 
 static func gravar_opcoes(o: Dictionary) -> void:
 	var c := ConfigFile.new()
 	for k in o:
-		c.set_value("som", k, o[k])
+		c.set_value(_secao(k), k, o[k])
 	c.save(ARQ_OPCOES)
 
 static func aplicar_opcoes(gm) -> void:
+	var o := ler_opcoes()
+	var vel: int = clampi(int(o["texto"]), 0, VELOCIDADES_TEXTO.size() - 1)
+	DialogueBox.mult_velocidade = float(VELOCIDADES_TEXTO[vel][1])
+	Vibrar.ligado = o["vibrar"] > 0.5
 	var audio = gm.get_node_or_null("AudioManager") if gm else null
 	if audio == null:
 		return
-	var o := ler_opcoes()
 	audio.set_master_volume(o["geral"])
 	audio.set_bgm_volume(o["musica"])
 	audio.set_bgs_volume(o["musica"])

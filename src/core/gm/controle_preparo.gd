@@ -63,7 +63,10 @@ func _aplicar_resultado(resultado: Dictionary) -> void:
 		# a JanelaResultado já pôs a poção no inventário durante a animação
 		if not resultado.get("item_ja_adicionado", false):
 			gm.game_temp.add_item(resultado.item, resultado.get("quantidade", 1))
-		# missão 1: qualquer poção feita libera os guardas (ponte e estradaB)
+		# a poção do tutorial (Poção do Retorno) não conta para a missão
+		if resultado.get("tutorial", false):
+			return
+		# missão 1: qualquer poção feita (fora o tutorial) libera os guardas (ponte e estradaB)
 		if gm.game_temp.get_var("missao01_pocao_feita") != 1.0:
 			gm.game_temp.set_var("missao01_pocao_feita", 1.0)
 		# quão longe ficou da Calma Profunda (a bruxa comenta na 1ª poção): 0 = perfeita, 1 = água

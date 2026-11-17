@@ -18,8 +18,14 @@ const COR_SUAVE := Color(0.5, 0.43, 0.35)
 const COR_FEITO := Color(0.25, 0.5, 0.25)
 const COR_ATUAL := Color(0.5, 0.18, 0.45)
 
+## Mudou o passo atual (i == passos.size(): falta só Finalizar). A cena avisa a jogadora.
+signal passo_mudou(i: int, passo: Dictionary)
+
+const PULSO_DURACAO: float = 1.2   # s do destaque na linha do passo novo
+
 var cena = null
 var pagina: Dictionary = {}
+var _pulso: float = 0.0
 var _i: int = 0                  # passo atual
 var _t_passo: float = 0.0        # chama: tempo no estado certo
 var _contagem: int = 0           # ingrediente: quantos entraram neste passo
@@ -78,6 +84,7 @@ func _t_sim() -> float:
 func _process(delta: float) -> void:
 	if pagina.is_empty() or not is_visible_in_tree():
 		return
+	_pulso = maxf(0.0, _pulso - delta / PULSO_DURACAO)
 	var passos: Array = pagina["passos"]
 	if _i < passos.size():
 		var s: Dictionary = passos[_i]
@@ -100,6 +107,13 @@ func _avancar() -> void:
 	_t_passo = 0.0
 	_contagem = 0
 	_t_primeiro = -1.0
+	_pulso = 1.0
+	var passos: Array = pagina["passos"]
+	passo_mudou.emit(_i, passos[_i] if _i < passos.size() else {})
+
+## Passo atual (para o tutorial): índice e se o tempo dele já acabou.
+func passo_atual() -> int:
+	return _i
 
 
 func _draw() -> void:
@@ -115,6 +129,8 @@ func _draw() -> void:
 		var atual := k == _i
 		var cor := COR_FEITO if feito else (COR_ATUAL if atual else COR_SUAVE)
 		var marca := "✓" if feito else ("▶" if atual else "·")
+		if atual and _pulso > 0.0:   # passo novo: a linha pisca
+			draw_rect(Rect2(2, y - 14, LARG - 4, ALT_LINHA), Color(COR_ATUAL, 0.35 * _pulso * (0.6 + 0.4 * sin(_pulso * 18.0))))
 		var txt := "Finalizar"
 		if k < passos.size():
 			var s: Dictionary = passos[k]

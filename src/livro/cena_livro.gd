@@ -18,6 +18,9 @@
 # Tipos marcados no papel: ensinada = fitinha dourada; rascunho = papel cinza e carimbo.
 # Animações: abrir/fechar o livro, virar folha, ir até uma página (várias folhas),
 # página nova aparecendo, página apagada sumindo.
+# Livro fechado: arrastar para passar da última folha (ou para voltar antes da primeira)
+# fecha o livro, que fica na tela só com a capa. Tocar na capa abre de novo; tocar fora
+# do livro ou no ✕ fecha a cena.
 # Os dados ficam em GameTemp.livro (LivroReceitas). Aberta sozinha (F6), usa um livro de teste.
 class_name CenaLivro
 extends Control
@@ -86,6 +89,15 @@ const T_FOLHA_RAPIDA: float = 0.1
 const COR_FITA := Color(0.85, 0.65, 0.15)
 
 var _toque_ini := Vector2(-1, -1)
+var _fechado: bool = false          # livro fechado na tela (só a capa)
+var _capa_fechada: Control         # a capa que está na tela com o livro fechado
+var _capa_frente: Control           # frente (título): fechou antes da 1ª folha ou abriu fechado
+var _capa_verso: Control            # verso (liso): fechou depois da última folha
+## true: a cena abre com o livro fechado (frente); tocar na capa abre. Definir antes de entrar na árvore.
+var comecar_fechado: bool = false
+var _ja_abriu: bool = false         # a 1ª abertura vai até a página nova (escreve as novas)
+const RECT_CAPA := Rect2(170, 30, 300, 580)
+const COR_OURO := Color(0.85, 0.65, 0.25)
 
 
 func _ready() -> void:
@@ -96,8 +108,12 @@ func _ready() -> void:
 	_carregar_dados()
 	_montar()
 	_atualizar()
-	_animar_abrir()
-	_escrever_novas()
+	if comecar_fechado:
+		_mostrar_fechado(true)
+	else:
+		_ja_abriu = true
+		_animar_abrir()
+		_escrever_novas()
 
 
 ## GameTemp do jogo, ou um livro de teste quando a cena roda sozinha.
@@ -134,6 +150,7 @@ func _montar() -> void:
 	fundo.color = COR_FUNDO
 	fundo.size = AREA
 	fundo.mouse_filter = Control.MOUSE_FILTER_STOP
+	fundo.gui_input.connect(_fundo_input)
 	add_child(fundo)
 
 	_corpo = Control.new()
@@ -232,6 +249,8 @@ func _montar() -> void:
 	x.add_theme_stylebox_override("normal", _caixa(COR_CAPA, 8, Color(1, 1, 1, 0.3), 1))
 	x.add_theme_color_override("font_color", Color(1, 0.95, 0.85))
 	_corpo.add_child(x)
+
+	_montar_capa_fechada()
 
 	_editor = EditorReceita.new()
 	add_child(_editor)
@@ -760,11 +779,142 @@ func _animar_abrir() -> void:
 	tw.tween_property(_corpo, "scale", Vector2.ONE, T_ABRIR).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tw.tween_property(_corpo, "modulate:a", 1.0, T_ABRIR * 0.6)
 
+## Fecha o livro sem sair da cena: as páginas fecham na lombada e fica só a capa.
+## frente: fechou voltando antes da 1ª folha (mostra a frente); senão, o verso.
+func fechar_livro(frente: bool = false) -> void:
+	if _animando or _fechado:
+		return
+	_animando = true
+	_som(SOM_ABRIR)
+	_confirmar_apagar = -1
+	var tp := create_tween().set_parallel(true)
+	for f in _folhas_no:
+		tp.tween_property(f, "scale:x", 0.0, T_FOLHA).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	await tp.finished
+	var tw := create_tween().set_parallel(true)
+	tw.tween_property(_corpo, "scale", Vector2(0.5, 1.0), T_FECHAR * 0.6).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tw.tween_property(_corpo, "modulate:a", 0.0, T_FECHAR * 0.6)
+	await tw.finished
+	await _mostrar_fechado(frente)
+	_animando = false
+
+## Mostra o livro fechado (frente ou verso), com um pulinho.
+func _mostrar_fechado(frente: bool) -> void:
+	_corpo.visible = false
+	_capa_frente.visible = false
+	_capa_verso.visible = false
+	_capa_fechada = _capa_frente if frente else _capa_verso
+	_capa_fechada.visible = true
+	_capa_fechada.scale = Vector2(0.85, 1.0)
+	_capa_fechada.modulate.a = 0.0
+	_fechado = true
+	var tc := create_tween().set_parallel(true)
+	tc.tween_property(_capa_fechada, "scale", Vector2.ONE, 0.25).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tc.tween_property(_capa_fechada, "modulate:a", 1.0, 0.15)
+	await tc.finished
+
+## Livro fechado: tocar na capa abre de novo (pela frente: 1ª folha; pelo verso: a última).
+func abrir_livro() -> void:
+	if _animando or not _fechado:
+		return
+	var pela_frente: bool = _capa_fechada == _capa_frente
+	_fechado = false
+	_capa_frente.visible = false
+	_capa_verso.visible = false
+	for f in _folhas_no:
+		f.scale.x = 1.0
+	_montar_lista()
+	_spread = 0 if pela_frente else _ultimo_spread()
+	_corpo.visible = true
+	_atualizar()
+	_animar_abrir()
+	if not _ja_abriu:   # 1ª vez aberto (veio fechado): escreve as páginas novas
+		_ja_abriu = true
+		_escrever_novas()
+
+func _montar_capa_fechada() -> void:
+	_capa_frente = _montar_capa(true)
+	_capa_verso = _montar_capa(false)
+	_capa_fechada = _capa_frente
+
+## Capa do livro fechado. A frente tem título, moldura dourada e estrela; o verso é liso,
+## mais escuro, com a lombada do outro lado.
+func _montar_capa(frente: bool) -> Control:
+	var raiz := Control.new()
+	raiz.position = RECT_CAPA.position
+	raiz.size = RECT_CAPA.size
+	raiz.pivot_offset = RECT_CAPA.size * 0.5
+	raiz.visible = false
+	add_child(raiz)
+	var capa := Panel.new()
+	capa.size = RECT_CAPA.size
+	capa.mouse_filter = Control.MOUSE_FILTER_STOP
+	capa.add_theme_stylebox_override("panel", _caixa(COR_CAPA if frente else COR_CAPA.darkened(0.25), 10, Color(0, 0, 0, 0.5), 3))
+	capa.gui_input.connect(func(ev: InputEvent):
+		if (ev is InputEventMouseButton or ev is InputEventScreenTouch) and ev.pressed:
+			accept_event()
+			abrir_livro())
+	raiz.add_child(capa)
+	var lombada := ColorRect.new()
+	lombada.color = Color(0, 0, 0, 0.3)
+	lombada.size = Vector2(12, RECT_CAPA.size.y)
+	lombada.position = Vector2(0 if frente else RECT_CAPA.size.x - 12, 0)
+	lombada.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	raiz.add_child(lombada)
+	if frente:
+		var moldura := Panel.new()
+		moldura.position = Vector2(18, 18)
+		moldura.size = RECT_CAPA.size - Vector2(36, 36)
+		moldura.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		moldura.add_theme_stylebox_override("panel", _caixa(Color(0, 0, 0, 0), 6, Color(COR_OURO, 0.8), 2))
+		raiz.add_child(moldura)
+		var titulo := _rotulo("Receitas", 34, COR_OURO, false)
+		titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		titulo.size = Vector2(RECT_CAPA.size.x, 50)
+		titulo.position = Vector2(0, RECT_CAPA.size.y * 0.32)
+		raiz.add_child(titulo)
+		var estrela := _rotulo("★", 40, COR_OURO, false)
+		estrela.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		estrela.size = Vector2(RECT_CAPA.size.x, 50)
+		estrela.position = Vector2(0, RECT_CAPA.size.y * 0.32 + 64)
+		raiz.add_child(estrela)
+	else:
+		var selo := _rotulo("✦", 30, Color(COR_OURO, 0.45), false)
+		selo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		selo.size = Vector2(RECT_CAPA.size.x, 40)
+		selo.position = Vector2(0, RECT_CAPA.size.y - 80)
+		raiz.add_child(selo)
+	var x := _botao("✕", fechar)
+	x.position = Vector2(RECT_CAPA.size.x - 40, -6)
+	x.size = Vector2(44, 40)
+	x.add_theme_stylebox_override("normal", _caixa(COR_CAPA, 8, Color(1, 1, 1, 0.3), 1))
+	x.add_theme_color_override("font_color", Color(1, 0.95, 0.85))
+	raiz.add_child(x)
+	return raiz
+
+## Toque fora do livro (no fundo escuro) fecha a cena.
+func _fundo_input(ev: InputEvent) -> void:
+	if not ((ev is InputEventMouseButton or ev is InputEventScreenTouch) and ev.pressed):
+		return
+	if _editor.ativo or _nomear.visible or _detalhe.visible:
+		return
+	if not _fechado and RECT_LIVRO.has_point(ev.position):
+		return
+	fechar()
+
 func fechar() -> void:
 	if _animando:
 		return
 	_animando = true
 	_som(SOM_ABRIR)
+	if _fechado:   # já fechado: só a capa some
+		var tf := create_tween().set_parallel(true)
+		tf.tween_property(_capa_fechada, "scale", Vector2(0.15, 0.9), T_FECHAR).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		tf.tween_property(self, "modulate:a", 0.0, T_FECHAR + 0.05)
+		await tf.finished
+		fechou.emit()
+		queue_free()
+		return
 	# primeiro as páginas fecham na lombada, depois o livro some
 	var tp := create_tween().set_parallel(true)
 	for f in _folhas_no:
@@ -796,7 +946,7 @@ func _input(event: InputEvent) -> void:
 			fechar()
 		get_viewport().set_input_as_handled()
 		return
-	if _editor.ativo or _nomear.visible or _detalhe.visible:
+	if _editor.ativo or _nomear.visible or _detalhe.visible or _fechado:
 		return
 	# arrastar para o lado passa a página
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -806,7 +956,9 @@ func _input(event: InputEvent) -> void:
 			var d: Vector2 = event.position - _toque_ini
 			if absf(d.x) > SWIPE_MIN and absf(d.y) < absf(d.x):
 				if d.x < 0 and _spread >= _ultimo_spread() and not _animando:
-					fechar()   # passou da última folha: fecha o livro
+					fechar_livro()   # passou da última folha: o livro fecha (fica a capa)
+				elif d.x > 0 and _spread <= 0 and not _animando:
+					fechar_livro(true)   # voltou antes da primeira folha: fecha pela frente
 				else:
 					_passar(-1 if d.x > 0 else 1)
 			_limpar_toque.call_deferred()   # o papel ainda lê _toque_ini neste mesmo toque

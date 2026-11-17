@@ -205,16 +205,7 @@ func _create_option_buttons(options_list: Array):
 		btn.custom_minimum_size = Vector2.ZERO
 		# o texto vai num Label FILHO (fora do layout do botão): quebra linha à vontade
 		# sem aumentar a altura mínima do botão, então nunca estoura a caixa.
-		var lbl := Label.new()
-		lbl.text = str(options_list[i])
-		lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		lbl.clip_text = true
-		lbl.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-		lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		lbl.add_theme_font_size_override("font_size", fonte)
-		lbl.add_theme_color_override("font_color", Color.WHITE)
+		var lbl := _rotulo_opcao(str(options_list[i]), fonte)
 		btn.add_child(lbl)
 		_caber.call_deferred(lbl, fonte)
 		lbl.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -232,8 +223,40 @@ func _create_option_buttons(options_list: Array):
 		tw.tween_interval(0.05 * i)
 		tw.tween_property(btn, "modulate:a", 1.0, 0.18)
 
+## Texto da opção: Label; com tags de cor ([item]...), RichTextLabel com as cores.
+func _rotulo_opcao(texto: String, fonte: int) -> Control:
+	if DialogueBox.tem_tag(texto):
+		var r := RichTextLabel.new()
+		r.bbcode_enabled = true
+		r.text = DialogueBox.tags_para_bbcode(texto)
+		r.scroll_active = false
+		r.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		r.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		r.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		r.clip_contents = true
+		r.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		for k in ["normal_font_size", "bold_font_size", "italics_font_size", "bold_italics_font_size"]:
+			r.add_theme_font_size_override(k, fonte)
+		r.add_theme_color_override("default_color", Color.WHITE)
+		return r
+	var lbl := Label.new()
+	lbl.text = texto
+	lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	lbl.clip_text = true
+	lbl.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	lbl.add_theme_font_size_override("font_size", fonte)
+	lbl.add_theme_color_override("font_color", Color.WHITE)
+	return lbl
+
 ## Diminui a fonte do texto da opção até caber no botão (no mínimo FONTE_MIN).
-func _caber(lbl: Label, fonte: int) -> void:
+func _caber(rotulo: Control, fonte: int) -> void:
+	if rotulo is RichTextLabel:
+		_caber_rico(rotulo, fonte)
+		return
+	var lbl: Label = rotulo
 	await get_tree().process_frame   # espera o layout dar tamanho ao botão
 	if not is_instance_valid(lbl) or lbl.size.x <= 1.0:
 		return
@@ -255,6 +278,19 @@ func _caber(lbl: Label, fonte: int) -> void:
 		while tam > 10 and f.get_height(tam) > lbl.size.y + 2.0 * margem_texto:
 			tam -= 1
 	lbl.add_theme_font_size_override("font_size", tam)
+
+## Mesmo que _caber, para o texto com cores (mede o texto sem as tags).
+func _caber_rico(r: RichTextLabel, fonte: int) -> void:
+	await get_tree().process_frame
+	if not is_instance_valid(r) or r.size.x <= 1.0:
+		return
+	var f: Font = r.get_theme_font("normal_font")
+	var puro: String = r.get_parsed_text()
+	var tam := fonte
+	while tam > FONTE_MIN and f.get_multiline_string_size(puro, HORIZONTAL_ALIGNMENT_CENTER, r.size.x, tam).y > r.size.y:
+		tam -= 1
+	for k in ["normal_font_size", "bold_font_size", "italics_font_size", "bold_italics_font_size"]:
+		r.add_theme_font_size_override(k, tam)
 
 func _limpar_opcoes() -> void:
 	for child in options_container.get_children():

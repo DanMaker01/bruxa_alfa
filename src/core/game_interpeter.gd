@@ -322,12 +322,17 @@ func chamar_evento(evento: EventoData, pai: EventInstance) -> EventInstance:
 
 ## Usa um item do inventário (botão "Usar"): matriz A na personalidade (padrão: bruxa),
 ## gasta 1 unidade e roda os comandos de efeito do item como um evento.
+## true enquanto a bruxa usa um item em si (o efeito mágico): o player não anda.
+var _usando_item: bool = false
+
 func usar_item(id: String, personalidade: String = "bruxa") -> bool:
 	var item: ItemData = database.get_item(id) if database else null
 	if item == null or game_temp == null or not game_temp.has_item(id):
 		return false
-	if not item.efeito.is_empty() and game_manager and game_manager.has_method("get_input_manager"):
-		var im = game_manager.get_input_manager()   # poção com efeito: a bruxa para (não segue andando)
+	# usando qualquer poção em si: a bruxa para e não anda até o efeito mágico acabar
+	_usando_item = true
+	if game_manager and game_manager.has_method("get_input_manager"):
+		var im = game_manager.get_input_manager()
 		if im and im.has_method("force_reset"):
 			im.force_reset()
 	if game_temp.has_personality(personalidade):
@@ -335,6 +340,7 @@ func usar_item(id: String, personalidade: String = "bruxa") -> bool:
 	game_temp.remove_item(id, 1)
 	# mesmo efeito mágico de quando a poção é aplicada na princesa, agora na bruxa
 	await CmdAplicarPocao.efeito_magico(self, game_manager.get_player() if game_manager else null)
+	_usando_item = false
 	if not item.efeito.is_empty():
 		var pag := PaginaData.new()
 		pag.comandos = item.efeito.duplicate()
@@ -487,7 +493,7 @@ func _find_event_recursive(node: Node, event_name: String):
 
 func is_processing_dialog() -> bool:
 	# Bloqueia o input do player durante diálogo, opções, fade, preparo e movimentos com espera.
-	if is_dialog_active:
+	if is_dialog_active or _usando_item:
 		return true
 	for event in running_events:
 		if event.is_paused and not event.waiting_for_option:
