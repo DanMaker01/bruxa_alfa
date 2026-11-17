@@ -70,4 +70,5 @@ static func aplicar_matriz(interp, gt, personalidade: String, A: Array) -> void:
 
 ## Clarão + brilhos subindo no alvo (evento ou bruxa) + câmera tremendo um pouco.
 static func efeito_magico(interp, alvo) -> void:
+	Vibrar.forte()   # aplicar poção (o tremor da câmera logo depois não vibra de novo)
 	await CmdMostrarEfeito.mostrar(interp, alvo, CmdMostrarEfeito.Tipo.MAGICO, COR_BRILHO)

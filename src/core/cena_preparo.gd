@@ -170,6 +170,30 @@ func _process(delta: float) -> void:
 	if som:
 		som.definir(sistema.T, _quente_agora, _frio_agora)
 		som.definir_fogo(sistema.F, sistema.fogo_ligado)
+		_tim_da_cor(delta)
+
+## Mudou a cor da chama (faixa de temperatura): toca a nota da cor nova. A cor nova
+## precisa durar TIM_ESPERA s (na borda entre duas cores não fica tocando sem parar).
+const TIM_ESPERA: float = 0.25
+var _cor_tocada: String = ""
+var _cor_candidata: String = ""
+var _t_candidata: float = 0.0
+func _tim_da_cor(delta: float) -> void:
+	var cor_agora := EstadosChama.de_T(sistema.T)
+	if _cor_tocada == "":
+		_cor_tocada = cor_agora   # começo do preparo: não toca
+		return
+	if cor_agora == _cor_tocada:
+		_cor_candidata = ""
+		return
+	if cor_agora != _cor_candidata:
+		_cor_candidata = cor_agora
+		_t_candidata = 0.0
+	_t_candidata += delta
+	if _t_candidata >= TIM_ESPERA:
+		_cor_tocada = cor_agora
+		_cor_candidata = ""
+		som.tim(EstadosChama.indice(cor_agora))
 
 # =============================================================================
 # INICIALIZAÇÃO
@@ -354,7 +378,8 @@ func _popular_inventario() -> void:
 
 func _criar_botao_item(item_name: String, item: ItemData, quantidade: int) -> Button:
 	var btn = Button.new()
-	btn.custom_minimum_size = Vector2(120, 120)   # grande, para o dedo
+	var lado: float = layout.tam_item() if layout else 120.0
+	btn.custom_minimum_size = Vector2(lado, lado)   # grande, para o dedo (tamanho pelo layout)
 	btn.text = (item.get_nome() if item else item_name) + "\nx" + str(quantidade)
 	btn.add_theme_font_size_override("font_size", 16)
 	if item and item.icone:
@@ -547,6 +572,7 @@ func _fogo_segurar(botao: Control = null) -> void:
 	gravador.acao(sistema.t_sim, "acender")
 	var cor := visual.liga_desliga(botao if botao else botao_fogo, true)
 	feedback.texto_flutuante("fogo aceso!", cor)
+	Vibrar.media()
 
 ## Botão Acender/Apagar dos layouts novos.
 func alternar_fogo() -> void:
@@ -556,6 +582,7 @@ func alternar_fogo() -> void:
 	sistema.desligar_fogo()
 	var cor := visual.apagou(botao_fogo)
 	feedback.texto_flutuante("fogo apagado", cor)
+	Vibrar.dupla()
 
 ## Segurando com o fogo aceso: tira CONST_A de F; fraco demais → apaga.
 ## botao: quem anima (o −Fogo do layout); sem ele, o botão de fogo da cena.
@@ -567,6 +594,7 @@ func _abafar_fogo(botao: Control = null) -> void:
 	if sistema.abafar_fogo():
 		var cor := visual.apagou(b)
 		feedback.texto_flutuante("o fogo apagou!", cor)
+		Vibrar.dupla()
 		segurar_fogo.intervalo_repeticao = 0.0
 	else:
 		visual.abafar(b)
@@ -622,6 +650,7 @@ func _iniciar_preparo() -> void:
 	feedback.resetar()
 	reacao.resetar()
 	_ferveu = false
+	_cor_tocada = ""
 	painel.limpar()
 	icones.limpar()
 	visual.resetar()
@@ -814,6 +843,11 @@ func _unhandled_input(event: InputEvent) -> void:
 	var tecla := OS.get_keycode_string(event.keycode)
 	if tecla in ["P", "C", "T", "K"]:
 		trocar_modo(tecla)
+		get_viewport().set_input_as_handled()
+	elif tecla == "L" and layout:   # alternativas de layout (celular)
+		var nome := layout.proximo_layout()
+		_popular_inventario()   # botões dos itens no tamanho novo
+		feedback.texto_flutuante("Layout: " + nome, Color(1, 0.9, 0.5))
 		get_viewport().set_input_as_handled()
 
 ## Tocar no ícone de um ingrediente que acabou de entrar (até T_MAX_RETIRAR s) tira ele

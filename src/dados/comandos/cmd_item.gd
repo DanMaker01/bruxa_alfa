@@ -24,6 +24,7 @@ func executar(interp, ev) -> int:
 		return AVANCAR
 	if acao == Acao.ADICIONAR:
 		gt.add_item(item.id, quantidade)
+		Vibrar.leve()   # pegou item
 		interp.item_added.emit(item.id, quantidade)
 	else:
 		gt.remove_item(item.id, quantidade)

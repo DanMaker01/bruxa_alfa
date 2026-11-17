@@ -185,7 +185,8 @@ func resetar() -> void:
 ## Ponto onde os itens lançados caem.
 func boca() -> Vector2:
 	if caldeirao:
-		return caldeirao.global_position + BOCA_OFFSET * _caldeirao_escala_base.y * 0.5
+		var s_pai: float = caldeirao.get_parent().scale.y if caldeirao.get_parent() is Node2D else 1.0   # layout pode escalar o caldeirão
+		return caldeirao.global_position + BOCA_OFFSET * _caldeirao_escala_base.y * 0.5 * s_pai
 	return Vector2(320, 230)
 
 # =============================================================================

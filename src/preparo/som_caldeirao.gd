@@ -3,6 +3,8 @@
 #   borbulhar  → "ploc"s cujo ritmo e tom sobem com a temperatura
 #   chiado     → ruído agudo quando algum ingrediente está QUENTE DEMAIS
 #   estalos    → cliques secos de gelo quando algum ingrediente está FRIO DEMAIS
+#   tim        → nota curta quando a temperatura entra numa cor nova da chama (tim(i)):
+#                cada cor tem a sua nota, mais aguda nas cores quentes
 #   lenha      → estalar do fogo: mais rápido e mais agudo conforme a faixa de cor da chama
 #                (brasa: poucos estalos graves; branco/azul: crepitar rápido e brilhante)
 # A cena chama definir() a cada frame e silenciar() quando o preparo pausa/fecha.
@@ -35,6 +37,13 @@ var _quente: float = 0.0      # 0..1
 var _frio: float = 0.0        # 0..1
 var _vol: float = 0.0         # volume suavizado (entra/sai sem estalo)
 var _plocs: Array = []        # {f, fase, t}
+var _tins: Array = []         # {f, fase, t} notas da mudança de cor
+# ---- tim (mudança de cor da chama) ----
+const TIM_BASE: float = 392.0         # Hz da cor mais fria (sol)
+## Escala pentatônica: cor i toca TIM_BASE × TIM_ESCALA[i] (apagado .. negro).
+const TIM_ESCALA := [1.0, 1.125, 1.25, 1.5, 1.6667, 2.0, 2.25, 2.5, 3.0]
+const TIM_DURACAO: float = 0.9
+const TIM_VOLUME: float = 0.22
 var _estalo: float = 0.0      # tempo restante do estalo atual (s)
 var _ruido_ant: float = 0.0
 var _fn: float = -1.0        # fogo normalizado 0..1 (-1 = apagado)
@@ -66,6 +75,13 @@ func definir(T: float, quente: float, frio: float) -> void:
 func definir_fogo(F: float, aceso: bool) -> void:
 	_fn = clampf((F - LENHA_F_MIN) / (LENHA_F_MAX - LENHA_F_MIN), 0.0, 1.0) if aceso else -1.0
 
+## Nota da cor i (EstadosChama.LISTA): a temperatura acabou de entrar nessa cor.
+func tim(i: int) -> void:
+	var k: int = clampi(i, 0, TIM_ESCALA.size() - 1)
+	if _tins.size() >= 3:
+		_tins.pop_front()
+	_tins.append({"f": TIM_BASE * TIM_ESCALA[k], "fase": 0.0, "t": 0.0})
+
 func silenciar() -> void:
 	_ativo = false
 
@@ -95,6 +111,17 @@ func _process(_delta: float) -> void:
 					continue
 				p["fase"] += TAU * p["f"] * (1.0 + x * 0.8) * dt
 				s += sin(p["fase"]) * exp(-x * 5.0) * 0.35
+			# tim: seno com a oitava por cima, ataque curto e cauda longa (som de sininho)
+			for j in range(_tins.size() - 1, -1, -1):
+				var q: Dictionary = _tins[j]
+				q["t"] += dt
+				var y: float = q["t"] / TIM_DURACAO
+				if y >= 1.0:
+					_tins.remove_at(j)
+					continue
+				q["fase"] += TAU * q["f"] * dt
+				var env_t: float = minf(1.0, q["t"] / 0.005) * exp(-y * 5.0)
+				s += (sin(q["fase"]) + 0.35 * sin(q["fase"] * 2.0)) * env_t * TIM_VOLUME
 			# chiado (quente demais): ruído com agudo realçado
 			var r := randf_range(-1.0, 1.0)
 			if _quente > 0.01:

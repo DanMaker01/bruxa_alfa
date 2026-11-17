@@ -56,6 +56,7 @@ func _montar() -> void:
 			b.focus_mode = Control.FOCUS_NONE
 			b.add_theme_font_size_override("font_size", 28)
 			PainelMenu.estilo_carta(b)
+			b.button_down.connect(func(): Vibrar.leve())
 	caixa.get_node("Iniciar").pressed.connect(_iniciar)
 	caixa.get_node("Carregar").pressed.connect(_carregar)
 	caixa.get_node("Opções").pressed.connect(_opcoes)

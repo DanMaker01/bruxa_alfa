@@ -338,8 +338,10 @@ func usar_item(id: String, personalidade: String = "bruxa") -> bool:
 	if game_temp.has_personality(personalidade):
 		CmdAplicarPocao.aplicar_matriz(self, game_temp, personalidade, CalculadoraPocao.matriz_do_item(item))
 	game_temp.remove_item(id, 1)
-	# mesmo efeito mágico de quando a poção é aplicada na princesa, agora na bruxa
-	await CmdAplicarPocao.efeito_magico(self, game_manager.get_player() if game_manager else null)
+	# mesmo efeito mágico de quando a poção é aplicada na princesa, agora na bruxa.
+	# Poção com efeito (ex.: Retorno): o próprio efeito tem o visual (sumir, aparecer...).
+	if item.efeito.is_empty():
+		await CmdAplicarPocao.efeito_magico(self, game_manager.get_player() if game_manager else null)
 	_usando_item = false
 	if not item.efeito.is_empty():
 		var pag := PaginaData.new()

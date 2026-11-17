@@ -100,6 +100,61 @@ def nota_da_chance(ch):
     return 5, "muito difícil"
 
 
+NOVA_RECEITA = "(receita nova)"
+NOME_AGUA = "Água de Caldeirão"
+NOME_DESCONHECIDO = "Poção desconhecida"
+ADJETIVOS = [(0.95, "Concentrada"), (0.80, "Refinada"), (0.60, ""), (0.40, "Rala"), (0.20, "Aguada"), (0.0, "Estragada")]
+SEMELHANCA_MAX = 0.3
+
+
+def adjetivo(a):
+    for lim, txt in ADJETIVOS:
+        if a >= lim:
+            return txt
+    return ADJETIVOS[-1][1]
+
+
+def proximas(dados, A, n=3):
+    """[(nome, distância, tolerância)] das poções do catálogo mais perto da matriz."""
+    cat, dmax = dados.catalogo
+    out = [(r["nome"], sim.distancia(A, r["A"]), r["tol"] if r["tol"] > 0 else dmax) for r in cat]
+    return sorted(out, key=lambda x: x[1])[:n]
+
+
+def nome_como_jogo(dados, r):
+    """O nome que a janela do resultado daria (JanelaResultado: água, catálogo, um item só,
+    parecida com um ingrediente, desconhecida). Devolve (nome, por quê)."""
+    A = r["A"]
+    if sim.distancia(A, sim.identidade()) <= 0.0001:
+        return NOME_AGUA, "a matriz não mudou nada (identidade)"
+    rec = sim.reconhecer(A, r["a"], dados.catalogo)
+    if rec["perto"]:
+        return rec["pocao"], "perto de uma poção do catálogo (dist %.3f)" % rec["dist"]
+    ids = {d["item"] for d in r["diags"]}
+    if len(ids) == 1:
+        it = dados.itens[next(iter(ids))]
+        adj = adjetivo(r["a"])
+        nome = ("Poção de %s %s" % (it["nome"], adj)) if adj else "Poção de %s" % it["nome"]
+        if any(c["nome"] == nome for c in dados.catalogo[0]):
+            nome = "Poção de %s" % it["nome"]
+        return nome, "um item só (qualidade pelo aproveitamento médio %s)" % pct_txt(r["a"])
+    melhor, rel_min = "", 1e9
+    for it in dados.itens.values():
+        ef = sim.distancia(it["A"], sim.identidade())
+        if ef < 0.001:
+            continue
+        rel = sim.distancia(A, it["A"]) / ef
+        if rel < rel_min:
+            melhor, rel_min = it["nome"], rel
+    if rel_min <= SEMELHANCA_MAX:
+        return "Poção de " + melhor, "matriz parecida com a de um ingrediente puro"
+    return NOME_DESCONHECIDO, "poção nova: a bruxa dá o nome no livro"
+
+
+def pct_txt(x):
+    return "%.1f%%" % (100 * x)
+
+
 # =============================================================================
 # ANÁLISES
 # =============================================================================
@@ -543,18 +598,38 @@ def interface():
             w = W.QWidget()
             lay = W.QHBoxLayout(w)
             esq = W.QVBoxLayout()
-            self.r_combo = self.combo_receitas()
+            linha = W.QHBoxLayout()
+            linha.addWidget(W.QLabel("Receita"))
+            self.r_combo = W.QComboBox()
+            self.r_combo.addItems(sorted(self.dados.receitas) + [NOVA_RECEITA])
             self.r_combo.currentTextChanged.connect(self.carregar_receita)
-            esq.addWidget(W.QLabel("Receita"))
-            esq.addWidget(self.r_combo)
+            linha.addWidget(self.r_combo, 1)
+            esq.addLayout(linha)
             self.r_passos = W.QTableWidget(0, 4)
             self.r_passos.setHorizontalHeaderLabels(["passo", "chama / item", "qtd", "segundos"])
             self.r_passos.verticalHeader().setVisible(False)
-            self.r_passos.setMinimumWidth(380)
+            self.r_passos.setSelectionBehavior(W.QAbstractItemView.SelectRows)
+            self.r_passos.setSelectionMode(W.QAbstractItemView.SingleSelection)
+            self.r_passos.setMinimumWidth(470)
             esq.addWidget(self.r_passos)
+            # mexer nos passos
+            bts = W.QGridLayout()
+            for k, (txt, f) in enumerate([("+ chama", lambda: self.novo_passo("chama")),
+                                          ("+ ingrediente", lambda: self.novo_passo("ingrediente")),
+                                          ("remover passo", self.remover_passo),
+                                          ("subir", lambda: self.mover_passo(-1)),
+                                          ("descer", lambda: self.mover_passo(1))]):
+                b = W.QPushButton(txt)
+                b.clicked.connect(f)
+                bts.addWidget(b, k // 3, k % 3)
+            esq.addLayout(bts)
             self.r_perfeita = W.QCheckBox("jogadora perfeita (sem erro)")
             self.r_perfeita.setChecked(True)
+            self.r_perfeita.toggled.connect(self.mudou_receita)
             esq.addWidget(self.r_perfeita)
+            self.r_auto = W.QCheckBox("rodar sozinho a cada mudança")
+            self.r_auto.setChecked(True)
+            esq.addWidget(self.r_auto)
             bt = W.QPushButton("Rodar")
             bt.clicked.connect(self.rodar_receita)
             esq.addWidget(bt)
@@ -566,7 +641,8 @@ def interface():
             esq.addWidget(self.r_comparar)
             self.r_resumo = W.QLabel()
             self.r_resumo.setWordWrap(True)
-            esq.addWidget(self.r_resumo)
+            self.r_resumo.setTextFormat(QtCore.Qt.RichText)
+            esq.addWidget(self.r_resumo, 1)
             lay.addLayout(esq, 0)
             dir_ = W.QVBoxLayout()
             self.r_graf = Grafico()
@@ -575,55 +651,131 @@ def interface():
             dir_.addWidget(self.r_tab, 2)
             lay.addLayout(dir_, 1)
             self.tabs.addTab(w, "Receita")
+            self._timer_auto = QtCore.QTimer(self)
+            self._timer_auto.setSingleShot(True)
+            self._timer_auto.setInterval(250)
+            self._timer_auto.timeout.connect(self.rodar_receita)
             self.carregar_receita()
 
-        def carregar_receita(self, *_):
-            rc = self.dados.receitas.get(self.r_combo.currentText())
-            if not rc:
+        def mudou_receita(self, *_):
+            if getattr(self, "_montando", False):
                 return
+            if self.r_auto.isChecked():
+                self._timer_auto.start()
+
+        def carregar_receita(self, *_):
+            nome = self.r_combo.currentText()
+            if nome == NOVA_RECEITA:
+                item0 = sorted(self.dados.itens)[0] if self.dados.itens else ""
+                self.r_lista = [{"tipo": "chama", "estado": "normal"}, {"tipo": "ingrediente", "item": item0, "qtd": 1, "seg": 20.0}]
+            else:
+                rc = self.dados.receitas.get(nome)
+                if not rc:
+                    return
+                self.r_lista = copy.deepcopy(rc["passos"])
+            self.montar_passos()
+            self.mudou_receita()
+
+        def montar_passos(self, selecionar=-1):
+            self._montando = True
             t = self.r_passos
-            t.setRowCount(len(rc["passos"]))
+            t.setRowCount(0)
+            t.setRowCount(len(self.r_lista))
             estados = [e["id"] for e in sim.ESTADOS]
-            for k, p in enumerate(rc["passos"]):
+            for k, p in enumerate(self.r_lista):
                 t.setItem(k, 0, W.QTableWidgetItem(str(k)))
+                c = W.QComboBox()
                 if p["tipo"] == "chama":
-                    c = W.QComboBox()
                     c.addItems(estados)
-                    c.setCurrentText(p["estado"])
+                    c.setCurrentText(p.get("estado", "normal"))
+                    c.currentTextChanged.connect(self.mudou_receita)
                     t.setCellWidget(k, 1, c)
                     t.setCellWidget(k, 2, W.QLabel(""))
                     t.setCellWidget(k, 3, W.QLabel(""))
                 else:
-                    c = W.QComboBox()
-                    c.addItems(sorted(self.dados.itens))
-                    c.setCurrentText(p["item"])
+                    for iid in sorted(self.dados.itens):
+                        c.addItem("%s (%s)" % (self.dados.itens[iid]["nome"], iid), iid)
+                    c.setCurrentIndex(max(0, c.findData(p.get("item"))))
+                    c.currentIndexChanged.connect(self.mudou_receita)
                     t.setCellWidget(k, 1, c)
                     q = W.QSpinBox()
                     q.setRange(1, 30)
                     q.setValue(int(p.get("qtd", 1)))
+                    q.valueChanged.connect(self.mudou_receita)
                     t.setCellWidget(k, 2, q)
                     s = W.QDoubleSpinBox()
-                    s.setRange(0, 300)
+                    s.setRange(0, 600)
                     s.setSingleStep(1)
+                    s.setDecimals(1)
                     s.setValue(float(p.get("seg", 0)))
+                    s.valueChanged.connect(self.mudou_receita)
                     t.setCellWidget(k, 3, s)
             t.resizeColumnsToContents()
+            if 0 <= selecionar < len(self.r_lista):
+                t.selectRow(selecionar)
+            self._montando = False
+
+        def ler_passos(self):
+            """Passos como estão na tabela."""
+            t = self.r_passos
+            out = []
+            for k, p in enumerate(self.r_lista):
+                if p["tipo"] == "chama":
+                    out.append({"tipo": "chama", "estado": t.cellWidget(k, 1).currentText()})
+                else:
+                    out.append({"tipo": "ingrediente", "item": t.cellWidget(k, 1).currentData(),
+                                "qtd": t.cellWidget(k, 2).value(), "seg": t.cellWidget(k, 3).value()})
+            return out
+
+        def _linha_sel(self):
+            r = self.r_passos.currentRow()
+            return r if 0 <= r < len(self.r_lista) else -1
+
+        def novo_passo(self, tipo):
+            self.r_lista = self.ler_passos()
+            k = self._linha_sel()
+            k = len(self.r_lista) if k < 0 else k + 1
+            if tipo == "chama":
+                p = {"tipo": "chama", "estado": "normal"}
+            else:
+                item0 = sorted(self.dados.itens)[0] if self.dados.itens else ""
+                p = {"tipo": "ingrediente", "item": item0, "qtd": 1, "seg": 20.0}
+            self.r_lista.insert(k, p)
+            self.montar_passos(k)
+            self.mudou_receita()
+
+        def remover_passo(self):
+            k = self._linha_sel()
+            if k < 0:
+                return
+            self.r_lista = self.ler_passos()
+            del self.r_lista[k]
+            self.montar_passos(min(k, len(self.r_lista) - 1))
+            self.mudou_receita()
+
+        def mover_passo(self, d):
+            k = self._linha_sel()
+            j = k + d
+            if k < 0 or not (0 <= j < len(self.r_lista)):
+                return
+            self.r_lista = self.ler_passos()
+            self.r_lista[k], self.r_lista[j] = self.r_lista[j], self.r_lista[k]
+            self.montar_passos(j)
+            self.mudou_receita()
 
         def receita_editada(self):
-            rc = copy.deepcopy(self.dados.receitas[self.r_combo.currentText()])
-            t = self.r_passos
-            for k, p in enumerate(rc["passos"]):
-                if p["tipo"] == "chama":
-                    p["estado"] = t.cellWidget(k, 1).currentText()
-                else:
-                    p["item"] = t.cellWidget(k, 1).currentText()
-                    p["qtd"] = t.cellWidget(k, 2).value()
-                    p["seg"] = t.cellWidget(k, 3).value()
+            nome = self.r_combo.currentText()
+            base = self.dados.receitas.get(nome, {"chave": "nova", "nome": "Receita nova", "pocao": ""})
+            rc = {k: v for k, v in base.items() if k != "passos"}
+            rc["passos"] = self.ler_passos()
             return rc
 
         @ocupado
         def rodar_receita(self, *_):
             rc = self.receita_editada()
+            if not any(p["tipo"] == "ingrediente" for p in rc["passos"]):
+                self.r_resumo.setText("Sem ingrediente: nada para cozinhar.")
+                return
             r = sim.simular(rc, self.dados.itens, jogadora(self.params, seed=1, perfeita=self.r_perfeita.isChecked()),
                             self.dados.catalogo)
             ax = self.r_graf.novo()
@@ -647,9 +799,18 @@ def interface():
                                "%.1f" % d["T_min"], "%.1f" % d["T_max"], pct(d["a_Q"]), pct(d["a_Tmin"] * d["a_Tmax"]),
                                pct(d["a_tmin"] * d["a_tmax"]), pct(d["a"])])
             preencher(self.r_tab, linhas, ["#ffd6d6" if d["a"] < 0.95 else "" for d in r["diags"]])
-            self.r_resumo.setText("<b>%s</b><br>aproveitamento médio <b>%s</b> (pior item %s)<br>poção: %s (dist %.3f)<br>efeito: <b>%s</b><br>tempo total %.1f s"
-                                  % (rc["nome"], pct(r["a"]), pct(r["a_min_item"]), r.get("pocao"), r.get("dist", 0),
-                                     "SIM" if r.get("efeito") else "não", r["t_final"]))
+            nome, motivo = nome_como_jogo(self.dados, r)
+            perto = proximas(self.dados, r["A"], 3)
+            diag = "  ".join("%s ×%.3f" % (tr, r["A"][k][k]) for k, tr in enumerate("OCEAN"))
+            fora = sum(abs(r["A"][i][j]) for i in range(5) for j in range(5) if i != j)
+            self.r_resumo.setText(
+                "<span style='font-size:15pt'>Resultado: <b>%s</b></span><br><i>%s</i><br>"
+                "efeito: <b>%s</b><br><br>"
+                "aproveitamento médio <b>%s</b> (pior item %s)<br>tempo total %.1f s<br><br>"
+                "<b>Matriz</b>: %s%s<br><br><b>Poções mais perto</b> (distância / tolerância):<br>%s"
+                % (nome, motivo, "SIM" if r.get("efeito") else "não", pct(r["a"]), pct(r["a_min_item"]), r["t_final"],
+                   diag, ("<br>fora da diagonal: %.3f" % fora) if fora > 1e-4 else "",
+                   "<br>".join("%s%s: %.3f / %.3f" % ("✔ " if d <= tol else "· ", n, d, tol) for n, d, tol in perto)))
             self.anterior = r
 
         # ---------------- Sensibilidade ----------------

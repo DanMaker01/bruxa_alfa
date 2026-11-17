@@ -135,6 +135,8 @@ func fechar() -> void:
 func _salvar() -> void:
 	var nome := SaveJogo.salvar(gm)
 	_msg.text = "Jogo salvo." if nome != "" else "Não deu para salvar."
+	if nome != "":
+		Vibrar.media()
 
 func _carregar() -> void:
 	_abrir_painel(PainelMenu.saves(_carregar_save))

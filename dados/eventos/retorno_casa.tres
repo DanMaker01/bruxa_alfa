@@ -7,6 +7,24 @@
 [ext_resource type="Script" uid="uid://dkw5y5gsrn515" path="res://src/dados/comandos/cmd_esperar.gd" id="5_esp"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="6_ev"]
 [ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="6_ns1jd"]
+[ext_resource type="Script" uid="uid://7xxa8u611ha0" path="res://src/dados/comandos/cmd_mostrar_efeito.gd" id="7_efeito"]
+[ext_resource type="Script" uid="uid://u1lexc30s8be" path="res://src/dados/comandos/cmd_player.gd" id="8_player"]
+
+[sub_resource type="Resource" id="R_efeito_sai"]
+script = ExtResource("7_efeito")
+esperar = false
+
+[sub_resource type="Resource" id="R_esp_sumir"]
+script = ExtResource("5_esp")
+segundos = 0.35
+
+[sub_resource type="Resource" id="R_sumir"]
+script = ExtResource("8_player")
+acao = 3
+
+[sub_resource type="Resource" id="R_esp_sumida"]
+script = ExtResource("5_esp")
+segundos = 1.0
 
 [sub_resource type="Resource" id="R_fade_sai"]
 script = ExtResource("3_fade")
@@ -27,9 +45,25 @@ script = ExtResource("3_fade")
 tipo = 1
 tempo = 0.8
 
+[sub_resource type="Resource" id="R_efeito_chega"]
+script = ExtResource("7_efeito")
+esperar = false
+
+[sub_resource type="Resource" id="R_esp_aparecer"]
+script = ExtResource("5_esp")
+segundos = 0.35
+
+[sub_resource type="Resource" id="R_aparecer"]
+script = ExtResource("8_player")
+acao = 2
+
+[sub_resource type="Resource" id="R_esp_fim"]
+script = ExtResource("5_esp")
+segundos = 0.6
+
 [sub_resource type="Resource" id="P_1"]
 script = ExtResource("1_pag")
-comandos = Array[ExtResource("2_cmd")]([SubResource("R_fade_sai"), SubResource("R_tele"), SubResource("R_esp"), SubResource("R_fade_entra")])
+comandos = Array[ExtResource("2_cmd")]([SubResource("R_efeito_sai"), SubResource("R_esp_sumir"), SubResource("R_sumir"), SubResource("R_esp_sumida"), SubResource("R_fade_sai"), SubResource("R_tele"), SubResource("R_esp"), SubResource("R_fade_entra"), SubResource("R_efeito_chega"), SubResource("R_esp_aparecer"), SubResource("R_aparecer"), SubResource("R_esp_fim")])
 
 [resource]
 script = ExtResource("6_ev")

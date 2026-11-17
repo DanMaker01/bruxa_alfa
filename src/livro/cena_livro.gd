@@ -95,7 +95,10 @@ var _capa_frente: Control           # frente (título): fechou antes da 1ª folh
 var _capa_verso: Control            # verso (liso): fechou depois da última folha
 ## true: a cena abre com o livro fechado (frente); tocar na capa abre. Definir antes de entrar na árvore.
 var comecar_fechado: bool = false
-var _ja_abriu: bool = false         # a 1ª abertura vai até a página nova (escreve as novas)
+var _ja_abriu: bool = false
+## Tutorial do livro (CmdTutorialLivro) enquanto ele roda: diz o que pode (virar, sair) e é
+## avisado ao passar a limpo. null = livro normal.
+var tutorial = null         # a 1ª abertura vai até a página nova (escreve as novas)
 const RECT_CAPA := Rect2(170, 30, 300, 580)
 const COR_OURO := Color(0.85, 0.65, 0.25)
 
@@ -325,6 +328,7 @@ func _virar(d: int, t: float) -> void:
 	if Time.get_ticks_msec() - _ultimo_som_virar > 90:   # folhas rápidas: não empilha o som
 		_ultimo_som_virar = Time.get_ticks_msec()
 		_som(SOM_VIRAR)
+		Vibrar.leve()
 	var sai: Control = _folhas_no[1] if d > 0 else _folhas_no[0]
 	var entra: Control = _folhas_no[0] if d > 0 else _folhas_no[1]
 	var tw := create_tween()
@@ -353,6 +357,22 @@ func ir_para(id: int) -> void:
 		await _virar(1 if alvo > _spread else -1, T_FOLHA_RAPIDA)
 	_animando = false
 	_atualizar()
+
+## Botão de uma página que está aberta agora (pelo texto), ou null. Para o tutorial.
+func botao_da_pagina(id: int, texto: String) -> Button:
+	var lado := _lado_de(id)
+	if lado < 0:
+		return null
+	return _achar_botao(_caixas[lado], texto)
+
+func _achar_botao(no: Node, texto: String) -> Button:
+	for c in no.get_children():
+		if c is Button and c.text == texto and c.is_visible_in_tree():
+			return c
+		var b := _achar_botao(c, texto)
+		if b:
+			return b
+	return null
 
 ## Lado (0/1) em que a página está agora, ou -1.
 func _lado_de(id: int) -> int:
@@ -621,6 +641,7 @@ func _aparecer_pagina(id: int) -> void:
 
 func _memorizar(p: Dictionary) -> void:
 	LivroReceitas.memorizar(livro, p)
+	Vibrar.media()
 	_atualizar()
 
 func _apagar(p: Dictionary) -> void:
@@ -650,6 +671,8 @@ func _passar_a_limpo(p: Dictionary) -> void:
 	if _animando:
 		return
 	if LivroReceitas.passar_a_limpo(livro, p):
+		if tutorial:
+			tutorial.ao_passar_a_limpo(p)   # a receita do tutorial vira "ensinada"
 		await ir_para(int(p["id"]))
 		await _aparecer_pagina(int(p["id"]))   # passar a limpo não abre o editor
 
@@ -905,6 +928,8 @@ func _fundo_input(ev: InputEvent) -> void:
 func fechar() -> void:
 	if _animando:
 		return
+	if tutorial and not tutorial.pode_sair():
+		return
 	_animando = true
 	_som(SOM_ABRIR)
 	if _fechado:   # já fechado: só a capa some
@@ -948,6 +973,8 @@ func _input(event: InputEvent) -> void:
 		return
 	if _editor.ativo or _nomear.visible or _detalhe.visible or _fechado:
 		return
+	if tutorial and not tutorial.pode_virar():
+		return
 	# arrastar para o lado passa a página
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed and RECT_LIVRO.has_point(event.position):
@@ -983,6 +1010,7 @@ func _rotulo(t: String, tam: int, cor: Color, quebra: bool = true) -> Label:
 func _botao(t: String, acao: Callable) -> Button:
 	var b := Button.new()
 	b.text = t
+	b.button_down.connect(func(): Vibrar.leve())
 	b.focus_mode = Control.FOCUS_NONE
 	b.custom_minimum_size.y = 40
 	b.pressed.connect(acao)

@@ -152,92 +152,67 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] audio, 
 		[ ] video, etc
 		[?] Velocidade do texto (Lenta, Normal, Rápida, Já) e Vibração (celular; toque em botão, item no ponto, pausa do tutorial, poção com efeito). Android: o export precisa da permissão VIBRATE.
+			[?] Agora 3 velocidades: Normal (a antiga Lenta), Rápida e Instantânea. Vírgula sem pausa; ponto com o dobro da pausa (7 letras). A escolha antiga foi zerada (chave nova vel_texto).
+			[?] Vibração também em: pegar item, encostar num bloqueio (guarda, porta, parede), tremor da câmera, aplicar poção, fogo aceso (média) e fogo apagou (dois pulsos), botões dos menus (pausa, principal, opções, livro, Acender, Voltar), virar página, memorizar receita e salvar jogo. Vibrações muito juntas (< 90 ms) viram uma.
 	[ ] cartas/hud
 		[ ] definir verso: pentagrama (giratório lento?), 
 			principalmente as que fica no HUD sempre visivel 
 
 
 [ ] Caldeirão 100%
-	[ ]	Tutorial do caldeirão na 1ª vez. 
-		mudar intro talvez. tentar integrar naturalmente com o que já tem.  
-		(poção concentrada pó de retorno? 3; sem deixar errar). 
-		Decidido: a bruxa fala e guia, livre (não trava botões). Mas pausa e te obriga a apertar o botão
-		[?] Feito (tutorial_caldeirao.gd): ao chegar em casa (bruxa_in_auto) a bruxa comenta os 3 pós de retorno, ganha os 3 e o caldeirão abre no tutorial (variável tutorial_caldeirao: 1 = fazer, 2 = feito). A bruxinha fala pelo balão. Pausas com a tela escura e só o botão certo aceso: acender; esquentar até amarelo (+Fogo pisca; passou, o −Fogo pisca); amarelo: pausa até jogar os 3 pós; nos 25 s, se a temperatura vai sair do amarelo pausa e mostra o +Fogo (esfriando) ou o −Fogo (esquentando); fogo apagou: Acender; no fim, Finalizar (sem a pergunta). Outros itens e tirar o pó do caldeirão ficam bloqueados; o Voltar (Sair) some só no tutorial.
-			[?] A poção do tutorial não conta para a missão 1 (missao01_pocao_feita / missao01_pocao_erro): os guardas só liberam com outra poção. Saves de teste podem já estar com a variável em 1.
+	[?]	Tutorial finalizado?	
+		[?] Tutorial do livro (cmd_tutorial_livro.gd, fim do bruxa_in_auto, antes de destravar a bruxa, nos dois caminhos): ela comenta que vai anotar a receita e anda até o livro; tela escura, só o livro responde (toque nele); o livro abre fechado: toque na capa (tocar fora ou no ✕ fecha e volta a pedir o livro); a bruxa escreve o rascunho da Poção do Retorno; Passar a limpo (obrigatório) e a página vira ensinada (fitinha) com a receita certa; Memorizar explicado (opcional, Continuar); arrastar para fechar o livro; tocar fora ou no ✕ para sair. A receita Retorno não vem mais pronta no livro (retorno.tres conhecida = false; o tutorial do caldeirão continua usando o arquivo).
 	[?] Fogo frio: 3 cores de 400 a 800 (transparente 400, azul pálido 600, normal vermelho 800; no livro "Transparente grande" virou "Azul pálido"). Aceso fica opaco (alfa 0,8); só abaixo de 400 (apagando) vai sumindo até F = 0. (sistema_termico.gd CORES_FOGO)
-	[?] Finalizar só aparece com itens no caldeirão, no canto superior direito.
 	[ ] Layout
-		[?] Fogo: apagado = um botão só, Acender (no lugar dos dois); aceso = −Fogo e +Fogo, independentes (o −Fogo não mexe mais no +Fogo; segurar o +Fogo não abafa). Saiu o botão Acender/Apagar de baixo.
-		[?] Caldeirão: o +Fogo não fica mais avermelhado (nem ao acender, nem ao soltar).
-		[?] Correção: segurando o −Fogo até apagar, o botão sumia sem "soltar" e continuava repetindo; ao acender de novo, abafava e apagava na hora. Agora um botão que some com o dedo em cima solta sozinho (BotaoSegurar).
 		[ ] Reformular Layout (pensar em celular). 
-		Menus, botões,Bruxa_chibi,caldeirão, tamanhos livre 
-		texto em cima do caldeirão (passar para falas da bruxa), feedback rápido da bruxa.
-	[ ] Feedback bom pra temperatura do caldeirão e itens, tanto frio quanto quente
-		[?] Quando um item passa de 95% o ícone dá um pulo de brilho e toca um plim ("cura" se não houver plim.mp3). A guia já mostra os segundos que faltam no passo atual.
-		[.] TESTE de P e M:
+			[?] Alternativas de layout: tecla L no caldeirão troca entre Atual, Polegares (botões de fogo e itens maiores, caldeirão menor), Caldeirão grande (caldeirão 1,2×, itens menores) e Fogo nas laterais (−Fogo e +Fogo altos nas bordas, itens no meio). A escolha fica salva (user://opcoes.cfg). Valores em LayoutPreparo.LAYOUTS.
+			Tamanhos: Menus, botões, Bruxa_chibi, caldeirão 
+			texto em cima do caldeirão -> passar para falas da bruxa, feedback rápido da bruxa? multi balões?
+		[ ] Dúvida: Usar cartas tbm na cena do caldeirão, para botões, etc? testar como ficaria. 
+			Carta comprida é meio estranho. O que usar então? Mudança de layout afeta?
+		[?] Resultado da Poção ok?
+	[ ] Feedback audiovisual pra temperatura do caldeirão e tbm dos itens, tanto frio quanto quente
+		[?] Som da cor: quando a temperatura entra numa cor nova da chama (e fica 0,25 s), toca um "tim" com a nota daquela cor (escala pentatônica, mais agudo nas cores quentes). SomCaldeirao.tim(), TIM_* para ajustar.
+		[?] TESTE de P e M:
 			M = absoluto
 			P = anel completo, provavelmente semáforo ou aproxima.
 			C = o anel já é colorido, mas vai sendo revelado.
-	[.] Teste de Mecânica: segurar para jogar itens
+	[.] Teste de Segurar item para jogar multiplos
 		Teste #1: 9/10 certos (itens a cada 0,4 s). Faltam mais 2 testes.
 		Teste #2:  /10 certos 
 		Teste #3:  /10 certos 
-	[.] Resultado da Poção:
-		[.] mostre o grafico certo, depois mostre o T(t) do jogador sendo feito.e os itens entrando. Não precisa mostrar mais os anéis de itens no resultado, mostre somente o gráfico já integrado com os itens (feito: curva ideal aparece, depois o T(t) é desenhado e cada item surge quando a curva passa; ícones pequenos sem anel, gráfico grande)
-			EDIT: Mantenha os anéis, mas quero os itens se mantendo pequenos. (feito: anel volta, ícone pequeno; enche quando o item entra)
-		[?] Resultado: poção com efeito toca um "plim" antes do nome aparecer (res://audio/se/plim.mp3; sem ele, magic.mp3).
-			[?] Agora a animação vem primeiro (estrela girando, anel e brilhinhos na matriz) e o som do plim toca logo depois.
-		
-	[ ] Dúvida: Usar cartas tbm na cena do caldeirão, para botões, etc? testar como ficaria.
-	[ ] Definir: Poção concentrada é só com precisão muito alta
 	[ ] Catálogo e poções
 		[?] Catálogo de poções (dados/pocoes): qualquer poção com a matriz perto de uma do catálogo recebe o nome dela e, se ela tiver, o efeito (com aproveitamento >= aproveitamento_min_efeito; evita 4 mal cozidos = 3 bem cozidos). Sem quantidades nem "Dobrada" (não serve para receitas não comutativas).
 			[?] Pó de retorno ajustado para o tutorial: chama amarela (T 115–150 °C), ~25 s com os 3 pós (m 3300, s 2000/2200). Janela para 95%: ±5 s; para 90%: ±7 s. Receita do livro atualizada.
 			Poção do Retorno (antes "Poção de Pó de Retorno Concentrada"; diálogos de bruxa_in e castelo_in03 atualizados): matriz de 3 pós, efeito com 95% → volta para casa.
-			[?] Tolerância por poção (PocaoReferencia.distancia_max; 0 = a do catálogo, 0,05). Retorno: 0,02 → 2 ou 4 pós bem cozidos não viram mais Poção do Retorno nem ganham o efeito (simulador: experimento quantidade). Renomear a poção no livro não muda mais o efeito.
+			[?] Tolerância por poção (PocaoReferencia.distancia_max; 0 = a do catálogo, 0,05). Retorno: 0,02 → 2 ou 4 pós bem cozidos não viram mais Poção do Retorno nem ganham o efeito (simulador: experimento quantidade). 
 			[ ] PROBLEMA a tratar: quantidades diferentes podem chegar na mesma matriz (ex.: 4 mal cozidos ≈ 3 bem cozidos). Hoje só o aproveitamento mínimo segura.
-			[?] Água de Caldeirão com tolerância mínima (distancia_max 0,005).
 
 [ ] Livro de Receitas:
 	[ ] Cena do Livro:
-		[?] Só as receitas existentes, sem páginas vazias. Nº ímpar: à direita da última, uma página transparente "+ Nova receita". Nº par: botão "+ Nova" no rodapé da direita na última folha. Tocar abre o editor (página ainda transparente); Pronto: o papel surge (animação) e a receita é transcrita; Cancelar: a página nem existe.
-		[?] Livro: virar página mais rápido (0,2 s); na última folha o "›" vira "+ Nova"; arrastar para avançar na última folha fecha o livro; ao fechar, as páginas fecham na lombada e depois o livro some; passar a limpo não abre mais o editor.
-			[?] Livro fechado: passar da última folha ou voltar antes da primeira (arrastar) fecha o livro e fica só a capa; tocar na capa abre de novo; tocar fora do livro ou no ✕ fecha a cena.
-				[?] Frente (título "Receitas", moldura dourada, estrela) diferente do verso (liso, mais escuro, lombada do outro lado). Voltar antes da 1ª folha fecha pela frente; passar da última, pelo verso. Abrir pela frente vai à 1ª folha, pelo verso à última. O comando Livro abre a cena com o livro fechado (frente): tocar na capa abre.
 		[ ] Pensar em fazer um auto-cozinhar seguindo uma receita?... (pensar)
 	[ ] Receitas:
 		[ ] Balanceamento de Receitas:
 			[ ] Criar mais receitas:
-				Receita muito rápida, 
-				receita muito demorada. 
-				Receita muito quente. 
-				Receita muito fria. 
-			[ ] Pergunta: Dois pontos de cozimento diferentes para o mesmo item podem gerar poções diferentes?		
-			[ ] Se eu colocar muita (QUANTO?) quantidade de um ingrediente, vai fazer uma poção muito forte.
-			[ ] Faz sentido uma receita que leva o mesmo ingrediente 2x em tempos diferentes? I_tempo, I_Temper, Q, como conseguir aprovetar duas vezes um mesmo tipo de item numa mesma receita?
-			[ ] DEPOIS: Fazer receita dobrada tem efeito de potencializar (escalar) a matriz resultante. por exemplo se fizer uma poção da calma profunda dobrada, 
-			[ ] balancear dificuldade, peso de cada erro: tempo, temp, cozimento, explorar os TIPOS de matrizes. explorar o que é posível nesse sistema térmico
-				[?] balancear o resultado da poção de extroversão. pois um cogumelo já está sendo suficiente para o melhor resultado, entender o pq.
-				Por quê: o cogumelo multiplica E por 1,16 (+16%) e o critério do filho do mercador aceitava qualquer E que subisse 10% (e aceitava C/A/O mudando até "pouco").
-				Ajuste: E precisa subir "muito" (>= +30%; a desenvoltura dá +40%) e O, C, A não podem mudar (menos de 10%); N não pode subir; nenhum traço extremo.
-				Com 1 cogumelo agora: "B-bom... dia." / "Melhorou um pouco, mas ainda não dá para deixar a loja com ele."
-			[.] Ver tipos de poções e dar nomes: 
-				Database (nomes das proibidas ficam para o Cap. 2): Nomear as poções de referência no catálogo (PocaoReferencia: nome, descrição, A). Poção da Calma Profunda. Poção #2. Poções proíbidas. 
+				Receita que é muito rápida , 
+				receita que é muito demorada. 
+				Receita muito quente, com fogo negro. 
+				Receita muito fria, quase desligando. 
+			[ ] Perguntas: 
+				[ ] Dois pontos de cozimento diferentes para o mesmo item podem gerar poções diferentes? 
+				[ ] Faz sentido uma receita que leva o mesmo ingrediente 2x em tempos diferentes? I_tempo, I_Temper, Q, como conseguir aprovetar duas vezes um mesmo tipo de item numa mesma receita?
+				[ ] E se eu dobrar a poção? Testar com as não comutativas: Fazer receita dobrada tem efeito de potencializar (escalar) a matriz resultante. por exemplo se fizer uma poção da calma profunda dobrada, 
+				[ ] dificuldade, medir peso de cada erro: tempo, temp, cozimento, 
+				[ ] explorar os TIPOS de matrizes. explorar o que é posível nesse sistema térmico
+		[.] Ver tipos de poções e dar nomes: 
+			Database (nomes das proibidas ficam para o Cap. 2): 
+				Nomear as poções de referência no catálogo (PocaoReferencia: nome, descrição, A). 
+				Poção da Calma Profunda. Poção #2. Poções proíbidas. 
 				Poção #2 = Poção da Desenvoltura (definir bem antes do Cap. 1; só usada no Cap. X).
 				Poções proibidas: as que têm algum autovalor 0 (2^5 − 1 = 31 combinações de traços zerados). Ainda sem nome. (feito: 31 no catálogo como "Poção Proibida (sem O, C...)", nomes provisórios)
-				(Antigo) Poção de Pó de Retorno Concentrada: virou a Poção do Retorno (ver Caldeirão > Catálogo e poções), com outros valores do pó.
-				Nome: poção de um item só agora usa "Poção de [item] [qualidade]" antes de procurar no catálogo (senão um pó mal cozido virava "Concentrada").
+		[?] Nome: poção de um item só agora usa "Poção de [item] [qualidade]" antes de procurar no catálogo (senão um pó mal cozido virava "Concentrada").
 
-			
-		[ ] 1ª receita: calma profunda
 				
-		[ ] 2ª receita: desenvoltura
-			Ajustado: musgo t_max 12 → 35 (aguenta os ~30 s finais); flor m 2400 → 5000, s−/s+ 900/1400 → 1900/2900 (Q de 60 s a ~85 °C ≈ 5100). Juntos dão diag(1,1,1.4,1,1) se o musgo entra depois.
-			balancear tempo, u,s-,s+, Tmin,Tmax,tmin,tmax, etc de cada item. infusao
-			Está difícil saber a hora de colocar a flor. Mudar cor do fogo de forma mais clara? outras cores? 
-		[?] Com receita memorizada, quando a guia passa de passo a linha pisca e a bruxinha diz o que fazer ("Agora: 3× flor da farra!", "Agora: chama branco.", "Pronto! Pode finalizar.").
-		
 [ ] História/Roteiro
 	[ ]	Diálogos devem condizer com a época
 		[ ] Cap. 1 (-N)
@@ -259,6 +234,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 	[ ] Intro : revisar texto (tempo e ritmo). ultimas frases da intro estão pequenas em comparação. a forma do texto é pirâmide invertida.
 		[?] "Em 1484, o Papa..." agora é uma legenda sozinha (6 s) e "Toda mulher..." outra (6 s). O fundo rola mais devagar (28,8 px/s, antes 30) na mesma proporção do tempo a mais, para não chegar ao fim do sprite.
 	[?] Cores nas falas (dialogue_box.gd, CORES_TAG): [ator]nome[/ator] azul claro, [item]erva[/item] roxo, [traco]Extroversão[/traco] verde, [ouro]10 moedas[/ouro] amarelo, [mapa]o castelo[/mapa] laranja. Agora também nas opções e nas legendas.
+		[?] Correção: fala que começava com uma tag ([item]Calma profunda[/item]?) era lida como o cabeçalho do falante (plaquinha "item" e o texto com [/color][/b]).
 	[?] Fonte das falas: normal, negrito ([item]), itálico etc. todas com o mesmo tamanho (FONTE_PADRAO 28 ou o do estilo).
 	[ ] Cap. 1: Revisão de cada evento.
 	[ ] Sprites do  Balão de expressão: precisa da arte (1 sprite de balão, se der pra fazer sem deformar as quinas seria ideal) (talvez 9 blocos)
@@ -292,6 +268,10 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] ???
 	[ ] Cap. 1 Casamento
 		[ ] cidadeA_in01 não tem quest?
+	[.] Mercador
+		[ ] Inventário de cada, personalidade de cada?
+		[ ] Comprar e Vender? 
+			[ ] 2 inventários e você pode trocar/negociar?
 
 
 [ ] Personagens
@@ -318,18 +298,13 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 
 [ ] Eventos/Core:
 	[?] Pular a intro com toques: escurece em 0,5 s (antes 1,5 s), sem a espera de 0,2 s, e o 2º toque (pular até a casa) já vale logo depois do 1º. A variável intro_historia é gravada antes, então pular direto não repete a intro. (intro_auto.tres)
+		[ ] Está complicando mas o problema persiste, vamos ao básico. No início deve haver um fade_in na intro, se a pessoa pular, dá um fade_out, depois um fade_in para bruxa_out1. Só isso.
 		[?] Correção: o 2º pulo (até a casa) só vale depois que a bruxa_out1 clareou; toque durante o escurecer não pula de novo (no celular o mesmo toque chegava 2 vezes e pulava direto para bruxa_in, com corte seco).
 			[?] Fim da intro sem pular: escurece em 1,5 s (antes era o 0,5 s do pulo); pulando continua 0,5 s.
 	[?] Intro: pular com toque faz a legenda sumir com fade curto (0,3 s), sem corte seco, junto com o fade do comando.
 	[?] Usar poção com efeito para a bruxa (ela não segue andando).
+		[?] Poção do Retorno: aparece o efeito e a bruxa some; com ela sumida, escurece e vai para casa; clareia, efeito de novo e ela aparece (dados/eventos/retorno_casa.tres). Poções com efeito não fazem mais o efeito genérico antes (o efeito delas tem o próprio visual).
 		[?] Agora com qualquer poção usada em si: a bruxa para e não anda até o efeito mágico acabar.
-	[?] Guardas da ponte e da estradaB (deslocamento agora 250 px): o Mover da bruxa vinha antes da variável que libera, e a página sólida bloqueava. Agora a variável vem antes: a página muda na hora (passável) e o Mover anda. Regra: a página do evento troca assim que a variável muda, mesmo com os comandos ainda rodando. (mudar para 250px de deslocamento)
-	[?] brilho na porta, da mesma cor do véu, ao trocar o véu.
-		Feito: ao clicar no véu adicione um flash da cor do véu no sprite da porta, para que ele pisque da cor.
-		Feito: saiu o brilho da porta (o do véu continua); a porta pisca 2 vezes na cor nova. Novo tipo de efeito PISCAR no Mostrar efeito (serve para qualquer evento)
-		Correção: tingiu, mas como a cor do objeto não era branca misturou as cores do objeto mais a tintura. quero que leve em consideração isso e pinte da cor que eu pedi. preciso mandar o mesmo sprite com tons de branco para isso?
-		Feito: não precisa de sprite branco. No pico do piscar cada pixel vira a cor pedida (com só um leve claro/escuro para manter o desenho) e a tintura própria do sprite (self_modulate) é desligada durante o piscar.
-
 
 [ ] Documentação e Organização
 	[ ] organização da pasta Graphics(está sendo chamada de assets neste projeto) estilo rpgmaker:
@@ -342,6 +317,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		Windowskins (janelas, etc)
 	[ ] Debug e ferramentas
 		[?] Debug simplificado: 4 abas (Jogo = variáveis + personalidade + estados salvos; Itens = itens + poções; Mapa; Comandos), fonte e botões maiores. Abre na hora e monta a aba no frame seguinte (uma parte por frame).
+			[?] Aba "Pers." vazia: o ponto no nome da aba virava "_" e a aba não achava a lista. Agora "Pers". Botão "Ir" (Mapa) maior; "Ir até" mais largo.
 			[?] Abas Vars (variáveis + estados salvos) e Pers. separadas; personalidade em 1 linha por personagem: nome, O C E A N (campos de número) e ↺.
 		[?] Debug, aba Poções: histograma do aproveitamento de cada poção feita (user://estatisticas_pocoes.txt; só em build de debug), zerar, e botões para dar qualquer poção do catálogo pronta (★ = tem efeito).
 		[?] Jogadas gravadas (só em build de debug): user://jogadas/<data>.json com histórico T/F, entradas, ações (+Fogo, −Fogo, acender, jogar), receita memorizada e aproveitamento. Usadas pela ferramenta de balanceamento.
@@ -352,6 +328,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 	Referência (já feito, fica para consulta):
 		Simulador do caldeirão (ferramentas/simulador_caldeirao.py, Python 3; gráficos com matplotlib): mesmas contas do jogo, lidas dos .gd/.tres. Experimentos: receitas, rodar, tempo, chama, mapa, monte (Monte Carlo), janelas, quantidade, otimizar, relatorio. Saída em ferramentas/sim_saida/. Ex.: python ferramentas/simulador_caldeirao.py tempo retorno
 		Ferramenta de balanceamento (ferramentas/balanceamento.py; PySide6 + matplotlib; usa o simulador): abas Receita (editar passos, rodar, comparar com a anterior), Sensibilidade, Monte Carlo, Itens (mexer nos parâmetros ao vivo e salvar no .tres), Testes, Dificuldade (nota 1 a 5) e Jogadas reais (reavaliar e calibrar a jogadora simulada; grava ferramentas/calibracao.json). Linha de comando: --testes, --dificuldade, --calibrar [pasta].
+			Aba Receita: escolher receita ou "(receita nova)", mudar chama, item, quantidade e segundos, + chama / + ingrediente / remover / subir / descer, rodar sozinho a cada mudança. Mostra o nome que o jogo daria (água, catálogo, um item só, parecida com ingrediente, desconhecida) e o porquê, o efeito, a diagonal da matriz e as 3 poções mais perto (distância / tolerância). Simulador: receita que termina num passo de chama finaliza quando a chama chega nele.
 		Editor de eventos em Python (_/editor_eventos, abrir com abrir_editor.bat; precisa de PySide6): páginas, condições, comandos, diálogo em texto (Ctrl+T), labels (F12), várias páginas/eventos de uma vez, buscar/substituir, desfazer, backup ao salvar. Ver _/editor_eventos/README.md.
 		Parallax e câmera nas bordas: na borda a câmera para e todas as camadas param junto (fatores: fundo 0.2, meio 1.0, frente 1.1, interiores "Frente+" 0.9).
 		Regra das imagens (para não aparecer cinza): camada sem loop precisa de largura ≥ 640 + fator × (largura do mapa − 640). Ex.: Frente 1.1 em mapa de 6000 px = 6536 px (ou scale x 1.09). Mapas maiores não são necessários.
@@ -369,6 +346,55 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 [ ] Bugs/Revisão:
 	[ ] missao01_convite é gravada e nunca lida: fica para o Cap. 2 (convite do casamento).
 
+```
+
+## Ideias guardadas: traços e próximas poções
+
+```
+Ideia geral: o jeito de cozinhar o ingrediente imita o traço que ele mexe.
+Matriz: O C E A N. "×1,12" = o traço sobe 12%. "E ← +0,08·N" = 8% do N passa a somar no E.
+
+C (disciplina, ordem, dever)
+	Pouco C querendo subir: filho do mercador, guarda que dorme, Zigmund que largou as obrigações.
+		Poção da Disciplina (C ×1,2). Ingredientes demorados e de faixa estreita (paciência e precisão).
+	Muito C querendo baixar: noivo perfeccionista que adia o casamento, padre preso às regras.
+		Poção do Desapego (C ×0,8). Ingredientes rápidos e de fogo forte (impulso).
+	Troca: C ← N (a ansiedade vira cuidado).
+A (confiança, gentileza, cooperação)
+	Subir: rei furioso, guarda grosso, goblin. Poção da Brandura (A ×1,15). Ingredientes frios e delicados.
+	Baixar: quem não sabe dizer não (princesa? mercador que dá fiado). Poção da Firmeza (A ×0,85). Chama negra.
+	Dilema: baixar a amabilidade de alguém é ajudar ou estragar? ("tudo tem seu preço")
+O (curiosidade, imaginação, aceitar o novo; o traço mais ligado ao véu e à inquisição)
+	Pouco O (velho cabeça fechada): mercador pai, padre. Poção da Visão (O ×1,2): enxerga o véu ou aceita o
+		diferente; em 1484, aberto demais vira suspeito de heresia. Ingredientes estranhos, com troca de
+		traços; receitas fora do padrão (chama fria e depois quente, mesmo item em dois tempos).
+	Baixar O: quem viu demais através do véu, criança que vê fantasmas, ou a inquisição pedindo para
+		"curar" a magia. Poção do Esquecimento (O ×0,8). Ingredientes comuns, cozimento longo e monótono.
+N e E (o outro lado)
+	Subir N: poção de medo (afastar a inquisição, guarda nervoso larga o posto). Primeira poção "ofensiva".
+	Baixar E: bobo da corte, alguém que fala demais da bruxa. Poção do silêncio.
+Matriz: diagonal pura = poções simples (começo); com troca = avançadas (transformam um traço em outro);
+	proibidas (traço vai a zero) = o que a inquisição acha que a bruxa faz.
+Sequência possível: Cap. 2 C alto (Zigmund/guarda) e A alto (rei); Cap. 3 O alto (mercador pai/padre,
+	risco de heresia); depois A baixo, O baixo, N alto, E baixo, com escolhas morais.
+
+Itens possíveis (receitas: rápida, demorada de faixa estreita, chama negra, fria)
+	Rápida (fogo forte, poucos segundos):
+		Pimenta-de-dragão: E ×1,12, A ×0,97, N ×1,05 (agitação, ousadia). Branco, 4 a 8 s.
+		Faísca-de-vagalume: O ×1,10, C ×0,95 (curiosidade, impulso). Amarelo ou branco, 3 a 6 s.
+		Pétala-de-relâmpago: E ← +0,08·N, N ×0,92 (nervosismo vira energia). Branco, 5 a 9 s.
+	Demorada (faixa estreita, não dá para acelerar com fogo alto):
+		Raiz-de-teixo: C ×1,15, O ×0,95 (prudência, tradição). Só normal (95 a 105 °C), 100 a 160 s.
+		Casca-de-carvalho-velho: A ×1,12, N ×0,90 (paciência, serenidade). Só laranja, 90 a 140 s.
+		Âmbar-de-resina: C ← +0,06·N, N ×0,94 (ansiedade vira cuidado). Só normal, 120 a 180 s.
+	Muito quente (chama negra, 195 °C ou mais; precisa F perto de 1730, testar se não cansa):
+		Escama-de-salamandra: E ×1,20, A ×0,90 (coragem, menos gentileza). 10 a 25 s.
+		Carvão-de-sabá: O ×1,15, A ×0,85, N ×1,10 (rebeldia, inquietação). 15 a 30 s.
+		Pena-de-fênix: E ×0,90, N ×0,90, E ← +0,10·N, N ← +0,10·E (troca parte do E com o N). 8 a 20 s.
+	Muito fria (transparente, estraga acima de ~78 °C):
+		Orvalho-da-lua: N ×0,85, E ×0,95 (calma, recolhimento). 30 a 60 s.
+		Flor-de-gelo: A ×1,10, O ×0,95 (doçura, conformidade). 25 a 50 s.
+		Lágrima-de-fantasma: O ×1,12, N ×1,05 (sensibilidade ao véu). 40 a 70 s.
 ```
 
 ## Possíveis expansões (futuras)

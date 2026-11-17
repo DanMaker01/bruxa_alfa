@@ -32,8 +32,9 @@ static func do_texto(msg: String) -> Dictionary:
 		return {"falante": null, "texto": msg}
 	# "[color=red]..." / "[shake]..." no começo é BBCode da fala, não o cabeçalho [nome;foto;pos]
 	var dentro := msg.substr(1, fim - 1)
-	if not dentro.contains(";") and dentro.trim_prefix("/").split("=")[0].split(" ")[0] in DialogueBox.TAGS_BBCODE:
-		return {"falante": null, "texto": msg}
+	var tag_ini: String = dentro.trim_prefix("/").split("=")[0].split(" ")[0]
+	if not dentro.contains(";") and (tag_ini in DialogueBox.TAGS_BBCODE or DialogueBox.CORES_TAG.has(tag_ini)):
+		return {"falante": null, "texto": msg}   # também as tags de cor ([item], [ator]...)
 	var campos := dentro.split(";")
 	var f := Falante.new()
 	if campos.size() >= 4:

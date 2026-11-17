@@ -155,6 +155,7 @@ func virar(direcao: String) -> void:
 # ===== ESTADO =====
 var movement_direction: int = 0	   # -1, 0, 1
 var is_moving_from_input: bool = false
+var _no_bloqueio: bool = false   # encostada num bloqueio agora (vibra só ao encostar)
 var is_event_running: bool = false
 ## Comando "Travar direção": andando, a bruxa não vira para o lado do movimento.
 var direcao_travada: bool = false
@@ -255,7 +256,13 @@ func _physics_process(delta: float) -> void:
 	
 	# 3. APLICA O MOVIMENTO
 	var x_antes: float = global_position.x
+	var vx_antes: float = velocity.x
 	move_and_slide()
+	# bateu num bloqueio (guarda, porta, parede): vibra uma vez por encostada
+	var bloqueada: bool = is_on_wall() and absf(vx_antes) > 30.0
+	if bloqueada and not _no_bloqueio:
+		Vibrar.leve()
+	_no_bloqueio = bloqueada
 	_respeitar_limite(x_antes)
 	
 	#DEBUG, saber com quem colidiu

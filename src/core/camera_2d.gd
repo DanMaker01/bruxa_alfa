@@ -144,6 +144,7 @@ func _kill_move_tween():
 
 # ===== TREMER CÂMERA =====
 func tremer_camera(intensidade: float, velocidade: float, duracao: float):
+	Vibrar.media()
 	shake_intensity = intensidade
 	shake_speed = velocidade
 	shake_duration = duracao

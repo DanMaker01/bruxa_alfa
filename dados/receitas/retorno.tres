@@ -20,4 +20,4 @@ ingredientes = Array[ExtResource("2_ing")]([SubResource("L0")])
 passos = PackedStringArray("Acenda e esquente o caldeirão.", "Chama amarela; jogue os 3 pós e cozinhe ~25 s. Só concentrada (95%) leva para casa.")
 passos_livro = Array[Dictionary]([{"tipo": "chama", "estado": "amarelo"}, {"tipo": "ingrediente", "item": "po_retorno", "qtd": 3, "seg": 25.0}])
 duracao = 30.0
-conhecida = true
+conhecida = false

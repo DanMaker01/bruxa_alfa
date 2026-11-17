@@ -22,9 +22,9 @@ var current_index: int = 0
 ## Pausa extra (em "letras") depois de cada caractere, para o texto respirar.
 const PAUSA_PONTUACAO := {
 	" ": 1.0,
-	",": 2.0,
+	# vírgula: sem pausa
 	";": 3.0, ":": 3.0,
-	".": 3.5, "!": 3.5, "?": 3.5, "…": 4.0,
+	".": 7.0, "!": 3.5, "?": 3.5, "…": 4.0,   # ponto: o dobro do que era (3,5)
 }
 var _escrevendo: bool = false
 var _cursor: float = 0.0        # posição do "cursor" em letras (pode ser fracionária)
@@ -192,7 +192,7 @@ const CORES_TAG := {
 const TAGS_NEGRITO := ["item"]
 
 ## Velocidade do texto (Opções): multiplica letras_por_segundo; 0 = instantâneo.
-static var mult_velocidade: float = 1.0
+static var mult_velocidade: float = 0.6
 
 ## Para outros textos (opções, legendas): as tags [item], [ator]... viram cor (item em
 ## negrito) e qualquer outro "[" fica literal. Sem tags, devolve o texto igual.

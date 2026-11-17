@@ -17,7 +17,7 @@ const ALTURA_TOQUE: float = 66.0
 ## Abas (simples): cada uma junta partes. Uma parte = uma lista (montada por _atualizar_parte).
 const PAGINAS := {
 	"Vars": ["Variáveis", "Estados"],
-	"Pers.": ["Personalidade"],
+	"Pers": ["Personalidade"],
 	"Itens": ["Itens", "Poções"],
 	"Mapa": ["Mapa"],
 	"Comandos": ["Comandos"],
@@ -455,7 +455,7 @@ func _montar() -> void:
 	var jogo := _criar_pagina("Vars")
 	_lista_vars = _criar_parte(jogo, "Variáveis")
 	_lista_estados = _criar_parte(jogo, "Estados salvos")
-	_lista_pers = _criar_parte(_criar_pagina("Pers."), "")
+	_lista_pers = _criar_parte(_criar_pagina("Pers"), "")
 	var itens := _criar_pagina("Itens")
 	_lista_itens = _criar_parte(itens, "")
 	_lista_pocoes = _criar_parte(itens, "Poções")
@@ -1030,6 +1030,9 @@ func _atualizar_mapa() -> void:
 	px.prefix = "x"
 	var ir_btn := Button.new()
 	ir_btn.text = "Ir"
+	ir_btn.custom_minimum_size = Vector2(160, ALTURA_TOQUE)   # grande: é o botão mais usado do mapa
+	ir_btn.add_theme_font_size_override("font_size", FONTE + 8)
+	ir_btn.add_theme_color_override("font_color", COR_DESTAQUE)
 	ir_btn.pressed.connect(func():
 		if mapas.item_count == 0 or not ferramentas.gm or not ferramentas.gm.get("teleporte"):
 			return
@@ -1116,6 +1119,7 @@ func _atualizar_mapa() -> void:
 			linha.add_child(cb)
 		var ate := Button.new()
 		ate.text = "Ir até"
+		ate.custom_minimum_size.x = 130
 		ate.tooltip_text = "leva a bruxa para perto do evento"
 		ate.pressed.connect(func():
 			var p = ferramentas.gm.get_player() if ferramentas.gm else null

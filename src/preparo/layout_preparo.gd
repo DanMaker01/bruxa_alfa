@@ -16,6 +16,32 @@ extends Control
 const BOTOES_CARTA: bool = true
 ## Margem (px) dos cantos do sprite que não esticam (9 fatias).
 const MARGEM_CARTA: float = 26.0
+## Alternativas de layout (para celular), trocadas com a tecla L no preparo (CenaPreparo).
+## A escolha fica em user://opcoes.cfg ([caldeirao] layout).
+##   anim:   escala e deslocamento do caldeirão (nó Animações, com a bruxinha e os ícones)
+##   item:   lado (px) dos botões de ingrediente
+##   bg:     faixa escura de baixo; scroll: carrossel de ingredientes
+##   menos / mais / acender: −Fogo, +Fogo e Acender (Rect2)
+##   bruxa:  pé da bruxinha; guia_y: altura da receita memorizada
+const LAYOUTS := [
+	{"nome": "Atual", "anim": [1.0, Vector2.ZERO], "item": 120.0, "bg": Rect2(0, 640, 640, 320),
+		"scroll": Rect2(16, 650, 608, 136), "menos": Rect2(16, 798, 296, 112), "mais": Rect2(328, 798, 296, 112),
+		"acender": Rect2(16, 798, 608, 112), "bruxa": Vector2(80, 470), "guia_y": 180.0},
+	{"nome": "Polegares", "anim": [0.92, Vector2(0, -40)], "item": 136.0, "bg": Rect2(0, 590, 640, 370),
+		"scroll": Rect2(12, 600, 616, 152), "menos": Rect2(8, 766, 308, 186), "mais": Rect2(324, 766, 308, 186),
+		"acender": Rect2(8, 766, 624, 186), "bruxa": Vector2(70, 430), "guia_y": 160.0},
+	{"nome": "Caldeirão grande", "anim": [1.2, Vector2(0, 30)], "item": 100.0, "bg": Rect2(0, 700, 640, 260),
+		"scroll": Rect2(16, 708, 608, 114), "menos": Rect2(16, 832, 296, 118), "mais": Rect2(328, 832, 296, 118),
+		"acender": Rect2(16, 832, 608, 118), "bruxa": Vector2(110, 520), "guia_y": 130.0},
+	{"nome": "Fogo nas laterais", "anim": [1.0, Vector2(0, -20)], "item": 118.0, "bg": Rect2(0, 600, 640, 360),
+		"scroll": Rect2(132, 612, 376, 140), "menos": Rect2(4, 600, 120, 352), "mais": Rect2(516, 600, 120, 352),
+		"acender": Rect2(132, 770, 376, 182), "bruxa": Vector2(80, 450), "guia_y": 170.0},
+]
+## Centro do caldeirão (escala do layout em volta dele).
+const PIVO_CALDEIRAO := Vector2(320, 300)
+const ARQ_OPCOES := "user://opcoes.cfg"
+static var layout_atual: int = -1
+
 ## Ícone do Abaixar (−Fogo), centralizado como o do +Fogo.
 const ICONE_ABAIXAR := "res://assets/game_caldeirao/botao_fogo_menos.png"
 
@@ -67,10 +93,12 @@ func configurar(p_cena) -> void:
 	seg.repetiu.connect(_abaixar)
 	_painel.add_child(_b_abaixar)
 	_b_acender = _botao("Acender", 30)
+	_b_acender.button_down.connect(func(): Vibrar.leve())
 	_b_acender.pressed.connect(_acender)
 	_painel.add_child(_b_acender)
 	# Sair (menor, acima do Finalizar): perde os ingredientes, com confirmação
 	_b_sair = _botao("", 14)
+	_b_sair.button_down.connect(func(): Vibrar.leve())
 	if ResourceLoader.exists(ICONE_SAIR):
 		_b_sair.icon = load(ICONE_SAIR)
 		_b_sair.expand_icon = true
@@ -87,7 +115,40 @@ func configurar(p_cena) -> void:
 			_estilo_carta(b)
 
 
+## Lado dos botões de ingrediente no layout atual.
+func tam_item() -> float:
+	return float(_layout()["item"])
+
+func nome_layout() -> String:
+	return str(_layout()["nome"])
+
+func _layout() -> Dictionary:
+	if layout_atual < 0:
+		var c := ConfigFile.new()
+		layout_atual = int(c.get_value("caldeirao", "layout", 0)) if c.load(ARQ_OPCOES) == OK else 0
+	return LAYOUTS[clampi(layout_atual, 0, LAYOUTS.size() - 1)]
+
+## Próxima alternativa de layout (tecla L). Devolve o nome.
+func proximo_layout() -> String:
+	_layout()
+	layout_atual = (layout_atual + 1) % LAYOUTS.size()
+	var c := ConfigFile.new()
+	c.load(ARQ_OPCOES)
+	c.set_value("caldeirao", "layout", layout_atual)
+	c.save(ARQ_OPCOES)
+	_montar()
+	return nome_layout()
+
 func _montar() -> void:
+	var L := _layout()
+	# caldeirão (com a bruxinha, os ícones e as bolhas): escala em volta do centro dele
+	var anim: Node2D = cena.get_node_or_null("Animações")
+	if anim:
+		var s: float = L["anim"][0]
+		anim.scale = Vector2(s, s)
+		anim.position = PIVO_CALDEIRAO - PIVO_CALDEIRAO * s + L["anim"][1]
+	if cena.get("reacao"):
+		cena.reacao.position = L["bruxa"]
 	# painel de ingredientes ocupa a tela toda (só os filhos recebem toque)
 	_painel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	_painel.position = Vector2.ZERO
@@ -95,20 +156,20 @@ func _montar() -> void:
 	_painel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if _painel_bg:   # faixa escura atrás dos controles de baixo
 		_painel_bg.visible = true
-		_painel_bg.position = Vector2(0, 640)
-		_painel_bg.size = Vector2(640, 320)
+		_painel_bg.position = L["bg"].position
+		_painel_bg.size = L["bg"].size
 	# Voltar (Sair): canto superior esquerdo, no tamanho do ícone
 	var tam_sair := Vector2(100, 88)
 	if _b_sair.icon:
 		tam_sair = _b_sair.icon.get_size()
 	_por(_b_sair, Vector2(8, 8), tam_sair)
 	_por(_b_pocao, Vector2(520, 8), Vector2(112, 100))      # Finalizar: canto superior direito (só com itens no caldeirão)
-	guia.position = Vector2(640 - GuiaReceita.LARG - 12, 180)
+	guia.position = Vector2(640 - GuiaReceita.LARG - 12, L["guia_y"])
 	_por(arcos, Vector2.ZERO, Vector2(640, 640))
 	_por(regua_caldeirao, Vector2(500, 196), Vector2(136, 400))
-	_por(_scroll, Vector2(16, 650), Vector2(608, 136))
-	_por(_b_abaixar, Vector2(16, 798), Vector2(296, 112))
-	_por(_b_fogo, Vector2(328, 798), Vector2(296, 112))
+	_por(_scroll, L["scroll"].position, L["scroll"].size)
+	_por(_b_abaixar, L["menos"].position, L["menos"].size)
+	_por(_b_fogo, L["mais"].position, L["mais"].size)
 	_b_fogo.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER   # ícone do +Fogo no meio do botão
 	_b_fogo.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
 	_b_fogo.expand_icon = true
@@ -118,7 +179,7 @@ func _montar() -> void:
 		_b_abaixar.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		_b_abaixar.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
 		_b_abaixar.expand_icon = true
-	_por(_b_acender, Vector2(16, 798), Vector2(608, 112))   # no lugar dos dois botões de fogo
+	_por(_b_acender, L["acender"].position, L["acender"].size)   # no lugar dos dois botões de fogo
 	if _b_fogo.icon:
 		_b_acender.icon = _b_fogo.icon
 		_b_acender.expand_icon = false

@@ -34,6 +34,7 @@ static func botao(texto: String, acao: Callable) -> Button:
 	b.custom_minimum_size = Vector2(0, ALTURA_BOTAO)
 	b.add_theme_font_size_override("font_size", 26)
 	estilo_carta(b)
+	b.button_down.connect(func(): Vibrar.leve())
 	if acao.is_valid():
 		b.pressed.connect(acao)
 	return b
@@ -155,11 +156,11 @@ func _montar_opcoes(gm) -> void:
 		b.add_theme_font_size_override("font_size", 18)
 		b.toggle_mode = true
 		b.button_group = grupo
-		b.button_pressed = k == int(cfg.get("texto", 1))
+		b.button_pressed = k == int(cfg.get("vel_texto", 0))
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		b.custom_minimum_size.y = 56
 		var valor := float(k)
-		b.pressed.connect(func(): _mudou(valor, gm, "texto"))
+		b.pressed.connect(func(): _mudou(valor, gm, "vel_texto"))
 		linha.add_child(b)
 	_col.add_child(linha)
 	# vibração (celular)
@@ -184,7 +185,7 @@ func _montar_opcoes(gm) -> void:
 	_col.add_child(botao("Voltar", _fechar))
 
 ## Velocidade do texto: [nome, multiplicador das letras por segundo (0 = instantâneo)].
-const VELOCIDADES_TEXTO := [["Lenta", 0.6], ["Normal", 1.0], ["Rápida", 1.8], ["Já", 0.0]]
+const VELOCIDADES_TEXTO := [["Normal", 0.6], ["Rápida", 1.8], ["Instantânea", 0.0]]
 
 func _mudou(v: float, gm, chave: String) -> void:
 	var cfg := ler_opcoes()
@@ -194,14 +195,14 @@ func _mudou(v: float, gm, chave: String) -> void:
 
 static func ler_opcoes() -> Dictionary:
 	var c := ConfigFile.new()
-	var out := {"geral": 1.0, "musica": 1.0, "efeitos": 1.0, "texto": 1.0, "vibrar": 1.0}
+	var out := {"geral": 1.0, "musica": 1.0, "efeitos": 1.0, "vel_texto": 0.0, "vibrar": 1.0}
 	if c.load(ARQ_OPCOES) == OK:
 		for k in out:
 			out[k] = float(c.get_value(_secao(k), k, out[k]))
 	return out
 
 static func _secao(chave: String) -> String:
-	return "jogo" if chave in ["texto", "vibrar"] else "som"
+	return "jogo" if chave in ["vel_texto", "vibrar"] else "som"
 
 static func gravar_opcoes(o: Dictionary) -> void:
 	var c := ConfigFile.new()
@@ -211,7 +212,7 @@ static func gravar_opcoes(o: Dictionary) -> void:
 
 static func aplicar_opcoes(gm) -> void:
 	var o := ler_opcoes()
-	var vel: int = clampi(int(o["texto"]), 0, VELOCIDADES_TEXTO.size() - 1)
+	var vel: int = clampi(int(o["vel_texto"]), 0, VELOCIDADES_TEXTO.size() - 1)
 	DialogueBox.mult_velocidade = float(VELOCIDADES_TEXTO[vel][1])
 	Vibrar.ligado = o["vibrar"] > 0.5
 	var audio = gm.get_node_or_null("AudioManager") if gm else null

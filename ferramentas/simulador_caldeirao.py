@@ -380,6 +380,9 @@ def simular(receita, itens, jog=None, catalogo=None, guardar_hist=True):
                 t_estavel += DT
                 if t_estavel >= TEMPO_CHAMA:
                     fase = "jogando"
+                    if i_passo >= len(passos):   # receita termina num passo de chama: chegou, finaliza
+                        t_final = t
+                        break
             else:
                 t_estavel = 0.0
         if fase == "jogando" and i_passo < len(passos):
