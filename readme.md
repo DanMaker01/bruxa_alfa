@@ -24,8 +24,9 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 
 ```
 
-[ ] Arte Visual 100%
-	[ ] Faces					(422x908 hoje; a parte de baixo fica escondida atrás da caixa de diálogo, então pode ser 420x740 ou outro tamanho, a foto é escalada pela altura mantendo a proporção)
+[ ] Arte Visual 100% 	(arquivos .png estão na pasta /assets/)
+
+	[ ] Faces			(422x908 hoje, porém a parte de baixo fica escondida atrás da caixa de diálogo. pode mudar para 420x740 ou outro tamanho)
 		[ ] Bruxa
 			[ ] neutro
 			[ ] pensando
@@ -47,10 +48,10 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] Padre
 			[ ] neutro
 
-	[ ] Sprites		(tamanhos variados, abrir no assets) (a âncora do sprite é o centro-inferior)
+	[ ] Sprites		(tamanhos variados (a âncora do sprite é o CENTRO-INFERIOR) (pode mudar as larg/alt se quiser)
 		[ ] Bruxa
 			[ ] parada			(80x252)
-			[ ] andando
+			[ ] andando			(126x252)
 			[ ] correndo		(126x252)
 		[ ] Rei					(105x200)
 		[ ] Princesa			(105x200)
@@ -127,7 +128,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] água correndo
 		[ ] (metal?)
 	[ ] SE:
-		[ ] magia01		
+		[ ] magia01
 		[ ] magia02 
 		[ ] magia03
 		[ ] pancada01
@@ -135,32 +136,24 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] corte
 		[ ] vidro01
 		[ ] vidro02
-		
+
 [ ]	Menus 100%
 	[ ] Estilo de cartas
 		[ ] definir carta para cada clicável.
 	[.] menu inicial
 		[ ] bg
 		[ ] bgm
-	[.] menu pause
-		[ ] continuar, save, load, opções, menu principal
-	[.] cena caldeirão
-		[ ] bruxa, caldeirão, botões, inventário
-	[ ] cena loja
-		[ ] ... (depois)
-	[.] opções (único)
-		[ ] audio, 
-		[ ] video, etc
-		[?] Velocidade do texto (Lenta, Normal, Rápida, Já) e Vibração (celular; toque em botão, item no ponto, pausa do tutorial, poção com efeito). Android: o export precisa da permissão VIBRATE.
-			[?] Agora 3 velocidades: Normal (a antiga Lenta), Rápida e Instantânea. Vírgula sem pausa; ponto com o dobro da pausa (7 letras). A escolha antiga foi zerada (chave nova vel_texto).
-			[?] Vibração também em: pegar item, encostar num bloqueio (guarda, porta, parede), tremor da câmera, aplicar poção, fogo aceso (média) e fogo apagou (dois pulsos), botões dos menus (pausa, principal, opções, livro, Acender, Voltar), virar página, memorizar receita e salvar jogo. Vibrações muito juntas (< 90 ms) viram uma.
-	[ ] cartas/hud
-		[ ] definir verso: pentagrama (giratório lento?), 
-			principalmente as que fica no HUD sempre visivel 
-
+	[?] menu pause - ok?
+    [?] cena caldeirão
+		[?] L para mudar Layouts
+	[?] opções (único)
+		[!] audio, 
+		[!] vel texto
+        [?] Pergunta: o que mais?
+    [ ] hud, falta algo?
 
 [ ] Caldeirão 100%
-	[?]	Tutorial finalizado?	
+	[?]	Tutorial finalizado?
 		[?] Tutorial do livro (cmd_tutorial_livro.gd, fim do bruxa_in_auto, antes de destravar a bruxa, nos dois caminhos): ela comenta que vai anotar a receita e anda até o livro; tela escura, só o livro responde (toque nele); o livro abre fechado: toque na capa (tocar fora ou no ✕ fecha e volta a pedir o livro); a bruxa escreve o rascunho da Poção do Retorno; Passar a limpo (obrigatório) e a página vira ensinada (fitinha) com a receita certa; Memorizar explicado (opcional, Continuar); arrastar para fechar o livro; tocar fora ou no ✕ para sair. A receita Retorno não vem mais pronta no livro (retorno.tres conhecida = false; o tutorial do caldeirão continua usando o arquivo).
 	[?] Fogo frio: 3 cores de 400 a 800 (transparente 400, azul pálido 600, normal vermelho 800; no livro "Transparente grande" virou "Azul pálido"). Aceso fica opaco (alfa 0,8); só abaixo de 400 (apagando) vai sumindo até F = 0. (sistema_termico.gd CORES_FOGO)
 	[ ] Layout
@@ -193,7 +186,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] Pensar em fazer um auto-cozinhar seguindo uma receita?... (pensar)
 	[ ] Receitas:
 		[ ] Balanceamento de Receitas:
-			[ ] Criar mais receitas:
+			[.] Criar mais receitas:
 				Receita que é muito rápida , 
 				receita que é muito demorada. 
 				Receita muito quente, com fogo negro. 
@@ -212,37 +205,18 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 				Poções proibidas: as que têm algum autovalor 0 (2^5 − 1 = 31 combinações de traços zerados). Ainda sem nome. (feito: 31 no catálogo como "Poção Proibida (sem O, C...)", nomes provisórios)
 		[?] Nome: poção de um item só agora usa "Poção de [item] [qualidade]" antes de procurar no catálogo (senão um pó mal cozido virava "Concentrada").
 
-				
-[ ] História/Roteiro
-	[ ]	Diálogos devem condizer com a época
-		[ ] Cap. 1 (-N)
-			[?] intro-Campones
-			[ ] Guardas
-			[ ] Bosque NPC
-			[ ] Cidade 
-			[ ] Castelo
-		[ ] Cap. 2 (+E)
-	[ ] Usar traços na história: 
-		O,(conservador com pouca abertura)
-		C (consequencialidade, prudencia, preguiçoso),
-		A (amabilidade, aumentar ou diminuir?)
-	[ ] Usar permutação de traços
-	[ ] Poções proibidas
-
 
 [ ] Diálogos 100%
-	[ ] Intro : revisar texto (tempo e ritmo). ultimas frases da intro estão pequenas em comparação. a forma do texto é pirâmide invertida.
-		[?] "Em 1484, o Papa..." agora é uma legenda sozinha (6 s) e "Toda mulher..." outra (6 s). O fundo rola mais devagar (28,8 px/s, antes 30) na mesma proporção do tempo a mais, para não chegar ao fim do sprite.
-	[?] Cores nas falas (dialogue_box.gd, CORES_TAG): [ator]nome[/ator] azul claro, [item]erva[/item] roxo, [traco]Extroversão[/traco] verde, [ouro]10 moedas[/ouro] amarelo, [mapa]o castelo[/mapa] laranja. Agora também nas opções e nas legendas.
-		[?] Correção: fala que começava com uma tag ([item]Calma profunda[/item]?) era lida como o cabeçalho do falante (plaquinha "item" e o texto com [/color][/b]).
-	[?] Fonte das falas: normal, negrito ([item]), itálico etc. todas com o mesmo tamanho (FONTE_PADRAO 28 ou o do estilo).
+	[ ] Intro : revisar texto (tempo e ritmo). ultimas frases da intro estão pequenas em comparação.
 	[ ] Cap. 1: Revisão de cada evento.
 	[ ] Sprites do  Balão de expressão: precisa da arte (1 sprite de balão, se der pra fazer sem deformar as quinas seria ideal) (talvez 9 blocos)
 	[ ] Estilo visual:
 		[ ] organizar o layout e textura dialogo/opções
 		[ ]	Ajuste estético, borda, cor, fonte, etc.
-		[ ]	Criação de estilos padronizados para cada coisa. estilo de texto, estilo de janela, paleta de cores, animação coerente, etc...
-		[.] Eventos de diálogo devem verificar se o próximo evento a tomar a frente será diálogo também, exceto depois de comando wait, etc.
+		[ ]	Criação de estilos padronizados para cada coisa. 
+        	[ ] estilo de texto
+        	[ ] estilo de janela, paleta de cores, animação coerente, etc...
+		[?] RESOLVER LOGO: Eventos de diálogo devem verificar se o próximo evento a tomar a frente será diálogo também, exceto depois de comando wait, etc.
 			Feito: a carta do diálogo não desvira se vem outro diálogo em seguida (Interpreter.dialogo_a_seguir: fila de diálogos ou próximo comando de um evento rodando, pulando os instantâneos como variável/if/label/item/som). 
 			Esperar, mover, fade etc. interrompem. Espera no máximo 1,5 s (carta.gd: ESPERA_MAX_DIALOGO).
 			se um evento acabar em mensagem e outro iniciar em mensagem com o mesmo falante, nome, foto etc então o card não deve fechar depois do primeiro evento, pois é uma continudade. 
@@ -252,6 +226,25 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 			Rei: abrindo a carta 2x para o mesmo falante, "Tanta certeza assim?" "Pois aplique aqui na minha frente". Ver se é wait, ou o quê.
 			Era o "ir para" (goto) + esperar 0,5 s entre as falas. Feito: a carta segue o goto e esperas curtas (até 1 s somado, ESPERA_CURTA_DIALOGO) não fecham a carta.
 			[?] Testar: fala do rei e apagar esse tópico.
+
+          
+[ ] História/Roteiro
+	[ ]	Diálogos devem condizer com a época
+		[ ] Cap. 1 (-N)
+			[?] intro-Campones
+			[.] Guardas
+			[ ] Bosque NPC
+			[.] Cidade 
+			[.] Castelo
+		[ ] Cap. 2
+        	[ ] Qual traço? 
+            [ ] Qual quest?
+	[ ] Usar traços na história: 
+		O,(conservador com pouca abertura)
+		C (consequencialidade, prudencia, preguiçoso),
+		A (amabilidade, aumentar ou diminuir?)
+	[ ] Usar permutação de traços em alguma quest, receita, mas que seja visto esse efeito.
+	[ ] Poções proibidas numa quest
 
 
 [ ] Quests
@@ -302,10 +295,8 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[?] Correção: o 2º pulo (até a casa) só vale depois que a bruxa_out1 clareou; toque durante o escurecer não pula de novo (no celular o mesmo toque chegava 2 vezes e pulava direto para bruxa_in, com corte seco).
 			[?] Fim da intro sem pular: escurece em 1,5 s (antes era o 0,5 s do pulo); pulando continua 0,5 s.
 	[?] Intro: pular com toque faz a legenda sumir com fade curto (0,3 s), sem corte seco, junto com o fade do comando.
-	[?] Usar poção com efeito para a bruxa (ela não segue andando).
-		[?] Poção do Retorno: aparece o efeito e a bruxa some; com ela sumida, escurece e vai para casa; clareia, efeito de novo e ela aparece (dados/eventos/retorno_casa.tres). Poções com efeito não fazem mais o efeito genérico antes (o efeito delas tem o próprio visual).
-		[?] Agora com qualquer poção usada em si: a bruxa para e não anda até o efeito mágico acabar.
 
+  
 [ ] Documentação e Organização
 	[ ] organização da pasta Graphics(está sendo chamada de assets neste projeto) estilo rpgmaker:
 		Animations (efeitos especiais, magias, etc)
@@ -318,14 +309,14 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 	[ ] Debug e ferramentas
 		[?] Debug simplificado: 4 abas (Jogo = variáveis + personalidade + estados salvos; Itens = itens + poções; Mapa; Comandos), fonte e botões maiores. Abre na hora e monta a aba no frame seguinte (uma parte por frame).
 			[?] Aba "Pers." vazia: o ponto no nome da aba virava "_" e a aba não achava a lista. Agora "Pers". Botão "Ir" (Mapa) maior; "Ir até" mais largo.
-			[?] Abas Vars (variáveis + estados salvos) e Pers. separadas; personalidade em 1 linha por personagem: nome, O C E A N (campos de número) e ↺.
 		[?] Debug, aba Poções: histograma do aproveitamento de cada poção feita (user://estatisticas_pocoes.txt; só em build de debug), zerar, e botões para dar qualquer poção do catálogo pronta (★ = tem efeito).
 		[?] Jogadas gravadas (só em build de debug): user://jogadas/<data>.json com histórico T/F, entradas, ações (+Fogo, −Fogo, acender, jogar), receita memorizada e aproveitamento. Usadas pela ferramenta de balanceamento.
 	[ ] GDD
 		[!] v1
 		[!] v2
 		[!] v3.3
-	Referência (já feito, fica para consulta):
+      
+	>>> Referência (já feito, fica para consulta):
 		Simulador do caldeirão (ferramentas/simulador_caldeirao.py, Python 3; gráficos com matplotlib): mesmas contas do jogo, lidas dos .gd/.tres. Experimentos: receitas, rodar, tempo, chama, mapa, monte (Monte Carlo), janelas, quantidade, otimizar, relatorio. Saída em ferramentas/sim_saida/. Ex.: python ferramentas/simulador_caldeirao.py tempo retorno
 		Ferramenta de balanceamento (ferramentas/balanceamento.py; PySide6 + matplotlib; usa o simulador): abas Receita (editar passos, rodar, comparar com a anterior), Sensibilidade, Monte Carlo, Itens (mexer nos parâmetros ao vivo e salvar no .tres), Testes, Dificuldade (nota 1 a 5) e Jogadas reais (reavaliar e calibrar a jogadora simulada; grava ferramentas/calibracao.json). Linha de comando: --testes, --dificuldade, --calibrar [pasta].
 			Aba Receita: escolher receita ou "(receita nova)", mudar chama, item, quantidade e segundos, + chama / + ingrediente / remover / subir / descer, rodar sozinho a cada mudança. Mostra o nome que o jogo daria (água, catálogo, um item só, parecida com ingrediente, desconhecida) e o porquê, o efeito, a diagonal da matriz e as 3 poções mais perto (distância / tolerância). Simulador: receita que termina num passo de chama finaliza quando a chama chega nele.
@@ -345,7 +336,6 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 
 [ ] Bugs/Revisão:
 	[ ] missao01_convite é gravada e nunca lida: fica para o Cap. 2 (convite do casamento).
-
 ```
 
 ## Ideias guardadas: traços e próximas poções
