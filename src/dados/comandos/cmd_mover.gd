@@ -25,6 +25,12 @@ const DIRECOES := ["", "esq", "dir", "centro"]
 @export var y: float = 0.0
 ## id do evento de destino (destino = ATE_EVENTO).
 @export var ate_evento: String = ""
+## Onde parar no evento de destino: no centro, ou encostada no lado esquerdo/direito dele
+## (pela largura do sprite do evento).
+enum Lado { CENTRO, ESQUERDA, DIREITA }
+@export var lado: Lado = Lado.CENTRO
+## Meia largura (px) da bruxa para "encostar" (o sprite parado tem 80 px; um pouco menos encosta).
+const MEIA_BRUXA: float = 30.0
 ## Quanto andar a partir de onde está; negativo = para a esquerda (destino = DESLOCAR).
 @export var deslocamento: float = 0.0
 ## Evento anda só na horizontal (mantém a altura atual).
@@ -122,10 +128,20 @@ func _destino_x(interp, ev, quem: Node2D):
 			if not no:
 				interp.falhar(ev, self, "evento '" + ate_evento + "' não encontrado no mapa")
 				return null
-			return no.global_position.x
+			if lado == Lado.CENTRO:
+				return no.global_position.x
+			var meia: float = _meia_largura(no) + (MEIA_BRUXA if alvo == Alvo.BRUXA else _meia_largura(quem))
+			return no.global_position.x + (-meia if lado == Lado.ESQUERDA else meia)
 		Destino.DESLOCAR:
 			return quem.global_position.x + deslocamento
 	return null
+
+## Meia largura do sprite da página ativa de um evento (0 se não tiver).
+static func _meia_largura(no: Node) -> float:
+	var pag = no._get_active_page_node() if no.has_method("_get_active_page_node") else null
+	if pag and pag.has_method("tamanho_base"):
+		return pag.tamanho_base().x * 0.5
+	return 0.0
 
 func _validate_property(property: Dictionary) -> void:
 	var mostrar := true
@@ -134,7 +150,7 @@ func _validate_property(property: Dictionary) -> void:
 		"x": mostrar = destino == Destino.X
 		"y": mostrar = destino == Destino.X and alvo == Alvo.EVENTO and not manter_y
 		"manter_y": mostrar = destino == Destino.X and alvo == Alvo.EVENTO
-		"ate_evento": mostrar = destino == Destino.ATE_EVENTO
+		"ate_evento", "lado": mostrar = destino == Destino.ATE_EVENTO
 		"deslocamento": mostrar = destino == Destino.DESLOCAR
 		"velocidade", "direcao", "esperar": mostrar = destino != Destino.PARAR
 		_: return

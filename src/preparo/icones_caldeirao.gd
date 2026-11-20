@@ -13,8 +13,9 @@
 # A régua do anel (e da vela): ABSOLUTO é o final (os outros ficam só como referência):
 #   PUNICAO      ponto sempre em FRACAO_PONTO; o resto do anel = punição (1 − a), linear na punição.
 #   PROPORCIONAL anel fecha em m + 3·s+ (vela: (1 + h_max)·t_max): posição do ponto depende do item.
-#   ABSOLUTO     anel fecha sempre em Q_ABSOLUTO (vela: T_ABSOLUTO s): cada item tem posição absoluta
-#                e você se guia só pelas cores.
+#   ABSOLUTO     anel fecha sempre no mesmo Q (vela: na mesma duração) para todo item: o maior
+#                cozimento e o maior tempo entre TODOS os ingredientes (q_absoluto / t_absoluto),
+#                até onde eles já ficaram vermelhos. Cada item tem posição absoluta e você se guia pelas cores.
 # Em PROPORCIONAL/ABSOLUTO cada bolhinha tem a cor do aproveitamento NAQUELE ponto da régua
 # (a curva de verdade: gaussiana suave muda de cor devagar, gaussiana estreita muda rápido).
 # Cores: branco (cru) → dourado (ponto, brilhando) → amarelo → laranja → vermelho (50%) → preto (100%).
@@ -63,8 +64,46 @@ static var modo: int = ModoRegua.ABSOLUTO
 ## PUNICAO: parte do anel (e da vela) que vai até o ponto ideal; o resto é a régua da punição.
 const FRACAO_PONTO: float = 0.75
 ## ABSOLUTO: Q que fecha o anel e duração (s) que fecha a vela, iguais para todo ingrediente.
+## Calculados de todos os ingredientes em PASTA_ITENS (ver q_absoluto/t_absoluto);
+## estes são só o valor se não achar nenhum.
 const Q_ABSOLUTO: float = 10000.0
 const T_ABSOLUTO: float = 100.0
+const PASTA_ITENS := "res://dados/itens/"
+## Cozimento "vermelho": Q em que o aproveitamento do cozimento cai a ~1% (m + 3·s+).
+const Z_VERMELHO: float = 3.0
+static var _q_abs: float = -1.0
+static var _t_abs: float = -1.0
+
+## Maior Q (cozimento já vermelho, m + 3·s+) entre todos os ingredientes.
+static func q_absoluto() -> float:
+	if _q_abs < 0.0:
+		_calcular_absolutos()
+	return _q_abs
+
+## Maior duração (tempo já zerado, (1 + h_max)·t_max) entre todos os ingredientes.
+static func t_absoluto() -> float:
+	if _t_abs < 0.0:
+		_calcular_absolutos()
+	return _t_abs
+
+static func _calcular_absolutos() -> void:
+	var q := 0.0
+	var t := 0.0
+	var dir := DirAccess.open(PASTA_ITENS)
+	if dir:
+		for f in dir.get_files():
+			var nome := f.trim_suffix(".remap")   # no jogo exportado os .tres viram .tres.remap
+			if not nome.ends_with(".tres"):
+				continue
+			var it = load(PASTA_ITENS + nome)
+			if not (it is ItemData):
+				continue
+			if it.m > 0.0:
+				q = maxf(q, it.m + Z_VERMELHO * maxf(it.s_mais, 0.0))
+			if it.t_max > 0.0 and it.t_max < 999.0:
+				t = maxf(t, (1.0 + maxf(it.h_max, 0.0)) * it.t_max)
+	_q_abs = q if q > 0.0 else Q_ABSOLUTO
+	_t_abs = t if t > 0.0 else T_ABSOLUTO
 ## PROPORCIONAL: o ponto fica entre estas frações da volta (evita colar no começo/fim).
 const PONTO_MIN: float = 0.4
 const PONTO_MAX: float = 0.9
@@ -77,23 +116,13 @@ const ESCALA_CORES := [
 	Color(1.0, 0.15, 0.1),    # 4 vermelho: punição de 50%
 	Color(0.05, 0.05, 0.05),  # 5 preto: punição máxima
 ]
-# ---- PALETAS do anel/vela. Escolhida: SEMAFORO, com o anel começando vazio (precolorido = false).
-#      As teclas de teste P / C / M saíram; as outras paletas ficam no código só como referência. ----
-#   DOURADO   branco (cru) -> DOURADO (ideal) -> amarelo -> laranja -> vermelho -> preto (a de antes)
-#   APROXIMA  chegando: branco -> amarelo -> laranja -> vermelho -> VERDE (ideal);
-#             passando: vermelho -> laranja -> amarelo -> branco (o pedido do readme)
-#   SEMAFORO  chegando: cinza -> amarelo -> VERDE (ideal); passando: amarelo -> laranja -> vermelho -> preto
-#   FAIXA     anel contínuo (não bolhinhas). Cada trecho tem a cor do aproveitamento NAQUELE ponto:
-#             vermelho (punição alta) > amarelo > VERDE (ideal) > amarelo > vermelho (cozinhou/tempo demais).
-#             Começa vazio e vai revelando a cor conforme cozinha (anel de fora) e o tempo passa (anel de dentro).
-#   COR_UNICA todas as bolhinhas acesas com a cor do estado ATUAL (paleta APROXIMA); o anel só mostra o quanto andou
-enum Paleta { FAIXA, DOURADO, APROXIMA, SEMAFORO, COR_UNICA }
-const NOMES_PALETA := ["faixa (vermelho > amarelo > verde > amarelo > vermelho)", "dourado (branco > dourado > amarelo > laranja > vermelho > preto)", "aproxima (branco > amarelo > laranja > vermelho > verde)", "semáforo (cinza > amarelo > verde > amarelo > vermelho > preto)", "cor única (= aproxima no anel contínuo)"]
-static var paleta: int = Paleta.FAIXA   # cores do anel (tecla P troca para testar)
-## O anel é sempre contínuo (como a FAIXA); a paleta só escolhe as cores. false = bolinhas (antigo).
+# ---- CORES do anel/vela (escolhida: FAIXA, anel contínuo começando vazio; as outras paletas
+#      e as teclas de teste P / C saíram). Cada trecho do anel tem a cor do aproveitamento
+#      NAQUELE ponto: vermelho (punição alta) > amarelo > VERDE (ideal) > amarelo > vermelho.
+#      Vai revelando a cor conforme cozinha (anel de fora) e o tempo passa (anel de dentro).
+#      A vela/bolinhas usam cor_antes (branco > amarelo > verde) e cor_depois (verde > amarelo > vermelho).
+## O anel é sempre contínuo; false = bolinhas (antigo).
 const ANEL_CONTINUO: bool = true
-## Ligado: as bolhinhas que ainda não acenderam já mostram a cor do trecho (fraquinhas) e a "barra" vai acendendo.
-static var precolorido: bool = false
 const C_BRANCO := Color(0.95, 0.95, 0.9)
 const C_CINZA := Color(0.6, 0.6, 0.6)
 const C_AMARELO := Color(1.0, 0.92, 0.3)
@@ -110,7 +139,7 @@ static func _rampa(cores: Array, f: float) -> Color:
 
 ## Cor do ponto ideal na paleta atual.
 static func cor_ideal() -> Color:
-	return cor_escala(1.0) if paleta == Paleta.DOURADO else C_VERDE
+	return C_VERDE
 
 ## FAIXA: cor do aproveitamento a (0 = punição total, 1 = ideal).
 static func cor_aproveitamento(a: float) -> Color:
@@ -118,41 +147,19 @@ static func cor_aproveitamento(a: float) -> Color:
 
 ## Cor de um trecho do anel contínuo na paleta atual: a = aproveitamento naquele ponto,
 ## depois = já passou do ideal (cozinhou demais / tempo demais).
-static func cor_faixa(a: float, depois: bool) -> Color:
-	match paleta:
-		Paleta.FAIXA:
-			return cor_aproveitamento(a)
-		Paleta.DOURADO:
-			if depois:
-				return cor_punicao(1.0 - a)
-			return cor_ideal() if a >= 0.9 else ESCALA_CORES[0]
-		_:
-			return cor_depois(1.0 - a) if depois else cor_antes(a)
+static func cor_faixa(a: float, _depois: bool) -> Color:
+	return cor_aproveitamento(a)
 
 ## Cor chegando no ideal: a = aproveitamento (0 = longe, >= 0.9 = no ponto).
 static func cor_antes(a: float) -> Color:
 	if a >= 0.9:
 		return cor_ideal()
-	match paleta:
-		Paleta.DOURADO:
-			return ESCALA_CORES[0]
-		Paleta.SEMAFORO:
-			return _rampa([C_CINZA, C_AMARELO], a / 0.9)
-		_:
-			return _rampa([C_BRANCO, C_AMARELO, C_LARANJA, C_VERMELHO], a / 0.9)
+	return _rampa([C_BRANCO, C_AMARELO], a / 0.9)
 
 ## Cor depois do ideal: p = punição (0 = no ponto, 1 = perdeu tudo).
 static func cor_depois(p: float) -> Color:
 	p = clampf(p, 0.0, 1.0)
-	match paleta:
-		Paleta.DOURADO:
-			return cor_punicao(p)
-		Paleta.SEMAFORO:
-			return _rampa([C_VERDE, C_AMARELO, C_LARANJA, C_VERMELHO, C_PRETO], p)
-		_:
-			if p < 0.1:
-				return cor_ideal()
-			return _rampa([C_VERMELHO, C_LARANJA, C_AMARELO, C_BRANCO], (p - 0.1) / 0.9)
+	return _rampa([C_VERDE, C_AMARELO, C_VERMELHO], p)
 
 # ---- AVISO DE QUENTE/FRIO no ícone (tecla T no preparo troca; só para testes) ----
 #   FOLGA      (padrão) começa antes do limite na mesma distância da folga do ingrediente:
@@ -380,7 +387,7 @@ func atualizar(i: int, est: Dictionary) -> void:
 	if chegou:   # acabou de chegar no ponto (>= 95%): o ícone dá um "pulo" de brilho
 		ic["pop"] = 1.0
 		chegou_no_ponto.emit(i)
-	# cor do estado agora (paleta COR_UNICA)
+	# cor do estado agora
 	if item_ic == null or item_ic.m <= 0.0:
 		ic["cor_atual"] = cor_ideal()
 	elif passou:
@@ -452,7 +459,7 @@ func perder(i: int) -> void:
 static func _q_cheio(item: ItemData) -> float:
 	if modo == ModoRegua.PROPORCIONAL and item and item.m > 0.0:
 		return clampf(item.m + 3.0 * maxf(item.s_mais, 0.0), item.m / PONTO_MAX, item.m / PONTO_MIN)
-	return Q_ABSOLUTO
+	return q_absoluto()
 
 ## Duração (s) que fecha a vela.
 static func _t_cheio(item: ItemData) -> float:
@@ -461,7 +468,7 @@ static func _t_cheio(item: ItemData) -> float:
 			return clampf((1.0 + maxf(item.h_max, 0.0)) * item.t_max, item.t_max / PONTO_MAX, item.t_max / PONTO_MIN)
 		if item.t_min > 0.0:
 			return item.t_min / FRACAO_PONTO
-	return T_ABSOLUTO
+	return t_absoluto()
 
 ## Cor do cozimento num Q qualquer da régua: branco (cru), dourado (a ≥ 0.9, no ponto),
 ## e depois do ponto a cor da punição (1 − a_Q) que aquele Q dá.
@@ -469,7 +476,7 @@ static func _t_cheio(item: ItemData) -> float:
 ## recalculadas 36 vezes por ícone a cada frame).
 static var _cache_anel: Dictionary = {}
 static func cores_anel(item: ItemData) -> Array:
-	var chave := str(item.get_instance_id() if item else 0) + ":" + str(modo) + ":" + str(paleta)
+	var chave := str(item.get_instance_id() if item else 0) + ":" + str(modo)
 	if not _cache_anel.has(chave):
 		var q_cheio: float = _q_cheio(item)
 		var lista: Array = []
@@ -722,18 +729,8 @@ func _desenhar_anel(ic: Dictionary) -> void:
 		var cor: Color
 		var r: float
 		if acesa <= 0.0:
-			if precolorido:
-				cor = Color(_cor_trecho(item, cores, b, u), 0.3 * alfa)
-				r = ANEL_TAM * 0.7
-			else:
-				cor = Color(COR_ANEL_COZINHANDO, 0.16 * alfa)
-				r = ANEL_TAM * 0.5
-		elif paleta == Paleta.COR_UNICA:
-			cor = Color(ic["cor_atual"], lerpf(0.35, 0.95, acesa) * alfa)
-			r = lerpf(ANEL_TAM * 0.55, ANEL_TAM, acesa)
-			if ic["ponto"]:
-				cor.a = (0.75 + 0.25 * pulso) * alfa
-				r = ANEL_TAM * (1.0 + 0.15 * pulso)
+			cor = Color(COR_ANEL_COZINHANDO, 0.16 * alfa)
+			r = ANEL_TAM * 0.5
 		elif modo != ModoRegua.PUNICAO:
 			cor = cores[b]
 			var dourada: bool = cor.is_equal_approx(cor_ideal())
@@ -771,7 +768,7 @@ const FAIXA_LARGURA_VELA: float = 3.0
 static func _q_faixa(item: ItemData) -> float:
 	if modo != ModoRegua.ABSOLUTO and item and item.m > 0.0:
 		return clampf(item.m + 3.0 * maxf(item.s_mais, 0.0), item.m / PONTO_MAX, item.m / PONTO_MIN)
-	return Q_ABSOLUTO
+	return q_absoluto()
 
 static func _t_faixa(item: ItemData) -> float:
 	if modo != ModoRegua.ABSOLUTO and item:
@@ -779,12 +776,12 @@ static func _t_faixa(item: ItemData) -> float:
 			return clampf((1.0 + maxf(item.h_max, 0.0)) * item.t_max, item.t_max / PONTO_MAX, item.t_max / PONTO_MIN)
 		if item.t_min > 0.0:
 			return item.t_min / FRACAO_PONTO
-	return T_ABSOLUTO
+	return t_absoluto()
 
 static var _cache_faixa: Dictionary = {}
 ## Cores dos trechos da faixa (cozimento e tempo) para o item.
 static func cores_faixa(item: ItemData) -> Dictionary:
-	var chave := str(item.get_instance_id() if item else 0) + ":" + str(modo) + ":" + str(paleta)
+	var chave := str(item.get_instance_id() if item else 0) + ":" + str(modo)
 	if not _cache_faixa.has(chave):
 		var coz: Array = []
 		var tem: Array = []
@@ -822,13 +819,6 @@ func _faixa_arco(c: Vector2, raio: float, largura: float, u: float, cores: Array
 	var ini := -PI * 0.5
 	u = clampf(u, 0.0, 1.0)
 	draw_arc(c, raio, ini, ini + TAU, 64, Color(1, 1, 1, 0.10 * alfa), largura * 0.6)
-	if precolorido:
-		# anel já colorido: o caminho todo aparece fraquinho e vai sendo revelado
-		for k in FAIXA_TRECHOS:
-			var w0: float = float(k) / FAIXA_TRECHOS
-			if w0 + 1.0 / FAIXA_TRECHOS <= u:
-				continue
-			draw_arc(c, raio, ini + TAU * maxf(w0, u), ini + TAU * (float(k + 1) / FAIXA_TRECHOS) + 0.01, 3, Color(cores[k], 0.28 * alfa), largura * 0.8)
 	if u <= 0.0:
 		return
 	var n: int = FAIXA_TRECHOS
@@ -851,8 +841,6 @@ func _cor_trecho(item: ItemData, cores: Array, b: int, u: float) -> Color:
 			cores = cores_anel(item)
 		return cores[b]
 	if u <= FRACAO_PONTO:
-		if paleta == Paleta.DOURADO:
-			return COR_ANEL_COZINHANDO
 		return cor_antes(0.9 * u / FRACAO_PONTO) if u < FRACAO_PONTO - 0.5 / ANEL_BOLHAS else cor_ideal()
 	return cor_depois((u - FRACAO_PONTO) / (1.0 - FRACAO_PONTO))
 

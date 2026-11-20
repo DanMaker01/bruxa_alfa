@@ -21,6 +21,17 @@ var dialog_queue: Array = []
 var current_dialog = null  # item da fila que está na tela agora
 var is_dialog_active: bool = false
 var running_events: Array = []
+## Evento que levou a bruxa para o mapa atual (CmdTeleportar). Enquanto ele roda
+## (fade, efeito, bruxa aparecendo), as cenas automáticas do mapa novo esperam.
+var evento_chegada = null
+
+func chegada_em_andamento() -> bool:
+	if evento_chegada == null:
+		return false
+	if evento_chegada.finished:
+		evento_chegada = null
+		return false
+	return true
 var event_id_counter: int = 0
 
 # ===== SINAIS =====

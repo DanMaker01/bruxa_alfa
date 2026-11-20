@@ -22,7 +22,7 @@ tempo = 0.2
 [sub_resource type="Resource" id="Resource_70527"]
 script = ExtResource("4_x5cxl")
 mapa = "res://mapas/mapa_bosque.tscn"
-posicao = Vector2(120, 505)
+posicao = Vector2(180, 505)
 direcao = 2
 
 [sub_resource type="Resource" id="Resource_qvgjy"]

@@ -56,12 +56,10 @@ var _produtorio: AnimacaoProdutorio
 ## A tela de informações (nome, nota, matriz, pentágono, ingredientes).
 var _vistas: ResultadoVistas
 var _aperto_pos := Vector2.ZERO
-## Durante as animações (produtório, cartas): segurar acelera; um toque pula até o fim.
-const TEMPO_TOQUE: float = 0.2         # soltar antes disto = toque (pula)
-const VEL_SEGURAR: float = 3.0
-const VEL_PULAR: float = 100.0
-var _apertou_em: float = -1.0
-var _pulando: bool = false
+## Durante as animações (produtório, cartas): um toque acelera até o fim da animação
+## (antes: segurar acelerava 3× e um toque pulava tudo). 2,7 = 3 − 10%.
+const VEL_ACELERAR: float = 2.7
+var _acelerando: bool = false
 
 
 func _ready() -> void:
@@ -82,10 +80,6 @@ func _process(delta: float) -> void:
 		_halo.modulate.a = 0.35 + 0.2 * sin(_t * 3.0)   # brilho pulsando
 	if _dica.visible:
 		_dica.modulate.a = 0.45 + 0.45 * sin(_t * 4.0)
-	# segurando durante a animação: acelera
-	if _apertou_em >= 0.0 and not _pulando and _animando() \
-			and Time.get_ticks_msec() / 1000.0 - _apertou_em >= TEMPO_TOQUE:
-		Engine.time_scale = VEL_SEGURAR
 
 func _exit_tree() -> void:
 	Engine.time_scale = 1.0   # nunca deixa o jogo acelerado
@@ -95,8 +89,7 @@ func _animando() -> bool:
 
 ## Volta a velocidade normal do jogo.
 func _velocidade_normal() -> void:
-	_pulando = false
-	_apertou_em = -1.0
+	_acelerando = false
 	Engine.time_scale = 1.0
 
 # =============================================================================
@@ -297,6 +290,7 @@ func _depois_das_informacoes(pedir_nome: bool) -> void:
 	# 3. nome: poção nova → pergunta o nome e já coloca nas informações
 	if pedir_nome:
 		_texto.text = "Uma poção nova! Que nome ela vai ter?"
+		_velocidade_normal()   # dar nome não fica acelerado
 		_estado = Estado.NOMEANDO
 		for c in [_faixa_nome, _texto, _caixa_nome]:
 			c.visible = true
@@ -442,30 +436,14 @@ func _estourar_brilhos(centro: Vector2) -> void:
 # =============================================================================
 func _input(event: InputEvent) -> void:
 	if visible and _animando():
-		# segurar acelera (ver _process); um toque curto pula tudo até o resultado pronto
+		# um toque acelera o resto da animação (produtório e as 3 cartas)
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 			get_viewport().set_input_as_handled()
-			if event.pressed:
-				_apertou_em = Time.get_ticks_msec() / 1000.0
-			elif _apertou_em >= 0.0:
-				var curto: bool = Time.get_ticks_msec() / 1000.0 - _apertou_em < TEMPO_TOQUE
-				_apertou_em = -1.0
-				if curto and not _pulando:
-					_pulando = true
-					Engine.time_scale = VEL_PULAR
-				elif not _pulando:
-					Engine.time_scale = 1.0
+			if event.pressed and not _acelerando:
+				_acelerando = true
+				Engine.time_scale = VEL_ACELERAR
 		return
 	if not visible or _estado != Estado.PRONTA:
-		return
-	# TESTE: tecla G troca onde fica o gráfico da temperatura (ResultadoVistas.modo_grafico)
-	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_G:
-		ResultadoVistas.proximo_modo_grafico()
-		_vistas.montar(_res, _res.get("A", []))
-		_vistas.titulo(_nome_atual)
-		_vistas.mostrar_tudo()
-		_dica.text = "gráfico: " + ResultadoVistas.NOMES_MODO_GRAFICO[ResultadoVistas.modo_grafico]
-		get_viewport().set_input_as_handled()
 		return
 	var aperto2: bool = (event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT) \
 		or (event is InputEventScreenTouch and event.pressed)
@@ -534,19 +512,26 @@ func _fechar() -> void:
 	tw.tween_property(escuro, "color:a", 0.7, 0.6)
 	tw.tween_property(voo, "position", CENTRO_POCAO - TAM_POCAO * 0.5, 0.8).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
 	await tw.finished
+	# poção que já estava no inventário: a linha dela já está na carta aberta; esconder
+	# agora fazia ela sumir e voltar (piscão). Só a poção nova nasce escondida.
+	var nova: bool = not (gt and gt.has_method("has_item") and gt.has_item(id))
+	# poção nova: o HUD já sabe que ela está chegando ANTES de entrar no inventário, então a
+	# linha dela nasce escondida (antes ela aparecia por um instante, sumia e voltava)
+	if nova and hud and hud.has_method("preparar_item_chegando") and id != "":
+		hud.preparar_item_chegando(id, true)
 	if gt and id != "":
 		gt.add_item(id, int(_res.get("quantidade", 1)))
 		_res["item_ja_adicionado"] = true
-		# a linha da poção já nasce escondida (antes aparecia, sumia e voltava com o fade)
+		# a linha da poção nova já nasce escondida (antes aparecia, sumia e voltava com o fade)
 		if hud and hud.has_method("preparar_item_chegando"):
-			hud.preparar_item_chegando(id, true)
+			hud.preparar_item_chegando(id, nova)
 	await _esperar(0.45)   # a carta termina de abrir
 
 	# 3. a poção desce até a linha dela; se a lista está cheia (a linha fica fora da
 	#    carta), vai para a parte de baixo da carta
 	var destino := DESTINO_INVENTARIO
 	if hud and hud.has_method("preparar_item_chegando") and id != "":
-		destino = hud.preparar_item_chegando(id, true)
+		destino = hud.preparar_item_chegando(id, nova)
 	if carta:
 		var rc: Rect2 = carta.get_global_rect()
 		if not rc.grow(-20.0).has_point(destino):

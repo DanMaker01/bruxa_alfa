@@ -183,16 +183,18 @@ func get_intensidade_fogo() -> float:
 ## Dentro de cada faixa a cor "segura" no meio e troca rápido perto da próxima,
 ## para dar para ler a faixa sem números.
 const CORES_FOGO := [
-	# T ≈ (F + 175) / 9.75: amarelo 1150 ≈ 136 °C, branco 1350 ≈ 156 °C, púrpura 1500 ≈ 172 °C
-	# fogo baixo (frio), 3 cores de 400 a 800, como os estados do livro:
-	# transparente (≈ 59-80 °C), azul pálido (≈ 80-95 °C), normal (vermelho)
-	[400.0, Color(0.92, 0.95, 1.0)],   # mesmas cores de EstadosChama
-	[600.0, Color(0.6, 0.76, 1.0)],
+	# T ≈ (F + 175) / 9.75: amarelo 1150 ≈ 136 °C, branco 1350 ≈ 156 °C, violeta 1500 ≈ 172 °C, índigo 1700 ≈ 192 °C
+	# fogo baixo (frio), 4 cores de 400 a 800, como os estados do livro:
+	# transparente (≈ 59-80 °C), pêssego (≈ 80-88 °C), rosa (≈ 88-95 °C), normal (vermelho)
+	[400.0, Color(0.82, 0.9, 1.0, 0.35)],   # transparente: branco azulado translúcido (mesmas cores de EstadosChama)
+	[620.0, Color(1.0, 0.8, 0.62)],
+	[715.0, Color(0.95, 0.35, 0.65)],
 	[800.0, Color(1.0, 0.22, 0.06)],
 	[900.0, Color(1.0, 0.55, 0.12)],
 	[1150.0, Color(1.0, 0.88, 0.2)],
 	[1350.0, Color(1.0, 1.0, 0.85)],
-	[1500.0, Color(0.78, 0.45, 1.0)],
+	[1500.0, Color(0.85, 0.55, 1.0)],   # violeta (roxo claro, rosado)
+	[1700.0, Color(0.33, 0.24, 0.9)],   # índigo (roxo escuro azulado)
 	[2000.0, Color(0.12, 0.1, 0.35)],   # fogo negro (azul quase preto)
 ]
 
@@ -200,6 +202,16 @@ func get_cor_fogo() -> Color:
 	var i = get_intensidade_fogo()
 	if i <= 0.0:
 		return Color(CORES_FOGO[0][1], 0.0)
+	var cor := _cor_tabela()
+	cor.a = i * cor.a
+	return cor
+
+## Quanto da opacidade a cor da chama tem agora (a transparente é translúcida; as outras, 1).
+func alfa_fogo() -> float:
+	return _cor_tabela().a
+
+## Cor da tabela CORES_FOGO no F atual (com o alfa da tabela).
+func _cor_tabela() -> Color:
 	var cor: Color = CORES_FOGO[-1][1]
 	if F <= CORES_FOGO[0][0]:
 		cor = CORES_FOGO[0][1]
@@ -212,5 +224,4 @@ func get_cor_fogo() -> Color:
 				t = t * t * t * (t * (t * 6.0 - 15.0) + 10.0)   # smootherstep: faixas mais marcadas
 				cor = CORES_FOGO[k][1].lerp(CORES_FOGO[k + 1][1], t)
 				break
-	cor.a = i
 	return cor

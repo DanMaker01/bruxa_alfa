@@ -26,6 +26,12 @@ variavel = "missao01_aceita"
 script = ExtResource("14_pul")
 label = "fim"
 
+[sub_resource type="Resource" id="I_fin_inicio"]
+script = ExtResource("6_qvtfd")
+tipo = 1
+tempo = 1.5
+esperar = false
+
 [sub_resource type="Resource" id="Resource_subir"]
 script = ExtResource("3_5fpwa")
 alvo = 1
@@ -90,7 +96,7 @@ segundos = 10.0
 script = ExtResource("13_leg")
 texto = "No segundo, encantou os móveis e acendeu seu caldeirão.
 
-No terceiro dia ela saiu para pegar o tecido do véu..."
+E no terceiro dia..."
 segundos = 10.0
 metadata/_custom_type_script = "uid://c8c7nvlca7oyd"
 
@@ -98,12 +104,6 @@ metadata/_custom_type_script = "uid://c8c7nvlca7oyd"
 script = ExtResource("4_ghp5v")
 segundos = 2.999999999999904
 metadata/_custom_type_script = "uid://dkw5y5gsrn515"
-
-[sub_resource type="Resource" id="I_fin_inicio"]
-script = ExtResource("6_qvtfd")
-tipo = 1
-tempo = 1.5
-esperar = false
 
 [sub_resource type="Resource" id="I_fout_natural"]
 script = ExtResource("6_qvtfd")
@@ -113,14 +113,14 @@ tempo = 1.5
 script = ExtResource("15_lab")
 nome = "fim"
 
+[sub_resource type="Resource" id="Resource_82dll"]
+script = ExtResource("6_qvtfd")
+tempo = 0.5
+
 [sub_resource type="Resource" id="Resource_0fsx2"]
 script = ExtResource("5_sauaa")
 variavel = "intro_historia"
 valor = 1.0
-
-[sub_resource type="Resource" id="Resource_82dll"]
-script = ExtResource("6_qvtfd")
-tempo = 0.5
 
 [sub_resource type="Resource" id="Resource_73kuf"]
 script = ExtResource("8_b0yjd")

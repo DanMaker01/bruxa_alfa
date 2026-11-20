@@ -70,8 +70,11 @@ static func _curva(dist: float, m: float, meia: float) -> float:
 	return m * (1.0 - g)
 
 ## Correndo, a câmera vai um pouco à frente da bruxa (mais tempo para reagir).
+## Vai e volta com freio suave; a volta (ao parar de correr) é bem mais lenta.
 const ADIANTE_CORRIDA: float = 70.0    # px à frente
-const VEL_ADIANTE: float = 130.0       # px/s com que a câmera vai e volta
+## Fração do caminho que falta percorrida por segundo (indo / voltando).
+const TAXA_IDA: float = 2.0
+const TAXA_VOLTA: float = 0.8
 var _adiante: float = 0.0
 var _lado: float = 1.0
 
@@ -80,7 +83,8 @@ func _atualizar_adiante(delta: float) -> void:
 	if absf(player.velocity.x) > 5.0:
 		_lado = signf(player.velocity.x)
 	var alvo: float = _lado * ADIANTE_CORRIDA if correndo else 0.0
-	_adiante = move_toward(_adiante, alvo, VEL_ADIANTE * delta)
+	var taxa: float = TAXA_IDA if absf(alvo) > absf(_adiante) else TAXA_VOLTA
+	_adiante = lerpf(_adiante, alvo, 1.0 - exp(-taxa * delta))
 
 ## Onde a câmera fica quando segue a bruxa.
 func _alvo_bruxa() -> Vector2:
@@ -181,3 +185,4 @@ func debug():
 func _input(event):
 	if event is InputEventKey and event.pressed and event.keycode == KEY_F7:
 		debug()
+

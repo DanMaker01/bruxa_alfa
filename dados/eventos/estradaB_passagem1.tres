@@ -22,7 +22,7 @@ tempo = 0.2
 [sub_resource type="Resource" id="Resource_x2yk1"]
 script = ExtResource("4_susx8")
 mapa = "res://mapas/mapa_castelo_out.tscn"
-posicao = Vector2(2850, 505)
+posicao = Vector2(2790, 505)
 direcao = 1
 
 [sub_resource type="Resource" id="Resource_rrcgn"]

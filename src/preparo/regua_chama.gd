@@ -12,9 +12,9 @@ const T_INI: float = 40.0     # começo da escala (°C)
 const T_FIM: float = 220.0    # fim da escala (°C)
 const COR_TEXTO := Color(0.95, 0.92, 0.85)
 const COR_SUAVE := Color(0.75, 0.72, 0.68)
-const CURTO := {"apagado": "apag.", "transparente": "transp.", "transparente_grande": "azul",
+const CURTO := {"apagado": "apag.", "transparente": "transp.", "transparente_grande": "pêssego", "rosa": "rosa",
 	"normal": "normal", "laranja": "laranja", "amarelo": "amarelo", "branco": "branco",
-	"purpura": "púrpura", "negro": "negro"}
+	"purpura": "violeta", "indigo": "índigo", "negro": "negro"}
 
 var formato: Formato = Formato.HORIZONTAL
 var cena = null

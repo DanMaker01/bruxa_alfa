@@ -286,8 +286,17 @@ func _on_zone_player_entered():
 	
 	# toque só vale com a bruxa perto de verdade (a física pode reportar a posição
 	# antiga logo depois de um teletransporte)
-	if trigger == "touch" and dist <= DIST_MAX_TOQUE and _can_activate():
+	if trigger == "touch" and dist <= _dist_max_toque() and _can_activate():
 		_do_activate()
+
+## Distância máxima para o toque valer: DIST_MAX_TOQUE ou, se a zona da página for maior
+## (ex.: guarda com area_scale 4), metade da diagonal dela + uma folga. Antes a bruxa entrava
+## numa zona larga ainda a mais de 200 px e o toque nunca disparava.
+func _dist_max_toque() -> float:
+	var r := _zone_global_rect()
+	if r.size.x <= 0.0:
+		return DIST_MAX_TOQUE
+	return maxf(DIST_MAX_TOQUE, r.size.length() * 0.5 + 80.0)
 
 func _on_zone_player_exited():
 	player_near = false
@@ -380,6 +389,11 @@ func _can_activate() -> bool:
 	var now = Time.get_ticks_msec() / 1000.0
 	if now - last_activation_time < get_cooldown():
 		return false
+	# cena automática (trava a bruxa ou fala) no mapa em que ela acabou de chegar:
+	# espera o evento que trouxe ela terminar (fade, efeito, ela aparecer)
+	if trigger == "parallel" and _pagina_e_cena() and interpreter \
+			and interpreter.has_method("chegada_em_andamento") and interpreter.chegada_em_andamento():
+		return false
 	# A MESMA página não roda duas vezes; outra página do mesmo evento pode
 	# (ex.: bos_goblin muda de página durante o "esperar" e pode ser clicado).
 	if interpreter and interpreter.has_method("is_page_running"):
@@ -387,6 +401,18 @@ func _can_activate() -> bool:
 			return false
 	return true
 
+
+## Página com cara de cena: trava a bruxa ou mostra fala/pergunta.
+func _pagina_e_cena() -> bool:
+	var pd := _get_active_page_data()
+	if pd == null:
+		return false
+	for c in pd.comandos:
+		if c is CmdMostrarMsg or c is CmdMostrarOpcoes:
+			return true
+		if c is CmdPlayer and c.acao == CmdPlayer.Acao.TRAVAR:
+			return true
+	return false
 
 func _activate():
 	"""Ativa o evento respeitando o guard (chamado por GameManager/debug)"""

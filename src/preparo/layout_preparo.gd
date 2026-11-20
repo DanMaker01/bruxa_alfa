@@ -16,15 +16,15 @@ extends Control
 const BOTOES_CARTA: bool = true
 ## Margem (px) dos cantos do sprite que não esticam (9 fatias).
 const MARGEM_CARTA: float = 26.0
-## Layout do preparo ("Caldeirão grande": caldeirão 1,2×, controles na faixa de baixo).
+## Layout do preparo (caldeirão 1,0×, um pouco mais baixo; controles na faixa de baixo).
 ##   anim:   escala e deslocamento do caldeirão (nó Animações, com a bruxinha e os ícones)
 ##   item:   lado (px) dos botões de ingrediente
 ##   bg:     faixa escura de baixo; scroll: carrossel de ingredientes
 ##   menos / mais / acender: −Fogo, +Fogo e Acender (Rect2)
 ##   bruxa:  pé da bruxinha; guia_y: altura da receita memorizada
-const LAYOUT := {"anim": [1.2, Vector2(0, 30)], "item": 100.0, "bg": Rect2(0, 700, 640, 260),
+const LAYOUT := {"anim": [1.0, Vector2(0, 30)], "item": 100.0, "bg": Rect2(0, 700, 640, 260),
 		"scroll": Rect2(16, 708, 608, 114), "menos": Rect2(16, 832, 296, 118), "mais": Rect2(328, 832, 296, 118),
-		"acender": Rect2(16, 832, 608, 118), "bruxa": Vector2(110, 520), "guia_y": 130.0}
+		"acender": Rect2(16, 832, 608, 118), "bruxa": Vector2(80, 500), "guia_y": 130.0}
 ## Centro do caldeirão (escala do layout em volta dele).
 const PIVO_CALDEIRAO := Vector2(320, 300)
 

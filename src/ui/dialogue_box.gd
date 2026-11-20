@@ -296,8 +296,12 @@ func _process(delta: float) -> void:
 		if PAUSA_PONTUACAO.has(c) and i + 1 < _texto_puro.length():
 			_cursor = float(i + 1)
 			_pausa = PAUSA_PONTUACAO[c]
-			_corte = i
-			_visual = maxf(_visual, _cursor)   # só cresce: as letras de antes não voltam a apagar
+			if c != " ":
+				# pontuação de verdade: ela aparece inteira antes de contar a pausa.
+				# (Espaço não: antes cada espaço esperava a palavra terminar de aparecer
+				# e o texto ficava "soletrado".)
+				_corte = i
+				_visual = maxf(_visual, _cursor)   # só cresce: as letras de antes não voltam a apagar
 			break
 	_efeito.cursor = _cursor
 	_efeito.corte = _corte
@@ -317,14 +321,9 @@ func esta_escrevendo() -> bool:
 
 func _finish_dialog():
 	_escrevendo = false
-	print("[DialogueBox] ===== FINISH_DIALOG =====")
 	visible = false
 	_sair_escurecer()
-	print("[DialogueBox] visible = false")
-	print("[DialogueBox] Emitindo dialog_finished...")
 	dialog_finished.emit()
-	print("[DialogueBox] dialog_finished emitido!")
-	print("[DialogueBox] ===== FIM FINISH_DIALOG =====")
 
 ## Esconde a caixa sem emitir dialog_finished (usado quando a pergunta fecha por uma opção).
 func fechar_sem_sinal() -> void:
@@ -333,11 +332,9 @@ func fechar_sem_sinal() -> void:
 	_sair_escurecer()
 
 func show_dialog(messages_array: Array, falante = null):
-	print("[DialogueBox] ===== SHOW_DIALOG =====")
-	print("[DialogueBox] messages_array: ", messages_array)
 
 	if messages_array.is_empty():
-		print("[DialogueBox] ⚠️ Lista vazia")
+		push_warning("[DialogueBox] ⚠️ Lista vazia")
 		return
 
 	messages = messages_array
@@ -346,52 +343,32 @@ func show_dialog(messages_array: Array, falante = null):
 	visible = true
 	_sair_id += 1   # cancela uma saída da tela escura que estava esperando
 	_fade_escurecer(true)
-	print("[DialogueBox] visible: ", visible)
-	print("[DialogueBox] messages: ", messages)
-	print("[DialogueBox] current_index: ", current_index)
 
 	_show_current_message()
 
-	print("[DialogueBox] Emitindo advance_requested...")
 	advance_requested.emit()
-	print("[DialogueBox] advance_requested emitido!")
-	print("[DialogueBox] ===== FIM SHOW_DIALOG =====")
 
 
 
 func advance():
-	print("[DialogueBox] ===== ADVANCE CHAMADO =====")
-	print("[DialogueBox] visible: ", visible)
-	print("[DialogueBox] current_index ANTES: ", current_index)
-	print("[DialogueBox] messages.size(): ", messages.size())
 
 	if not visible:
-		print("[DialogueBox] ⚠️ Invisível, ignorando")
 		return
 
 	# Ainda escrevendo: o toque completa o texto em vez de pular para a próxima.
 	if _escrevendo:
 		_terminar_escrita()
 		advance_requested.emit()   # o botão de avançar volta a aparecer
-		print("[DialogueBox] Texto completado (máquina de escrever)")
 		return
 
 	current_index += 1
-	print("[DialogueBox] current_index DEPOIS: ", current_index)
 
 	if current_index >= messages.size():
-		print("[DialogueBox] Fim das mensagens! Finalizando...")
 		_finish_dialog()
-		print("[DialogueBox] _finish_dialog() chamado")
 	else:
-		print("[DialogueBox] Próxima mensagem: ", messages[current_index])
 		_show_current_message()
-		print("[DialogueBox] _show_current_message() chamado")
-		print("[DialogueBox] Emitindo advance_requested...")
 		advance_requested.emit()
-		print("[DialogueBox] advance_requested emitido!")
 
-	print("[DialogueBox] ===== FIM ADVANCE =====")
 
 func is_dialog_visible() -> bool:
 	return visible

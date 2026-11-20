@@ -8,17 +8,13 @@
 #      matriz final, que vai para o lugar da grade na janela e fica lá.
 # Cada unidade é um cartão (sem agrupar). A matriz final fica na janela até confirmar;
 # aí a JanelaResultado transforma ela na poção.
-# Teste: K troca o que o toque faz (acelera/pula), no preparo.
+# Toque acelera (a JanelaResultado acelera o jogo todo; tocou() fica para uso direto).
 # Depois da 1ª combinação o cartão do acumulado vira um ícone de poção; o anel mostra a
 # média do aproveitamento dos ingredientes que já entraram.
 class_name AnimacaoProdutorio
 extends Control
 
-enum Toque { ACELERA, PULA }
-const NOMES_TOQUE := ["toque acelera", "toque pula"]
-static var toque: int = Toque.ACELERA
-
-const ACELERAR: float = 4.0
+const ACELERAR: float = 2.7   # mesma da JanelaResultado (3 − 10%)
 const ICONE_POCAO := "res://assets/game_caldeirao/pocao.png"
 const COR_OP := Color(1.0, 0.9, 0.6)
 const T_CHEGAR: float = 0.55
@@ -139,16 +135,10 @@ func rodando() -> bool:
 func tocou() -> void:
 	if not _rodando:
 		return
-	if toque == Toque.PULA:
-		_pular = true
-		for tw in _tweens:
-			if is_instance_valid(tw) and tw.is_running():
-				tw.custom_step(1000.0)
-	else:
-		_vel = ACELERAR
-		for tw in _tweens:
-			if is_instance_valid(tw) and tw.is_running():
-				tw.set_speed_scale(_vel)
+	_vel = ACELERAR
+	for tw in _tweens:
+		if is_instance_valid(tw) and tw.is_running():
+			tw.set_speed_scale(_vel)
 
 
 ## Roda a animação. diagnosticos: os do CalculadoraPocao (com "item" e "a").

@@ -17,13 +17,11 @@ var is_advance_mode: bool = false
 @onready var advance_button: Button = get_node_or_null("Panel/MarginContainer/VBoxContainer/AdvanceButton")
 
 func _ready():
-	print("[OptionBox] ===== READY =====")
 	process_mode = PROCESS_MODE_ALWAYS
 	visible = false
 	
 	# Cria botão Avançar se não existir
 	if not advance_button:
-		print("[OptionBox] Criando advance_button...")
 		advance_button = Button.new()
 		advance_button.name = "AdvanceButton"
 		var vbox = $Panel/MarginContainer/VBoxContainer
@@ -53,7 +51,6 @@ func _ready():
 	
 	_setup_ui()
 	visible = false
-	print("[OptionBox] ===== FIM READY =====")
 
 func _setup_ui():
 	if panel:
@@ -86,6 +83,8 @@ const MARGEM_AVANCAR: float = 14.0
 ## Seta do avançar: amplitude (px) e período (s) do balanço.
 const SETA_AMPLITUDE: float = 7.0
 const SETA_PERIODO: float = 1.1
+## Tempo (s) da setinha aparecer quando a frase termina.
+const SETA_FADE: float = 0.2
 var _seta: Label
 var _t_seta: float = 0.0
 
@@ -95,6 +94,12 @@ func _process(delta: float) -> void:
 		var y: float = SETA_AMPLITUDE * sin(TAU * _t_seta / SETA_PERIODO)
 		_seta.offset_top = y
 		_seta.offset_bottom = y
+		# a setinha só aparece quando a frase terminou de escrever (o botão já funciona antes:
+		# o toque completa o texto)
+		var db = get_tree().get_first_node_in_group(DialogueBox.GRUPO)
+		var escrevendo: bool = db != null and db.has_method("esta_escrevendo") and db.esta_escrevendo()
+		var alvo: float = 0.0 if escrevendo else 1.0
+		_seta.modulate.a = alvo if alvo < _seta.modulate.a else move_toward(_seta.modulate.a, alvo, delta / SETA_FADE)
 
 func _margens(v: float) -> void:
 	var m = get_node_or_null("Panel/MarginContainer")
@@ -104,7 +109,6 @@ func _margens(v: float) -> void:
 
 func show_advance():
 	_margens(MARGEM_AVANCAR)
-	print("[OptionBox] ===== SHOW_ADVANCE =====")
 	
 	is_advance_mode = true
 	options = []
@@ -122,10 +126,8 @@ func show_advance():
 		advance_button.visible = true
 	
 	visible = true
-	print("[OptionBox] visible: ", visible)
 
 func hide_advance():
-	print("[OptionBox] ===== HIDE_ADVANCE =====")
 	
 	if advance_button:
 		advance_button.visible = false
@@ -139,10 +141,9 @@ func show_options(options_list: Array):
 	_margens(margem)
 	"""Mostra opções para o jogador (sem pergunta)"""
 	if options_list.is_empty():
-		print("[OptionBox] ⚠️ Lista de opções vazia")
+		push_warning("[OptionBox] ⚠️ Lista de opções vazia")
 		return
 	
-	print("[OptionBox] 📝 Mostrando opções: ", options_list)
 	
 	is_advance_mode = false
 	options = options_list
@@ -294,17 +295,14 @@ func _estilizar_botao(btn: Button) -> void:
 # ===== SINAIS =====
 
 func _on_advance_pressed():
-	print("[OptionBox] ▶️ Avançar pressionado")
 	hide_advance()
 	option_selected.emit(-1, "avancar")
 
 func _on_option_pressed(index: int):
-	print("[OptionBox] Opção selecionada: ", index, " - ", options[index])
 	visible = false
 	option_selected.emit(index, options[index])
 
 func _on_cancel_pressed():
-	print("[OptionBox] Opção cancelada")
 	visible = false
 	option_selected.emit(-1, "")
 

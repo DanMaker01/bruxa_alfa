@@ -8,14 +8,17 @@ extends RefCounted
 ## id, nome no livro, faixa de T (°C) com a chama estável, cor da bolinha no livro.
 const LISTA := [
 	{"id": "apagado", "nome": "Apagado", "T_min": -999.0, "T_max": 59.0, "cor": Color(0.35, 0.33, 0.3)},
-	{"id": "transparente", "nome": "Transparente", "T_min": 59.0, "T_max": 80.0, "cor": Color(0.92, 0.95, 1.0)},
-	# id antigo mantido (receitas salvas e desenvoltura.tres usam); no livro aparece "Azul pálido"
-	{"id": "transparente_grande", "nome": "Azul pálido", "T_min": 80.0, "T_max": 95.0, "cor": Color(0.6, 0.76, 1.0)},
+	{"id": "transparente", "nome": "Transparente", "T_min": 59.0, "T_max": 80.0, "cor": Color(0.82, 0.9, 1.0)},
+	# id antigo mantido (receitas salvas usam); no livro aparece "Pêssego"
+	{"id": "transparente_grande", "nome": "Pêssego", "T_min": 80.0, "T_max": 88.0, "cor": Color(1.0, 0.8, 0.62)},
+	{"id": "rosa", "nome": "Rosa", "T_min": 88.0, "T_max": 95.0, "cor": Color(0.95, 0.35, 0.65)},
 	{"id": "normal", "nome": "Normal", "T_min": 95.0, "T_max": 105.0, "cor": Color(0.9, 0.25, 0.1)},
 	{"id": "laranja", "nome": "Laranja", "T_min": 105.0, "T_max": 122.0, "cor": Color(1.0, 0.55, 0.12)},
 	{"id": "amarelo", "nome": "Amarelo", "T_min": 122.0, "T_max": 145.0, "cor": Color(0.95, 0.8, 0.15)},
 	{"id": "branco", "nome": "Branco", "T_min": 145.0, "T_max": 163.0, "cor": Color(0.85, 0.85, 0.8)},
-	{"id": "purpura", "nome": "Púrpura", "T_min": 163.0, "T_max": 195.0, "cor": Color(0.6, 0.35, 0.85)},
+	# id antigo "purpura" mantido para a 1ª metade do roxo (agora "Violeta")
+	{"id": "purpura", "nome": "Violeta", "T_min": 163.0, "T_max": 180.0, "cor": Color(0.78, 0.5, 0.98)},
+	{"id": "indigo", "nome": "Índigo", "T_min": 180.0, "T_max": 195.0, "cor": Color(0.33, 0.24, 0.85)},
 	{"id": "negro", "nome": "Negro", "T_min": 195.0, "T_max": 999.0, "cor": Color(0.12, 0.1, 0.3)},
 ]
 

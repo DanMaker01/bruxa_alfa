@@ -31,6 +31,11 @@ var _botao: Button
 var _acao: Callable = Callable()
 var _t: float = 0.0
 var _ret := Rect2()
+var _seta_embaixo: bool = false
+## Distância mínima (px) da moldura até a borda da tela.
+const MARGEM_TELA: float = 3.0
+## Espaço (px) que a setinha precisa em cima do alvo; menos que isso, ela vai para baixo.
+const ESPACO_SETA: float = 50.0
 
 
 func _ready() -> void:
@@ -135,16 +140,28 @@ func _atualizar() -> void:
 		_escuros[k].size = faixas[k].size.max(Vector2.ZERO)
 	_moldura.visible = tem_alvo
 	if tem_alvo:
-		_moldura.position = _ret.position
-		_moldura.size = _ret.size
+		# a moldura nunca sai da tela (alvo encostado na borda, ex.: o ✕ no canto)
+		var dentro := _ret.intersection(Rect2(Vector2.ZERO, tela).grow(-MARGEM_TELA))
+		if dentro.size.x < 4.0 or dentro.size.y < 4.0:
+			dentro = _ret
+		_moldura.position = dentro.position
+		_moldura.size = dentro.size
+		# setinha em cima; sem espaço em cima, embaixo apontando para cima
+		_seta_embaixo = dentro.position.y < ESPACO_SETA
 		_moldura.queue_redraw()
 
 func _desenhar_moldura() -> void:
 	var pulso: float = 0.5 + 0.5 * sin(_t * 6.0)
-	_moldura.draw_rect(Rect2(Vector2.ZERO, _moldura.size), Color(COR_MOLDURA, 0.5 + 0.5 * pulso), false, 4.0 + 3.0 * pulso)
+	# borda desenhada para dentro (não passa da moldura nem da tela)
+	var larg: float = 4.0 + 3.0 * pulso
+	_moldura.draw_rect(Rect2(Vector2.ONE * larg * 0.5, _moldura.size - Vector2.ONE * larg), Color(COR_MOLDURA, 0.5 + 0.5 * pulso), false, larg)
 	var cx: float = _moldura.size.x * 0.5
-	var y: float = -14.0 - 8.0 * pulso
-	_moldura.draw_colored_polygon(PackedVector2Array([Vector2(cx - 16, y - 22), Vector2(cx + 16, y - 22), Vector2(cx, y)]), COR_MOLDURA)
+	if _seta_embaixo:
+		var yb: float = _moldura.size.y + 14.0 + 8.0 * pulso
+		_moldura.draw_colored_polygon(PackedVector2Array([Vector2(cx - 16, yb + 22), Vector2(cx + 16, yb + 22), Vector2(cx, yb)]), COR_MOLDURA)
+	else:
+		var y: float = -14.0 - 8.0 * pulso
+		_moldura.draw_colored_polygon(PackedVector2Array([Vector2(cx - 16, y - 22), Vector2(cx + 16, y - 22), Vector2(cx, y)]), COR_MOLDURA)
 
 ## Toque em área escura: não faz nada (só não deixa passar).
 func _engolir(ev: InputEvent) -> void:

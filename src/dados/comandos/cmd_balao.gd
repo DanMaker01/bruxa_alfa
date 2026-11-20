@@ -1,5 +1,8 @@
 # Balão de emoção acima da bruxa ou de um evento: "!", "?", "...", coração, raiva, nota, "!?".
 # Some sozinho depois de "duracao" segundos.
+# Arte: se existir SPRITE_BALAO (um sprite só, com o rabicho embaixo no meio), o corpo é
+# desenhado em 9 fatias (cantos não deformam; só o meio estica na largura do símbolo) e o
+# rabicho vai inteiro, sem esticar. Sem o arquivo, o balão é desenhado em código.
 class_name CmdBalao
 extends Comando
 
@@ -72,6 +75,10 @@ static func _criar_balao(emocao_: int) -> Node2D:
 	var simb := Node2D.new()
 	simb.name = "Simbolo"
 	simb.position = Vector2(0, -Desenho.ALTURA * 0.5 - Desenho.RABO)
+	var tex := Desenho.textura()
+	if tex:   # com sprite: centro do corpo do sprite
+		var alt_corpo: float = (tex.get_size().y - RABO_SPRITE) * ESCALA_SPRITE
+		simb.position = Vector2(0, -RABO_SPRITE * ESCALA_SPRITE - alt_corpo * 0.5)
 	raiz.add_child(simb)
 	var rot := Label.new()
 	rot.text = texto
@@ -86,6 +93,15 @@ static func _criar_balao(emocao_: int) -> Node2D:
 	simb.add_child(rot)
 	return raiz
 
+## Sprite do balão (opcional). Desenhe em 2× (ESCALA_SPRITE = 0.5): corpo + rabicho embaixo, no meio.
+const SPRITE_BALAO := "res://assets/ui/balao.png"
+## Cantos do sprite (px do sprite) que não esticam.
+const MARGEM_SPRITE: int = 40
+## Altura (px do sprite) do rabicho, na faixa de baixo do sprite.
+const RABO_SPRITE: int = 24
+## px do sprite → px do jogo.
+const ESCALA_SPRITE: float = 0.5
+
 ## Corpo do balão: sombra, contorno escuro, miolo creme e rabicho, com a ponta em (0, 0).
 class Desenho extends Node2D:
 	const ALTURA := 50.0
@@ -96,14 +112,54 @@ class Desenho extends Node2D:
 	const COR_MIOLO := Color(1.0, 0.98, 0.94)
 	const COR_SOMBRA := Color(0, 0, 0, 0.22)
 	var largura := 58.0
+	static var _tex: Texture2D = null
+	static var _tex_lida: bool = false
+
+	static func textura() -> Texture2D:
+		if not _tex_lida:
+			_tex_lida = true
+			if ResourceLoader.exists(SPRITE_BALAO):
+				_tex = load(SPRITE_BALAO)
+		return _tex
 
 	func _draw() -> void:
+		var tex := textura()
+		if tex:
+			_desenhar_sprite(tex)
+			return
 		var ret := Rect2(-largura * 0.5, -ALTURA - RABO, largura, ALTURA)
 		_corpo(ret.grow(BORDA), Vector2(3, 4), COR_SOMBRA, BORDA)
 		_corpo(ret.grow(BORDA), Vector2.ZERO, COR_BORDA, BORDA)
 		_corpo(ret, Vector2.ZERO, COR_MIOLO, 0.0)
 		# brilho no canto de cima
 		draw_line(ret.position + Vector2(RAIO * 0.6, 7), ret.position + Vector2(RAIO * 1.4, 5), Color(1, 1, 1, 0.9), 3.0, true)
+
+	## 9 fatias do corpo (sprite sem a faixa do rabicho) + o rabicho inteiro, ponta em (0, 0).
+	func _desenhar_sprite(tex: Texture2D) -> void:
+		var e := ESCALA_SPRITE
+		var ts := tex.get_size()
+		var m := float(MARGEM_SPRITE)
+		var rabo_src := float(RABO_SPRITE)
+		var corpo_src := Rect2(0, 0, ts.x, ts.y - rabo_src)
+		# destino do corpo: largura do balão (mínimo: os dois cantos), altura do sprite
+		var alt := corpo_src.size.y * e
+		var larg := maxf(largura, 2.0 * m * e + 1.0)
+		var rabo_alt := rabo_src * e
+		var dst := Rect2(-larg * 0.5, -rabo_alt - alt, larg, alt)
+		var xs_src := [0.0, m, corpo_src.size.x - m, corpo_src.size.x]
+		var ys_src := [0.0, m, corpo_src.size.y - m, corpo_src.size.y]
+		var xs_dst := [dst.position.x, dst.position.x + m * e, dst.end.x - m * e, dst.end.x]
+		var ys_dst := [dst.position.y, dst.position.y + m * e, dst.end.y - m * e, dst.end.y]
+		for i in 3:
+			for j in 3:
+				var src := Rect2(xs_src[i], ys_src[j], xs_src[i + 1] - xs_src[i], ys_src[j + 1] - ys_src[j])
+				var d := Rect2(xs_dst[i], ys_dst[j], xs_dst[i + 1] - xs_dst[i], ys_dst[j + 1] - ys_dst[j])
+				if src.size.x > 0.0 and src.size.y > 0.0 and d.size.x > 0.0 and d.size.y > 0.0:
+					draw_texture_rect_region(tex, d, src)
+		# rabicho: faixa de baixo, só o meio do sprite (largura 2 × margem), sem esticar
+		var rabo_larg := minf(2.0 * m, ts.x)
+		var src_rabo := Rect2((ts.x - rabo_larg) * 0.5, ts.y - rabo_src, rabo_larg, rabo_src)
+		draw_texture_rect_region(tex, Rect2(-rabo_larg * e * 0.5, -rabo_alt, rabo_larg * e, rabo_alt), src_rabo)
 
 	func _corpo(r: Rect2, desloc: Vector2, c: Color, extra: float) -> void:
 		draw_colored_polygon(_retangulo_redondo(r, RAIO + extra, desloc), c)

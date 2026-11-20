@@ -101,6 +101,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] castelo_in02	(1280x640)
 		[ ] castelo_in03	(1280x640)
 		[ ] estrada_b		(2000x640)
+		[ ] Fundo menu inicial (640x960) (ou uma img em loop)
 
 [ ]	Audio 100%
 	[ ] BGM:
@@ -140,44 +141,26 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] vidro01
 		[ ] vidro02
 
-[ ]	Menus 100%
-	[ ] Estilo de cartas
-		[ ] definir carta para cada clicável. o que falta?
-	[.] menu inicial
-		[ ] bg
-    [?] hud, falta algo? rever.
-		Revisado: o popup do item fecha sozinho quando chega um diálogo ou o HUD some; o Desistir (aplicar poção) some enquanto o popup está aberto e ganhou o estilo dos botões das opções; vibração ao tocar num item, abrir a carta, nos botões do popup, no Desistir e nos ícones do Status; fonte do inventário igual à do diálogo (28, branca); limpeza de código sem uso e prints.
 
 [ ] Caldeirão 100%
-	[?] Fogo frio: 3 cores de 400 a 800 (transparente 400, azul pálido 600, normal vermelho 800; no livro "Transparente grande" virou "Azul pálido"). Aceso fica opaco (alfa 0,8); só abaixo de 400 (apagando) vai sumindo até F = 0. (sistema_termico.gd CORES_FOGO)
-		Definir melhor: as cores infra. as cores ultra 400° já estão um pouco melhores. Por exemplo, não gostei que tem outro tom de azul na chama fraca, pois já tem azul sendo usado. talvez rosa seria melhor. 
-		Quais são as cores? 
-		Resposta:
-	[ ] Layout
-		[ ] Reformular Layout (pensar em celular). 
-			[?] Layout escolhido: Caldeirão grande (caldeirão 1,2×, itens menores, controles na faixa de baixo). As outras alternativas e a tecla L foram removidas. Valores em LayoutPreparo.LAYOUT.
-			REMOVER: estilo de layout lateral
-			Tamanhos: Menus, botões, Bruxa_chibi, caldeirão 
-		[?] texto em cima do caldeirão -> passar para falas da bruxa, feedback rápido da bruxa? multi balões?
-			Feito: os textos do caldeirão (fogo aceso/apagou, item se perdeu, já misturou, tirei, item no ponto, avisos de nível) viraram falas no balão da bruxinha. Avisos importantes entram na fila (até 3); os rápidos só aparecem se ela estiver calada. Os textos flutuantes ficaram só para as teclas de debug.
-		[ ] Dúvida: Usar cartas tbm na cena do caldeirão, para botões, etc? testar como ficaria. 
-			Carta comprida é meio estranho. O que usar então? Mudança de layout afeta?
-	[ ] Feedback audiovisual pra temperatura do caldeirão e tbm dos itens, tanto frio quanto quente
-		[?] TESTE de P e C:
-			P = anel completo, faixa vermelho -> ...
-				testei com a erva: quando o anel finaliza ele ainda está verde e fica no caldeirão ainda um bom tempo antes de sumir. 
-				acho que a erva está com tempo e cozimento maior que o máximo do anel. 
-			C = o anel já é colorido, mas vai sendo revelado.
-
+	[?] Roxo em dois: Violeta (roxo claro, fogo 1500, caldo 163-180 °C; id antigo "purpura") e Índigo (roxo escuro azulado, fogo 1700, caldo 180-195 °C), antes do Negro (2000). No livro são dois estados. Nenhuma receita usava o roxo; simulador sem mudança nas 3 receitas.
 	[ ] Catálogo e poções
-		[?] Catálogo de poções (dados/pocoes): qualquer poção com a matriz perto de uma do catálogo recebe o nome dela e, se ela tiver, o efeito (com aproveitamento >= aproveitamento_min_efeito; evita 4 mal cozidos = 3 bem cozidos). Sem quantidades nem "Dobrada" (não serve para receitas não comutativas).
-			[?] Tolerância por poção (PocaoReferencia.distancia_max; 0 = a do catálogo, 0,05). Retorno: 0,02 → 2 ou 4 pós bem cozidos não viram mais Poção do Retorno nem ganham o efeito (simulador: experimento quantidade). 
-			[ ] PROBLEMA a tratar: quantidades diferentes podem chegar na mesma matriz (ex.: 4 mal cozidos ≈ 3 bem cozidos). Hoje só o aproveitamento mínimo segura. Já é o suficiente, mas tem algo mais geral?
+		[?] Catálogo de poções (dados/pocoes): 
+			qualquer poção com a matriz perto de uma do catálogo recebe o nome dela e, se ela tiver, 
+			o efeito (com aproveitamento >= aproveitamento_min_efeito; 
+			evita 4 mal cozidos = 3 bem cozidos). 
+			Sem quantidades nem "Dobrada" (não serve para receitas não comutativas).
+			[?] Tolerância por poção (PocaoReferencia.distancia_max; 0 = a do catálogo, 0,05). 
+				Retorno: 0,02 → 2 ou 4 pós bem cozidos não viram mais Poção do Retorno nem ganham o efeito 
+				(simulador: experimento quantidade). 
+			[ ] PROBLEMA a tratar: quantidades diferentes podem chegar na mesma matriz (ex.: 4 mal cozidos ≈ 3 bem cozidos). 
+				Hoje só o aproveitamento mínimo segura. Já é o suficiente, mas tem algo mais geral?
 
 [ ] Livro de Receitas:
-	[ ] Cena do Livro:
-		[ ] Pensar em fazer um auto-cozinhar seguindo uma receita?... (pensar)
+	[?] Ao criar uma poção desconhecida ele pede para dar o nome. O nome vai para a receita e para a poção criada, e fica armazenada, se o jogador criar outra semelhante o nome já virá automaticamente.
+		[?] Já funciona: sai como "Poção desconhecida" e o nome é dado no livro (ao passar o rascunho a limpo); vai para a receita, o item e o catálogo do jogador (salvo), e as próximas parecidas já vêm com o nome.
 	[ ] Receitas:
+		[?] Nome: poção de um item só agora usa "Poção de [item] [qualidade]" antes de procurar no catálogo (senão um pó mal cozido virava "Concentrada").
 		[ ] Balanceamento de Receitas:
 			[.] Criar mais receitas:
 				Receita que é muito rápida , 
@@ -196,28 +179,41 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 				Poção da Calma Profunda. Poção #2. Poções proíbidas. 
 				Poção #2 = Poção da Desenvoltura (definir bem antes do Cap. 1; só usada no Cap. X).
 				Poções proibidas: as que têm algum autovalor 0 (2^5 − 1 = 31 combinações de traços zerados). Ainda sem nome. (feito: 31 no catálogo como "Poção Proibida (sem O, C...)", nomes provisórios)
-		[?] Nome: poção de um item só agora usa "Poção de [item] [qualidade]" antes de procurar no catálogo (senão um pó mal cozido virava "Concentrada").
-
 
 [ ] Diálogos 100%
-	[?] Intro : revisar texto (tempo e ritmo). ultimas frases da intro estão pequenas em comparação.
 	[ ] Cap. 1: Revisão de cada evento.
 	[ ] Sprites do  Balão de expressão: precisa da arte (1 sprite de balão, se der pra fazer sem deformar as quinas seria ideal) (talvez 9 blocos)
+		[?] Pronto para a arte: assets/ui/balao.png (um sprite com o rabicho embaixo no meio, desenhado em 2×). Cantos de 40 px não esticam; só o meio estica. Rabicho: faixa de 24 px de baixo. Deixei um provisório no lugar; sem o arquivo volta o desenhado em código. Ajustes em cmd_balao.gd (MARGEM_SPRITE, RABO_SPRITE, ESCALA_SPRITE).
 	[ ] Estilo visual:
 		[ ] organizar o layout e textura dialogo/opções
 		[ ]	Ajuste estético, borda, cor, fonte, etc.
+	[?] Só aparece a setinha pra baixo para avançar diálogo quando a frase terminar. antes disso o botão o botão pode ser apertado mas o simbolo para baixo não pode ter.
+		[?] Feito: a ▼ some enquanto o texto está sendo escrito e aparece (0,2 s) quando a frase termina. O toque continua funcionando antes (completa a frase).
+
+
 
 [ ] História/Roteiro
-	[ ]	Diálogos devem condizer com a época
-		[ ] Cap. 1 (-N)
+	>>>	Diálogos devem condizer com a época
+	
+	[ ] Revisar diálogos dos eventos/cenas:
+		[.] Cap. 1 (-N)
 			[?] intro-Campones
-			[.] Guardas
+			[?] Guardas
 			[ ] Bosque NPC
-			[.] Cidade 
-			[.] Castelo
+			[?] Cidade
+				[ ] Casa 1, não tem nada. 
+			[?] Castelo
+				[ ] Casamento
+				[ ] Fuga
+					[ ] Com Retorno
+					[ ] Sem Retorno
+				[ ] Esperar
+					[ ] Abriu porta -> Fuga
+					>>> Enrolar -> dia nunca passa
+				 
 		[ ] Cap. 2
-        	[ ] Qual traço? 
-            [ ] Qual quest?
+			[ ] Qual traço? 
+			[ ] Qual quest?
 	>>> Usar traços na história: 
 		O,(conservador com pouca abertura)
 		C (consequencialidade, prudencia, preguiçoso),
@@ -226,7 +222,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 	[ ] Poções proibidas numa quest
 
 
-[ ] Quests
+[ ] Quests (tirar?)
 	[ ] Quest Zigmund
 		[ ] personalidade
 		[ ] situação
@@ -237,9 +233,8 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 			[!] pediu para a bruxa ajudar a princesa
 			[!] casamento
 	[ ] Quest Bosque Goblin
-		[ ] ???
-	[ ] Cap. 1 Casamento
-		[ ] cidadeA_in01 não tem quest?
+		[ ] (ainda não tem nada fixo, mas pode ser um ser mágico que vive no bosque)
+
 	[.] Mercador
 		[ ] Inventário de cada, personalidade de cada?
 		[ ] Comprar e Vender? 
@@ -251,22 +246,24 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 	[ ] Criar personalidades big five
 	[ ] Cada personagem tem seu linguajar próprio e manias.
 		[ ] Bruxa
-		[ ] Campones
-		[ ] Guarda1
-		[ ] Guarda2
+		[ ] Campones N+ C-
+		[ ] Guarda1 C- A+
+		[ ] Guarda2 C+
 		[ ] bosque_npc
 		[ ] Cidade
-			[ ] NPC Adulto
-			[ ] NPC Criança 1 
-			[ ] NPC Criança 2
+			[ ] NPC Adulto O- 
+			[ ] NPC Criança 1 O++ 
+			[ ] NPC Criança 2 O++ A+
 			[ ] Casa 1
 				[ ] NPC 
 			[ ] Casa 2
-				[ ] Mercador Pai
-				[ ] Mercador Filho
+				[ ] Mercador Pai A+
+				[ ] Mercador Filho E--
 			[ ] Igreja
-				[ ] Padre
-
+				[ ] Padre O- C++ A+
+		[ ] Castelo
+			[ ] Rei O- C- A+
+			[ ] Princesa N++ A+ O+
 
 [ ] Documentação e Organização
 	[ ] organização da pasta Graphics(está sendo chamada de assets neste projeto) estilo rpgmaker:
@@ -278,34 +275,22 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		Transitions
 		Windowskins (janelas, etc)
 	[ ] Debug e ferramentas
-		[?] Debug, aba Poções: histograma do aproveitamento de cada poção feita (user://estatisticas_pocoes.txt; só em build de debug), zerar, e botões para dar qualquer poção do catálogo pronta (★ = tem efeito).
-		[?] Jogadas gravadas (só em build de debug): user://jogadas/<data>.json com histórico T/F, entradas, ações (+Fogo, −Fogo, acender, jogar), receita memorizada e aproveitamento. Usadas pela ferramenta de balanceamento.
-	[ ] GDD
-		[!] v1
-		[!] v2
-		[!] v3.3
-    
-	>>> Referência (já feito, fica para consulta):
-		Simulador do caldeirão (ferramentas/simulador_caldeirao.py, Python 3; gráficos com matplotlib): mesmas contas do jogo, lidas dos .gd/.tres. Experimentos: receitas, rodar, tempo, chama, mapa, monte (Monte Carlo), janelas, quantidade, otimizar, relatorio. Saída em ferramentas/sim_saida/. Ex.: python ferramentas/simulador_caldeirao.py tempo retorno
-		Ferramenta de balanceamento (ferramentas/balanceamento.py; PySide6 + matplotlib; usa o simulador): abas Receita (editar passos, rodar, comparar com a anterior), Sensibilidade, Monte Carlo, Itens (mexer nos parâmetros ao vivo e salvar no .tres), Testes, Dificuldade (nota 1 a 5) e Jogadas reais (reavaliar e calibrar a jogadora simulada; grava ferramentas/calibracao.json). Linha de comando: --testes, --dificuldade, --calibrar [pasta].
-			Aba Receita: escolher receita ou "(receita nova)", mudar chama, item, quantidade e segundos, + chama / + ingrediente / remover / subir / descer, rodar sozinho a cada mudança. Mostra o nome que o jogo daria (água, catálogo, um item só, parecida com ingrediente, desconhecida) e o porquê, o efeito, a diagonal da matriz e as 3 poções mais perto (distância / tolerância). Simulador: receita que termina num passo de chama finaliza quando a chama chega nele.
-		Editor de eventos em Python (_/editor_eventos, abrir com abrir_editor.bat; precisa de PySide6): páginas, condições, comandos, diálogo em texto (Ctrl+T), labels (F12), várias páginas/eventos de uma vez, buscar/substituir, desfazer, backup ao salvar. Ver _/editor_eventos/README.md.
-		Parallax e câmera nas bordas: na borda a câmera para e todas as camadas param junto (fatores: fundo 0.2, meio 1.0, frente 1.1, interiores "Frente+" 0.9).
-		Regra das imagens (para não aparecer cinza): camada sem loop precisa de largura ≥ 640 + fator × (largura do mapa − 640). Ex.: Frente 1.1 em mapa de 6000 px = 6536 px (ou scale x 1.09). Mapas maiores não são necessários.
-		Por camada: bosque (Meio chão 1.0, Frente árvores 1.1, scale 1.07); bruxa_out (Fundo 0.2, casa no Meio); castelo_in03 (Fundo 0.2, Frente 1.1, scale 1.051); castelo_out (Fundo 0.2, Frente 1.1); cidadeA, estradaA, estradaB (Fundo 0.2); ponte (Fundo4 céu, Fundo3 nuvens longe pan -6, Fundo2 montanha, Fundo nuvens pan -12, todos 0.2; Meio/Meio2/Meio3 1.0; Frente nuvens 1.1 pan -40).
+		[.] Debug, aba Poções: histograma do aproveitamento de cada poção feita (user://estatisticas_pocoes.txt; só em build de debug), zerar, e botões para dar qualquer poção do catálogo pronta (★ = tem efeito).
+			[.] Colocar botão poara limpar o histórico.
+	
 
-
-[ ] Decisões menores:
-	[ ] (fazer depois) Personalidade do alvo na hora de aplicar a poção.
-	[ ] (fazer depois) A ação da poção deve mostrar a personalidade mudando.
+[ ] Aplicar poção:
+	[.] A ação da poção deve mostrar a personalidade mudando.
 		Ideia: um pequeno menu com a face da pessoa e a personalidade dela mudando; a personalidade fica na carta Status. Layout ainda a definir.
-	[ ] (fazer depois) Logo: diminuir o caldeirão e deixar mono tom, sem efeitos.
+		[?] Feito (1ª versão): MenuAplicarPocao (src/ui/menu_aplicar_pocao.gd). Abre junto com o inventário no "Aplicar poção": nome e face do alvo (dados/falantes/<personalidade>.tres, ou o campo "personagem" do comando) e o pentagrama O C E A N com a personalidade dele (só a forma, −10 a 10). Tocar numa poção mostra a prévia tracejada; aplicar anima a forma e mostra setinhas ↑↓ por um instante; depois fecha. Fica sobre a carta Status, com a face e o nome numa carta logo acima (os outros jeitos e a tecla M saíram).
+		[?] Destaque ao aplicar: o popup fecha, 0,5 s depois a carta dá um clarão dourado, a face brilha, cresce e treme com faíscas, e o pentagrama muda devagar (com um pequeno "passa e volta"), as pontas que mudaram pulsam e as setinhas ↑↓ ficam maiores e pulando. O efeito mágico no alvo acontece junto. O menu fica mais 1,2 s e fecha.
+		[?] Escala da mudança: agora o pentagrama usa o valor real (−10 a 10) na prévia e ao aplicar, sem raiz. Mudanças pequenas ficam quase imperceptíveis. Contorno cinza = como estava.
+		[ ] Adicionar tecla para trocar o layout do aplicação de poção. quero uma opção em que a personalidade da pessoa apareça aonde está o status da bruxa, e a foto apareça numa carta acima do status.
+			[?] Feito: ficou só este jeito (os outros e a tecla M saíram); o pentagrama do alvo fica exatamente no lugar da carta Status da bruxa e a face com o nome numa carta logo acima dela (mesma largura).
 	[ ] Representação de poções visual com matriz/grafo. (feito, versão simples: no pentágono cada ponta sai do traço que mais contribui e gira até a sua; diagonal = só escala com um pulo)
 		[ ] (Cap. 2) Mostrar o pentagrama, cada aresta representa um componente. Pensei em relacionar as arestas com a_ij e criar um feedback útil visualmente.
 		[ ] (Cap. 2) O pentagrama deve ter animações a depender da matriz. Por exemplo, matriz diagonal (ou próxima de diagonal a menos de ruído) só escala, então a animação do pentagram é escalar. Matriz que troca dois componentes deve trocar duas pontas do pentagrama suavemente, como uma permutação ou rotação.
 
-[ ] Bugs/Revisão:
-	[ ] missao01_convite é gravada e nunca lida: fica para o Cap. 2 (convite do casamento).
 ```
 
 ## Ideias guardadas: traços e próximas poções
@@ -355,6 +340,33 @@ Itens possíveis (receitas: rápida, demorada de faixa estreita, chama negra, fr
 		Orvalho-da-lua: N ×0,85, E ×0,95 (calma, recolhimento). 30 a 60 s.
 		Flor-de-gelo: A ×1,10, O ×0,95 (doçura, conformidade). 25 a 50 s.
 		Lágrima-de-fantasma: O ×1,12, N ×1,05 (sensibilidade ao véu). 40 a 70 s.
+
+NPC do bosque: o goblin (ideia, ainda não feito)
+	Vigia os cogumelos brilhantes. A baixo (grosso, cobra pedágio), N alto (desconfiado de tudo).
+	Cap. 1: só sabor e uma dica, sem quest. Cap. 2: alvo natural da Poção da Brandura (subir A).
+	1ª vez:
+		GOBLIN: Pare aí! Esses cogumelos têm dono.
+		BRUXA: E quem seria o dono?
+		GOBLIN: Eu. Quem passa, paga. Um cogumelo por cabeça... e você tem cabeça grande, com esse chapéu.
+		BRUXA: Não vim colher nada. Só estou de passagem para a cidade.
+		GOBLIN: Todos dizem isso. Depois some a metade do bosque.
+		GOBLIN: Lá na cidade andam falando de mulheres de chapéu. Os homens do Papa estão perguntando por elas.
+		BRUXA: (Hmm... então a notícia já chegou aqui.)
+	Depois:
+		GOBLIN: Você de novo. Não toque em nada.
+		GOBLIN: Se for ao castelo, olhe para o alto da torre. A névoa de lá não é névoa.
+
+Receitas para os extremos que faltam (ideias; testar no simulador antes)
+	Raiz-de-teixo (demorada): C ×1,15, O ×0,95. Só chama normal (95 a 105 °C), 100 a 160 s.
+		Poção da Disciplina (C ×1,2): chama normal, 2 raízes por 120 s. Para Zigmund / guarda que dorme.
+	Faísca-de-vagalume (rápida): O ×1,10, C ×0,95. Chama branca (145 a 163 °C), 3 a 6 s.
+		Poção da Visão (O ×1,2): chama branca, 3 faíscas em sequência, finalizar logo. Liga com o véu e a heresia (Cap. 3).
+	Escama-de-salamandra (chama negra): E ×1,20, A ×0,90. Só chama negra (195 °C ou mais), 10 a 25 s.
+		Poção da Coragem: chama negra, 2 escamas; fecha com 1 olho de salamandra para amaciar (mesma criatura, outra parte).
+	Orvalho-da-lua (fria): N ×0,85, E ×0,95. Estraga acima de 85 °C, 30 a 60 s (usa transparente e pêssego).
+		Poção do Recolhimento: transparente, 2 orvalhos; sobe para pêssego e 1 musgo-do-recato no fim.
+	Onde achar: raiz na floresta; faísca no bosque (perto do goblin); escama com o mercador; orvalho raro no bruxa_out.
+	Testar: se a chama negra cansa (F perto do máximo) e se a faixa estreita da raiz é jogável no celular.
 ```
 
 ## Possíveis expansões (futuras)

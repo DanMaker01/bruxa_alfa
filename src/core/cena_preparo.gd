@@ -101,6 +101,7 @@ var _punindo_agora: bool = false
 var _quente_agora: float = 0.0   # pior nível de "quente demais" agora (0..1), para o som
 var _frio_agora: float = 0.0     # pior nível de "frio demais" agora (0..1), para o som
 var _icone_pocao: Texture2D
+var _inventario_sujo: bool = false   # o inventário mudou com o resultado aberto
 var _icone_voltar: Texture2D
 
 # =============================================================================
@@ -364,6 +365,12 @@ func _conectar_botoes() -> void:
 func _popular_inventario() -> void:
 	if not game_temp or not database or not lista_ingredientes:
 		return
+	# poção nova entrando no inventário com a janela de resultado aberta: não remonta a
+	# lista do caldeirão agora (os nomes piscavam embaixo); remonta no próximo preparo
+	if janela_resultado and janela_resultado.visible:
+		_inventario_sujo = true
+		return
+	_inventario_sujo = false
 	for child in lista_ingredientes.get_children():
 		child.queue_free()
 	var inventario = game_temp.get_inventory()
@@ -630,6 +637,8 @@ func _atualizar_botao_pocao() -> void:
 # =============================================================================
 func _iniciar_preparo() -> void:
 	# Sempre reseta (é chamado quando a cena abre)
+	if _inventario_sujo:
+		_popular_inventario()
 	preparo_ativo = true
 	preparo_pausado = false
 	sistema.reset()
@@ -837,13 +846,14 @@ func get_ingredientes() -> Array:
 func is_preparando() -> bool:
 	return preparo_ativo
 
-## TESTE: P troca as cores do anel (sempre contínuo), C liga o anel já colorido (revelando),
-## T troca o aviso de quente/frio do ícone; K troca o toque do produtório. (Régua: absoluta.)
+## TESTE: T troca o aviso de quente/frio do ícone. (Régua: absoluta.)
+## (Escolhidos e fixos: anel na paleta faixa, sem pré-colorir; falas em balões soltos;
+## no resultado, toque acelera.)
 func _unhandled_input(event: InputEvent) -> void:
 	if not visible or not (event is InputEventKey) or not event.pressed or event.echo:
 		return
 	var tecla := OS.get_keycode_string(event.keycode)
-	if tecla in ["P", "C", "T", "K"]:
+	if tecla == "T":
 		trocar_modo(tecla)
 		get_viewport().set_input_as_handled()
 
@@ -902,22 +912,13 @@ func _item_no_ponto(_i: int) -> void:
 	var nome := SOM_NO_PONTO if ResourceLoader.exists("res://audio/se/%s.mp3" % SOM_NO_PONTO) else SOM_NO_PONTO_RESERVA
 	audio.play_se(nome, 0.7, 0.05)
 
-## Modos de teste (teclas P / C / T / K).
+## Modo de teste (tecla T).
 func trocar_modo(tecla: String) -> void:
 	var cor := Color(0.85, 0.85, 1.0)
 	match tecla:
-		"P":
-			IconesCaldeirao.paleta = (IconesCaldeirao.paleta + 1) % IconesCaldeirao.Paleta.size()
-			feedback.texto_flutuante("cores: " + IconesCaldeirao.NOMES_PALETA[IconesCaldeirao.paleta], cor)
-		"C":
-			IconesCaldeirao.precolorido = not IconesCaldeirao.precolorido
-			feedback.texto_flutuante("anel já colorido: " + ("sim" if IconesCaldeirao.precolorido else "não"), cor)
 		"T":
 			IconesCaldeirao.modo_temp = (IconesCaldeirao.modo_temp + 1) % IconesCaldeirao.ModoTemp.size()
 			feedback.texto_flutuante("aviso quente/frio: " + IconesCaldeirao.NOMES_MODO_TEMP[IconesCaldeirao.modo_temp], cor)
-		"K":
-			AnimacaoProdutorio.toque = (AnimacaoProdutorio.toque + 1) % AnimacaoProdutorio.Toque.size()
-			feedback.texto_flutuante("produtório: " + AnimacaoProdutorio.NOMES_TOQUE[AnimacaoProdutorio.toque], cor)
 	if debug_ui:
 		debug_ui.atualizar_modos()
 

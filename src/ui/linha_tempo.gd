@@ -48,7 +48,7 @@ var _h0: float = ALTURA   # altura da curva principal
 ## historico: [{"t", "T"}...] do preparo; t0: entrada do ingrediente; tf: fim do preparo.
 ## t_inicio: começo da receita (entrada do 1º ingrediente); o gráfico vai de t_inicio a tf.
 func configurar(historico: Array, t0: float, tf: float, t_inicio: float = 0.0) -> void:
-	_hist = historico
+	_hist = reduzir(historico)
 	_ti = t_inicio
 	_t0 = t0
 	_tf = maxf(tf, t_inicio + 0.001)
@@ -104,6 +104,48 @@ func _T_em(t: float) -> float:
 			break
 		melhor = float(p.get("T", T_MIN))
 	return melhor
+
+## Histórico do preparo com menos pontos para desenhar (a cada 50 ms dá milhares: deixava
+## os gráficos do resultado pesados). Em cada fatia de tempo guarda o ponto mais frio e o
+## mais quente (a forma da curva não muda). Resultado guardado: as várias linhas usam o mesmo.
+const FATIAS_GRAFICO: int = 160
+static var _red_origem: Array = []
+static var _red_tam: int = -1
+static var _red: Array = []
+static func reduzir(hist: Array) -> Array:
+	if hist.size() <= FATIAS_GRAFICO * 2:
+		return hist
+	if is_same(hist, _red_origem) and hist.size() == _red_tam:
+		return _red
+	var out: Array = []
+	var n := hist.size()
+	var passo: float = float(n) / float(FATIAS_GRAFICO)
+	for k in FATIAS_GRAFICO:
+		var i0 := int(k * passo)
+		var i1 := mini(int((k + 1) * passo), n)
+		if i1 <= i0:
+			continue
+		var i_min := i0
+		var i_max := i0
+		for i in range(i0, i1):
+			var T: float = float(hist[i].get("T", 0.0))
+			if T < float(hist[i_min].get("T", 0.0)):
+				i_min = i
+			if T > float(hist[i_max].get("T", 0.0)):
+				i_max = i
+		var a := mini(i_min, i_max)
+		var b := maxi(i_min, i_max)
+		if k == 0 and a != 0:
+			out.append(hist[0])
+		out.append(hist[a])
+		if b != a:
+			out.append(hist[b])
+	if out[-1] != hist[n - 1]:
+		out.append(hist[n - 1])
+	_red_origem = hist
+	_red_tam = n
+	_red = out
+	return out
 
 ## Mesma cor da chama do caldeirão para essa temperatura do caldo.
 static func cor_da_temperatura(T: float) -> Color:

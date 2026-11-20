@@ -206,7 +206,7 @@ func atualizar(sistema: SistemaTermico, delta: float, perda_media: float, _punin
 		var cor = sistema.get_cor_fogo()
 		# chama opaca (FOGO_ALFA_MAX) enquanto F >= F_LIMIT_MIN; abaixo disso (apagou)
 		# vai ficando transparente até sumir junto com o F
-		cor.a = FOGO_ALFA_MAX * clampf(sistema.F / SistemaTermico.F_LIMIT_MIN, 0.0, 1.0)
+		cor.a = FOGO_ALFA_MAX * clampf(sistema.F / SistemaTermico.F_LIMIT_MIN, 0.0, 1.0) * sistema.alfa_fogo()   # transparente: translúcida
 		_fogo_aceso = sistema.fogo_ligado
 		fogo.self_modulate = cor
 		fogo.visible = sistema.fogo_ligado or cor.a > 0.05

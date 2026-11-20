@@ -46,5 +46,6 @@ func executar(interp, ev) -> int:
 	if not ResourceLoader.exists(caminho):
 		interp.falhar(ev, self, "mapa não existe: '%s' (%s)" % [mapa, caminho])
 		return AVANCAR
+	interp.evento_chegada = ev   # cenas automáticas do mapa novo esperam este evento acabar
 	interp.teleport_requested.emit(caminho, posicao.x, posicao.y, DIRECOES[direcao])
 	return AVANCAR

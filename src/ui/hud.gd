@@ -43,6 +43,8 @@ var popup_instance = null
 # botão de ação no popup; "Desistir" cancela. Resultado no sinal item_escolhido.
 # =============================================================================
 signal item_escolhido(id: String)   # "" = desistiu
+## Escolhendo item: tocou num item (popup aberto) ou fechou o popup (""). Para a prévia.
+signal item_em_foco(id: String)
 var _escolha_texto: String = ""
 var _escolha_ativo_antes: bool = true
 var _botao_desistir: Button
@@ -271,9 +273,12 @@ func destacar_item(id: String) -> void:
 	var linha := _linha_do_item(id)
 	if linha == null:
 		return
-	linha.modulate = Color(1.6, 1.3, 0.6, 0.0)
 	var tw := linha.create_tween()
-	tw.tween_property(linha, "modulate", Color(1.6, 1.3, 0.6, 1.0), 0.2)
+	if linha.modulate.a < 0.5:   # poção nova (escondida): aparece com o brilho
+		linha.modulate = Color(1.6, 1.3, 0.6, 0.0)
+		tw.tween_property(linha, "modulate", Color(1.6, 1.3, 0.6, 1.0), 0.2)
+	else:                        # já estava na lista: só brilha, sem sumir
+		tw.tween_property(linha, "modulate", Color(1.6, 1.3, 0.6, 1.0), 0.2)
 	tw.tween_property(linha, "modulate", Color.WHITE, 0.6)
 
 func _create_item_button(item_name: String, quantity: int) -> Button:
@@ -339,6 +344,7 @@ func _on_item_button_pressed(item_name: String):
 	popup_instance.show_item(titulo, item_data, quantity, anchor, area)
 	if _escolha_texto != "":
 		popup_instance.mostrar_acao(_escolha_texto, _terminar_escolha.bind(item_name))
+		item_em_foco.emit(item_name)
 	elif item:
 		popup_instance.mostrar_acao("Usar", _usar_item.bind(item_name))
 
@@ -408,6 +414,8 @@ func _on_popup_closed():
 	if popup_instance:
 		popup_instance.visible = false
 	carta_inventario.segurar = _escolha_texto != ""   # escolhendo item: o inventário fica aberto
+	if _escolha_texto != "":
+		item_em_foco.emit("")
 
 # =============================================================================
 # STATUS

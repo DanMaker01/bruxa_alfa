@@ -5,10 +5,8 @@
 #   2. pentágono O-C-E-A-N (efeito numa pessoa neutra);
 #   3. ingredientes com o anel de aproveitamento (tocar num ícone abre os detalhes).
 # Gráfico da temperatura sempre visível (tocar num ingrediente destaca o trecho dele).
-# Tecla G (teste) troca onde ele fica (ResultadoVistas.modo_grafico):
-#   0 CARTA3   em cima na carta de ingredientes, ícones e detalhe embaixo
-#   1 CARTA4   uma 4ª carta só com o gráfico (2 cartas em cima, 2 embaixo)
-#   2 DETALHE  ícones em cima; embaixo o detalhe do item e o gráfico fixo
+# Onde ele fica: DETALHE (escolhido; a tecla G saiu): ícones em cima; embaixo o detalhe do
+# item e o gráfico fixo. (CARTA3 e CARTA4 ficam no código só como referência.)
 # Ao confirmar, as cartas 2 e 3 fecham, a matriz vira a poção e a carta 1 fecha.
 class_name ResultadoVistas
 extends Control
@@ -33,10 +31,6 @@ const NOMES_MODO_GRAFICO := ["gráfico em cima da carta de ingredientes", "gráf
 static var modo_grafico: int = ModoGrafico.DETALHE
 var grafico: GraficoResultado
 var _r_detalhe: Rect2 = C_DETALHE
-
-## G alterna entre os dois escolhidos: fixo embaixo com o detalhe / 4ª carta (o "em cima da carta 3" saiu).
-static func proximo_modo_grafico() -> void:
-	modo_grafico = ModoGrafico.CARTA4 if modo_grafico == ModoGrafico.DETALHE else ModoGrafico.DETALHE
 
 ## Retângulos (tela) da carta de ingredientes, do gráfico, da área dos ícones e do detalhe, pelo modo.
 func _layout() -> Dictionary:
@@ -547,7 +541,7 @@ class GraficoResultado extends Control:
 		_f = get_theme_default_font()
 
 	func configurar(hist: Array, ti: float, tf: float, diags: Array) -> void:
-		_hist = hist
+		_hist = LinhaTempo.reduzir(hist)   # menos pontos: desenhar a cada quadro da animação ficava pesado
 		_ti = ti
 		_tf = maxf(tf, ti + 0.001)
 		_diags = diags
