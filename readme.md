@@ -26,7 +26,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 
 [ ] Arte Visual 100% 	(arquivos .png estão na pasta /assets/)
 
-	[ ] Faces			(422x908 hoje, porém a parte de baixo fica escondida atrás da caixa de diálogo. pode mudar para 420x740 ou outro tamanho)
+	[ ] Faces	(422x908 hoje, porém a parte de baixo fica escondida atrás da caixa de diálogo. pode mudar para 420x740 ou outro tamanho)
 		[ ] Bruxa
 			[ ] neutro
 			[ ] pensando
@@ -48,59 +48,59 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] Padre
 			[ ] neutro
 
-	[ ] Sprites		(tamanhos variados (a âncora do sprite é o CENTRO-INFERIOR) (pode mudar as larg/alt se quiser)
+	[ ] Sprites		(tamanhos variados) (a âncora do sprite é o CENTRO-INFERIOR) (pode mudar as larg/alt se quiser)
 		[ ] Bruxa
-			[ ] parada			(80x252)
-			[ ] andando			(126x252)
-			[ ] correndo		(126x252)
-		[ ] Rei					(105x200)
-		[ ] Princesa			(105x200)
-		[ ] Guarda1				(105x200)
+			[ ] parada		(80x252)
+			[ ] andando		(126x252)
+			[ ] correndo	(126x252)
+		[ ] Rei				(105x200)
+		[ ] Princesa		(105x200)
+		[ ] Guarda1			(105x200)
 			[ ] parado
 			[ ] andando
-		[ ] Guarda2				(105x200)
+		[ ] Guarda2			(105x200)
 			[ ] parado
 			[ ] andando
-		[ ] NPC1 - Criança		(105x145)
+		[ ] NPC1 - Criança	(105x145)
 			[ ] parado
 			[ ] andando
-		[ ] NPC2 - Criança		(105x145)
+		[ ] NPC2 - Criança	(105x145)
 			[ ] parado
 			[ ] andando
-		[ ] NPC3 - Adulto		(105x200)
+		[ ] NPC3 - Adulto	(105x200)
 			[ ] parado
-		[ ] Mercador pai		(105x200)
+		[ ] Mercador pai	(105x200)
 			[ ] parado
-		[ ] Mercador filho		(105x200)
+		[ ] Mercador filho	(105x200)
 			[ ] parado
-		[ ] Padre				(105x200)
+		[ ] Padre			(105x200)
 			[ ] parado
 		[ ] Portas
-			[ ] porta padrão	(90x180)
+			[ ] porta padrão (90x180)
 			[ ] porta bruxa
 			[ ] portão castelo
 		[ ] Objetos
-			[ ] Livro de Receitas	(69x69)
+			[ ] Livro de Receitas (69x69)
 			[ ] ...
 
-	[ ] Cenários		(largura variada, altura:640px)
-		[ ] floresta			(6000x640)
-		[ ] bruxa_in			(1280x640)
-		[ ] bruxa_out1			(1280x640)
-		[ ] bruxa_out2			(1280x640)
-		[ ] bruxa_out3			(1280x640)
-		[ ] bosque				(2000x640)
-		[ ] cidade				(4000x640)
-		[ ] cidade_in01			(1280x640)
-		[ ] cidade_in02			(1280x640)
-		[ ] cidade_in03			(2000x640)
-		[ ] estrada_a			(2000x640)
-		[ ] ponte				(2000x640)
-		[ ] castelo				(3000x640)
-		[ ] castelo_in01		(2500x640)
-		[ ] castelo_in02		(1280x640)
-		[ ] castelo_in03		(1280x640)
-		[ ] estrada_b			(2000x640)
+	[ ] Cenários		(largura variada, altura: 640px)
+		[ ] floresta		(6000x640)
+		[ ] bruxa_in		(1280x640)
+		[ ] bruxa_out1		(1280x640)
+		[ ] bruxa_out2		(1280x640)
+		[ ] bruxa_out3		(1280x640)
+		[ ] bosque			(2000x640)
+		[ ] cidade			(4000x640)
+		[ ] cidade_in01		(1280x640)
+		[ ] cidade_in02		(1280x640)
+		[ ] cidade_in03		(2000x640)
+		[ ] estrada_a		(2000x640)
+		[ ] ponte			(2000x640)
+		[ ] castelo			(3000x640)
+		[ ] castelo_in01	(2500x640)
+		[ ] castelo_in02	(1280x640)
+		[ ] castelo_in03	(1280x640)
+		[ ] estrada_b		(2000x640)
 
 [ ]	Audio 100%
 	[ ] BGM:
@@ -120,6 +120,8 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] castelo_in01, castelo_in02
 		[ ] castelo_in03
 		[ ] estrada_b
+		[ ] menu inicial
+		[ ] ???
 	[ ] BGS:
 		[ ] sapos (bruxa_out1)
 		[ ] tremor
@@ -140,49 +142,38 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 
 [ ]	Menus 100%
 	[ ] Estilo de cartas
-		[ ] definir carta para cada clicável.
+		[ ] definir carta para cada clicável. o que falta?
 	[.] menu inicial
 		[ ] bg
-		[ ] bgm
-	[?] menu pause - ok?
-    [?] cena caldeirão
-		[?] L para mudar Layouts, decidir: caldeirão grande, botões maiores? testar mais alterativas
-	[?] opções (único)
-		[!] audio, 
-		[!] vel texto
-        [?] Pergunta: o que mais?
-    [ ] hud, falta algo?
+    [ ] hud, falta algo? rever.
 
 [ ] Caldeirão 100%
 	[?] Fogo frio: 3 cores de 400 a 800 (transparente 400, azul pálido 600, normal vermelho 800; no livro "Transparente grande" virou "Azul pálido"). Aceso fica opaco (alfa 0,8); só abaixo de 400 (apagando) vai sumindo até F = 0. (sistema_termico.gd CORES_FOGO)
+		Definir melhor: as cores infra. as cores ultra 400° já estão um pouco melhores. Por exemplo, não gostei que tem outro tom de azul na chama fraca, pois já tem azul sendo usado. talvez rosa seria melhor. 
 	[ ] Layout
 		[ ] Reformular Layout (pensar em celular). 
-			[?] Alternativas de layout: tecla L no caldeirão troca entre Atual, Polegares (botões de fogo e itens maiores, caldeirão menor), Caldeirão grande (caldeirão 1,2×, itens menores) e Fogo nas laterais (−Fogo e +Fogo altos nas bordas, itens no meio). A escolha fica salva (user://opcoes.cfg). Valores em LayoutPreparo.LAYOUTS.
+			[?] Alternativas de layout: tecla L no caldeirão troca entre Atual, Polegares (botões de fogo e itens maiores, caldeirão menor), Caldeirão grande (caldeirão 1,2×, itens menores) e Fogo nas laterais 	(−Fogo e +Fogo altos nas bordas, itens no meio). A escolha fica salva (user://opcoes.cfg). Valores em LayoutPreparo.LAYOUTS.
+			REMOVER: estilo de layout lateral
 			Tamanhos: Menus, botões, Bruxa_chibi, caldeirão 
-			texto em cima do caldeirão -> passar para falas da bruxa, feedback rápido da bruxa? multi balões?
+		[ ] texto em cima do caldeirão -> passar para falas da bruxa, feedback rápido da bruxa? multi balões?
 		[ ] Dúvida: Usar cartas tbm na cena do caldeirão, para botões, etc? testar como ficaria. 
 			Carta comprida é meio estranho. O que usar então? Mudança de layout afeta?
-		[?] Resultado da Poção ok?
 	[ ] Feedback audiovisual pra temperatura do caldeirão e tbm dos itens, tanto frio quanto quente
-		[?] Som da cor: quando a temperatura entra numa cor nova da chama (e fica 0,25 s), toca um "tim" com a nota daquela cor (escala pentatônica, mais agudo nas cores quentes). SomCaldeirao.tim(), TIM_* para ajustar.
-		[?] TESTE de P e M:
-			M = absoluto
-			P = anel completo, provavelmente semáforo ou aproxima.
+		[?] TESTE de P e C:
+			P = anel completo, faixa vermelho -> ...
+				testei com a erva: quando o anel finaliza ele ainda está verde e fica no caldeirão ainda um bom tempo antes de sumir. 
+				acho que a erva está com tempo e cozimento maior que o máximo do anel. 
 			C = o anel já é colorido, mas vai sendo revelado.
-	[.] Teste de Segurar item para jogar multiplos
-		Teste #1: 9/10 certos (itens a cada 0,4 s). Faltam mais 2 testes.
-		Teste #2:  /10 certos 
-		Teste #3:  /10 certos 
+
 	[ ] Catálogo e poções
 		[?] Catálogo de poções (dados/pocoes): qualquer poção com a matriz perto de uma do catálogo recebe o nome dela e, se ela tiver, o efeito (com aproveitamento >= aproveitamento_min_efeito; evita 4 mal cozidos = 3 bem cozidos). Sem quantidades nem "Dobrada" (não serve para receitas não comutativas).
-			[?] Pó de retorno ajustado para o tutorial: chama amarela (T 115–150 °C), ~25 s com os 3 pós (m 3300, s 2000/2200). Janela para 95%: ±5 s; para 90%: ±7 s. Receita do livro atualizada.
-			Poção do Retorno (antes "Poção de Pó de Retorno Concentrada"; diálogos de bruxa_in e castelo_in03 atualizados): matriz de 3 pós, efeito com 95% → volta para casa.
 			[?] Tolerância por poção (PocaoReferencia.distancia_max; 0 = a do catálogo, 0,05). Retorno: 0,02 → 2 ou 4 pós bem cozidos não viram mais Poção do Retorno nem ganham o efeito (simulador: experimento quantidade). 
-			[ ] PROBLEMA a tratar: quantidades diferentes podem chegar na mesma matriz (ex.: 4 mal cozidos ≈ 3 bem cozidos). Hoje só o aproveitamento mínimo segura.
+			[ ] PROBLEMA a tratar: quantidades diferentes podem chegar na mesma matriz (ex.: 4 mal cozidos ≈ 3 bem cozidos). Hoje só o aproveitamento mínimo segura. Já é o suficiente, mas tem algo mais geral?
 
 [ ] Livro de Receitas:
 	[ ] Cena do Livro:
 		[ ] Pensar em fazer um auto-cozinhar seguindo uma receita?... (pensar)
+		[ ] no tutorial, na hora do rascunho não deve estar escuriceido, só quando aparecer a indicação no botão.
 	[ ] Receitas:
 		[ ] Balanceamento de Receitas:
 			[.] Criar mais receitas:
@@ -215,18 +206,9 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ]	Criação de estilos padronizados para cada coisa. 
         	[ ] estilo de texto
         	[ ] estilo de janela, paleta de cores, animação coerente, etc...
-		[?] RESOLVER LOGO: Eventos de diálogo devem verificar se o próximo evento a tomar a frente será diálogo também, exceto depois de comando wait, etc.
-			Feito: a carta do diálogo não desvira se vem outro diálogo em seguida (Interpreter.dialogo_a_seguir: fila de diálogos ou próximo comando de um evento rodando, pulando os instantâneos como variável/if/label/item/som). 
-			Esperar, mover, fade etc. interrompem. Espera no máximo 1,5 s (carta.gd: ESPERA_MAX_DIALOGO).
-			se um evento acabar em mensagem e outro iniciar em mensagem com o mesmo falante, nome, foto etc então o card não deve fechar depois do primeiro evento, pois é uma continudade. 
-			exemplos disso acontecem ao chamar eventos por comando, entre outros.
-			Testar mais: no camponês, no castelo_in01.
-			Feito também: quem chamou outro evento (Chamar evento) e volta com fala depois que o chamado termina em fala: a carta não fecha entre os dois.
-			Rei: abrindo a carta 2x para o mesmo falante, "Tanta certeza assim?" "Pois aplique aqui na minha frente". Ver se é wait, ou o quê.
-			Era o "ir para" (goto) + esperar 0,5 s entre as falas. Feito: a carta segue o goto e esperas curtas (até 1 s somado, ESPERA_CURTA_DIALOGO) não fecham a carta.
-			[?] Testar: fala do rei e apagar esse tópico.
+		[ ] Efeito escuro do diálogo tbm deve esperar se o próximo evento é diálogo, para não ficar alternando a transparência toda hora
+		[ ] e a face em mostrar opções e a face em mostrar diálogo tbm deve se manter, se ela for aparecer novamente em breve.
 
-          
 [ ] História/Roteiro
 	[ ]	Diálogos devem condizer com a época
 		[ ] Cap. 1 (-N)
@@ -288,8 +270,6 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 				[ ] Padre
 
 
-[ ] Eventos/Core: ok? 1/3
-  
 [ ] Documentação e Organização
 	[ ] organização da pasta Graphics(está sendo chamada de assets neste projeto) estilo rpgmaker:
 		Animations (efeitos especiais, magias, etc)
@@ -306,7 +286,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[!] v1
 		[!] v2
 		[!] v3.3
-      
+    
 	>>> Referência (já feito, fica para consulta):
 		Simulador do caldeirão (ferramentas/simulador_caldeirao.py, Python 3; gráficos com matplotlib): mesmas contas do jogo, lidas dos .gd/.tres. Experimentos: receitas, rodar, tempo, chama, mapa, monte (Monte Carlo), janelas, quantidade, otimizar, relatorio. Saída em ferramentas/sim_saida/. Ex.: python ferramentas/simulador_caldeirao.py tempo retorno
 		Ferramenta de balanceamento (ferramentas/balanceamento.py; PySide6 + matplotlib; usa o simulador): abas Receita (editar passos, rodar, comparar com a anterior), Sensibilidade, Monte Carlo, Itens (mexer nos parâmetros ao vivo e salvar no .tres), Testes, Dificuldade (nota 1 a 5) e Jogadas reais (reavaliar e calibrar a jogadora simulada; grava ferramentas/calibracao.json). Linha de comando: --testes, --dificuldade, --calibrar [pasta].
