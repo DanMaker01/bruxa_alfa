@@ -998,8 +998,8 @@ func _input(event: InputEvent) -> void:
 			_limpar_toque.call_deferred()   # o papel ainda lê _toque_ini neste mesmo toque
 
 
-## Livro fechado: tocar na capa abre; tocar fora sai. Arrastar: na frente, para a direita
-## sai e para a esquerda abre; no verso, para a esquerda sai e para a direita abre.
+## Livro fechado: tocar na capa abre; tocar fora sai. Arrastar para qualquer lado sai
+## (na capa ou no verso).
 var _toque_fechado := Vector2(-1, -1)
 func _livro_fechado_input(event: InputEvent) -> void:
 	if _animando or not (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT):
@@ -1015,13 +1015,8 @@ func _livro_fechado_input(event: InputEvent) -> void:
 	var x = _capa_fechada.get_node_or_null("X")
 	if x and x.get_global_rect().has_point(ini):
 		return   # o ✕ da capa cuida
-	var frente: bool = _capa_fechada == _capa_frente
-	if absf(d.x) > SWIPE_MIN and absf(d.y) < absf(d.x):
-		var abre: bool = (d.x < 0) if frente else (d.x > 0)   # frente: esquerda abre; verso: direita abre
-		if abre:
-			abrir_livro()
-		else:
-			fechar()
+	if d.length() > SWIPE_MIN:
+		fechar()   # arrastou (qualquer direção): sai
 	elif _capa_fechada.get_global_rect().has_point(event.position):
 		abrir_livro()
 	else:

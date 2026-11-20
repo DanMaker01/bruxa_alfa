@@ -53,11 +53,11 @@ func avisar_mudancas(i: int, nome: String, est: Dictionary, t: float) -> void:
 		if nivel > int(antes.get(k, 0)) and _pode_avisar("%d:%s:%d" % [i, k, nivel], t):
 			# passando do ponto = aviso amarelo; passou muito (a perda já pesa) = vermelho
 			var cor_msg: Color = COR_PUNICAO if nivel == 2 else COR_ALERTA
-			texto_flutuante("%s: %s" % [nome, MSG_NIVEL[k][nivel]], cor_msg)
+			fala("%s: %s" % [nome, MSG_NIVEL[k][nivel]], false)
 			if nivel == 2:
 				marcador.emit(COR_PUNICAO)
 	if est.get("no_ponto", false) and not antes.get("no_ponto", false) and _pode_avisar("%d:no_ponto" % i, t):
-		texto_flutuante("%s: no ponto ✓" % nome, COR_OK)
+		fala("%s no ponto!" % nome, false)
 		marcador.emit(COR_OK)
 	var novo: Dictionary = est["niveis"].duplicate()
 	novo["no_ponto"] = est.get("no_ponto", false)
@@ -69,6 +69,20 @@ func _pode_avisar(chave: String, t: float) -> bool:
 	_ultimo_aviso[chave] = t
 	return true
 
+## Aviso do jogo dito pela bruxinha (balão), não mais texto flutuante em cima do caldeirão.
+## importante: entra na fila de falas; senão só aparece se o balão estiver livre (avisos de
+## cada item mudam rápido e não podem empilhar).
+func fala(texto: String, importante: bool = true) -> void:
+	var r = alvo.get("reacao") if alvo else null
+	if r == null:
+		texto_flutuante(texto, COR_ALERTA)
+		return
+	if importante:
+		r.dizer(texto, 2.0)
+	else:
+		r.dizer_se_livre(texto, 1.8)
+
+## Texto flutuante em cima do caldeirão (hoje só para as teclas de teste).
 func texto_flutuante(texto: String, cor: Color) -> void:
 	if not alvo:
 		return

@@ -528,7 +528,7 @@ func _perder_ingrediente(i: int) -> void:
 	_estados[i] = {}
 	_fatias_atual.erase(i)
 	icones.perder(i)
-	feedback.texto_flutuante(_nome_exibicao(acc["nome"]) + " se perdeu!", FeedbackPreparo.COR_PUNICAO)
+	feedback.fala(_nome_exibicao(acc["nome"]) + " se perdeu!")
 	_atualizar_botao_pocao()
 
 ## Ingredientes que ainda estão no caldeirão (sem os perdidos).
@@ -557,7 +557,7 @@ func _perda_media() -> float:
 func _fogo_clique_curto() -> void:
 	# Clique curto no [F] → pulso de fogo (F += CONST_A), só com o fogo aceso
 	if not sistema.fogo_ligado:
-		feedback.texto_flutuante("fogo apagado (segure para acender)", VisualCaldeirao.COR_FOGO_DESLIGA)
+		feedback.fala("O fogo está apagado. Segure para acender.")
 		return
 	indicadores.registrar_acao_adicionar(sistema)
 	gravador.acao(sistema.t_sim, "+fogo")
@@ -570,8 +570,8 @@ func _fogo_segurar(botao: Control = null) -> void:
 		return   # aceso: segurar o +Fogo não abafa mais (isso é do −Fogo)
 	sistema.ligar_fogo()
 	gravador.acao(sistema.t_sim, "acender")
-	var cor := visual.liga_desliga(botao if botao else botao_fogo, true)
-	feedback.texto_flutuante("fogo aceso!", cor)
+	var _cor := visual.liga_desliga(botao if botao else botao_fogo, true)
+	feedback.fala("Fogo aceso!")
 	Vibrar.media()
 
 ## Botão Acender/Apagar dos layouts novos.
@@ -580,8 +580,8 @@ func alternar_fogo() -> void:
 		_fogo_segurar()
 		return
 	sistema.desligar_fogo()
-	var cor := visual.apagou(botao_fogo)
-	feedback.texto_flutuante("fogo apagado", cor)
+	var _cor := visual.apagou(botao_fogo)
+	feedback.fala("Apaguei o fogo.")
 	Vibrar.dupla()
 
 ## Segurando com o fogo aceso: tira CONST_A de F; fraco demais → apaga.
@@ -592,8 +592,8 @@ func _abafar_fogo(botao: Control = null) -> void:
 	var b: Control = botao if botao else botao_fogo
 	gravador.acao(sistema.t_sim, "-fogo")
 	if sistema.abafar_fogo():
-		var cor := visual.apagou(b)
-		feedback.texto_flutuante("o fogo apagou!", cor)
+		var _cor := visual.apagou(b)
+		feedback.fala("O fogo apagou!")
 		Vibrar.dupla()
 		segurar_fogo.intervalo_repeticao = 0.0
 	else:
@@ -846,11 +846,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	if tecla in ["P", "C", "T", "K"]:
 		trocar_modo(tecla)
 		get_viewport().set_input_as_handled()
-	elif tecla == "L" and layout:   # alternativas de layout (celular)
-		var nome := layout.proximo_layout()
-		_popular_inventario()   # botões dos itens no tamanho novo
-		feedback.texto_flutuante("Layout: " + nome, Color(1, 0.9, 0.5))
-		get_viewport().set_input_as_handled()
 
 ## Tocar no ícone de um ingrediente que acabou de entrar (até T_MAX_RETIRAR s) tira ele
 ## do caldeirão e devolve ao inventário. Depois disso já misturou no caldo.
@@ -868,10 +863,10 @@ func _input(event: InputEvent) -> void:
 	var acc: Dictionary = ingredientes_ativos[k]
 	var nome := _nome_exibicao(str(acc["nome"]))
 	if sistema.t_sim - float(acc["t0"]) > T_MAX_RETIRAR:
-		feedback.texto_flutuante(nome + ": já misturou no caldo", FeedbackPreparo.COR_ALERTA)
+		feedback.fala(nome + " já misturou no caldo.")
 		return
 	_retirar_ingrediente(k)
-	feedback.texto_flutuante(nome + " retirado", FeedbackPreparo.COR_OK)
+	feedback.fala("Tirei: " + nome + ".")
 
 func _retirar_ingrediente(k: int) -> void:
 	var id: String = str(ingredientes_ativos[k]["nome"])

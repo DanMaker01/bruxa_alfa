@@ -41,7 +41,7 @@ func _montar() -> void:
 		titulo.size = Vector2(640, 120)
 		titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		titulo.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		titulo.add_theme_font_size_override("font_size", 64)
+		titulo.add_theme_font_size_override("font_size", Estilo.FONTE_TITULO)
 		titulo.add_theme_color_override("font_color", PainelMenu.COR_BORDA)
 	var l2 = get_node_or_null("Label2")
 	if l2:
@@ -54,7 +54,7 @@ func _montar() -> void:
 		if b is Button:
 			b.custom_minimum_size = Vector2(300, PainelMenu.ALTURA_BOTAO)
 			b.focus_mode = Control.FOCUS_NONE
-			b.add_theme_font_size_override("font_size", 28)
+			b.add_theme_font_size_override("font_size", Estilo.FONTE_TEXTO)
 			PainelMenu.estilo_carta(b)
 			b.button_down.connect(func(): Vibrar.leve())
 	caixa.get_node("Iniciar").pressed.connect(_iniciar)

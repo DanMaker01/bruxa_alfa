@@ -172,7 +172,7 @@ class _Tutorial extends Node:
 			Etapa.CAPA:
 				_destaque.alvo(func(): return livro._capa_fechada.get_global_rect() if livro and livro._fechado else Rect2(), false)
 			Etapa.ESCREVER:
-				_destaque.alvo(Callable(), true)   # escuro: espera ela escrever
+				_destaque.alvo(Callable(), false)   # sem escuro: só espera ela escrever
 			Etapa.LIMPO:
 				_destaque.alvo(_rect_botao.bind(_pagina_id, "Passar a limpo"), true)
 			Etapa.MEMORIZAR:

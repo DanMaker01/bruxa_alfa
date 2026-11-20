@@ -16,31 +16,17 @@ extends Control
 const BOTOES_CARTA: bool = true
 ## Margem (px) dos cantos do sprite que não esticam (9 fatias).
 const MARGEM_CARTA: float = 26.0
-## Alternativas de layout (para celular), trocadas com a tecla L no preparo (CenaPreparo).
-## A escolha fica em user://opcoes.cfg ([caldeirao] layout).
+## Layout do preparo ("Caldeirão grande": caldeirão 1,2×, controles na faixa de baixo).
 ##   anim:   escala e deslocamento do caldeirão (nó Animações, com a bruxinha e os ícones)
 ##   item:   lado (px) dos botões de ingrediente
 ##   bg:     faixa escura de baixo; scroll: carrossel de ingredientes
 ##   menos / mais / acender: −Fogo, +Fogo e Acender (Rect2)
 ##   bruxa:  pé da bruxinha; guia_y: altura da receita memorizada
-const LAYOUTS := [
-	{"nome": "Atual", "anim": [1.0, Vector2.ZERO], "item": 120.0, "bg": Rect2(0, 640, 640, 320),
-		"scroll": Rect2(16, 650, 608, 136), "menos": Rect2(16, 798, 296, 112), "mais": Rect2(328, 798, 296, 112),
-		"acender": Rect2(16, 798, 608, 112), "bruxa": Vector2(80, 470), "guia_y": 180.0},
-	{"nome": "Polegares", "anim": [0.92, Vector2(0, -40)], "item": 136.0, "bg": Rect2(0, 590, 640, 370),
-		"scroll": Rect2(12, 600, 616, 152), "menos": Rect2(8, 766, 308, 186), "mais": Rect2(324, 766, 308, 186),
-		"acender": Rect2(8, 766, 624, 186), "bruxa": Vector2(70, 430), "guia_y": 160.0},
-	{"nome": "Caldeirão grande", "anim": [1.2, Vector2(0, 30)], "item": 100.0, "bg": Rect2(0, 700, 640, 260),
+const LAYOUT := {"anim": [1.2, Vector2(0, 30)], "item": 100.0, "bg": Rect2(0, 700, 640, 260),
 		"scroll": Rect2(16, 708, 608, 114), "menos": Rect2(16, 832, 296, 118), "mais": Rect2(328, 832, 296, 118),
-		"acender": Rect2(16, 832, 608, 118), "bruxa": Vector2(110, 520), "guia_y": 130.0},
-	{"nome": "Fogo nas laterais", "anim": [1.0, Vector2(0, -20)], "item": 118.0, "bg": Rect2(0, 600, 640, 360),
-		"scroll": Rect2(132, 612, 376, 140), "menos": Rect2(4, 600, 120, 352), "mais": Rect2(516, 600, 120, 352),
-		"acender": Rect2(132, 770, 376, 182), "bruxa": Vector2(80, 450), "guia_y": 170.0},
-]
+		"acender": Rect2(16, 832, 608, 118), "bruxa": Vector2(110, 520), "guia_y": 130.0}
 ## Centro do caldeirão (escala do layout em volta dele).
 const PIVO_CALDEIRAO := Vector2(320, 300)
-const ARQ_OPCOES := "user://opcoes.cfg"
-static var layout_atual: int = -1
 
 ## Ícone do Abaixar (−Fogo), centralizado como o do +Fogo.
 const ICONE_ABAIXAR := "res://assets/game_caldeirao/botao_fogo_menos.png"
@@ -115,29 +101,12 @@ func configurar(p_cena) -> void:
 			_estilo_carta(b)
 
 
-## Lado dos botões de ingrediente no layout atual.
+## Lado dos botões de ingrediente.
 func tam_item() -> float:
 	return float(_layout()["item"])
 
-func nome_layout() -> String:
-	return str(_layout()["nome"])
-
 func _layout() -> Dictionary:
-	if layout_atual < 0:
-		var c := ConfigFile.new()
-		layout_atual = int(c.get_value("caldeirao", "layout", 0)) if c.load(ARQ_OPCOES) == OK else 0
-	return LAYOUTS[clampi(layout_atual, 0, LAYOUTS.size() - 1)]
-
-## Próxima alternativa de layout (tecla L). Devolve o nome.
-func proximo_layout() -> String:
-	_layout()
-	layout_atual = (layout_atual + 1) % LAYOUTS.size()
-	var c := ConfigFile.new()
-	c.load(ARQ_OPCOES)
-	c.set_value("caldeirao", "layout", layout_atual)
-	c.save(ARQ_OPCOES)
-	_montar()
-	return nome_layout()
+	return LAYOUT
 
 func _montar() -> void:
 	var L := _layout()

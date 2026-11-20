@@ -23,8 +23,8 @@ var current_index: int = 0
 const PAUSA_PONTUACAO := {
 	" ": 1.0,
 	# vírgula: sem pausa
-	";": 3.0, ":": 3.0,
-	".": 14.0, "!": 7.0, "?": 3.5, "…": 8.0,   # ponto, "..." e "!": o dobro de antes
+	";": 6.0, ":": 6.0,
+	".": 28.0, "!": 14.0, "?": 7.0, "…": 16.0,   # dobradas de novo (vírgula continua sem pausa)
 }
 var _escrevendo: bool = false
 var _cursor: float = 0.0        # posição do "cursor" em letras (pode ser fracionária)
@@ -54,7 +54,7 @@ var _escurecer: ColorRect
 ## Grupo usado pelo CmdEstiloDialogo para achar a caixa.
 const GRUPO := "caixa_dialogo"
 # ---- estilo da janela (CmdEstiloDialogo); vazio = padrão ----
-const FONTE_PADRAO: int = 28
+const FONTE_PADRAO: int = Estilo.FONTE_TEXTO
 var _estilo: Dictionary = {}
 var _tracejado: Control
 var _vinheta: TextureRect
@@ -131,18 +131,13 @@ func _criar_texto():
 func _setup_ui():
 	if panel:
 		# fundo preto com borda cinza, igual aos botões das opções
-		var style = StyleBoxFlat.new()
-		style.bg_color = Color(0, 0, 0, 1.0)
-		style.border_color = Color(0.4, 0.4, 0.4, 0.8)
-		style.set_border_width_all(2)
-		style.set_corner_radius_all(12)
-		panel.add_theme_stylebox_override("panel", style)
+		panel.add_theme_stylebox_override("panel", Estilo.caixa_preta())
 
 	if text_label:
 		# mesmo tamanho para todas as variações (o negrito do [item] usava o tamanho padrão, menor)
 		for chave in ["normal_font_size", "bold_font_size", "italics_font_size", "bold_italics_font_size", "mono_font_size"]:
 			text_label.add_theme_font_size_override(chave, FONTE_PADRAO)
-		text_label.add_theme_color_override("default_color", Color.WHITE)
+		text_label.add_theme_color_override("default_color", Estilo.TEXTO)
 		text_label.text = ""
 
 
@@ -301,9 +296,9 @@ func esta_escrevendo() -> bool:
 
 func _finish_dialog():
 	_escrevendo = false
-	_fade_escurecer(false)
 	print("[DialogueBox] ===== FINISH_DIALOG =====")
 	visible = false
+	_sair_escurecer()
 	print("[DialogueBox] visible = false")
 	print("[DialogueBox] Emitindo dialog_finished...")
 	dialog_finished.emit()
@@ -314,7 +309,7 @@ func _finish_dialog():
 func fechar_sem_sinal() -> void:
 	_escrevendo = false
 	visible = false
-	_fade_escurecer(false)
+	_sair_escurecer()
 
 func show_dialog(messages_array: Array, falante = null):
 	print("[DialogueBox] ===== SHOW_DIALOG =====")
@@ -328,6 +323,7 @@ func show_dialog(messages_array: Array, falante = null):
 	current_index = 0
 	_falante_fixo = falante if falante is Falante else null
 	visible = true
+	_sair_id += 1   # cancela uma saída da tela escura que estava esperando
 	_fade_escurecer(true)
 	print("[DialogueBox] visible: ", visible)
 	print("[DialogueBox] messages: ", messages)
@@ -404,19 +400,10 @@ func _criar_falante_ui() -> void:
 	_nome_painel.z_as_relative = false
 	_nome_painel.z_index = Z_NOME
 	_nome_painel.process_mode = Node.PROCESS_MODE_ALWAYS
-	var st := StyleBoxFlat.new()
-	st.bg_color = Color(0.16, 0.16, 0.22, 1.0)
-	st.border_color = Color(0.6, 0.6, 0.8, 0.9)
-	st.set_border_width_all(2)
-	st.set_corner_radius_all(10)
-	st.content_margin_left = 14
-	st.content_margin_right = 14
-	st.content_margin_top = 4
-	st.content_margin_bottom = 4
-	_nome_painel.add_theme_stylebox_override("panel", st)
+	_nome_painel.add_theme_stylebox_override("panel", Estilo.caixa_nome())
 	_nome_label = Label.new()
-	_nome_label.add_theme_font_size_override("font_size", 24)
-	_nome_label.add_theme_color_override("font_color", Color(1.0, 0.85, 0.45))
+	_nome_label.add_theme_font_size_override("font_size", Estilo.FONTE_NOME)
+	_nome_label.add_theme_color_override("font_color", Estilo.DESTAQUE)
 	_nome_painel.add_child(_nome_label)
 	_nome_painel.visible = false
 	add_child(_nome_painel)
@@ -482,6 +469,11 @@ func _on_caixa_visibilidade() -> void:
 		return
 	var meu_id := _esconder_id
 	await get_tree().create_timer(0.2, true).timeout
+	# vem outro diálogo/pergunta logo em seguida: foto e nome esperam (até ESPERA_MAX_SEGUIR)
+	var t := 0.2
+	while t < ESPERA_MAX_SEGUIR and meu_id == _esconder_id and not visible and _vem_dialogo():
+		await get_tree().process_frame
+		t += get_process_delta_time()
 	if meu_id != _esconder_id or visible:
 		return
 	_foto_atual = null
@@ -681,6 +673,29 @@ func _ajustar_escurecer() -> void:
 
 ## true = escurece até ALFA_MAX; false = clareia até sumir.
 ## A saída espera um instante: se outro diálogo abrir logo em seguida, a tela não pisca.
+## Se vem outro diálogo (Interpreter.dialogo_a_seguir), a tela escura, a foto e o nome
+## esperam até isto (s) em vez de sumir e voltar.
+const ESPERA_MAX_SEGUIR: float = 1.5
+var _sair_id: int = 0
+
+func _vem_dialogo() -> bool:
+	var it = get_node_or_null("/root/Main/GameManager/Interpeter")
+	return it != null and it.has_method("dialogo_a_seguir") and it.dialogo_a_seguir()
+
+## Caixa fechou: a tela escura some, a não ser que outro diálogo venha logo em seguida
+## (aí ela fica; se o diálogo não vier em ESPERA_MAX_SEGUIR, some).
+func _sair_escurecer() -> void:
+	_sair_id += 1
+	var meu := _sair_id
+	var t := 0.0
+	while t < ESPERA_MAX_SEGUIR and _vem_dialogo():
+		await get_tree().process_frame
+		t += get_process_delta_time()
+		if meu != _sair_id or visible:
+			return   # o próximo diálogo já abriu: a tela escura continua
+	if meu == _sair_id and not visible:
+		_fade_escurecer(false)
+
 func _fade_escurecer(entrar: bool) -> void:
 	if not _escurecer:
 		return

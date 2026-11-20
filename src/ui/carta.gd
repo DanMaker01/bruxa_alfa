@@ -334,5 +334,6 @@ func _input(event: InputEvent) -> void:
 		return
 	_ocioso = 0.0
 	if event is InputEventMouseButton and _atual == VERSO and not _virando and ativa and interativa:
+		Vibrar.leve()
 		abrir()
 		get_viewport().set_input_as_handled()

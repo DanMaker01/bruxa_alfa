@@ -7,7 +7,7 @@ extends Comando
 @export_multiline var texto: String = ""
 ## 0 = espera um toque. > 0 = some sozinha depois desses segundos (um toque adianta).
 @export var segundos: float = 0.0
-@export var tamanho_fonte: int = 30
+@export var tamanho_fonte: int = Estilo.FONTE_LEGENDA
 ## Altura do centro do texto na tela (0 = topo, 1 = base).
 @export_range(0.0, 1.0) var altura: float = 0.5
 @export var tempo_fade: float = 0.8
@@ -112,8 +112,8 @@ func _rotulo() -> Control:
 		r.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		for k in ["normal_font_size", "bold_font_size", "italics_font_size", "bold_italics_font_size"]:
 			r.add_theme_font_size_override(k, tamanho_fonte)
-		r.add_theme_color_override("default_color", Color(0.95, 0.92, 0.85))
-		r.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.8))
+		r.add_theme_color_override("default_color", Estilo.TEXTO_QUENTE)
+		r.add_theme_color_override("font_shadow_color", Estilo.SOMBRA)
 		r.add_theme_constant_override("shadow_offset_x", 2)
 		r.add_theme_constant_override("shadow_offset_y", 2)
 		r.add_theme_constant_override("line_separation", 8)
@@ -124,8 +124,8 @@ func _rotulo() -> Control:
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", tamanho_fonte)
-	label.add_theme_color_override("font_color", Color(0.95, 0.92, 0.85))
-	label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.8))
+	label.add_theme_color_override("font_color", Estilo.TEXTO_QUENTE)
+	label.add_theme_color_override("font_shadow_color", Estilo.SOMBRA)
 	label.add_theme_constant_override("shadow_offset_x", 2)
 	label.add_theme_constant_override("shadow_offset_y", 2)
 	label.add_theme_constant_override("line_spacing", 8)

@@ -9,30 +9,24 @@ extends PanelContainer
 signal fechou
 
 const ARQ_OPCOES := "user://opcoes.cfg"
-const COR_FUNDO := Color(0.08, 0.07, 0.11, 0.97)
-const COR_BORDA := Color(0.85, 0.7, 0.35)
-const COR_TEXTO := Color(0.95, 0.92, 0.85)
-const COR_SUAVE := Color(0.7, 0.66, 0.6)
+const COR_FUNDO := Estilo.FUNDO_MENU
+const COR_BORDA := Estilo.BORDA_OURO
+const COR_TEXTO := Estilo.TEXTO_QUENTE
+const COR_SUAVE := Estilo.TEXTO_SUAVE
 const ALTURA_BOTAO: float = 64.0
 
 var _col: VBoxContainer
 
 
 static func estilo_painel() -> StyleBoxFlat:
-	var st := StyleBoxFlat.new()
-	st.bg_color = COR_FUNDO
-	st.border_color = COR_BORDA
-	st.set_border_width_all(2)
-	st.set_corner_radius_all(14)
-	st.set_content_margin_all(22)
-	return st
+	return Estilo.caixa_menu()
 
 static func botao(texto: String, acao: Callable) -> Button:
 	var b := Button.new()
 	b.text = texto
 	b.focus_mode = Control.FOCUS_NONE
 	b.custom_minimum_size = Vector2(0, ALTURA_BOTAO)
-	b.add_theme_font_size_override("font_size", 26)
+	b.add_theme_font_size_override("font_size", Estilo.FONTE_MENU)
 	estilo_carta(b)
 	b.button_down.connect(func(): Vibrar.leve())
 	if acao.is_valid():

@@ -9,10 +9,10 @@ extends Control
 # =============================================================================
 # CONSTANTES
 # =============================================================================
-const POPUP_SIZE = Vector2(570, 200)
-const BUTTON_FONT_SIZE = 22
-const EMPTY_FONT_SIZE = 18
-const MARGIN = 10
+## Fonte das linhas do inventário: a mesma do diálogo (tamanho e cor).
+const BUTTON_FONT_SIZE = Estilo.FONTE_TEXTO
+const EMPTY_FONT_SIZE = Estilo.FONTE_TEXTO
+const COR_TEXTO := Estilo.TEXTO
 const POPUP_AREA_BOTTOM = 640.0  # o popup fica acima do HUD (inventário/status começam em y=640)
 const POPUP_ANCHOR_Y = 540.0     # altura preferida do centro do popup (sobe se não couber)
 
@@ -55,7 +55,6 @@ func _ready():
 	var lista = get_node_or_null("CartaInventario/Giro/Inventario/MarginContainer/ScrollContainer")
 	if lista and lista.has_signal("linha_tocada"):
 		lista.linha_tocada.connect(_on_linha_tocada)
-	print("[HUD] Inicializando...")
 	# o nó fica sempre visível; "visible" da cena vira ativo/inativo das cartas
 	var comecar_ativo := visible
 	visible = true
@@ -71,7 +70,6 @@ func _ready():
 	_create_popup()
 	_refresh_inventory()
 	_update_status()
-	print("[HUD] Inicializado!")
 
 # =============================================================================
 # CARTAS
@@ -84,6 +82,8 @@ var _ativo_token: int = 0
 
 func set_ativo(v: bool) -> void:
 	_ativo_token += 1
+	if not v and popup_instance and popup_instance.visible and _escolha_texto == "":
+		popup_instance.hide_item()   # HUD sumindo (caldeirão, cena): fecha o popup junto
 	fundo_hud.visible = v
 	carta_inventario.ativa = v
 	if not v or carta_status.ativa:
@@ -174,7 +174,6 @@ func _connect_signals():
 	if game_temp.has_signal("personality_changed"):
 		game_temp.personality_changed.connect(_on_personality_changed)
 	
-	print("[HUD] Conectado ao GameTemp!")
 
 func _create_popup():
 	"""Cria o popup de itens (invisível inicialmente)"""
@@ -185,7 +184,6 @@ func _create_popup():
 	add_child(popup_instance)
 	popup_instance.visible = false
 	popup_instance.popup_closed.connect(_on_popup_closed)
-	print("[HUD] Popup criado!")
 
 # =============================================================================
 # INVENTÁRIO
@@ -205,7 +203,6 @@ func _refresh_inventory():
 		return
 	
 	_populate_inventory(inventory)
-	print("[HUD] Inventário atualizado: ", inventory.size(), " itens")
 
 func _clear_inventory():
 	"""Remove todos os filhos do container de inventário"""
@@ -217,7 +214,7 @@ func _show_empty_inventory():
 	var label = Label.new()
 	label.text = "(Inventário vazio)"
 	label.add_theme_font_size_override("font_size", EMPTY_FONT_SIZE)
-	label.add_theme_color_override("font_color", Color(0.5, 0.5, 0.7))
+	label.add_theme_color_override("font_color", Color(COR_TEXTO, 0.6))
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	inventory_container.add_child(label)
 
@@ -269,7 +266,7 @@ func _create_item_button(item_name: String, quantity: int) -> Button:
 	var button = Button.new()
 	button.text = item_name + " (x" + str(quantity) + ")"
 	button.add_theme_font_size_override("font_size", BUTTON_FONT_SIZE)
-	button.add_theme_color_override("font_color", Color(0.5, 0.5, 0.7))
+	button.add_theme_color_override("font_color", COR_TEXTO)
 	button.add_theme_stylebox_override("normal", _button_style_normal())
 	button.add_theme_stylebox_override("hover", _button_style_hover())
 	button.add_theme_stylebox_override("pressed", _button_style_pressed())
@@ -307,7 +304,6 @@ func _button_style_pressed():
 
 func _on_item_button_pressed(item_name: String):
 	"""Abre o popup com informações do item"""
-	print("[HUD] Item clicado: ", item_name)
 	
 	if not game_temp or not popup_instance:
 		return
@@ -341,12 +337,29 @@ func escolher_item(texto_botao: String) -> void:
 	if _botao_desistir == null:
 		_botao_desistir = Button.new()
 		_botao_desistir.text = "Desistir"
-		_botao_desistir.add_theme_font_size_override("font_size", 24)
-		_botao_desistir.size = Vector2(180, 56)
-		_botao_desistir.pressed.connect(func(): _terminar_escolha(""))
+		_botao_desistir.add_theme_font_size_override("font_size", BUTTON_FONT_SIZE)
+		Estilo.botao_preto(_botao_desistir)
+		_botao_desistir.custom_minimum_size = Vector2(LARG_DESISTIR, 56)
+		_botao_desistir.size = _botao_desistir.custom_minimum_size
+		_botao_desistir.pressed.connect(func():
+			Vibrar.leve()
+			_terminar_escolha(""))
 		add_child(_botao_desistir)
-	_botao_desistir.position = Vector2((get_viewport().get_visible_rect().size.x - 180.0) * 0.5, POPUP_AREA_BOTTOM - 70.0)
+	_botao_desistir.position = Vector2((get_viewport().get_visible_rect().size.x - LARG_DESISTIR) * 0.5, POPUP_AREA_BOTTOM - 70.0)
 	_botao_desistir.visible = true
+
+const LARG_DESISTIR: float = 200.0
+
+## Popup x diálogo x Desistir:
+##  - chegou diálogo (a carta vira para ele): fecha o popup do item;
+##  - com o popup aberto o Desistir some (o popup cobriria ele); fechou, ele volta.
+func _process(_delta: float) -> void:
+	if popup_instance == null:
+		return
+	if popup_instance.visible and carta_inventario._quer_prioridade():
+		popup_instance.hide_item()
+	if _botao_desistir:
+		_botao_desistir.visible = _escolha_texto != "" and not popup_instance.visible
 
 func _terminar_escolha(id: String) -> void:
 	if _escolha_texto == "":
@@ -372,6 +385,7 @@ func _usar_item(id: String) -> void:
 
 func _on_linha_tocada(linha: Control) -> void:
 	if linha.has_meta("item"):
+		Vibrar.leve()
 		_on_item_button_pressed(linha.get_meta("item"))
 
 func _on_popup_closed():
@@ -388,9 +402,8 @@ func _update_status():
 	"""Atualiza o status da bruxa chamando a cena Status"""
 	if status_node and status_node.has_method("atualizar"):
 		status_node.atualizar()
-		print("[HUD] Status atualizado via HUD")
 	else:
-		print("[HUD] ⚠️ Status node não encontrado ou sem método atualizar")
+		push_warning("[HUD] Status node não encontrado ou sem método atualizar")
 
 # =============================================================================
 # SINAIS
@@ -398,19 +411,8 @@ func _update_status():
 
 func _on_inventory_changed():
 	"""Atualiza o inventário quando ele muda"""
-	print("[HUD] Inventário mudou!")
 	_refresh_inventory()
 
 func _on_personality_changed(_name: String):
 	"""Atualiza o status quando uma personalidade muda"""
-	print("[HUD] Personalidade mudou: ", _name)
 	_update_status()
-
-# =============================================================================
-# NOTIFICAÇÕES
-# =============================================================================
-
-func _show_notification(text: String):
-	"""Mostra uma notificação via GameManager"""
-	if game_manager and game_manager.has_method("_show_notification"):
-		game_manager._show_notification(text)

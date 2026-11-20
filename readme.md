@@ -145,17 +145,19 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] definir carta para cada clicável. o que falta?
 	[.] menu inicial
 		[ ] bg
-    [ ] hud, falta algo? rever.
+    [?] hud, falta algo? rever.
+		Revisado: o popup do item fecha sozinho quando chega um diálogo ou o HUD some; o Desistir (aplicar poção) some enquanto o popup está aberto e ganhou o estilo dos botões das opções; vibração ao tocar num item, abrir a carta, nos botões do popup, no Desistir e nos ícones do Status; fonte do inventário igual à do diálogo (28, branca); limpeza de código sem uso e prints.
 
 [ ] Caldeirão 100%
 	[?] Fogo frio: 3 cores de 400 a 800 (transparente 400, azul pálido 600, normal vermelho 800; no livro "Transparente grande" virou "Azul pálido"). Aceso fica opaco (alfa 0,8); só abaixo de 400 (apagando) vai sumindo até F = 0. (sistema_termico.gd CORES_FOGO)
 		Definir melhor: as cores infra. as cores ultra 400° já estão um pouco melhores. Por exemplo, não gostei que tem outro tom de azul na chama fraca, pois já tem azul sendo usado. talvez rosa seria melhor. 
 	[ ] Layout
 		[ ] Reformular Layout (pensar em celular). 
-			[?] Alternativas de layout: tecla L no caldeirão troca entre Atual, Polegares (botões de fogo e itens maiores, caldeirão menor), Caldeirão grande (caldeirão 1,2×, itens menores) e Fogo nas laterais 	(−Fogo e +Fogo altos nas bordas, itens no meio). A escolha fica salva (user://opcoes.cfg). Valores em LayoutPreparo.LAYOUTS.
+			[?] Layout escolhido: Caldeirão grande (caldeirão 1,2×, itens menores, controles na faixa de baixo). As outras alternativas e a tecla L foram removidas. Valores em LayoutPreparo.LAYOUT.
 			REMOVER: estilo de layout lateral
 			Tamanhos: Menus, botões, Bruxa_chibi, caldeirão 
-		[ ] texto em cima do caldeirão -> passar para falas da bruxa, feedback rápido da bruxa? multi balões?
+		[?] texto em cima do caldeirão -> passar para falas da bruxa, feedback rápido da bruxa? multi balões?
+			Feito: os textos do caldeirão (fogo aceso/apagou, item se perdeu, já misturou, tirei, item no ponto, avisos de nível) viraram falas no balão da bruxinha. Avisos importantes entram na fila (até 3); os rápidos só aparecem se ela estiver calada. Os textos flutuantes ficaram só para as teclas de debug.
 		[ ] Dúvida: Usar cartas tbm na cena do caldeirão, para botões, etc? testar como ficaria. 
 			Carta comprida é meio estranho. O que usar então? Mudança de layout afeta?
 	[ ] Feedback audiovisual pra temperatura do caldeirão e tbm dos itens, tanto frio quanto quente
@@ -172,8 +174,9 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 
 [ ] Livro de Receitas:
 	[ ] Cena do Livro:
+		[?] Livro fechado (capa ou verso): arrastar para qualquer lado sai da cena; tocar na capa abre, tocar fora sai.
 		[ ] Pensar em fazer um auto-cozinhar seguindo uma receita?... (pensar)
-		[ ] no tutorial, na hora do rascunho não deve estar escuriceido, só quando aparecer a indicação no botão.
+		[?] no tutorial, na hora do rascunho não deve estar escuriceido, só quando aparecer a indicação no botão. (feito: enquanto ela escreve, sem escuro)
 	[ ] Receitas:
 		[ ] Balanceamento de Receitas:
 			[.] Criar mais receitas:
@@ -198,16 +201,19 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 
 [ ] Diálogos 100%
 	[ ] Intro : revisar texto (tempo e ritmo). ultimas frases da intro estão pequenas em comparação.
+		[?] Feito (sem mudar o texto): as duas últimas frases ("No segundo..." e "No terceiro...") viraram uma legenda só, em dois parágrafos, como as outras.
+		[?] Pausas da pontuação dobradas de novo: "." 28, "…" 16, "!" 14, "?" 7, ";" e ":" 6 (em letras). Vírgula sem pausa.
 	[ ] Cap. 1: Revisão de cada evento.
 	[ ] Sprites do  Balão de expressão: precisa da arte (1 sprite de balão, se der pra fazer sem deformar as quinas seria ideal) (talvez 9 blocos)
 	[ ] Estilo visual:
 		[ ] organizar o layout e textura dialogo/opções
 		[ ]	Ajuste estético, borda, cor, fonte, etc.
-		[ ]	Criação de estilos padronizados para cada coisa. 
+		[?]	Criação de estilos padronizados para cada coisa. 
+			Feito (1ª etapa, visual igual): src/ui/estilo.gd (Estilo) com tamanhos de fonte, cores e caixas (caixa_preta, caixa_menu, caixa_popup, caixa_nome, caixa_balao, botao_preto). Já usam: diálogo, opções, HUD, popup do item, Status, menus (painel, principal), legenda, destaque do tutorial e balão da bruxinha. Faltam: livro e caldeirão (cena_livro, detalhe/editor de receita, janela de resultado, painel da panela). Debug fica de fora.
         	[ ] estilo de texto
         	[ ] estilo de janela, paleta de cores, animação coerente, etc...
-		[ ] Efeito escuro do diálogo tbm deve esperar se o próximo evento é diálogo, para não ficar alternando a transparência toda hora
-		[ ] e a face em mostrar opções e a face em mostrar diálogo tbm deve se manter, se ela for aparecer novamente em breve.
+		[?] Efeito escuro do diálogo tbm deve esperar se o próximo evento é diálogo, para não ficar alternando a transparência toda hora (feito: se vem outra fala ou pergunta logo depois, a tela escura fica; some se não vier em 1,5 s)
+		[?] e a face em mostrar opções e a face em mostrar diálogo tbm deve se manter, se ela for aparecer novamente em breve. (feito: foto e nome esperam até 1,5 s se vem outra fala/pergunta)
 
 [ ] História/Roteiro
 	[ ]	Diálogos devem condizer com a época
@@ -220,7 +226,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] Cap. 2
         	[ ] Qual traço? 
             [ ] Qual quest?
-	[ ] Usar traços na história: 
+	>>> Usar traços na história: 
 		O,(conservador com pouca abertura)
 		C (consequencialidade, prudencia, preguiçoso),
 		A (amabilidade, aumentar ou diminuir?)
@@ -300,6 +306,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 [ ] Decisões menores:
 	[ ] (fazer depois) Personalidade do alvo na hora de aplicar a poção.
 	[ ] (fazer depois) A ação da poção deve mostrar a personalidade mudando.
+		Ideia: um pequeno menu com a face da pessoa e a personalidade dela mudando; a personalidade fica na carta Status. Layout ainda a definir.
 	[ ] (fazer depois) Logo: diminuir o caldeirão e deixar mono tom, sem efeitos.
 	[ ] Representação de poções visual com matriz/grafo. (feito, versão simples: no pentágono cada ponta sai do traço que mais contribui e gira até a sua; diagonal = só escala com um pulo)
 		[ ] (Cap. 2) Mostrar o pentagrama, cada aresta representa um componente. Pensei em relacionar as arestas com a_ij e criar um feedback útil visualmente.

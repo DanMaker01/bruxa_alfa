@@ -28,7 +28,6 @@ func _ready():
 	_find_dependencies()
 	_atualizar_cores()
 	_conectar_sinais()
-	print("[Status] Inicializado!")
 
 func _find_dependencies():
 	var main = get_tree().current_scene
@@ -41,7 +40,6 @@ func _find_dependencies():
 func _conectar_sinais():
 	if game_temp and game_temp.has_signal("personality_changed"):
 		game_temp.personality_changed.connect(_on_personality_changed)
-		print("[Status] Conectado ao sinal personality_changed!")
 
 # =============================================================================
 # CORES
@@ -49,7 +47,6 @@ func _conectar_sinais():
 
 func _atualizar_cores():
 	if not game_temp:
-		print("[Status] ❌ GameTemp não disponível!")
 		return
 	
 	var personalidades = game_temp.get_all_personalities()
@@ -84,7 +81,6 @@ func _aplicar_cor(node: TextureRect, cor: Color):
 # =============================================================================
 
 func _on_personality_changed(_name: String):
-	print("[Status] Personalidade mudou!")
 	_atualizar_cores()
 
 func atualizar():
@@ -99,16 +95,9 @@ func _criar_balao() -> void:
 	_balao.z_as_relative = false
 	_balao.z_index = 300
 	_balao.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_balao.add_theme_font_size_override("font_size", 20)
-	_balao.add_theme_color_override("font_color", Color.WHITE)
-	var st := StyleBoxFlat.new()
-	st.bg_color = Color(0, 0, 0, 0.85)
-	st.set_corner_radius_all(8)
-	st.content_margin_left = 10
-	st.content_margin_right = 10
-	st.content_margin_top = 4
-	st.content_margin_bottom = 4
-	_balao.add_theme_stylebox_override("normal", st)
+	_balao.add_theme_font_size_override("font_size", Estilo.FONTE_PEQUENA)
+	_balao.add_theme_color_override("font_color", Estilo.TEXTO)
+	_balao.add_theme_stylebox_override("normal", Estilo.caixa_balao(Estilo.FUNDO_BALAO_ESCURO, 8))
 	_balao.visible = false
 	add_child(_balao)
 	var icones = [icone_o, icone_c, icone_e, icone_a, icone_n]
@@ -119,6 +108,7 @@ func _criar_balao() -> void:
 
 func _on_icone_input(event: InputEvent, i: int) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		Vibrar.leve()
 		_mostrar_balao(i)
 
 func _mostrar_balao(i: int) -> void:

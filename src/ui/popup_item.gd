@@ -48,8 +48,9 @@ func _ready():
 func _criar_botao_acao():
     _botao_acao = Button.new()
     _botao_acao.visible = false
-    _botao_acao.add_theme_font_size_override("font_size", 24)
+    _botao_acao.add_theme_font_size_override("font_size", Estilo.FONTE_NOME)
     _botao_acao.pressed.connect(func():
+        Vibrar.leve()
         var acao := _acao
         hide_item()
         if acao.is_valid():
@@ -69,17 +70,7 @@ func mostrar_acao(texto: String, acao: Callable):
 func _setup_ui():
     """Configura a aparência do popup"""
     if panel:
-        var style = StyleBoxFlat.new()
-        style.bg_color = Color(0.1, 0.1, 0.15, 1.0)
-        style.border_width_left = 2
-        style.border_width_right = 2
-        style.border_width_top = 2
-        style.border_width_bottom = 2
-        style.border_color = Color(0.6, 0.6, 0.8, 0.8)
-        style.corner_radius_top_left = 15
-        style.corner_radius_top_right = 15
-        style.corner_radius_bottom_left = 15
-        style.corner_radius_bottom_right = 15
+        var style := Estilo.caixa_popup()
         panel.add_theme_stylebox_override("panel", style)
 
 func show_item(item_name: String, item_data: Dictionary, quantity: int, anchor = null, area: Rect2 = Rect2()):
@@ -220,6 +211,7 @@ func get_popup_size() -> Vector2:
     return panel.size if panel else Vector2.ZERO
 
 func _on_close_pressed():
+    Vibrar.leve()
     hide_item()
 
 # ===== FECHAR COM ESC OU CLICANDO FORA =====

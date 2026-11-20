@@ -74,17 +74,10 @@ func _ready() -> void:
 
 func _criar_balao() -> void:
 	_balao = PanelContainer.new()
-	var st := StyleBoxFlat.new()
-	st.bg_color = Color(0.95, 0.95, 0.92, 0.95)
-	st.set_corner_radius_all(12)
-	st.content_margin_left = 10
-	st.content_margin_right = 10
-	st.content_margin_top = 4
-	st.content_margin_bottom = 4
-	_balao.add_theme_stylebox_override("panel", st)
+	_balao.add_theme_stylebox_override("panel", Estilo.caixa_balao(Estilo.FUNDO_BALAO_CLARO))
 	_balao_label = Label.new()
-	_balao_label.add_theme_font_size_override("font_size", 28)
-	_balao_label.add_theme_color_override("font_color", Color(0.1, 0.1, 0.1))
+	_balao_label.add_theme_font_size_override("font_size", Estilo.FONTE_TEXTO)
+	_balao_label.add_theme_color_override("font_color", Estilo.TEXTO_ESCURO)
 	_balao.add_child(_balao_label)
 	_balao.position = BALAO_OFFSET
 	_balao.modulate.a = 0.0
@@ -176,6 +169,8 @@ func dizer(texto: String, segundos: float = 2.5, fixa: bool = false) -> void:
 	_mostrar_dizer(texto, segundos, fixa)
 
 func _mostrar_dizer(texto: String, segundos: float, fixa: bool) -> void:
+	if fixa:
+		_fila.clear()   # instrução do tutorial: o que estava esperando perde a vez
 	_fixa = fixa
 	_ocupada_ate = _t + maxf(segundos, FALA_MIN) if not fixa else 0.0
 	_balao_label.text = texto
@@ -187,6 +182,12 @@ func _mostrar_dizer(texto: String, segundos: float, fixa: bool) -> void:
 	var tw := _balao.create_tween().set_parallel(true)
 	tw.tween_property(_balao, "modulate:a", 1.0, 0.15)
 	tw.tween_property(_balao, "scale", Vector2.ONE, 0.25).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+## Fala só se o balão estiver livre (avisos que mudam rápido; não entram na fila).
+func dizer_se_livre(texto: String, segundos: float = 1.8) -> void:
+	if _fixa or _t < _ocupada_ate or not _fila.is_empty():
+		return
+	_mostrar_dizer(texto, segundos, false)
 
 ## Tira o balão (e solta o modo fixo).
 func calar() -> void:

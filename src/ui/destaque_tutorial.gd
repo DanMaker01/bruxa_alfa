@@ -14,8 +14,8 @@ signal tocou_alvo
 
 const ALFA_ESCURO: float = 0.55
 const COR_MOLDURA := Color(1.0, 0.85, 0.3)
-const COR_FUNDO_DICA := Color(0.08, 0.07, 0.11, 0.96)
-const COR_BORDA_DICA := Color(0.85, 0.7, 0.35)
+const COR_FUNDO_DICA := Color(Estilo.FUNDO_MENU, 0.96)
+const COR_BORDA_DICA := Estilo.BORDA_OURO
 
 ## Onde fica o painel de dica (coordenadas de tela).
 var rect_dica := Rect2(20, 650, 600, 140)
@@ -74,7 +74,7 @@ func _ready() -> void:
 	_texto = Label.new()
 	_texto.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_texto.add_theme_font_size_override("font_size", 24)
-	_texto.add_theme_color_override("font_color", Color(0.95, 0.92, 0.85))
+	_texto.add_theme_color_override("font_color", Estilo.TEXTO_QUENTE)
 	col.add_child(_texto)
 	_botao = Button.new()
 	_botao.focus_mode = Control.FOCUS_NONE
