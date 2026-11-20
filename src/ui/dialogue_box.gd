@@ -29,6 +29,8 @@ const PAUSA_PONTUACAO := {
 var _escrevendo: bool = false
 var _cursor: float = 0.0        # posição do "cursor" em letras (pode ser fracionária)
 var _pausa: float = 0.0         # quanto ainda falta esperar na pontuação atual (em letras)
+var _corte: int = -1            # índice da última pontuação que pausou (-1 = nenhuma)
+var _visual: float = 0.0        # cursor só para o fade da pontuação (até ela aparecer inteira)
 var _texto_puro: String = ""
 var _efeito: EfeitoEscrita
 
@@ -79,10 +81,15 @@ class EfeitoEscrita extends RichTextEffect:
 	var cursor: float = 1.0e9
 	var largura: float = 4.0
 	var subida: float = 5.0
+	## Na pausa da pontuação: as letras até "corte" (a pontuação) terminam o fade com
+	## "visual", enquanto o cursor fica parado logo depois dela (o resto continua invisível).
+	var corte: int = -1
+	var visual: float = 0.0
 
 	func _process_custom_fx(char_fx: CharFXTransform) -> bool:
 		var idx: float = float(char_fx.relative_index)
-		var t: float = clampf((cursor - idx) / maxf(largura, 0.001), 0.0, 1.0)
+		var c: float = maxf(cursor, visual) if char_fx.relative_index <= corte else cursor
+		var t: float = clampf((c - idx) / maxf(largura, 0.001), 0.0, 1.0)
 		t = t * t * (3.0 - 2.0 * t)   # smoothstep: entra e sai devagar
 		char_fx.color.a *= t
 		char_fx.offset.y += (1.0 - t) * subida
@@ -252,6 +259,10 @@ func _preparar_bbcode(texto: String) -> Array:
 
 func _iniciar_escrita() -> void:
 	_pausa = 0.0
+	_corte = -1
+	_visual = 0.0
+	if _efeito:
+		_efeito.corte = -1
 	if letras_por_segundo <= 0.0 or mult_velocidade <= 0.0:
 		_terminar_escrita()
 		return
@@ -263,8 +274,14 @@ func _process(delta: float) -> void:
 	if not _escrevendo:
 		return
 	var avanco: float = delta * letras_por_segundo * mult_velocidade
-	# pausa da pontuação: o cursor espera, mas o fade das últimas letras continua
-	if _pausa > 0.0:
+	# pontuação: primeiro ela termina de aparecer (o cursor fica parado logo depois dela),
+	# só então conta a pausa
+	if _corte >= 0 and _visual < _corte + 1.0 + largura_fade:
+		var falta: float = _corte + 1.0 + largura_fade - _visual
+		var g: float = minf(falta, avanco)
+		_visual += g
+		avanco -= g
+	if _pausa > 0.0 and avanco > 0.0:
 		var gasto: float = minf(_pausa, avanco)
 		_pausa -= gasto
 		avanco -= gasto
@@ -279,8 +296,12 @@ func _process(delta: float) -> void:
 		if PAUSA_PONTUACAO.has(c) and i + 1 < _texto_puro.length():
 			_cursor = float(i + 1)
 			_pausa = PAUSA_PONTUACAO[c]
+			_corte = i
+			_visual = maxf(_visual, _cursor)   # só cresce: as letras de antes não voltam a apagar
 			break
 	_efeito.cursor = _cursor
+	_efeito.corte = _corte
+	_efeito.visual = _visual
 	if _cursor >= _texto_puro.length() + largura_fade:
 		_terminar_escrita()
 

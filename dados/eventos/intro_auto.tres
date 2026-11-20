@@ -84,14 +84,14 @@ script = ExtResource("13_leg")
 texto = "Então, em três dias ela ergueu sua casa na floresta:
 
 No primeiro dia ela cortou a madeira. Fez paredes e telhado."
-segundos = 7.999999999999744
+segundos = 10.0
 
 [sub_resource type="Resource" id="Resource_7qo38"]
 script = ExtResource("13_leg")
 texto = "No segundo, encantou os móveis e acendeu seu caldeirão.
 
 No terceiro dia ela saiu para pegar o tecido do véu..."
-segundos = 8.0
+segundos = 10.0
 metadata/_custom_type_script = "uid://c8c7nvlca7oyd"
 
 [sub_resource type="Resource" id="Resource_sauaa"]

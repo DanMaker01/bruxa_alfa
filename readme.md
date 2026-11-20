@@ -151,6 +151,8 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 [ ] Caldeirão 100%
 	[?] Fogo frio: 3 cores de 400 a 800 (transparente 400, azul pálido 600, normal vermelho 800; no livro "Transparente grande" virou "Azul pálido"). Aceso fica opaco (alfa 0,8); só abaixo de 400 (apagando) vai sumindo até F = 0. (sistema_termico.gd CORES_FOGO)
 		Definir melhor: as cores infra. as cores ultra 400° já estão um pouco melhores. Por exemplo, não gostei que tem outro tom de azul na chama fraca, pois já tem azul sendo usado. talvez rosa seria melhor. 
+		Quais são as cores? 
+		Resposta:
 	[ ] Layout
 		[ ] Reformular Layout (pensar em celular). 
 			[?] Layout escolhido: Caldeirão grande (caldeirão 1,2×, itens menores, controles na faixa de baixo). As outras alternativas e a tecla L foram removidas. Valores em LayoutPreparo.LAYOUT.
@@ -174,9 +176,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 
 [ ] Livro de Receitas:
 	[ ] Cena do Livro:
-		[?] Livro fechado (capa ou verso): arrastar para qualquer lado sai da cena; tocar na capa abre, tocar fora sai.
 		[ ] Pensar em fazer um auto-cozinhar seguindo uma receita?... (pensar)
-		[?] no tutorial, na hora do rascunho não deve estar escuriceido, só quando aparecer a indicação no botão. (feito: enquanto ela escreve, sem escuro)
 	[ ] Receitas:
 		[ ] Balanceamento de Receitas:
 			[.] Criar mais receitas:
@@ -200,20 +200,12 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 
 
 [ ] Diálogos 100%
-	[ ] Intro : revisar texto (tempo e ritmo). ultimas frases da intro estão pequenas em comparação.
-		[?] Feito (sem mudar o texto): as duas últimas frases ("No segundo..." e "No terceiro...") viraram uma legenda só, em dois parágrafos, como as outras.
-		[?] Pausas da pontuação dobradas de novo: "." 28, "…" 16, "!" 14, "?" 7, ";" e ":" 6 (em letras). Vírgula sem pausa.
+	[?] Intro : revisar texto (tempo e ritmo). ultimas frases da intro estão pequenas em comparação.
 	[ ] Cap. 1: Revisão de cada evento.
 	[ ] Sprites do  Balão de expressão: precisa da arte (1 sprite de balão, se der pra fazer sem deformar as quinas seria ideal) (talvez 9 blocos)
 	[ ] Estilo visual:
 		[ ] organizar o layout e textura dialogo/opções
 		[ ]	Ajuste estético, borda, cor, fonte, etc.
-		[?]	Criação de estilos padronizados para cada coisa. 
-			Feito (1ª etapa, visual igual): src/ui/estilo.gd (Estilo) com tamanhos de fonte, cores e caixas (caixa_preta, caixa_menu, caixa_popup, caixa_nome, caixa_balao, botao_preto). Já usam: diálogo, opções, HUD, popup do item, Status, menus (painel, principal), legenda, destaque do tutorial e balão da bruxinha. Faltam: livro e caldeirão (cena_livro, detalhe/editor de receita, janela de resultado, painel da panela). Debug fica de fora.
-        	[ ] estilo de texto
-        	[ ] estilo de janela, paleta de cores, animação coerente, etc...
-		[?] Efeito escuro do diálogo tbm deve esperar se o próximo evento é diálogo, para não ficar alternando a transparência toda hora (feito: se vem outra fala ou pergunta logo depois, a tela escura fica; some se não vier em 1,5 s)
-		[?] e a face em mostrar opções e a face em mostrar diálogo tbm deve se manter, se ela for aparecer novamente em breve. (feito: foto e nome esperam até 1,5 s se vem outra fala/pergunta)
 
 [ ] História/Roteiro
 	[ ]	Diálogos devem condizer com a época

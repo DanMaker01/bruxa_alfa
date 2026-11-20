@@ -227,6 +227,8 @@ func _populate_inventory(inventory: Dictionary):
 		var button = _create_item_button(item.get_nome() if item else item_name, quantity)
 		button.set_meta("item", item_name)
 		button.mouse_filter = Control.MOUSE_FILTER_IGNORE   # quem decide toque x arraste é a ListaRolavel
+		if item_name == _item_chegando:
+			button.modulate.a = 0.0   # poção ainda voando: a linha recriada continua escondida
 		inventory_container.add_child(button)
 
 # =============================================================================
@@ -240,7 +242,18 @@ func _linha_do_item(id: String) -> Control:
 
 ## Rola a lista até a linha do item e devolve o centro dela na tela (ou da carta, se não achar).
 ## esconder = true deixa a linha invisível até destacar_item().
+## Item que está chegando (escondido até destacar_item): se o inventário for remontado no
+## meio do voo (ex.: o livro avisa um nome novo), a linha nova também nasce escondida.
+var _item_chegando: String = ""
+const ESPERA_MAX_CHEGANDO: float = 6.0
+
 func preparar_item_chegando(id: String, esconder: bool = true) -> Vector2:
+	if esconder and _item_chegando != id:
+		_item_chegando = id
+		# segurança: se ninguém chamar destacar_item (voo interrompido), mostra mesmo assim
+		get_tree().create_timer(ESPERA_MAX_CHEGANDO).timeout.connect(func():
+			if _item_chegando == id:
+				destacar_item(id))
 	var linha := _linha_do_item(id)
 	if linha == null:
 		return carta_inventario.global_position + carta_inventario.size * 0.5
@@ -253,6 +266,8 @@ func preparar_item_chegando(id: String, esconder: bool = true) -> Vector2:
 
 ## A linha do item aparece com um brilho dourado.
 func destacar_item(id: String) -> void:
+	if _item_chegando == id:
+		_item_chegando = ""
 	var linha := _linha_do_item(id)
 	if linha == null:
 		return
