@@ -5,6 +5,8 @@
 
 [resource]
 script = ExtResource("1_ijf6h")
+valor_base = 20.0
+qtd_base = 6.0
 id = "cogumelo_brilhante"
 nome = "Cogumelo brilhante"
 descricao = "uma porção de cogumelos."

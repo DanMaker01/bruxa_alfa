@@ -98,14 +98,41 @@ func _abrir_menu(interp, gt) -> MenuAplicarPocao:
 	menu.abrir(p, personalidade, gt.get_personality(personalidade))
 	return menu
 
-## p' = A · p, limitado a −10..10 (sem aplicar).
+## Como a personalidade trata a borda (±10). PARA TESTAR (menu de debug, aba Poções):
+##   CORTE      p' = A·p cortado em ±10 (bate e para)
+##   PROJETIVA  a conta é feita num valor interno u = p / (1 − |p|/10) e volta com
+##              p = u / (1 + |u|/10): perto de 10 cada poção mexe menos, nunca passa
+##   TANH       u = 10·atanh(p/10), p = 10·tanh(u/10): parecido, freia mais suave
+## No meio da escala (|p| pequeno) os três dão quase o mesmo.
+enum Borda { CORTE, PROJETIVA, TANH }
+const NOMES_BORDA := ["corte", "projetiva", "tanh"]
+static var borda: int = Borda.CORTE
+const LIMITE: float = 10.0
+
+static func _para_interno(p: float) -> float:
+	var x := clampf(p / LIMITE, -0.999, 0.999)
+	match borda:
+		Borda.PROJETIVA: return LIMITE * x / (1.0 - absf(x))
+		Borda.TANH: return LIMITE * atanh(x)
+	return p
+
+static func _para_traco(u: float) -> float:
+	match borda:
+		Borda.PROJETIVA: return u / (1.0 + absf(u) / LIMITE)
+		Borda.TANH: return LIMITE * tanh(u / LIMITE)
+	return clampf(u, -LIMITE, LIMITE)
+
+## p' = A · p com a borda escolhida (sem aplicar).
 static func calcular(p: Array, A: Array) -> Array:
+	var u: Array = []
+	for j in 5:
+		u.append(_para_interno(float(p[j])))
 	var novo: Array = []
 	for i in 5:
 		var v := 0.0
 		for j in 5:
-			v += float(A[i][j]) * float(p[j])
-		novo.append(clampf(v, -10.0, 10.0))
+			v += float(A[i][j]) * float(u[j])
+		novo.append(_para_traco(v))
 	return novo
 
 ## p' = A · p (linhas O, C, E, A, N), limitado a −10..10. Também usado ao "Usar" item no inventário.

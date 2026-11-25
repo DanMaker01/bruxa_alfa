@@ -5,6 +5,8 @@
 
 [resource]
 script = ExtResource("1_ej1gs")
+valor_base = 5.0
+qtd_base = 20.0
 id = "agua"
 nome = "Água"
 descricao = "quantidade suficiente para um copo de água."

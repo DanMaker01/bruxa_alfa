@@ -213,7 +213,62 @@ def mult(X, Y):
     return [[sum(X[i][k] * Y[k][j] for k in range(n)) for j in range(n)] for i in range(n)]
 
 
+# Dose do ingrediente = a ** EXPOENTE_DOSE. 1 = linear (como no jogo hoje); 2 = quadrática (teste:
+# mal cozido pesa bem menos, k ingredientes valem ~M^(k·a²)). O balanceamento.py tem um botão para isso.
+EXPOENTE_DOSE = 1.0
+
+
+# Teste do "problema do zero": cisalhamento pequeno fora da diagonal nos ingredientes.
+# Fixo por item (sorteado pelo id, sempre o mesmo), normal com σ = CISALHAMENTO_SIGMA,
+# cortado em ±CISALHAMENTO_MAX. Desligado = matriz do item como está no .tres.
+CISALHAMENTO = False
+CISALHAMENTO_SIGMA = 0.005
+CISALHAMENTO_MAX = 0.01
+_cache_cis = {}
+
+
+def matriz_item(it):
+    if not CISALHAMENTO:
+        return it["A"]
+    chave = (it.get("id", ""), CISALHAMENTO_SIGMA, CISALHAMENTO_MAX)
+    if chave not in _cache_cis:
+        import hashlib
+        rng = random.Random(int(hashlib.md5(str(chave[0]).encode()).hexdigest(), 16))
+        M = [linha[:] for linha in it["A"]]
+        for i in range(5):
+            for j in range(5):
+                if i != j:
+                    r = rng.gauss(0.0, CISALHAMENTO_SIGMA)
+                    M[i][j] += max(-CISALHAMENTO_MAX, min(CISALHAMENTO_MAX, r))
+        _cache_cis[chave] = M
+    return _cache_cis[chave]
+
+
+def ajustar_catalogo_ao_ruido(itens, receitas, cat):
+    """Com CISALHAMENTO ligado, a poção ideal de cada receita passa a ser a própria receita
+    feita perfeita com os itens com ruído (como se o ruído estivesse no .tres de cada item).
+    Desligado, volta a matriz do .tres da poção."""
+    lista = cat[0] if isinstance(cat, tuple) else cat
+    for ref in lista:
+        ref.setdefault("A_puro", ref["A"])
+        ref["A"] = ref["A_puro"]
+    if not CISALHAMENTO:
+        return
+    for r in receitas.values():
+        ref = next((x for x in lista if x["nome"] == r.get("pocao")), None)
+        if ref is None:
+            continue
+        A = identidade()
+        for p in r["passos"]:
+            if p.get("tipo") == "ingrediente" and p.get("item") in itens:
+                B = interpolar(matriz_item(itens[p["item"]]), 1.0)
+                for _ in range(int(p.get("qtd", 1))):
+                    A = mult(B, A)
+        ref["A"] = A
+
+
 def interpolar(A, a):
+    a = max(0.0, min(1.0, a)) ** EXPOENTE_DOSE
     return [[a * A[i][j] + (1 - a) * (1.0 if i == j else 0.0) for j in range(5)] for i in range(5)]
 
 
@@ -430,7 +485,7 @@ def simular(receita, itens, jog=None, catalogo=None, guardar_hist=True):
         it = itens[iid]
         d = diagnostico(it, t0, hTT, t_final)
         diags.append(d)
-        A = mult(interpolar(it["A"], d["a"]), A)
+        A = mult(interpolar(matriz_item(it), d["a"]), A)
     a_med = sum(d["a"] for d in diags) / len(diags) if diags else 0.0
     res = {"receita": receita["chave"], "t_final": t_final, "diags": diags, "A": A, "a": a_med,
            "a_min_item": min((d["a"] for d in diags), default=0.0), "eventos": eventos,
@@ -454,7 +509,7 @@ def avaliar(entradas, hist_tt, t_final, itens, catalogo=None):
             continue
         d = diagnostico(it, t0, hist_tt, t_final)
         diags.append(d)
-        A = mult(interpolar(it["A"], d["a"]), A)
+        A = mult(interpolar(matriz_item(it), d["a"]), A)
     a_med = sum(d["a"] for d in diags) / len(diags) if diags else 0.0
     res = {"t_final": t_final, "diags": diags, "A": A, "a": a_med,
            "a_min_item": min((d["a"] for d in diags), default=0.0)}
@@ -754,7 +809,7 @@ def exp_quantidade(rc, itens, cat, args):
         for a in (1.0, 0.95, 0.9, 0.8, 0.7, 0.6):
             A = identidade()
             for _ in range(n):
-                A = mult(interpolar(it["A"], a), A)
+                A = mult(interpolar(matriz_item(it), a), A)
             r = reconhecer(A, a, cat)
             efeito = r["efeito"]
             marca = "    "

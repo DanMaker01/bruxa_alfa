@@ -6,7 +6,7 @@
 script = ExtResource("1_pers")
 id = "campones"
 abertura = 2.0
-consciencia = 4.0
+consciencia = -3.0
 extroversao = 3.0
 amabilidade = 6.0
 neuroticismo = 5.0

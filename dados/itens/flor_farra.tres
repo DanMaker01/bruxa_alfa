@@ -5,6 +5,8 @@
 
 [resource]
 script = ExtResource("1_item")
+valor_base = 25.0
+qtd_base = 5.0
 id = "flor_farra"
 nome = "Flor-de-farra"
 descricao = "Deixa qualquer um falante e festeiro... mas descuidado, meio grosso e agitado. Fogo baixo: ferver estraga."

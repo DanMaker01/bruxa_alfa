@@ -58,6 +58,13 @@ var A: Array[PackedFloat32Array] = [
 @export_range(0, 1, 0.01, "or_greater") var h_max: float = H_PADRAO
 
 
+@export_group("Comércio")
+## Valor cheio do item (em ouro) para um mercador que não tem nenhum.
+@export_range(0, 1000, 0.5, "or_greater") var valor_base: float = 10.0
+## Quanto existe do item "no mundo": raridade = qtd_base / (qtd_base + qtd do mercador).
+## Valor para o mercador = valor_base · raridade (quanto mais ele tem, mais barato).
+@export_range(0.1, 100, 0.1, "or_greater") var qtd_base: float = 5.0
+
 @export_group("Efeito")
 ## Todo item pode ser usado na bruxa pelo inventário (aplica A, gasta 1).
 ## Comandos executados depois disso (vazio = só a matriz). Ex.: teleporte para casa.

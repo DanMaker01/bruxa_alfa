@@ -5,6 +5,8 @@
 
 [resource]
 script = ExtResource("1_item")
+valor_base = 100.0
+qtd_base = 2.0
 id = "po_retorno"
 nome = "Pó de Retorno"
 descricao = "Um pó que lembra o caminho de casa. Sozinho não faz nada; 3 pós bem cozidos (concentrada) viram a Poção do Retorno."

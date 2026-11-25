@@ -23,7 +23,7 @@ texto = "Se procura [item]cogumelos[/item], eles crescem ao redor desta cidade."
 [sub_resource type="Resource" id="Resource_i5dmh"]
 script = ExtResource("3_msg")
 personagem = ExtResource("9_npc")
-texto = " Se bem que... eles crescem mais rápido deste lado aqui, logo depois da igreja."
+texto = "Se bem que... eles crescem mais rápido deste lado aqui, logo depois da igreja."
 metadata/_custom_type_script = "uid://8liac65hmnnq"
 
 [sub_resource type="Resource" id="Pag_0"]

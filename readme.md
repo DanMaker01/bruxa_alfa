@@ -141,24 +141,38 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] vidro01
 		[ ] vidro02
 
+[ ] ícone
+	[ ] descer um pouquinho 
 
 [ ] Caldeirão 100%
-	[?] Roxo em dois: Violeta (roxo claro, fogo 1500, caldo 163-180 °C; id antigo "purpura") e Índigo (roxo escuro azulado, fogo 1700, caldo 180-195 °C), antes do Negro (2000). No livro são dois estados. Nenhuma receita usava o roxo; simulador sem mudança nas 3 receitas.
-	[ ] Catálogo e poções
-		[?] Catálogo de poções (dados/pocoes): 
-			qualquer poção com a matriz perto de uma do catálogo recebe o nome dela e, se ela tiver, 
-			o efeito (com aproveitamento >= aproveitamento_min_efeito; 
-			evita 4 mal cozidos = 3 bem cozidos). 
-			Sem quantidades nem "Dobrada" (não serve para receitas não comutativas).
-			[?] Tolerância por poção (PocaoReferencia.distancia_max; 0 = a do catálogo, 0,05). 
+	[.] Catálogo e poções
+		[?] Catálogo de poções (dados/pocoes): (Nomeação de poções)
+			qualquer poção com a matriz perto de alguma do catálogo recebe o nome dela e,
+			pra ativar seu EFEITO (caso o tenha) é necessário fazer uma poção com qualidade >= 95% 
+			QUESTÃO: 4 mal cozidos = 3 bem cozidos?
+			RESPOSTA: não é problema 4 mal cozidos equivaler a uma poção com 3 bem cozidos as vezes.
+						o problema é isso escalar para 8 muito mal cozidos equivaler a 3 bem cozidos. Esse caso deve ser testado.
+			[!] Tolerância por poção (PocaoReferencia.distancia_max; 0 = a do catálogo, 0,05). 
 				Retorno: 0,02 → 2 ou 4 pós bem cozidos não viram mais Poção do Retorno nem ganham o efeito 
-				(simulador: experimento quantidade). 
-			[ ] PROBLEMA a tratar: quantidades diferentes podem chegar na mesma matriz (ex.: 4 mal cozidos ≈ 3 bem cozidos). 
+			[?] Testado (multiplicando as quantidades e achando o aproveitamento que mais aproxima): 
+				Desenvoltura e Retorno escalam sem limite (×2,67 a 0,36-0,38 e ×4 a 0,24-0,25 ainda ganham o nome; 8 pós a 0,38 ≈ 3 pós bons). 
+				Retorno não ganha o efeito (exige 0,95). 
+				Calma passa no ×2 (a 0,52), nos outros só não passa por arredondamento. Calma e Desenvoltura não têm mínimo: o efeito é a própria matriz. Opções pensadas: corte por ingrediente (abaixo de ~0,4 não conta), dose quadrática (a²), impureza (1 − a vira ruído), mínimo só no nome. A decidir.
+			[?] PROBLEMA a tratar: quantidades diferentes podem chegar na mesma matriz (ex.: 4 mal cozidos ≈ 3 bem cozidos). 
 				Hoje só o aproveitamento mínimo segura. Já é o suficiente, mas tem algo mais geral?
-
+				[?] Decidido: aceito como dose (cada ingrediente vale ~k·a; mal cozido = dose menor). O aproveitamento mínimo do efeito continua segurando.
+					QUESTÃO: para matrizes não comutativas isso de ~k*a cai por terra.
+					preciso testar com matrizes com pequenos números fora das diagonais também, para ver o cenário amplo.
+			
 [ ] Livro de Receitas:
 	[?] Ao criar uma poção desconhecida ele pede para dar o nome. O nome vai para a receita e para a poção criada, e fica armazenada, se o jogador criar outra semelhante o nome já virá automaticamente.
-		[?] Já funciona: sai como "Poção desconhecida" e o nome é dado no livro (ao passar o rascunho a limpo); vai para a receita, o item e o catálogo do jogador (salvo), e as próximas parecidas já vêm com o nome.
+		[?] Já funciona: sai como "Poção desconhecida" e o nome é dado no livro (ao passar o rascunho a limpo); 
+		vai para a receita, o item e o catálogo do jogador (salvo), e as próximas parecidas já vêm com o nome.
+		TESTAR: fazer uma poção desconhecida e:
+			[ ] dar nome
+			[ ] não dar nome
+			[ ] dar nome só depois
+			[ ] tentar editar poção depois
 	[ ] Receitas:
 		[?] Nome: poção de um item só agora usa "Poção de [item] [qualidade]" antes de procurar no catálogo (senão um pó mal cozido virava "Concentrada").
 		[ ] Balanceamento de Receitas:
@@ -173,6 +187,56 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 				[ ] E se eu dobrar a poção? Testar com as não comutativas: Fazer receita dobrada tem efeito de potencializar (escalar) a matriz resultante. por exemplo se fizer uma poção da calma profunda dobrada, 
 				[ ] dificuldade, medir peso de cada erro: tempo, temp, cozimento, 
 				[ ] explorar os TIPOS de matrizes. explorar o que é posível nesse sistema térmico
+					[?] Diagonalizáveis com autovalores positivos: multiplicar sucessivamente só escala, cada uma no seu eixo (autovetores).
+						M^t = P·D^t·P⁻¹ existe para qualquer t ≥ 0, então dá para "dobrar" (M²), meia dose (M^0,5) etc.
+						Diagonal é o caso em que os eixos são os próprios traços; duas diagonais comutam (a ordem não importa).
+					[?] Não diagonais (exemplo com 2 traços):
+						Permutação (troca E↔N): M² = I, dobrar anula.
+						Rotação de θ: M² gira 2θ, dobrar gira mais (não fortalece).
+						Cisalhamento (um traço soma no outro, [[1,0],[c,1]]): M^n soma n·c, cresce em linha reta.
+						Projeção (zera um traço): M² = M, dobrar não muda nada.
+						Mistura de poções: A·B ≠ B·A, a ordem muda o resultado.
+						Cada família de poção tem a sua "lei da dose" (pode virar mecânica).
+					[ ] Problema do zero: traço zerado não muda com diagonal (0·λ = 0). Ideias:
+						Cisalhamento pequeno nos ingredientes: ~1% fora da diagonal, talvez aleatório (normal em [−0,01; 0,01]).
+						Matriz 6×6 homogênea [A b; 0 1]: p' = A·p + b (empurrão fixo), sem sair do sistema de matrizes.
+					    Evitar o zero: garantir um |valor| mínimo (os personagens já usam ±0,5 a ±1,5 no lugar de 0).
+					    A pensar: qual é o mais geral e o mais legal de jogar.
+					[?] Teste no balanceamento.py (botão "Cisalhamento ±1%"; o jogo não muda): ruído fixo por item, normal σ 0,005 cortado em ±0,01.
+					    Com o catálogo puro as 3 receitas deixam de ganhar o nome (o ruído soma: Calma chega a 10% fora da diagonal).
+					    Com o catálogo seguindo o ruído (poção ideal = receita perfeita com ruído) tudo passa de novo, e as poções continuam distintas.
+					    Zero: personalidade (5,5,5,5,0) depois de uma receita: N vira −0,05 (Calma), −0,07 (Desenvoltura), +0,18 (Retorno). Funciona, mas fraco.
+					    A compensação (muitos mal cozidos = poucos bons) continua igual com o ruído.
+					    Níveis testados (N de 0 depois de uma poção, outros traços 5): ±1% −0,05 a +0,18; ±2% −0,14 a +0,35; ±4% −0,34 a +0,68 (Calma com 39% fora da diagonal). Padrão no balanceamento: ±1%.
+					[ ] 6×6 homogênea (pensando em manter 6×6 na operação e mostrar só 5×5; ainda não aplicar):
+						p = (O, C, E, A, N, 1), M = [A b; 0 1], p' = A·p + b (b = empurrão fixo).
+						Ganha: resolve o zero (b soma sempre), poções de "puxar para um alvo", continua tudo matriz (composição, ordem, potência).
+						Muda: dose dobrada vira "escala e desloca" (M² soma b + A·b); diagonais com b deixam de comutar; cada poção tem ponto fixo p* = (I − A)⁻¹·b.
+						Ingredientes: I + a·(M − I) vale igual, mal cozido também encolhe o empurrão.
+						Código: 5×5 → 6×6 em ItemData.A, .tres, calculadora, catálogo, balanceamento, pentagrama (compatível: b vazio = 0).
+						Puxar para o alvo: p' = p + t·(alvo − p) = (1 − t)·p + t·alvo → M = [(1 − t)·I  t·alvo; 0 1]. t
+						 = intensidade (0 a 100%), pode ser um t por traço (t = 0 não puxa).
+					        n doses: p_n = alvo + (1 − t)ⁿ·(p − alvo): chega perto, nunca passa. Ponto fixo = o alvo. Resolve o zero. Mal cozido = t·a.
+						Transformação projetiva (última linha da 6×6 diferente de (0 … 0 1)): p' = (A·p + b) / (cᵀ·p + d).
+							A divisão cria saturação: o traço sobe e "freia" perto de um limite. Jeito de modelar a borda sem o corte em ±10
+							(a borda também é parte do problema a modelar).
+							RESPONDER: como modelo matematicamente a borda? quando acontece de ser projetivo tenho que ficar ajustando o vetor para sempre a ultima coordnada ser 1?
+							[?] Botão para testar (debug, aba Poções, "Borda da personalidade"): corte / projetiva / tanh (CmdAplicarPocao.calcular).
+								Projetiva e tanh fazem a conta num valor interno u e voltam para −10..10 (projetiva: p = u/(1+|u|/10); tanh: p = 10·tanh(u/10)).
+								Ex.: E = 5 com ×1,4 três vezes: corte 7 → 9,8 → 10; projetiva 5,8 → 6,6 → 7,3; tanh 6,5 → 7,9 → 9,1. A identidade não muda nada nos três.
+							[?] Teste: poção que troca O e C (permutação) com 2 ingredientes: 1 "espelho" (C → −C) e depois 6 "giros" de 15° no plano O-C.
+								Precisa de um ingrediente drástico (o espelho): ingredientes perto da identidade nunca invertem (o determinante não troca de sinal).
+								Ordem importa: giros antes do espelho dão outra matriz (troca com sinal: O → −C, C → −O).
+								Compensação quebra em parte: 8 giros a 0,75 acertam o ângulo, mas encolhem (0,95); 24 a 0,25 encolhem para 0,86. Espelho mal cozido (a 0,5) zera o C.
+								Dobrar a poção (P²) volta ao original.
+								Outros jeitos (3 ingredientes, testados, os dois dão a troca exata):
+									Espelho girado: 3 giros de −15°, 1 espelho, 3 giros de +15° (espelhar na diagonal O = C).
+										Ordem trocada (começar pelo +15°) dá a troca com sinal. Mal cozido: os giros encolhem (4 a 0,75: dist. 0,07).
+									Três cisalhamentos: "soma C em O" (O + C), "C vira O − C" (o drástico, inverte), "tira C de O" (O − C).
+										O 1º e o 3º podem vir em pedaços (ex.: 4 de 25%); entre si só somam, então a compensação é exata (6 a 0,67 ou 8 a 0,5: dist. 0,000).
+										O do meio é o ponto sensível (a 0,9 já erra 0,2).
+									Sempre precisa de um ingrediente drástico (que inverte). O jeito escolhido muda a dificuldade da receita, mesmo com o mesmo resultado.
+					[ ] Mostrar o efeito da poção no pentagrama e nos traços (a parte 5×5 e o empurrão como seta/alvo): a pensar.
 		[.] Ver tipos de poções e dar nomes: 
 			Database (nomes das proibidas ficam para o Cap. 2): 
 				Nomear as poções de referência no catálogo (PocaoReferencia: nome, descrição, A). 
@@ -180,21 +244,12 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 				Poção #2 = Poção da Desenvoltura (definir bem antes do Cap. 1; só usada no Cap. X).
 				Poções proibidas: as que têm algum autovalor 0 (2^5 − 1 = 31 combinações de traços zerados). Ainda sem nome. (feito: 31 no catálogo como "Poção Proibida (sem O, C...)", nomes provisórios)
 
-[ ] Diálogos 100%
-	[ ] Cap. 1: Revisão de cada evento.
-	[ ] Sprites do  Balão de expressão: precisa da arte (1 sprite de balão, se der pra fazer sem deformar as quinas seria ideal) (talvez 9 blocos)
-		[?] Pronto para a arte: assets/ui/balao.png (um sprite com o rabicho embaixo no meio, desenhado em 2×). Cantos de 40 px não esticam; só o meio estica. Rabicho: faixa de 24 px de baixo. Deixei um provisório no lugar; sem o arquivo volta o desenhado em código. Ajustes em cmd_balao.gd (MARGEM_SPRITE, RABO_SPRITE, ESCALA_SPRITE).
-	[ ] Estilo visual:
-		[ ] organizar o layout e textura dialogo/opções
-		[ ]	Ajuste estético, borda, cor, fonte, etc.
-	[?] Só aparece a setinha pra baixo para avançar diálogo quando a frase terminar. antes disso o botão o botão pode ser apertado mas o simbolo para baixo não pode ter.
-		[?] Feito: a ▼ some enquanto o texto está sendo escrito e aparece (0,2 s) quando a frase termina. O toque continua funcionando antes (completa a frase).
 
+[ ] Diálogos 100%
+	[ ] Estilo visual: organizar o layout e textura dialogo/opções - borda, cor, fonte, etc.
 
 
 [ ] História/Roteiro
-	>>>	Diálogos devem condizer com a época
-	
 	[ ] Revisar diálogos dos eventos/cenas:
 		[.] Cap. 1 (-N)
 			[?] intro-Campones
@@ -212,12 +267,12 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 					>>> Enrolar -> dia nunca passa
 				 
 		[ ] Cap. 2
+			>>> Usar traços na história: 
+				O,(conservador com pouca abertura)
+				C (consequencialidade, prudencia, preguiçoso),
+				A (amabilidade, aumentar ou diminuir?)
 			[ ] Qual traço? 
 			[ ] Qual quest?
-	>>> Usar traços na história: 
-		O,(conservador com pouca abertura)
-		C (consequencialidade, prudencia, preguiçoso),
-		A (amabilidade, aumentar ou diminuir?)
 	[ ] Usar permutação de traços em alguma quest, receita, mas que seja visto esse efeito.
 	[ ] Poções proibidas numa quest
 
@@ -238,12 +293,41 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 	[.] Mercador
 		[ ] Inventário de cada, personalidade de cada?
 		[ ] Comprar e Vender? 
-			[ ] 2 inventários e você pode trocar/negociar?
-
+			[?] 2 inventários e você pode trocar/negociar?
+				[!] Feito (1ª versão, para testar): MenuLoja (src/ui/menu_loja.gd) + comando CmdLoja. 
+				Dois inventários e uma mesa: tocar no item leva 1 para a mesa, tocar na mesa devolve. 
+				Ouro é campo separado (−10 −1 +1 +10). 
+				Valor para o mercador = valor_base · qtd_base / (qtd_base + qtd que ele tem) (ItemData, grupo Comércio; padrão 10 e 5). 
+				Ele aceita se receber ≥ (1 + margem) · o que dá (margem por loja no comando). 
+				Estoque e ouro dele ficam salvos (variável loja_<id>). 
+				layout: Balança (a mesa pende para o lado que vale mais, valor real sem a margem) 
+				negociação: Pechincha (se faltar, ele pede mais ouro; 3 recusas e desiste por hoje). 
+				
 
 [ ] Personagens
-	[ ] Fazer uma ficha de personagem 
-	[ ] Criar personalidades big five
+	[ ] Fazer uma ficha de personagem, script de programa/ferramenta pra editar o database no geral?
+		[?] Feito: ferramenta central (ferramentas/central/central.py ou abrir_central.bat): uma janela com abas
+		Personalidades (tabela OCEAN, "no banco", nova, prévia de poção/item com doses), Itens (campos + matriz A),
+		Catálogo (poções + matriz A), Eventos (o editor de eventos) e Balanceamento. Cada aba carrega só quando abre;
+		salvar grava só o que mudou. As ferramentas antigas continuam funcionando sozinhas. Ver ferramentas/central/README.md.
+		[?] Reformulada: Personalidades com a lista "depois da poção" ao lado (▲/▼ e cores), Itens com "Novo item", Catálogo com proibidas no fim,
+		efeito na personalidade e comandos do efeito, Eventos e Balanceamento próprios (usam o motor das ferramentas antigas, sem matplotlib).
+		Organização: nucleo/ (peças comuns) + abas/ (uma por arquivo). Pode apagar ferramentas/central/abas/balanceamento_aba.py (não é mais usado).
+		Personalidades definidas: camponês C −3; rei O −6, C −4, A 2; bruxa 6, −1, −1, 1, 3.
+		[?] Ajustes: Personalidades com os 5 traços antes juntos e depois os 5 modificados (sem Σ|Δ|); Balanceamento com chama e item escolhidos em lista (a chama com a cor dela), jogadora perfeita / calibrada / ruim, aba Chamas e aba "Chama × tempo" (segundos de um ingrediente × cor da chama antes dele, poção e só aquele ingrediente); Itens com a curva de aproveitamento por cor da chama.
+		Jogadora ruim (reação 0,5 s, chama ±12%, folga 5 °C, tempo ±6 s e 2 s atrasada): calma_profunda dá 0% (não segura a chama, estoura 600 s), desenvoltura 94%, retorno 93%. REVISAR se é ruim demais.
+		[?] Novas abas na central: Receitas, Falas, Flags, Onde é usado, Mapas, Mercadores, Chamas, Calibração, Verificação e Projeto (git só leitura). Falas/Flags/Onde é usado/Mapas/Verificação só leem e o duplo clique abre o evento na aba Eventos. Ver ferramentas/central/README.md.
+		A Verificação achou: pegou_maca usada sem estar em dados/variaveis; missao01_convite ninguém testa; reputacao ninguém usa; cidadeA_in01_maca, cidadeA_in03_vazia, pensamento_inicio e pensamento_fim não estão em mapa nenhum e ninguém chama. REVISAR.
+	[?] Criar personalidades big five pra cada personagem
+		[?] Feito (só as novas, escala + = 4, ++ = 7, − = −4, sem sinal = 0): dados/personalidades/ 
+		mercador (A+), padre (O− C++ A+), 
+		morador = NPC adulto (O−), 
+		menina = NPC criança 1 (O++), 
+		menino = NPC criança 2 (O++ A+). 
+		Registradas em dados/banco.tres. 
+		Onde era 0 ficou um valor aleatório em [−1,5; −0,5] ∪ [0,5; 1,5]. 
+		As antigas não mudaram; camponês, guarda_ponte e guarda_estradaB agora também estão registradas no banco.
+		REVISAR: ver se as personalidades estão ok e remover tópico.
 	[ ] Cada personagem tem seu linguajar próprio e manias.
 		[ ] Bruxa
 		[ ] Campones N+ C-
@@ -268,105 +352,24 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 [ ] Documentação e Organização
 	[ ] organização da pasta Graphics(está sendo chamada de assets neste projeto) estilo rpgmaker:
 		Animations (efeitos especiais, magias, etc)
-		Characters (eventos)
-		Icons
-		Panoramas (imagens para cenário)
-		Pictures (sprites para controlar na tela)
-		Transitions
-		Windowskins (janelas, etc)
+		Characters (assets/eventos)
+		Icons assets/icones
+		Panoramas (imagens para cenário) ?
+		Pictures (sprites para controlar na tela) ?
+		Transitions ?
+		Windowskins (janelas, etc) assets/ui
 	[ ] Debug e ferramentas
-		[.] Debug, aba Poções: histograma do aproveitamento de cada poção feita (user://estatisticas_pocoes.txt; só em build de debug), zerar, e botões para dar qualquer poção do catálogo pronta (★ = tem efeito).
-			[.] Colocar botão poara limpar o histórico.
 	
 
 [ ] Aplicar poção:
 	[.] A ação da poção deve mostrar a personalidade mudando.
 		Ideia: um pequeno menu com a face da pessoa e a personalidade dela mudando; a personalidade fica na carta Status. Layout ainda a definir.
-		[?] Feito (1ª versão): MenuAplicarPocao (src/ui/menu_aplicar_pocao.gd). Abre junto com o inventário no "Aplicar poção": nome e face do alvo (dados/falantes/<personalidade>.tres, ou o campo "personagem" do comando) e o pentagrama O C E A N com a personalidade dele (só a forma, −10 a 10). Tocar numa poção mostra a prévia tracejada; aplicar anima a forma e mostra setinhas ↑↓ por um instante; depois fecha. Fica sobre a carta Status, com a face e o nome numa carta logo acima (os outros jeitos e a tecla M saíram).
-		[?] Destaque ao aplicar: o popup fecha, 0,5 s depois a carta dá um clarão dourado, a face brilha, cresce e treme com faíscas, e o pentagrama muda devagar (com um pequeno "passa e volta"), as pontas que mudaram pulsam e as setinhas ↑↓ ficam maiores e pulando. O efeito mágico no alvo acontece junto. O menu fica mais 1,2 s e fecha.
+		[?] Feito (1ª versão): MenuAplicarPocao (src/ui/menu_aplicar_pocao.gd). Abre junto com o inventário no "Aplicar poção": nome e face do alvo (dados/falantes/<personalidade>.tres, ou o campo "personagem" do comando) e o pentagrama O C E A N com a personalidade dele (só a forma, −10 a 10). Tocar numa poção mostra a prévia tracejada; aplicar anima a forma (setinhas ↑↓ removidas; as pontas que mudaram ainda pulsam); depois fecha. Fica sobre a carta Status, com a face e o nome numa carta logo acima (os outros jeitos e a tecla M saíram).
 		[?] Escala da mudança: agora o pentagrama usa o valor real (−10 a 10) na prévia e ao aplicar, sem raiz. Mudanças pequenas ficam quase imperceptíveis. Contorno cinza = como estava.
-		[ ] Adicionar tecla para trocar o layout do aplicação de poção. quero uma opção em que a personalidade da pessoa apareça aonde está o status da bruxa, e a foto apareça numa carta acima do status.
-			[?] Feito: ficou só este jeito (os outros e a tecla M saíram); o pentagrama do alvo fica exatamente no lugar da carta Status da bruxa e a face com o nome numa carta logo acima dela (mesma largura).
 	[ ] Representação de poções visual com matriz/grafo. (feito, versão simples: no pentágono cada ponta sai do traço que mais contribui e gira até a sua; diagonal = só escala com um pulo)
 		[ ] (Cap. 2) Mostrar o pentagrama, cada aresta representa um componente. Pensei em relacionar as arestas com a_ij e criar um feedback útil visualmente.
 		[ ] (Cap. 2) O pentagrama deve ter animações a depender da matriz. Por exemplo, matriz diagonal (ou próxima de diagonal a menos de ruído) só escala, então a animação do pentagram é escalar. Matriz que troca dois componentes deve trocar duas pontas do pentagrama suavemente, como uma permutação ou rotação.
 
-```
-
-## Ideias guardadas: traços e próximas poções
-
-```
-Ideia geral: o jeito de cozinhar o ingrediente imita o traço que ele mexe.
-Matriz: O C E A N. "×1,12" = o traço sobe 12%. "E ← +0,08·N" = 8% do N passa a somar no E.
-
-C (disciplina, ordem, dever)
-	Pouco C querendo subir: filho do mercador, guarda que dorme, Zigmund que largou as obrigações.
-		Poção da Disciplina (C ×1,2). Ingredientes demorados e de faixa estreita (paciência e precisão).
-	Muito C querendo baixar: noivo perfeccionista que adia o casamento, padre preso às regras.
-		Poção do Desapego (C ×0,8). Ingredientes rápidos e de fogo forte (impulso).
-	Troca: C ← N (a ansiedade vira cuidado).
-A (confiança, gentileza, cooperação)
-	Subir: rei furioso, guarda grosso, goblin. Poção da Brandura (A ×1,15). Ingredientes frios e delicados.
-	Baixar: quem não sabe dizer não (princesa? mercador que dá fiado). Poção da Firmeza (A ×0,85). Chama negra.
-	Dilema: baixar a amabilidade de alguém é ajudar ou estragar? ("tudo tem seu preço")
-O (curiosidade, imaginação, aceitar o novo; o traço mais ligado ao véu e à inquisição)
-	Pouco O (velho cabeça fechada): mercador pai, padre. Poção da Visão (O ×1,2): enxerga o véu ou aceita o
-		diferente; em 1484, aberto demais vira suspeito de heresia. Ingredientes estranhos, com troca de
-		traços; receitas fora do padrão (chama fria e depois quente, mesmo item em dois tempos).
-	Baixar O: quem viu demais através do véu, criança que vê fantasmas, ou a inquisição pedindo para
-		"curar" a magia. Poção do Esquecimento (O ×0,8). Ingredientes comuns, cozimento longo e monótono.
-N e E (o outro lado)
-	Subir N: poção de medo (afastar a inquisição, guarda nervoso larga o posto). Primeira poção "ofensiva".
-	Baixar E: bobo da corte, alguém que fala demais da bruxa. Poção do silêncio.
-Matriz: diagonal pura = poções simples (começo); com troca = avançadas (transformam um traço em outro);
-	proibidas (traço vai a zero) = o que a inquisição acha que a bruxa faz.
-Sequência possível: Cap. 2 C alto (Zigmund/guarda) e A alto (rei); Cap. 3 O alto (mercador pai/padre,
-	risco de heresia); depois A baixo, O baixo, N alto, E baixo, com escolhas morais.
-
-Itens possíveis (receitas: rápida, demorada de faixa estreita, chama negra, fria)
-	Rápida (fogo forte, poucos segundos):
-		Pimenta-de-dragão: E ×1,12, A ×0,97, N ×1,05 (agitação, ousadia). Branco, 4 a 8 s.
-		Faísca-de-vagalume: O ×1,10, C ×0,95 (curiosidade, impulso). Amarelo ou branco, 3 a 6 s.
-		Pétala-de-relâmpago: E ← +0,08·N, N ×0,92 (nervosismo vira energia). Branco, 5 a 9 s.
-	Demorada (faixa estreita, não dá para acelerar com fogo alto):
-		Raiz-de-teixo: C ×1,15, O ×0,95 (prudência, tradição). Só normal (95 a 105 °C), 100 a 160 s.
-		Casca-de-carvalho-velho: A ×1,12, N ×0,90 (paciência, serenidade). Só laranja, 90 a 140 s.
-		Âmbar-de-resina: C ← +0,06·N, N ×0,94 (ansiedade vira cuidado). Só normal, 120 a 180 s.
-	Muito quente (chama negra, 195 °C ou mais; precisa F perto de 1730, testar se não cansa):
-		Escama-de-salamandra: E ×1,20, A ×0,90 (coragem, menos gentileza). 10 a 25 s.
-		Carvão-de-sabá: O ×1,15, A ×0,85, N ×1,10 (rebeldia, inquietação). 15 a 30 s.
-		Pena-de-fênix: E ×0,90, N ×0,90, E ← +0,10·N, N ← +0,10·E (troca parte do E com o N). 8 a 20 s.
-	Muito fria (transparente, estraga acima de ~78 °C):
-		Orvalho-da-lua: N ×0,85, E ×0,95 (calma, recolhimento). 30 a 60 s.
-		Flor-de-gelo: A ×1,10, O ×0,95 (doçura, conformidade). 25 a 50 s.
-		Lágrima-de-fantasma: O ×1,12, N ×1,05 (sensibilidade ao véu). 40 a 70 s.
-
-NPC do bosque: o goblin (ideia, ainda não feito)
-	Vigia os cogumelos brilhantes. A baixo (grosso, cobra pedágio), N alto (desconfiado de tudo).
-	Cap. 1: só sabor e uma dica, sem quest. Cap. 2: alvo natural da Poção da Brandura (subir A).
-	1ª vez:
-		GOBLIN: Pare aí! Esses cogumelos têm dono.
-		BRUXA: E quem seria o dono?
-		GOBLIN: Eu. Quem passa, paga. Um cogumelo por cabeça... e você tem cabeça grande, com esse chapéu.
-		BRUXA: Não vim colher nada. Só estou de passagem para a cidade.
-		GOBLIN: Todos dizem isso. Depois some a metade do bosque.
-		GOBLIN: Lá na cidade andam falando de mulheres de chapéu. Os homens do Papa estão perguntando por elas.
-		BRUXA: (Hmm... então a notícia já chegou aqui.)
-	Depois:
-		GOBLIN: Você de novo. Não toque em nada.
-		GOBLIN: Se for ao castelo, olhe para o alto da torre. A névoa de lá não é névoa.
-
-Receitas para os extremos que faltam (ideias; testar no simulador antes)
-	Raiz-de-teixo (demorada): C ×1,15, O ×0,95. Só chama normal (95 a 105 °C), 100 a 160 s.
-		Poção da Disciplina (C ×1,2): chama normal, 2 raízes por 120 s. Para Zigmund / guarda que dorme.
-	Faísca-de-vagalume (rápida): O ×1,10, C ×0,95. Chama branca (145 a 163 °C), 3 a 6 s.
-		Poção da Visão (O ×1,2): chama branca, 3 faíscas em sequência, finalizar logo. Liga com o véu e a heresia (Cap. 3).
-	Escama-de-salamandra (chama negra): E ×1,20, A ×0,90. Só chama negra (195 °C ou mais), 10 a 25 s.
-		Poção da Coragem: chama negra, 2 escamas; fecha com 1 olho de salamandra para amaciar (mesma criatura, outra parte).
-	Orvalho-da-lua (fria): N ×0,85, E ×0,95. Estraga acima de 85 °C, 30 a 60 s (usa transparente e pêssego).
-		Poção do Recolhimento: transparente, 2 orvalhos; sobe para pêssego e 1 musgo-do-recato no fim.
-	Onde achar: raiz na floresta; faísca no bosque (perto do goblin); escama com o mercador; orvalho raro no bruxa_out.
-	Testar: se a chama negra cansa (F perto do máximo) e se a faixa estreita da raiz é jogável no celular.
 ```
 
 ## Possíveis expansões (futuras)

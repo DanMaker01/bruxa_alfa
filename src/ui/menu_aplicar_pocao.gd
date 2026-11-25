@@ -188,7 +188,6 @@ class PentagramaPersonalidade extends Control:
 	const COR_DESCE := Color(1.0, 0.35, 0.3)
 	const R_MIN: float = 0.12   # traço em −10 ainda aparece um pouquinho
 	const T_SETAS: float = 2.4
-	const TAM_SETA: int = 30
 	var _p: Array = [0.0, 0.0, 0.0, 0.0, 0.0]      # personalidade real (antes de aplicar)
 	var _rs: Array = [0.5, 0.5, 0.5, 0.5, 0.5]     # raio desenhado de cada ponta (0..1)
 	var _rs_antes = null                           # contorno cinza (comparando)
@@ -246,6 +245,7 @@ class PentagramaPersonalidade extends Control:
 
 	## Raio (0..1) de um valor −10..10.
 	static func raio_de(v: float) -> float:
+		# linear (sem raiz): as mudanças aparecem mais no raio
 		return R_MIN + (1.0 - R_MIN) * clampf((v + 10.0) / 20.0, 0.0, 1.0)
 
 	static func _raios(p: Array) -> Array:
@@ -302,16 +302,10 @@ class PentagramaPersonalidade extends Control:
 			var pv := _forma(_previa)
 			for i in 5:
 				draw_dashed_line(pv[i], pv[(i + 1) % 5], COR_PREVIA, 2.0, 7.0)
-		# letras e setinhas
-		var alfa_seta: float = clampf(_t_setas / 0.4, 0.0, 1.0)
+		# letras dos traços (as setinhas ↑↓ saíram; as pontas que mudaram ainda pulsam)
 		for i in 5:
 			var dir := Vector2.from_angle(-PI * 0.5 + TAU * i / 5.0)
 			var q := c + dir * (r + 16.0)
 			var txt: String = TRACOS[i]
 			var w := _f.get_string_size(txt, HORIZONTAL_ALIGNMENT_LEFT, -1, 20).x
 			draw_string(_f, q + Vector2(-w * 0.5, 7), txt, HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Estilo.TEXTO_QUENTE)
-			if _setas[i] != 0 and alfa_seta > 0.0:
-				var s: String = "↑" if _setas[i] > 0 else "↓"
-				var cor: Color = COR_SOBE if _setas[i] > 0 else COR_DESCE
-				var pula: float = -4.0 * absf(sin(Time.get_ticks_msec() / 1000.0 * 8.0)) * float(_setas[i])
-				draw_string(_f, q + Vector2(w * 0.5 + 2, 9 + pula), s, HORIZONTAL_ALIGNMENT_LEFT, -1, TAM_SETA, Color(cor, alfa_seta))

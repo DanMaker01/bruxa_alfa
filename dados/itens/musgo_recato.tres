@@ -5,6 +5,8 @@
 
 [resource]
 script = ExtResource("1_item")
+valor_base = 5.0
+qtd_base = 15.0
 id = "musgo_recato"
 nome = "Musgo-do-recato"
 descricao = "Devolve o juízo, a gentileza e a calma. Entra por último e não pode demorar no caldeirão."

@@ -5,6 +5,8 @@
 
 [resource]
 script = ExtResource("1_b0rtd")
+valor_base = 10.0
+qtd_base = 10.0
 id = "arroz"
 nome = "Arroz"
 descricao = "Um punhado de arroz."

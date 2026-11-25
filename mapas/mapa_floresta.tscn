@@ -22,12 +22,12 @@ metadata/_edit_vertical_guides_ = [3889.0]
 z_index = 1
 
 [node name="Passagem" type="CharacterBody2D" parent="Eventos" unique_id=1128940907]
-position = Vector2(68, 508)
+position = Vector2(38, 508)
 script = ExtResource("3_0h868")
 evento = ExtResource("ev_floresta_passagem1")
 
 [node name="Passagem2" type="CharacterBody2D" parent="Eventos" unique_id=1677333150]
-position = Vector2(5933, 534)
+position = Vector2(5963, 534)
 script = ExtResource("3_0h868")
 evento = ExtResource("ev_floresta_passagem2")
 

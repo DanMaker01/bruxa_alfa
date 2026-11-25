@@ -112,7 +112,7 @@ acao = 1
 
 [sub_resource type="Resource" id="Resource_vml6x"]
 script = ExtResource("3_lgb6n")
-texto = "osh, que estranho..."
+texto = "Osh, que estranho..."
 
 [sub_resource type="Resource" id="Resource_tf8po"]
 script = ExtResource("1_wk0jm")

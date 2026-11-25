@@ -53,6 +53,7 @@ class Dados:
         self.itens = sim.carregar_itens()
         self.receitas = sim.carregar_receitas()
         self.catalogo = sim.carregar_catalogo()
+        sim.ajustar_catalogo_ao_ruido(self.itens, self.receitas, self.catalogo)
 
     def ref_da_pocao(self, nome):
         for r in self.catalogo[0]:
@@ -498,7 +499,8 @@ def cli(argv):
 # =============================================================================
 # INTERFACE
 # =============================================================================
-def interface():
+def interface(so_janela=False):
+    """Abre a janela. so_janela=True: só cria e devolve a Janela (a ferramenta central usa numa aba)."""
     from PySide6 import QtCore, QtGui, QtWidgets as W
     import matplotlib
     matplotlib.use("QtAgg")
@@ -563,6 +565,22 @@ def interface():
             self.setCentralWidget(self.tabs)
             barra = self.addToolBar("principal")
             barra.addAction("Recarregar dados do projeto", self.recarregar)
+            self.acao_quad = barra.addAction("Dose quadrática (a²)")
+            self.acao_quad.setCheckable(True)
+            self.acao_quad.setToolTip("Teste: cada ingrediente conta como a² em vez de a (mal cozido pesa bem menos). "
+                                      "Só aqui no balanceamento; o jogo continua linear.")
+            self.acao_quad.toggled.connect(self.trocar_dose)
+            barra.addWidget(W.QLabel("  Cisalhamento: "))
+            self.combo_cis = W.QComboBox()
+            # (texto, σ, corte): ruído fixo por item fora da diagonal (teste do problema do zero)
+            self.niveis_cis = [("desligado", 0.0, 0.0), ("±1% (σ 0,005)", 0.005, 0.01),
+                               ("±2% (σ 0,01)", 0.01, 0.02), ("±4% (σ 0,02)", 0.02, 0.04)]
+            self.combo_cis.addItems([n[0] for n in self.niveis_cis])
+            self.combo_cis.setToolTip("Teste do problema do zero: ruído fixo por item fora da diagonal (normal, cortado), "
+                                      "sorteado pelo nome do item. O catálogo segue o ruído. Só aqui; o jogo não muda.")
+            self.combo_cis.setCurrentIndex(1)   # padrão: ±1%
+            self.combo_cis.currentIndexChanged.connect(self.trocar_cisalhamento)
+            barra.addWidget(self.combo_cis)
             self.status = W.QLabel()
             self.statusBar().addWidget(self.status)
             self.aba_receita()
@@ -579,7 +597,28 @@ def interface():
             self.status.setText("Projeto: %s | %d itens, %d receitas, %d poções | jogadora: cliques %.1f/s, reação %.2f s, "
                                 "ruído %.2f, folga %.0f °C, tempo %+.1f±%.1f s" % (
                                     sim.PROJ, len(self.dados.itens), len(self.dados.receitas), len(self.dados.catalogo[0]),
-                                    p["cliques_s"], p["reacao"], p["ruido"], p["folga"], p["vies_seg"], p["sigma_seg"]))
+                                    p["cliques_s"], p["reacao"], p["ruido"], p["folga"], p["vies_seg"], p["sigma_seg"]) + (" | dose: a² (teste)" if sim.EXPOENTE_DOSE == 2.0 else " | dose: a (linear)")
+                                + (" | cisalhamento σ %.3f" % sim.CISALHAMENTO_SIGMA if sim.CISALHAMENTO else ""))
+
+        def trocar_cisalhamento(self, idx):
+            _, sigma, corte = self.niveis_cis[idx]
+            sim.CISALHAMENTO = sigma > 0
+            sim.CISALHAMENTO_SIGMA = sigma
+            sim.CISALHAMENTO_MAX = corte
+            sim.ajustar_catalogo_ao_ruido(self.dados.itens, self.dados.receitas, self.dados.catalogo)
+            self.atualizar_status()
+            try:
+                self.rodar_receita()
+            except Exception as e:  # noqa: BLE001
+                print("[balanceamento] rodar depois de trocar o cisalhamento:", e)
+
+        def trocar_dose(self, ligado):
+            sim.EXPOENTE_DOSE = 2.0 if ligado else 1.0
+            self.atualizar_status()
+            try:
+                self.rodar_receita()
+            except Exception as e:  # noqa: BLE001
+                print("[balanceamento] rodar depois de trocar a dose:", e)
 
         def recarregar(self):
             self.dados.recarregar()
@@ -1280,6 +1319,8 @@ def interface():
 
     app = W.QApplication.instance() or W.QApplication(sys.argv)
     j = Janela()
+    if so_janela:
+        return j
     j.show()
     return app.exec()
 

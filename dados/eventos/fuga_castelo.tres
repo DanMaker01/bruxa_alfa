@@ -36,7 +36,7 @@ segundos = 0.3
 [sub_resource type="Resource" id="R_177"]
 script = ExtResource("4_x")
 personagem = ExtResource("x1")
-texto = "Majestade, por favor, me desculpe! Eu posso consertar!"
+texto = "Majestade, por favor, me desculpe! Eu posso consert..."
 
 [sub_resource type="Resource" id="R_178"]
 script = ExtResource("2_x")
@@ -60,7 +60,7 @@ texto = "Melhor fugir... e aproveitar para pegar o [item]véu[/item]."
 
 [sub_resource type="Resource" id="G_esp_pensa"]
 script = ExtResource("2_x")
-segundos = 1.2
+segundos = 0.5
 
 [sub_resource type="Resource" id="G_cam"]
 script = ExtResource("18_x")

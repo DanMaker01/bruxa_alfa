@@ -305,6 +305,10 @@ static func estado_ao_vivo(acc: Dictionary, item: ItemData, t_agora: float, T_ag
 # RESULTADO — a poção vira um item comum
 # =============================================================================
 ## Cria o ItemData da poção a partir do resultado de calcular().
+## Valor de uma poção feita no caldeirão para os mercadores (ver ItemData, grupo Comércio).
+const VALOR_POCAO: float = 40.0
+const QTD_POCAO: float = 3.0
+
 static func criar_pocao(resultado: Dictionary, id: String, nome: String) -> ItemData:
 	var pocao := ItemData.new()
 	pocao.id = id
@@ -313,6 +317,9 @@ static func criar_pocao(resultado: Dictionary, id: String, nome: String) -> Item
 	for linha in resultado.get("A", identidade()):
 		A_tipada.append(PackedFloat32Array(linha))
 	pocao.A = A_tipada
+	# comércio: poção dá trabalho para fazer e há poucas no mundo
+	pocao.valor_base = VALOR_POCAO
+	pocao.qtd_base = QTD_POCAO
 
 	# Descrição: ingredientes agrupados com o aproveitamento médio de cada um.
 	var grupos := {}
@@ -461,8 +468,13 @@ static func matriz_do_item(item: ItemData) -> Array:
 			return identidade()
 	return item.A
 
-## B = a·A + (1 − a)·I
+## Dose do ingrediente = a^EXPOENTE_DOSE. Com 2 (a²), mal cozido pesa bem menos: k ingredientes
+## valem ~M^(k·a²) em vez de ~M^(k·a) (4 a 0,75 = 2,25 bons, não 3). 1 = linear (antigo).
+const EXPOENTE_DOSE: float = 1.0
+
+## B = d·A + (1 − d)·I, com d = a^EXPOENTE_DOSE (a dose do ingrediente).
 static func interpolar(A: Array, a: float) -> Array:
+	a = pow(clampf(a, 0.0, 1.0), EXPOENTE_DOSE)
 	var B: Array = []
 	for i in N:
 		var linha := PackedFloat32Array()

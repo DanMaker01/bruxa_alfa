@@ -308,6 +308,16 @@ func _atualizar_pocoes() -> void:
 		EstatisticasPocoes.limpar()
 		_atualizar_pocoes())
 	_lista_pocoes.add_child(zerar)
+	var borda := Button.new()
+	borda.text = "Borda da personalidade: " + CmdAplicarPocao.NOMES_BORDA[CmdAplicarPocao.borda]
+	borda.pressed.connect(func():
+		CmdAplicarPocao.borda = (CmdAplicarPocao.borda + 1) % CmdAplicarPocao.NOMES_BORDA.size()
+		borda.text = "Borda da personalidade: " + CmdAplicarPocao.NOMES_BORDA[CmdAplicarPocao.borda])
+	_lista_pocoes.add_child(borda)
+	var loja := Button.new()
+	loja.text = "Abrir loja de teste (mercador)"
+	loja.pressed.connect(_abrir_loja_teste)
+	_lista_pocoes.add_child(loja)
 	_lista_pocoes.add_child(_secao("Dar poção do catálogo (pronta, com efeito)"))
 	CatalogoPocoes._garantir()
 	for ref in CatalogoPocoes._jogo.pocoes:
@@ -329,6 +339,17 @@ func _dar_pocao(ref: PocaoReferencia) -> void:
 	p.efeito = ref.efeito.duplicate()
 	database.registrar_item(p)
 	game_temp.add_item(id, 1)
+
+## Menu de troca com um estoque de teste (teclas M e N trocam layout e negociação).
+func _abrir_loja_teste() -> void:
+	var camada = get_node_or_null("/root/Main/CanvasLayer")
+	if camada == null or database == null or game_temp == null:
+		return
+	var menu := MenuLoja.new()
+	camada.add_child(menu)
+	var p = load("res://dados/falantes/mercador.tres") if ResourceLoader.exists("res://dados/falantes/mercador.tres") else null
+	menu.abrir({"gt": game_temp, "db": database, "personagem": p,
+		"estoque": {"erva": 20, "agua": 10, "sal": 5, "arroz": 5, "maca": 3}, "ouro_mercador": 100, "margem": 0.2})
 
 ## Lista (VBox) da aba atual, para a busca.
 func _lista_da_aba(nome: String) -> Container:

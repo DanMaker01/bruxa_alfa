@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1_h36lk")
 id = "rei"
-abertura = 3.0
-consciencia = 4.0
+abertura = -6.0
+consciencia = -4.0
 extroversao = 3.0
-amabilidade = 3.0
+amabilidade = 2.0
 neuroticismo = 3.0

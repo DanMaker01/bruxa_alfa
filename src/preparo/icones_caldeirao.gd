@@ -101,7 +101,9 @@ static func _calcular_absolutos() -> void:
 			if it.m > 0.0:
 				q = maxf(q, it.m + Z_VERMELHO * maxf(it.s_mais, 0.0))
 			if it.t_max > 0.0 and it.t_max < 999.0:
-				t = maxf(t, (1.0 + maxf(it.h_max, 0.0)) * it.t_max)
+				# h_max >= 999 = sem punição (água, sal): não entra, senão o anel nunca anda
+				var h: float = it.h_max if it.h_max < 999.0 else 0.0
+				t = maxf(t, (1.0 + maxf(h, 0.0)) * it.t_max)
 	_q_abs = q if q > 0.0 else Q_ABSOLUTO
 	_t_abs = t if t > 0.0 else T_ABSOLUTO
 ## PROPORCIONAL: o ponto fica entre estas frações da volta (evita colar no começo/fim).

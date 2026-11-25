@@ -5,6 +5,8 @@
 
 [resource]
 script = ExtResource("1_qmmbj")
+valor_base = 15.0
+qtd_base = 8.0
 id = "maca"
 nome = "Maçã"
 descricao = "uma maçã madura"

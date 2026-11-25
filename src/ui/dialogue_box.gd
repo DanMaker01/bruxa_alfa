@@ -21,10 +21,9 @@ var current_index: int = 0
 @export var subida_px: float = 5.0
 ## Pausa extra (em "letras") depois de cada caractere, para o texto respirar.
 const PAUSA_PONTUACAO := {
-	" ": 1.0,
-	# vírgula: sem pausa
+	" ": 1.0, ",":1.0,
 	";": 6.0, ":": 6.0,
-	".": 28.0, "!": 14.0, "?": 7.0, "…": 16.0,   # dobradas de novo (vírgula continua sem pausa)
+	".": 18.0, "!": 14.0, "?": 7.0, "…": 16.0,   
 }
 var _escrevendo: bool = false
 var _cursor: float = 0.0        # posição do "cursor" em letras (pode ser fracionária)
@@ -51,13 +50,19 @@ const DURACAO_ESCURECER: float = 0.25
 ## z_index absoluto da tela preta: acima do mapa e do HUD, abaixo da foto e da caixa.
 const Z_ESCURECER: int = 150
 var _escurecer: ColorRect
-# ---- pensamentos: feitos pelo CmdEstiloDialogo (itálico, cor apagada, face "_pensando",
-# sem plaquinha do nome, vinheta). Não há mais detecção automática de "(pensando)". ----
+# ---- pensamentos: a fala começa com a tag [pensamento] (pode fechar com [/pensamento]):
+# itálico, cor azulada, face "_pensando", sem plaquinha do nome e vinheta, só nessa fala.
+# Ex.: "[pensamento]Que dia..." ----
+const TAG_PENSAMENTO := "[pensamento]"
+const ESTILO_PENSAMENTO := {"cor": Color(0.75, 0.86, 1.0), "italico": true, "face_pensando": true,
+	"esconder_nome": true, "vinheta": true}
 ## Grupo usado pelo CmdEstiloDialogo para achar a caixa.
 const GRUPO := "caixa_dialogo"
 # ---- estilo da janela (CmdEstiloDialogo); vazio = padrão ----
 const FONTE_PADRAO: int = Estilo.FONTE_TEXTO
 var _estilo: Dictionary = {}
+## Estilo definido pelo CmdEstiloDialogo (o de pensamento vale só na fala com a tag).
+var _estilo_base: Dictionary = {}
 var _tracejado: Control
 var _vinheta: TextureRect
 var _pensando: bool = false
@@ -158,6 +163,13 @@ func _show_current_message():
 		var fala := _resolver_fala(str(messages[current_index]))
 		_aplicar_falante(fala["falante"], fala["nome"])
 		var texto: String = fala["texto"]
+		var pensa := texto.strip_edges().begins_with(TAG_PENSAMENTO)
+		if pensa:
+			texto = texto.strip_edges().trim_prefix(TAG_PENSAMENTO).replace("[/pensamento]", "")
+		var estilo_fala: Dictionary = ESTILO_PENSAMENTO if pensa else _estilo_base
+		if estilo_fala != _estilo:
+			_estilo = estilo_fala
+			_aplicar_estilo_janela()
 		if _estilo.get("parenteses", false):
 			texto = "(" + texto.strip_edges() + ")"
 		# BBCode do Godot nas falas: só as tags de TAGS_BBCODE valem; qualquer outro "["
@@ -621,10 +633,12 @@ func _foto_pensando(tex: Texture2D) -> Texture2D:
 # Vale para as próximas falas até mudar de novo ou restaurar.
 # =============================================================================
 func definir_estilo(e: Dictionary) -> void:
+	_estilo_base = e
 	_estilo = e
 	_aplicar_estilo_janela()
 
 func restaurar_estilo() -> void:
+	_estilo_base = {}
 	_estilo = {}
 	_aplicar_estilo_janela()
 

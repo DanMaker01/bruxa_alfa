@@ -10,11 +10,9 @@
 [ext_resource type="Script" uid="uid://dp3mfol3wf88y" path="res://src/dados/comandos/cmd_mover.gd" id="Ix8"]
 [ext_resource type="Resource" uid="uid://ck5s2dlc4wcek" path="res://dados/falantes/bruxa.tres" id="Ix9"]
 [ext_resource type="Script" uid="uid://b4qulgg7vsh20" path="res://src/dados/comandos/cmd_balao.gd" id="Ix10"]
-[ext_resource type="Resource" uid="uid://chrkm8ylgh7e1" path="res://dados/eventos/pensamento_inicio.tres" id="Ix11"]
 [ext_resource type="Script" uid="uid://dvii04cb4qtqa" path="res://src/dados/comandos/cmd_chamar_evento.gd" id="Ix12"]
 [ext_resource type="Script" uid="uid://cwdgcnn30o052" path="res://src/dados/comandos/cmd_if.gd" id="Ix13"]
 [ext_resource type="Script" uid="uid://phmwdet0nd7d" path="res://src/dados/comandos/cmd_end.gd" id="Ix14"]
-[ext_resource type="Resource" uid="uid://b0vf54xwaodp7" path="res://dados/eventos/pensamento_fim.tres" id="Ix15"]
 [ext_resource type="Script" uid="uid://c7yn4ka3ae65v" path="res://src/dados/comandos/cmd_variavel.gd" id="Ix16"]
 [ext_resource type="Script" uid="uid://dysdgwfai7wbh" path="res://src/dados/comandos/comando.gd" id="Ix17"]
 [ext_resource type="Script" uid="uid://gdfc3xl4mcr4" path="res://src/dados/pagina_data.gd" id="Ix18"]
@@ -164,27 +162,23 @@ segundos = 0.25
 script = ExtResource("Ix2")
 segundos = 0.6
 
-[sub_resource type="Resource" id="I_46"]
-script = ExtResource("Ix12")
-evento = ExtResource("Ix11")
-
 [sub_resource type="Resource" id="I_47"]
 script = ExtResource("Ix7")
 personagem = ExtResource("Ix9")
 face = "pensando"
-texto = "Pronto. Casaram."
+texto = "[pensamento]Pronto. Casaram."
 
 [sub_resource type="Resource" id="Z_1"]
 script = ExtResource("Ix7")
 personagem = ExtResource("Ix9")
 face = "pensando"
-texto = "E eu nem fui convidada."
+texto = "[pensamento]E eu nem fui convidada."
 
 [sub_resource type="Resource" id="I_48"]
 script = ExtResource("Ix7")
 personagem = ExtResource("Ix9")
 face = "pensando"
-texto = "Espero que ela esteja sendo ela mesma lá dentro."
+texto = "[pensamento]Espero que ela esteja sendo ela mesma lá dentro."
 
 [sub_resource type="Resource" id="I_1"]
 script = ExtResource("Ix0")
@@ -198,20 +192,16 @@ condicao = SubResource("I_1")
 script = ExtResource("Ix7")
 personagem = ExtResource("Ix9")
 face = "pensando"
-texto = "Agora que o casamento acabou, o castelo deve abrir de novo."
+texto = "[pensamento]Agora que o casamento acabou, o castelo deve abrir de novo."
 
 [sub_resource type="Resource" id="I_51"]
 script = ExtResource("Ix7")
 personagem = ExtResource("Ix9")
 face = "pensando"
-texto = "Ainda preciso buscar aquele [item]véu[/item]."
+texto = "[pensamento]Ainda preciso buscar aquele [item]véu[/item]."
 
 [sub_resource type="Resource" id="I_52"]
 script = ExtResource("Ix14")
-
-[sub_resource type="Resource" id="I_53"]
-script = ExtResource("Ix12")
-evento = ExtResource("Ix15")
 
 [sub_resource type="Resource" id="I_54"]
 script = ExtResource("Ix16")
@@ -237,7 +227,7 @@ valor = 1.0
 script = ExtResource("Ix18")
 condicoes = Array[ExtResource("Ix0")]([SubResource("I_57"), SubResource("I_58")])
 gatilho = 1
-comandos = Array[ExtResource("Ix17")]([SubResource("Resource_8edrb"), SubResource("I_2"), SubResource("I_3"), SubResource("I_4"), SubResource("I_5"), SubResource("I_8"), SubResource("I_11"), SubResource("I_12"), SubResource("I_13"), SubResource("I_14"), SubResource("I_15"), SubResource("I_16"), SubResource("I_17"), SubResource("I_18"), SubResource("I_19"), SubResource("I_22"), SubResource("I_23"), SubResource("I_24"), SubResource("I_25"), SubResource("I_26"), SubResource("I_27"), SubResource("I_28"), SubResource("I_29"), SubResource("I_30"), SubResource("I_31"), SubResource("I_32"), SubResource("I_35"), SubResource("I_38"), SubResource("I_41"), SubResource("I_44"), SubResource("I_45"), SubResource("I_46"), SubResource("I_47"), SubResource("Z_1"), SubResource("I_48"), SubResource("I_49"), SubResource("I_50"), SubResource("I_51"), SubResource("I_52"), SubResource("I_53"), SubResource("I_54"), SubResource("I_55")])
+comandos = Array[ExtResource("Ix17")]([SubResource("Resource_8edrb"), SubResource("I_2"), SubResource("I_3"), SubResource("I_4"), SubResource("I_5"), SubResource("I_8"), SubResource("I_11"), SubResource("I_12"), SubResource("I_13"), SubResource("I_14"), SubResource("I_15"), SubResource("I_16"), SubResource("I_17"), SubResource("I_18"), SubResource("I_19"), SubResource("I_22"), SubResource("I_23"), SubResource("I_24"), SubResource("I_25"), SubResource("I_26"), SubResource("I_27"), SubResource("I_28"), SubResource("I_29"), SubResource("I_30"), SubResource("I_31"), SubResource("I_32"), SubResource("I_35"), SubResource("I_38"), SubResource("I_41"), SubResource("I_44"), SubResource("I_45"), SubResource("I_47"), SubResource("Z_1"), SubResource("I_48"), SubResource("I_49"), SubResource("I_50"), SubResource("I_51"), SubResource("I_52"), SubResource("I_54"), SubResource("I_55")])
 
 [resource]
 script = ExtResource("Ix19")

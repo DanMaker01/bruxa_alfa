@@ -9,9 +9,7 @@
 [ext_resource type="Script" uid="uid://baglqudsvyyrb" path="res://src/dados/condicao.gd" id="6_i7745"]
 [ext_resource type="Script" uid="uid://bfi0og56a4lak" path="res://src/dados/evento_data.gd" id="7_kx00b"]
 [ext_resource type="Script" uid="uid://bx76ojik0lpci" path="res://src/dados/passo_rota.gd" id="9_8yti3"]
-[ext_resource type="Resource" uid="uid://chrkm8ylgh7e1" path="res://dados/eventos/pensamento_inicio.tres" id="Hx0"]
 [ext_resource type="Script" uid="uid://dvii04cb4qtqa" path="res://src/dados/comandos/cmd_chamar_evento.gd" id="Hx1"]
-[ext_resource type="Resource" uid="uid://b0vf54xwaodp7" path="res://dados/eventos/pensamento_fim.tres" id="Hx2"]
 [ext_resource type="Resource" uid="uid://ck5s2dlc4wcek" path="res://dados/falantes/bruxa.tres" id="Kx0"]
 [ext_resource type="Script" uid="uid://8liac65hmnnq" path="res://src/dados/comandos/cmd_mostrar_msg.gd" id="Kx1"]
 [ext_resource type="Script" uid="uid://bchvbuxgicj1n" path="res://src/dados/comandos/cmd_evento_animacao.gd" id="x0"]
@@ -88,19 +86,11 @@ sprite_frames = ExtResource("6_5rdbs")
 animacao = "parado"
 comandos = Array[ExtResource("2_i7745")]([SubResource("K_5"), SubResource("K_6")])
 
-[sub_resource type="Resource" id="H_1"]
-script = ExtResource("Hx1")
-evento = ExtResource("Hx0")
-
 [sub_resource type="Resource" id="H_2"]
 script = ExtResource("Kx1")
 personagem = ExtResource("Kx0")
 face = "pensando"
-texto = "Melhor não. Se o padre me vir, me entrega aos guardas."
-
-[sub_resource type="Resource" id="H_3"]
-script = ExtResource("Hx1")
-evento = ExtResource("Hx2")
+texto = "[pensamento]Melhor não. Se o padre me vir, me entrega aos guardas."
 
 [sub_resource type="Resource" id="H_4"]
 script = ExtResource("6_i7745")
@@ -113,7 +103,7 @@ script = ExtResource("1_8t4w6")
 condicoes = Array[ExtResource("6_i7745")]([SubResource("H_4")])
 sprite_frames = ExtResource("6_5rdbs")
 animacao = "parado"
-comandos = Array[ExtResource("2_i7745")]([SubResource("H_1"), SubResource("H_2"), SubResource("H_3")])
+comandos = Array[ExtResource("2_i7745")]([SubResource("H_2")])
 
 [resource]
 script = ExtResource("7_kx00b")

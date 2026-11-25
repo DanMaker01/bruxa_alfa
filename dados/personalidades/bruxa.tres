@@ -5,7 +5,8 @@
 [resource]
 script = ExtResource("1_cocvl")
 id = "bruxa"
-consciencia = 0.1
-extroversao = -0.1
-amabilidade = 0.2
-neuroticismo = -0.2
+abertura = 6.0
+consciencia = -1.0
+extroversao = -1.0
+amabilidade = 1.0
+neuroticismo = 3.0
