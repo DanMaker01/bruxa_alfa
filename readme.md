@@ -48,7 +48,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] Padre
 			[ ] neutro
 
-	[ ] Sprites		(tamanhos variados) (a âncora do sprite é o CENTRO-INFERIOR) (pode mudar as larg/alt se quiser)
+	[ ] Sprites (tamanhos variados) (a âncora do sprite é o CENTRO-INFERIOR) (pode mudar as larg/alt se quiser)
 		[ ] Bruxa
 			[ ] parada		(80x252)
 			[ ] andando		(126x252)
@@ -83,7 +83,7 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 			[ ] Livro de Receitas (69x69)
 			[ ] ...
 
-	[ ] Cenários		(largura variada, altura: 640px)
+	[ ] Cenários (largura variada, altura: 640px)
 		[ ] floresta		(6000x640)
 		[ ] bruxa_in		(1280x640)
 		[ ] bruxa_out1		(1280x640)
