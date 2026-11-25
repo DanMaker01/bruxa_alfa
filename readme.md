@@ -18,11 +18,8 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 ||	[?] Testar		||
 ||	[!] Finalizado		||
   ==============================
-```
 
-## Terminar até o Cap. 1 (1)
-
-```
+Terminar até o Cap. 1 (1)
 
 [ ] Arte Visual 100% 	(arquivos .png estão na pasta /assets/)
 
@@ -370,11 +367,8 @@ MAPA: https://miro.com/app/board/uXjVHHRQsyM=/
 		[ ] (Cap. 2) Mostrar o pentagrama, cada aresta representa um componente. Pensei em relacionar as arestas com a_ij e criar um feedback útil visualmente.
 		[ ] (Cap. 2) O pentagrama deve ter animações a depender da matriz. Por exemplo, matriz diagonal (ou próxima de diagonal a menos de ruído) só escala, então a animação do pentagram é escalar. Matriz que troca dois componentes deve trocar duas pontas do pentagrama suavemente, como uma permutação ou rotação.
 
-```
+Possíveis expansões (futuras)
 
-## Possíveis expansões (futuras)
-
-```
 [ ] Sistema de clima
 [ ]	Sistema de fama
 [ ]	Sistema de compra/venda
